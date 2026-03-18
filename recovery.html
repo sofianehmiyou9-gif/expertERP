@@ -81,14 +81,9 @@ a {
       return;
     }
 
-    status.textContent = "Redirection vers le formulaire de nouveau mot de passe...";
-    window.location.replace(target);
-
-    window.setTimeout(function () {
-      status.textContent = "Si la redirection automatique n'a pas fonctionne, utilisez le lien ci-dessous.";
-      fallbackCopy.style.display = "block";
-      fallbackLink.style.display = "block";
-    }, 1200);
+    status.textContent = "Le lien est valide. Ouvrez le formulaire ci-dessous si votre email ou navigateur bloque la redirection automatique.";
+    fallbackCopy.style.display = "block";
+    fallbackLink.style.display = "block";
   })();
   </script>
 </body>
