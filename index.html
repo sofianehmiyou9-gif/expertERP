@@ -2265,7 +2265,14 @@ async function requestPasswordResetEmail(email) {
     if (response.status === 429) {
       throw new Error('Trop de demandes de reinitialisation. Attendez une minute avant de recommencer.');
     }
-    throw new Error('Impossible d\'envoyer le lien de reinitialisation');
+    let details = '';
+    try {
+      const payload = await response.json();
+      details = payload.error_description || payload.msg || payload.message || '';
+    } catch (e) {
+      details = '';
+    }
+    throw new Error(details || 'Impossible d\'envoyer le lien de reinitialisation');
   }
 }
 
@@ -2519,6 +2526,11 @@ async function submitPortalAccess() {
     }
     ExpertPortalAuth.goToDashboard('entreprise', email);
   } catch (err) {
+    const rawMessage = String((err && err.message) || '').trim();
+    if (rawMessage) {
+      setPortalFeedback(rawMessage, 'error');
+      return;
+    }
     const errorCode = mapErrorToCode(err);
     showError(errorCode, err.message);
   } finally {
@@ -3785,6 +3797,11 @@ const ERROR_MESSAGES = {
     message: 'Impossible de se connecter à Internet. Vérifiez votre connexion et réessayez.',
     type: 'error'
   },
+  'rate_limit': {
+    title: 'Trop de tentatives',
+    message: 'Vous avez fait trop de demandes. Attendez une minute puis réessayez.',
+    type: 'warning'
+  },
   'server_error': {
     title: 'Erreur du serveur',
     message: 'Une erreur technique est survenue. Notre équipe a été notifiée. Réessayez dans quelques instants.',
@@ -3803,6 +3820,7 @@ function showError(errorCode, customMessage = null) {
     message: customMessage || 'Une erreur est survenue. Veuillez réessayer.',
     type: 'error'
   };
+  const finalMessage = customMessage || errorConfig.message;
 
   const overlay = document.getElementById('error-overlay');
   const iconEl = document.getElementById('error-icon');
@@ -3820,7 +3838,7 @@ function showError(errorCode, customMessage = null) {
   }
   
   titleEl.textContent = errorConfig.title;
-  contentEl.innerHTML = `<p>${errorConfig.message}</p>`;
+  contentEl.innerHTML = `<p>${finalMessage}</p>`;
 
   overlay.classList.add('open');
 }
@@ -3846,6 +3864,9 @@ function mapErrorToCode(error) {
   }
   if (msg.includes('network') || msg.includes('fetch') || msg.includes('timeout')) {
     return 'network_error';
+  }
+  if (msg.includes('429') || msg.includes('too many') || msg.includes('rate limit') || msg.includes('trop de demandes') || msg.includes('trop de tentatives')) {
+    return 'rate_limit';
   }
   if (msg.includes('validation') || msg.includes('invalid')) {
     return 'validation_error';
