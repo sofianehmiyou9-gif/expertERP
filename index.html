@@ -580,6 +580,24 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .success-box p{font-size:.85rem;color:var(--muted);line-height:1.8;}
 .success-box strong{color:var(--ink);font-weight:600;}
 .chip-group{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem;}
+/* ── INVITATION CODE GATE ── */
+.cs-gate{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.1rem;padding:.5rem 0 1rem;}
+.cs-gate-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(145deg,#eff6ff,#dbeafe);border:1px solid rgba(37,99,235,.2);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(37,99,235,.14),inset 0 1px 0 rgba(255,255,255,.8);}
+.cs-gate-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:400;color:var(--ink);margin:0;}
+.cs-gate-desc{font-size:.87rem;color:var(--muted);line-height:1.7;max-width:370px;margin:0;}
+.cs-gate-field{width:100%;max-width:360px;text-align:left;}
+.cs-code-input{font-family:'DM Mono',monospace !important;font-size:1.05rem !important;letter-spacing:.12em;text-align:center;text-transform:uppercase;border-color:rgba(37,99,235,.25) !important;background:#f8fafc !important;}
+.cs-code-input:focus{border-color:#2563eb !important;box-shadow:0 0 0 4px rgba(37,99,235,.1) !important;}
+.cs-code-feedback{min-height:1.35rem;margin-top:.4rem;font-size:.82rem;text-align:center;font-family:'DM Mono',monospace;}
+.cs-code-feedback.valid{color:#16a34a;}
+.cs-code-feedback.invalid{color:#dc2626;}
+.cs-code-feedback.loading{color:#64748b;}
+.cs-gate-btn{width:100%;max-width:360px;display:flex;align-items:center;justify-content:center;padding:.88rem 2rem;background:linear-gradient(135deg,#1d4ed8,#2563eb);border-radius:12px;box-shadow:0 12px 24px rgba(37,99,235,.22);}
+.cs-gate-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(37,99,235,.28);}
+.cs-gate-btn:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none;}
+.cs-gate-note{font-size:.8rem;color:#94a3b8;margin:0;}
+.cs-gate-link{color:#2563eb;text-decoration:none;font-weight:600;}
+.cs-gate-link:hover{text-decoration:underline;}
 .chip{font-size:.8rem;padding:.35rem .9rem;border:1.5px solid var(--border);border-radius:20px;cursor:pointer;transition:all .2s;background:transparent;color:var(--ink);}
 .chip:hover{border-color:var(--accent);}
 .chip.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
@@ -1665,18 +1683,35 @@ function toggleTheme() {
     <div class="modal-header">
       <h2>Rejoindre ExpertERPHub</h2>
       <p>Profil consultant · Inscription gratuite</p>
-      <div class="mi-step-labels" style="margin-top:1rem;">
+      <div class="mi-step-labels" id="cs-step-labels" style="display:none;margin-top:1rem;">
         <span class="mi-slbl active" id="cslbl-1">01 Profil</span>
         <span class="mi-slbl" id="cslbl-2">02 Compétences</span>
         <span class="mi-slbl" id="cslbl-3">03 Expériences</span>
         <span class="mi-slbl" id="cslbl-4">04 Disponibilité</span>
       </div>
-      <div class="mi-progress-bar"><div class="mi-bar-fill" id="cs-bar" style="width:25%"></div></div>
+      <div class="mi-progress-bar" id="cs-progress-wrap" style="display:none;"><div class="mi-bar-fill" id="cs-bar" style="width:25%"></div></div>
     </div>
 
     <div class="modal-body">
       <!-- Step 1 -->
-      <div class="mi-step active" id="cs-step-1">
+      <!-- Gate: Invitation code -->
+      <div id="cs-gate" class="cs-gate">
+        <div class="cs-gate-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <h3 class="cs-gate-title">Accès par invitation</h3>
+        <p class="cs-gate-desc">ExpertERPHub est une plateforme réservée aux consultants ERP sélectionnés. Entrez votre code d'invitation unique pour activer votre inscription.</p>
+        <div class="form-group cs-gate-field" style="margin-bottom:.5rem;">
+          <label class="form-label">Code d'invitation <span>*</span></label>
+          <input class="form-input cs-code-input" id="cs-invite-code" placeholder="EXP-XXXX-XXXX" maxlength="32" autocomplete="off" spellcheck="false" data-uppercase="true">
+          <div class="cs-code-feedback" id="cs-code-feedback"></div>
+        </div>
+        <button class="btn-next-modal cs-gate-btn" data-action="cs-validate-invite">Valider mon accès →</button>
+        <p class="cs-gate-note">Pas encore de code ? <a href="mailto:access@expertERPhub.com" class="cs-gate-link">Demander une invitation</a></p>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="mi-step" id="cs-step-1">
         <div class="form-row">
           <div class="form-group"><label class="form-label">Prénom <span>*</span></label><input class="form-input" id="cs-prenom" placeholder="Jean"></div>
           <div class="form-group"><label class="form-label">Nom <span>*</span></label><input class="form-input" id="cs-nom" placeholder="Dupont"></div>
@@ -2893,6 +2928,7 @@ function handleStaticAction(event) {
   if (action === 'cs-add-exp') return csAddExp();
   if (action === 'apply-promo') return applyPromo(trigger.dataset.inputId || '', trigger.dataset.feedbackId || '');
   if (action === 'cs-back') return csBack();
+  if (action === 'cs-validate-invite') return validateInviteCode();
   if (action === 'cs-next') return csNext();
   if (action === 'select-ent-type') return selectEntType(trigger.dataset.entType || '');
   if (action === 'select-plan') return selectPlan(parseInt(trigger.dataset.plan || '0', 10));
@@ -2998,23 +3034,94 @@ function applyPromo(inputId, feedbackId) {
 const CS_ERP_LIST = ['SAP','Oracle','Microsoft Dynamics','Workday','Salesforce','ServiceNow','Infor','Sage','Odoo','NetSuite'];
 let CS_STEP = 1;
 const CS_TOTAL = 4;
+let csGatePassed = false;
+let csInviteCode = '';
+let csInviteCodeId = null;
+
+async function validateInviteCode() {
+  const input = document.getElementById('cs-invite-code');
+  const fb = document.getElementById('cs-code-feedback');
+  const btn = document.querySelector('[data-action="cs-validate-invite"]');
+  const raw = (input?.value || '').trim().toUpperCase().replace(/\s+/g, '');
+  if (!raw) {
+    fb.className = 'cs-code-feedback invalid';
+    fb.textContent = "Veuillez entrer votre code d'invitation.";
+    return;
+  }
+  fb.className = 'cs-code-feedback loading';
+  fb.textContent = 'Vérification en cours\u2026';
+  if (btn) btn.disabled = true;
+  try {
+    const rows = await sbSelect('invitation_codes',
+      'code=eq.' + encodeURIComponent(raw) + '&is_active=eq.true&used_at=is.null&limit=1');
+    if (!rows || rows.length === 0) {
+      fb.className = 'cs-code-feedback invalid';
+      fb.textContent = '\u2717 Code invalide ou d\u00e9j\u00e0 utilis\u00e9. V\u00e9rifiez votre invitation.';
+      if (btn) btn.disabled = false;
+      return;
+    }
+    const row = rows[0];
+    if (row.expires_at && new Date(row.expires_at) < new Date()) {
+      fb.className = 'cs-code-feedback invalid';
+      fb.textContent = "\u2717 Ce code d'invitation a expir\u00e9.";
+      if (btn) btn.disabled = false;
+      return;
+    }
+    fb.className = 'cs-code-feedback valid';
+    fb.textContent = '\u2713 Code valide \u2014 Bienvenue sur ExpertERPHub\u00a0!';
+    setTimeout(() => csGatePass(raw, row.id), 900);
+  } catch(e) {
+    fb.className = 'cs-code-feedback invalid';
+    fb.textContent = '\u2717 Erreur de connexion. Veuillez r\u00e9essayer.';
+    if (btn) btn.disabled = false;
+  }
+}
+
+function csGatePass(code, codeId) {
+  csGatePassed = true;
+  csInviteCode = code;
+  csInviteCodeId = codeId;
+  CS_STEP = 1;
+  document.getElementById('cs-gate').style.display = 'none';
+  const slbls = document.getElementById('cs-step-labels');
+  if (slbls) slbls.style.display = '';
+  const prog = document.getElementById('cs-progress-wrap');
+  if (prog) prog.style.display = '';
+  document.getElementById('cs-footer').style.display = '';
+  updateCSUI();
+}
 
 function openConsultantModal() {
   CS_STEP = 1;
+  csGatePassed = false; csInviteCode = ''; csInviteCodeId = null;
   selectedModules = {};
   renderErpChips();
   const modContainer = document.getElementById('cs-erp-modules');
   if (modContainer) modContainer.innerHTML = '';
-  updateCSUI();
+  const gate = document.getElementById('cs-gate');
+  if (gate) gate.style.display = '';
+  const slbls = document.getElementById('cs-step-labels');
+  if (slbls) slbls.style.display = 'none';
+  const prog = document.getElementById('cs-progress-wrap');
+  if (prog) prog.style.display = 'none';
+  const codeFb = document.getElementById('cs-code-feedback');
+  if (codeFb) { codeFb.textContent = ''; codeFb.className = 'cs-code-feedback'; }
+  const codeInp = document.getElementById('cs-invite-code');
+  if (codeInp) { codeInp.value = ''; codeInp.disabled = false; }
+  const gateBtn = document.querySelector('[data-action="cs-validate-invite"]');
+  if (gateBtn) gateBtn.disabled = false;
+  for (let i = 1; i <= CS_TOTAL; i++) document.getElementById('cs-step-' + i)?.classList.remove('active');
+  document.getElementById('cs-footer').style.display = 'none';
   document.getElementById('overlay-consultant').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
+
 function closeConsultantModal() {
   document.getElementById('overlay-consultant').classList.remove('open');
   document.body.style.overflow = '';
   document.getElementById('cs-success').style.display = 'none';
   document.getElementById('cs-footer').style.display = '';
-  appliedPromo = null;
+  appliedPromo = null; csGatePassed = false; csInviteCode = ''; csInviteCodeId = null;
   selectedModules = {};
   const promoInput = document.getElementById('cs-promo');
   if (promoInput) { promoInput.value = ''; promoInput.style.borderColor = ''; }
@@ -3200,7 +3307,8 @@ async function submitConsultant() {
         promo_code: appliedPromo ? appliedPromo.code : null,
         promo_reduction: appliedPromo ? appliedPromo.pct : null,
         erp_modules: getSelectedModules(),
-        auth_password_sha256: passwordHash
+        auth_password_sha256: passwordHash,
+        invitation_code: csInviteCode || null
       }),
       statut: 'en_attente'
     };
@@ -3208,6 +3316,14 @@ async function submitConsultant() {
       await registerAuthUser(data.email, password);
     } catch (e) {}
     await sbInsert('consultants', data);
+    if (csInviteCodeId) {
+      try {
+        await fetch(SB_URL + '/rest/v1/invitation_codes?id=eq.' + encodeURIComponent(csInviteCodeId), {
+          method: 'PATCH', headers: SB_HDR,
+          body: JSON.stringify({ used_by_email: data.email, used_at: new Date().toISOString() })
+        });
+      } catch(e) {}
+    }
     document.getElementById('cs-success').style.display = 'block';
     document.getElementById('cs-footer').style.display = 'none';
     for (let i = 1; i <= CS_TOTAL; i++) document.getElementById('cs-step-' + i)?.classList.remove('active');

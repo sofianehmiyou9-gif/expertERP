@@ -85,11 +85,51 @@ END $$;
 --   USING (statut = 'approuve');
 --
 -- -- Allow inserts (signup/import) for now
--- CREATE POLICY consultants_insert
---   ON public.consultants
---   FOR INSERT
---   TO anon, authenticated
---   WITH CHECK (true);
+
+-- =========================================================
+-- SECTION C — INVITATION CODES
+-- Run this in Supabase SQL Editor to enable invite-only
+-- consultant registration.
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS public.invitation_codes (
+  id          UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  code        TEXT        UNIQUE NOT NULL,
+  label       TEXT,                          -- e.g. "Invitation pour Jean Dupont"
+  created_by_email TEXT,                     -- admin who generated this code
+  used_by_email    TEXT,                     -- consultant who used it
+  used_at     TIMESTAMPTZ,                   -- timestamp of use (NULL = not yet used)
+  expires_at  TIMESTAMPTZ,                   -- optional expiry date
+  is_active   BOOLEAN     DEFAULT true,      -- can be disabled manually
+  created_at  TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable RLS
+ALTER TABLE public.invitation_codes ENABLE ROW LEVEL SECURITY;
+
+-- Anon can read active, unused codes (to validate them on the frontend)
+CREATE POLICY "invitation_codes_public_check"
+  ON public.invitation_codes
+  FOR SELECT
+  TO anon, authenticated
+  USING (is_active = true AND used_at IS NULL);
+
+-- Only service role (admin) can insert, update, delete
+-- (No public INSERT/UPDATE/DELETE policy — admin uses service key)
+
+-- =========================================================
+-- HOW TO CREATE AN INVITATION CODE (run as admin):
+-- =========================================================
+-- INSERT INTO public.invitation_codes (code, label, created_by_email)
+-- VALUES ('EXP-ABC1-2024', 'Invitation Jean Dupont', 'admin@expertERPhub.com');
+--
+-- To create a batch quickly:
+-- INSERT INTO public.invitation_codes (code, label)
+-- SELECT 'EXP-' || upper(substring(gen_random_uuid()::text, 1, 4)) || '-' ||
+--        upper(substring(gen_random_uuid()::text, 1, 4)),
+--        'Code #' || generate_series
+-- FROM generate_series(1, 20);
+-- =========================================================
 --
 -- CREATE POLICY entreprises_insert
 --   ON public.entreprises
