@@ -2262,6 +2262,9 @@ async function requestPasswordResetEmail(email) {
     })
   });
   if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error('Trop de demandes de reinitialisation. Attendez une minute avant de recommencer.');
+    }
     throw new Error('Impossible d\'envoyer le lien de reinitialisation');
   }
 }

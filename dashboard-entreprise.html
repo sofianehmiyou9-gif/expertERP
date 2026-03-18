@@ -634,7 +634,10 @@ async function requestPasswordResetEmail(email) {
       redirect_to: getResetRedirectUrl()
     })
   });
-  if (!response.ok) throw new Error('Impossible d\'envoyer le lien');
+  if (!response.ok) {
+    if (response.status === 429) throw new Error('Trop de demandes de reinitialisation. Attendez une minute avant de recommencer.');
+    throw new Error('Impossible d\'envoyer le lien');
+  }
 }
 
 async function verifyRecoveryCode(email, token) {
@@ -646,7 +649,10 @@ async function verifyRecoveryCode(email, token) {
     },
     body: JSON.stringify({ email: email, token: token, type: 'recovery' })
   });
-  if (!response.ok) throw new Error('Code invalide ou expire');
+  if (!response.ok) {
+    if (response.status === 429) throw new Error('Trop de tentatives de verification. Attendez une minute avant de recommencer.');
+    throw new Error('Code invalide ou expire');
+  }
   return response.json();
 }
 
