@@ -1700,7 +1700,11 @@ function toggleTheme() {
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
         <h3 class="cs-gate-title">Accès par invitation</h3>
-        <p class="cs-gate-desc">ExpertERPHub est une plateforme réservée aux consultants ERP sélectionnés. Entrez votre code d'invitation unique pour activer votre inscription.</p>
+        <p class="cs-gate-desc">ExpertERPHub est une plateforme réservée aux consultants ERP sélectionnés. Entrez votre email professionnel et votre code d'invitation pour déverrouiller l'inscription.</p>
+        <div class="form-group cs-gate-field" style="margin-bottom:.2rem;">
+          <label class="form-label">Email professionnel <span>*</span></label>
+          <input class="form-input" id="cs-invite-email" type="email" placeholder="prenom.nom@entreprise.com" autocomplete="email">
+        </div>
         <div class="form-group cs-gate-field" style="margin-bottom:.5rem;">
           <label class="form-label">Code d'invitation <span>*</span></label>
           <input class="form-input cs-code-input" id="cs-invite-code" placeholder="EXP-XXXX-XXXX" maxlength="32" autocomplete="off" spellcheck="false" data-uppercase="true">
@@ -3036,6 +3040,7 @@ let CS_STEP = 1;
 const CS_TOTAL = 4;
 let csGatePassed = false;
 let csInviteCode = '';
+let csInviteEmail = '';
 
 async function consumeInviteCodeOnce(code, email) {
   const inviteCode = String(code || '').trim().toUpperCase();
@@ -3063,9 +3068,16 @@ async function consultantEmailExists(email) {
 
 async function validateInviteCode() {
   const input = document.getElementById('cs-invite-code');
+  const emailInput = document.getElementById('cs-invite-email');
   const fb = document.getElementById('cs-code-feedback');
   const btn = document.querySelector('[data-action="cs-validate-invite"]');
   const raw = (input?.value || '').trim().toUpperCase().replace(/\s+/g, '');
+  const email = String(emailInput?.value || '').trim().toLowerCase();
+  if (!email) {
+    fb.className = 'cs-code-feedback invalid';
+    fb.textContent = 'Veuillez entrer votre email professionnel.';
+    return;
+  }
   if (!raw) {
     fb.className = 'cs-code-feedback invalid';
     fb.textContent = "Veuillez entrer votre code d'invitation.";
@@ -3075,24 +3087,22 @@ async function validateInviteCode() {
   fb.textContent = 'Vérification en cours\u2026';
   if (btn) btn.disabled = true;
   try {
-    const rows = await sbSelect('invitation_codes',
-      'code=eq.' + encodeURIComponent(raw) + '&is_active=eq.true&used_at=is.null&limit=1');
-    if (!rows || rows.length === 0) {
+    if (await consultantEmailExists(email)) {
       fb.className = 'cs-code-feedback invalid';
-      fb.textContent = '\u2717 Code invalide ou d\u00e9j\u00e0 utilis\u00e9. V\u00e9rifiez votre invitation.';
+      fb.textContent = '✗ Cet email est déjà utilisé. Utilisez une autre adresse.';
       if (btn) btn.disabled = false;
       return;
     }
-    const row = rows[0];
-    if (row.expires_at && new Date(row.expires_at) < new Date()) {
+    const consumed = await consumeInviteCodeOnce(raw, email);
+    if (!consumed) {
       fb.className = 'cs-code-feedback invalid';
-      fb.textContent = "\u2717 Ce code d'invitation a expir\u00e9.";
+      fb.textContent = '✗ Code invalide, expiré ou déjà utilisé. Vérifiez votre invitation.';
       if (btn) btn.disabled = false;
       return;
     }
     fb.className = 'cs-code-feedback valid';
     fb.textContent = '\u2713 Code valide \u2014 Bienvenue sur ExpertERPHub\u00a0!';
-    setTimeout(() => csGatePass(raw), 900);
+    setTimeout(() => csGatePass(raw, email), 900);
   } catch(e) {
     fb.className = 'cs-code-feedback invalid';
     fb.textContent = '\u2717 Erreur de connexion. Veuillez r\u00e9essayer.';
@@ -3100,11 +3110,18 @@ async function validateInviteCode() {
   }
 }
 
-function csGatePass(code) {
+function csGatePass(code, email) {
   csGatePassed = true;
   csInviteCode = code;
+  csInviteEmail = email;
   CS_STEP = 1;
   document.getElementById('cs-gate').style.display = 'none';
+  const mainEmail = document.getElementById('cs-email');
+  if (mainEmail) {
+    mainEmail.value = email;
+    mainEmail.readOnly = true;
+    mainEmail.style.background = '#f8fafc';
+  }
   const slbls = document.getElementById('cs-step-labels');
   if (slbls) slbls.style.display = '';
   const prog = document.getElementById('cs-progress-wrap');
@@ -3115,7 +3132,7 @@ function csGatePass(code) {
 
 function openConsultantModal() {
   CS_STEP = 1;
-  csGatePassed = false; csInviteCode = '';
+  csGatePassed = false; csInviteCode = ''; csInviteEmail = '';
   selectedModules = {};
   renderErpChips();
   const modContainer = document.getElementById('cs-erp-modules');
@@ -3130,6 +3147,14 @@ function openConsultantModal() {
   if (codeFb) { codeFb.textContent = ''; codeFb.className = 'cs-code-feedback'; }
   const codeInp = document.getElementById('cs-invite-code');
   if (codeInp) { codeInp.value = ''; codeInp.disabled = false; }
+  const inviteEmail = document.getElementById('cs-invite-email');
+  if (inviteEmail) { inviteEmail.value = ''; inviteEmail.disabled = false; }
+  const mainEmail = document.getElementById('cs-email');
+  if (mainEmail) {
+    mainEmail.value = '';
+    mainEmail.readOnly = false;
+    mainEmail.style.background = '';
+  }
   const gateBtn = document.querySelector('[data-action="cs-validate-invite"]');
   if (gateBtn) gateBtn.disabled = false;
   for (let i = 1; i <= CS_TOTAL; i++) document.getElementById('cs-step-' + i)?.classList.remove('active');
@@ -3143,7 +3168,7 @@ function closeConsultantModal() {
   document.body.style.overflow = '';
   document.getElementById('cs-success').style.display = 'none';
   document.getElementById('cs-footer').style.display = '';
-  appliedPromo = null; csGatePassed = false; csInviteCode = '';
+  appliedPromo = null; csGatePassed = false; csInviteCode = ''; csInviteEmail = '';
   selectedModules = {};
   const promoInput = document.getElementById('cs-promo');
   if (promoInput) { promoInput.value = ''; promoInput.style.borderColor = ''; }
@@ -3340,15 +3365,14 @@ async function submitConsultant() {
       statut: 'en_attente'
     };
 
-    if (await consultantEmailExists(data.email)) {
-      showError('duplicate_email', 'Cet email est déjà utilisé par un consultant. Utilisez une autre adresse email professionnelle pour cette inscription.');
+    if (csInviteEmail && data.email !== csInviteEmail) {
+      alert("L'email de l'inscription doit correspondre à l'email validé avec le code d'invitation.");
       btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
       return;
     }
 
-    const consumed = await consumeInviteCodeOnce(csInviteCode, data.email);
-    if (!consumed) {
-      alert("Ce code d'invitation n'est plus disponible (déjà utilisé ou expiré).");
+    if (await consultantEmailExists(data.email)) {
+      showError('duplicate_email', 'Cet email est déjà utilisé par un consultant. Utilisez une autre adresse email professionnelle pour cette inscription.');
       btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
       return;
     }
