@@ -107,6 +107,8 @@ CREATE TABLE IF NOT EXISTS public.invitation_codes (
 -- Enable RLS
 ALTER TABLE public.invitation_codes ENABLE ROW LEVEL SECURITY;
 
+GRANT SELECT, UPDATE ON public.invitation_codes TO anon, authenticated;
+
 -- Anon can read active, unused codes (to validate them on the frontend)
 CREATE POLICY "invitation_codes_public_check"
   ON public.invitation_codes
