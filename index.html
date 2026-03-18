@@ -2198,6 +2198,24 @@ function getResetRedirectUrl() {
   return 'https://experterphub.com/reset-password.html';
 }
 
+function redirectRecoveryLinkToResetPageIfNeeded() {
+  const currentPath = String(window.location.pathname || '').toLowerCase();
+  const onHomePage = currentPath === '/' || currentPath.endsWith('/index.html');
+  if (!onHomePage) return;
+
+  const hashParams = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
+  const queryParams = new URLSearchParams(window.location.search || '');
+  const token = hashParams.get('access_token') || queryParams.get('access_token');
+  const type = (hashParams.get('type') || queryParams.get('type') || '').toLowerCase();
+
+  if (!token) return;
+  if (type && type !== 'recovery') return;
+
+  const hash = window.location.hash || '';
+  const search = hash ? '' : (window.location.search || '');
+  window.location.replace(window.location.origin + '/reset-password.html' + search + hash);
+}
+
 async function requestPasswordResetEmail(email) {
   const response = await fetch(SB_URL + '/auth/v1/recover', {
     method: 'POST',
@@ -3662,6 +3680,7 @@ function filterConsultants() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  redirectRecoveryLinkToResetPageIfNeeded();
   bindStaticActionHandlers();
   refreshAdminPortalVisibility();
   refreshPortalEntryButton();
