@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ExpertERPHub — Marketplace B2B pour Experts ERP</title>
+<title>ExpertERPHub — Plateforme de collaboration professionnelle pour Experts ERP</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
 (function () {
@@ -236,28 +236,28 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .profil-section{padding:5rem 2.5rem;border-top:1px solid var(--border);max-width:1200px;width:calc(100% - 5rem);margin:0 auto;}
 .profil-section h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;margin-bottom:.6rem;letter-spacing:-.02em;}
 .profil-section .sub{font-size:.95rem;color:#475569;margin-bottom:3rem;}
-.profil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.75rem;}
-.profil-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:2rem;position:relative;transition:all .4s cubic-bezier(.34,.1,.64,.1);cursor:pointer;overflow:hidden;transform:perspective(1000px) rotateY(0deg);}
+.profil-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;perspective:1200px;}
+.profil-card{background:linear-gradient(165deg, var(--card) 0%, var(--paper) 100%);border:1.5px solid var(--border);border-radius:14px;padding:2.25rem;position:relative;transition:all .5s cubic-bezier(.34,.1,.64,.1);cursor:pointer;overflow:hidden;transform:perspective(1000px) rotateY(0deg) rotateX(0deg);box-shadow:0 10px 28px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5);}
 .profil-card:before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg, var(--accent) 0%, transparent 100%);opacity:0;transition:opacity .3s ease;z-index:0;}
-.profil-card:hover{transform:translateY(-8px) rotateY(5deg) scale(1.02);box-shadow:var(--shadow-xl);border-color:var(--accent);}
-.profil-card:hover:before{opacity:.03;}
+.profil-card:hover{transform:perspective(1000px) rotateY(5deg) rotateX(-3deg) translateY(-8px) scale(1.02);box-shadow:0 24px 52px rgba(30,58,138,.22), inset 0 1px 0 rgba(255,255,255,.7);border-color:var(--accent);background:linear-gradient(165deg, #ffffff 0%, var(--accent-light) 100%);}
+.profil-card:hover:before{opacity:.04;}
 .profil-card > *{position:relative;z-index:1;}
 .profil-card.gold{border-top:4px solid var(--accent);}
 .profil-card.blue{border-top:4px solid var(--blue);}
-.profil-icon{width:50px;height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.25rem;transition:transform .3s ease;}
-.profil-card:hover .profil-icon{transform:scale(1.1) rotate(5deg);}
-.profil-icon.gold-bg{background:var(--accent-light);}
-.profil-icon.blue-bg{background:var(--blue-light);}
-.profil-card h3{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.01em;}
-.profil-card p{font-size:.88rem;color:#475569;line-height:1.7;margin-bottom:1.5rem;}
-.profil-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .75rem;border-radius:50px;margin-bottom:1rem;font-weight:600;}
-.profil-tag.gold{background:var(--accent-light);color:var(--accent-dark);}
-.profil-tag.blue{background:var(--blue-light);color:var(--blue);}
-.profil-cta{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;gap:.5rem;transition:gap .3s ease;font-weight:600;}
-.profil-card:hover .profil-cta{gap:.8rem;}
+.profil-icon{width:60px;height:60px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:1.4rem;transition:all .3s ease;}
+.profil-card:hover .profil-icon{transform:scale(1.18) rotate(12deg);}
+.profil-icon.gold-bg{background:linear-gradient(135deg, var(--accent-light) 0%, rgba(200,169,110,.08) 100%);box-shadow:0 8px 16px rgba(200,169,110,.15);}
+.profil-icon.blue-bg{background:linear-gradient(135deg, var(--blue-light) 0%, rgba(30,58,138,.08) 100%);box-shadow:0 8px 16px rgba(30,58,138,.15);}
+.profil-card h3{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;margin-bottom:.6rem;letter-spacing:-.01em;}
+.profil-card p{font-size:.88rem;color:#475569;line-height:1.8;margin-bottom:1.75rem;}
+.profil-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .9rem;border-radius:50px;margin-bottom:1.25rem;font-weight:600;}
+.profil-tag.gold{background:linear-gradient(120deg, var(--accent-light) 0%, rgba(200,169,110,.08) 100%);color:var(--accent-dark);}
+.profil-tag.blue{background:linear-gradient(120deg, var(--blue-light) 0%, rgba(30,58,138,.08) 100%);color:var(--blue);}
+.profil-cta{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);display:flex;align-items:center;gap:.55rem;transition:gap .3s ease;font-weight:600;}
+.profil-card:hover .profil-cta{gap:1rem;}
 .profil-cta.blue{color:var(--blue);}
-.profil-arrow{font-size:1rem;transition:transform .3s ease;}
-.profil-card:hover .profil-arrow{transform:translateX(4px);}
+.profil-arrow{font-size:1.1rem;transition:transform .3s ease;}
+.profil-card:hover .profil-arrow{transform:translateX(5px) rotate(8deg);}
 
 /* ── STATS ── */
 .stats-band{padding:3.5rem 2.5rem;background:var(--ink);color:var(--paper);display:flex;gap:2rem;flex-wrap:wrap;justify-content:space-around;}
@@ -348,8 +348,22 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .consultant-card:after{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(130deg, rgba(59,130,246,.4), rgba(99,102,241,.2), rgba(30,58,138,.25));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .consultant-card:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(59,130,246,.46);box-shadow:0 16px 36px rgba(30,58,138,.2);}
 .consultant-card:hover:before{opacity:1;}
-.consultant-card.b2b-resource{border-color:rgba(59,130,246,.42);background:linear-gradient(180deg, rgba(30,58,138,.08) 0%, rgba(248,250,252,.96) 100%);}
-.consultant-card.b2b-resource:before{background:linear-gradient(130deg, rgba(30,58,138,.2) 0%, transparent 60%);opacity:.35;}
+.consultant-card.professional-resource{border-color:rgba(59,130,246,.42);background:linear-gradient(180deg, rgba(30,58,138,.08) 0%, rgba(248,250,252,.96) 100%);}
+.consultant-card.professional-resource:before{background:linear-gradient(130deg, rgba(30,58,138,.2) 0%, transparent 60%);opacity:.35;}
+
+/* ── PREMIUM SHOWCASE SECTION ── */
+.premium-showcase{padding:6rem 2.5rem;background:#0f172a url('assets/bg-images/platform-showcase.png') center/cover no-repeat;background-blend-mode:overlay;position:relative;overflow:hidden;color:#fff;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);}
+.premium-showcase:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, rgba(15,23,42,.75) 0%, rgba(30,58,138,.65) 50%, rgba(59,130,246,.45) 100%);z-index:0;}
+.premium-showcase > *{position:relative;z-index:1;}
+.showcase-inner{max-width:1200px;margin:0 auto;text-align:center;}
+.showcase-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;line-height:1.15;margin-bottom:1.5rem;letter-spacing:-.02em;text-shadow:0 4px 12px rgba(0,0,0,.3);}
+.showcase-subtitle{font-size:1.08rem;opacity:.9;max-width:700px;margin:0 auto 2.5rem;line-height:1.8;}
+.showcase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem;}
+.showcase-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:2rem 1.5rem;backdrop-filter:blur(10px);transition:all .3s ease;}
+.showcase-item:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35);transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.25);}
+.showcase-icon{font-size:2.2rem;margin-bottom:1rem;}
+.showcase-item h3{font-size:1.15rem;font-weight:600;margin-bottom:.75rem;letter-spacing:.3px;}
+.showcase-item p{font-size:.9rem;opacity:.85;line-height:1.75;}
 .cc-card-badge{display:inline-flex;align-items:center;gap:.35rem;margin-bottom:.8rem;padding:.28rem .58rem;border-radius:999px;background:rgba(30,58,138,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;}
 .cc-top{display:flex;align-items:flex-start;gap:.85rem;margin-bottom:.8rem;}
 .cc-avatar{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.86rem;font-weight:700;color:#fff;flex-shrink:0;box-shadow:0 8px 16px rgba(59,130,246,.35);letter-spacing:.08em;}
@@ -462,78 +476,26 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .modal-close:hover{color:var(--ink);transform:rotate(90deg);}
 .modal-body{padding:2rem 2.5rem;}
 .modal-footer{padding:1.5rem 2.5rem 2rem;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;position:sticky;bottom:0;background:var(--card);z-index:2;box-shadow:0 -8px 24px rgba(0,0,0,.06);}
-.form-group{margin-bottom:1.25rem;}
+.form-group{margin-bottom:1.25rem;perspective:1000px;}
 .form-label{display:block;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:.5rem;font-weight:600;}
 .form-label span{color:#ef4444;}
-.form-input{width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.65rem 1rem;border:1.5px solid var(--border);background:var(--paper);border-radius:6px;outline:none;color:var(--ink);transition:all .3s ease;}
-.portal-trigger{border-color:var(--blue);color:var(--blue);}
-.portal-trigger:before{background:var(--blue);}
-.portal-role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1.25rem;}
-.portal-role-card{border:1.5px solid var(--border);border-radius:10px;padding:1rem;cursor:pointer;background:var(--card);transition:all .25s ease;min-height:122px;display:flex;flex-direction:column;gap:.45rem;justify-content:flex-start;}
-.portal-role-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-md);}
-.portal-role-card.selected{border-color:var(--blue);background:var(--blue-light);box-shadow:0 0 0 3px rgba(30,58,138,.12);}
-.portal-role-card.hidden-admin{display:none;}
-.portal-role-title{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);font-weight:600;}
-.portal-role-desc{font-size:.78rem;color:var(--muted);line-height:1.6;}
-.portal-role-icon{font-size:1.35rem;}
-.portal-help{font-size:.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem;}
-.portal-actions{display:flex;gap:.75rem;justify-content:flex-end;align-items:center;}
-.portal-error{font-size:.8rem;color:var(--red);min-height:1.2rem;}
-.portal-reset-link{text-align:right;margin-top:-.5rem;margin-bottom:.9rem;}
-.portal-reset-link button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.78rem;text-decoration:underline;}
-.portal-session-box{display:none;margin-bottom:1rem;padding:.9rem 1rem;background:var(--blue-light);border:1px solid var(--blue-border);border-radius:8px;}
-.portal-session-box.open{display:block;}
-.portal-session-box strong{display:block;font-size:.85rem;color:var(--blue);margin-bottom:.25rem;}
-.portal-session-box p{font-size:.78rem;color:var(--muted);line-height:1.6;}
-.portal-session-actions{display:flex;gap:.65rem;justify-content:flex-end;margin-top:.85rem;flex-wrap:wrap;}
-@media(max-width:780px){.portal-role-grid{grid-template-columns:1fr;}}
-.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,169,110,.1);}
-.form-input.blue:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,58,95,.1);}
+.form-input{width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.75rem 1.1rem;border:1.5px solid var(--border);background:linear-gradient(175deg, #ffffff 0%, var(--paper) 100%);border-radius:8px;outline:none;color:var(--ink);transition:all .3s cubic-bezier(.34,.1,.64,.1);position:relative;box-shadow:0 4px 12px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.8);}
+.form-input::placeholder{color:rgba(107,113,128,.5);}
+.form-input:hover{border-color:var(--blue-border);box-shadow:0 6px 16px rgba(30,58,138,.12), inset 0 1px 0 rgba(255,255,255,.8);transform:translateY(-1px);}
+.form-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,58,138,.15), 0 8px 20px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(-2px);}
+.form-input.blue:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,58,95,.12), 0 8px 20px rgba(30,58,138,.16);}
+.form-input:focus::placeholder{color:rgba(107,113,128,.7)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 
-/* ── LANGUAGE SELECTOR ── */
-.lang-selector{display:flex;gap:.4rem;align-items:center;padding-left:1rem;border-left:1px solid var(--border);}
-.lang-btn{background:none;border:none;font-family:'DM Mono',monospace;font-size:.7rem;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:all .2s;border-radius:2px;letter-spacing:.05em;font-weight:500;}
-.lang-btn:hover{color:var(--ink);}
-.lang-btn.active{color:var(--blue);background:var(--blue-light);padding:.3rem .7rem;}
-.lang-btn.active:hover{color:var(--blue);}
-.theme-toggle{background:none;border:none;font-size:1rem;padding:.3rem .5rem;border-radius:4px;cursor:pointer;color:var(--muted);transition:all .2s ease;}
-.theme-toggle:hover{color:var(--ink);background:var(--blue-light);}
-
-.form-select{
-  width:100%;
-  font-family:'DM Sans',sans-serif;
-  font-size:.85rem;
-  padding:.7rem 2.4rem .7rem 1rem;
-  border:1.5px solid var(--border);
-  background-color:var(--paper);
-  background-image:var(--select-arrow),linear-gradient(180deg,rgba(30,58,138,.04),rgba(30,58,138,.01));
-  background-repeat:no-repeat;
-  background-position:right .85rem center,0 0;
-  background-size:12px 8px,100% 100%;
-  border-radius:8px;
-  outline:none;
-  color:var(--ink);
-  cursor:pointer;
-  appearance:none;
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  transition:all .22s ease;
-}
-.form-select:hover{border-color:var(--blue-border);box-shadow:var(--shadow-sm);}
-.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,58,138,.14),var(--shadow-sm);}
-.form-select.blue:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,58,138,.16),var(--shadow-sm);}
-.form-select:disabled{cursor:not-allowed;opacity:.65;background-image:var(--select-arrow),linear-gradient(180deg,rgba(138,133,128,.1),rgba(138,133,128,.05));}
-.form-select option{color:var(--ink);background:var(--paper);}
-.form-textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.65rem 1rem;border:1.5px solid var(--border);background:var(--paper);border-radius:6px;outline:none;color:var(--ink);resize:vertical;min-height:110px;transition:all .3s ease;}
-.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,169,110,.1);}
-.form-textarea.blue:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(30,58,95,.1);}
-.type-selector{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
-.type-option{border:2px solid var(--border);border-radius:8px;padding:1.25rem;cursor:pointer;transition:all .3s ease;text-align:center;background:var(--card);width:100%;appearance:none;-webkit-appearance:none;color:var(--ink);}
-.type-option:hover{border-color:var(--accent);background:rgba(200,169,110,.02);}
-.type-option.selected{border-color:var(--accent);background:rgba(200,169,110,.08);}
+/* ── ENHANCED 3D FORM FIELDS ── */
+.form-input::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, rgba(99,102,241,.1) 0%, rgba(59,130,246,.05) 100%);opacity:0;border-radius:8px;pointer-events:none;}
+.form-input:focus::before{opacity:1;animation:glow .6s ease-out;}
+.form-textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.75rem 1.1rem;border:1.5px solid var(--border);background:linear-gradient(175deg, #ffffff 0%, var(--paper) 100%);border-radius:8px;outline:none;color:var(--ink);resize:vertical;min-height:110px;transition:all .3s cubic-bezier(.34,.1,.64,.1);box-shadow:0 4px 12px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.8);}
+.form-textarea:hover{border-color:var(--blue-border);box-shadow:0 6px 16px rgba(30,58,138,.12), inset 0 1px 0 rgba(255,255,255,.8);}
+.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,58,138,.15), 0 8px 20px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.9);}
+.form-textarea.blue:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,58,95,.12), 0 8px 20px rgba(30,58,138,.16);}
 .type-option:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,169,110,.12);}
 .type-option .t-icon{font-size:1.6rem;margin-bottom:.6rem;}
 .type-option h4{font-size:.85rem;font-weight:600;margin-bottom:.25rem;letter-spacing:.5px;}
@@ -561,6 +523,45 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .chip:hover{border-color:var(--accent);}
 .chip.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
 .chip.selected.gold{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+/* ── PREMIUM FORM SELECT ── */
+.form-select{
+  width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.8rem 2.6rem .8rem 1.2rem;border:1.5px solid var(--border);background:linear-gradient(175deg, #ffffff 0%, var(--paper) 100%);background-image:var(--select-arrow),linear-gradient(180deg,rgba(30,58,138,.02),rgba(30,58,138,.01));background-repeat:no-repeat;background-position:right 1rem center, 0 0;background-size:14px 8px,100% 100%;border-radius:8px;outline:none;color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;transition:all .3s cubic-bezier(.34,.1,.64,.1);box-shadow:0 4px 12px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.form-select:hover{border-color:var(--blue-border);box-shadow:0 6px 16px rgba(30,58,138,.12), inset 0 1px 0 rgba(255,255,255,.8);transform:translateY(-1px);}
+.form-select:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 4px rgba(30,58,138,.15), 0 8px 20px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(-2px);}
+.form-select.blue:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,58,95,.12), 0 8px 20px rgba(30,58,138,.16);}
+.form-select:disabled{cursor:not-allowed;opacity:.6;background-image:var(--select-arrow),linear-gradient(180deg,rgba(138,133,128,.1),rgba(138,133,128,.05));}
+.form-select option{color:var(--ink);background:var(--paper);padding:.5rem;}
+
+/* ── PORTAL ROLE CARDS 3D ── */
+.portal-trigger{border-color:var(--blue);color:var(--blue);}
+.portal-trigger:before{background:var(--blue);}
+.portal-role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem;perspective:1200px;}
+.portal-role-card{
+  border:1.5px solid var(--border);border-radius:12px;padding:1.5rem 1.25rem;cursor:pointer;background:linear-gradient(165deg, var(--card) 0%, var(--paper) 100%);transition:all .35s cubic-bezier(.34,.1,.64,.1);min-height:140px;display:flex;flex-direction:column;gap:.6rem;justify-content:flex-start;position:relative;transform:perspective(1000px) rotateY(0deg) rotateX(0deg);box-shadow:0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.portal-role-card:hover{
+  border-color:var(--blue);background:linear-gradient(165deg, #ffffff 0%, var(--blue-light) 100%);transform:perspective(1000px) rotateY(3deg) rotateX(-2deg) translateY(-4px);box-shadow:0 16px 40px rgba(30,58,138,.22), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.portal-role-card.selected{border-color:var(--blue);background:linear-gradient(165deg, var(--blue-light) 0%, rgba(99,102,241,.05) 100%);box-shadow:0 0 0 3px rgba(30,58,138,.2), 0 12px 32px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.6);}
+.portal-role-card.hidden-admin{display:none;}
+.portal-role-icon{font-size:1.6rem;transition:transform .3s ease;}
+.portal-role-card:hover .portal-role-icon{transform:scale(1.15) rotate(8deg);}
+.portal-role-title{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600;}
+.portal-role-desc{font-size:.78rem;color:var(--muted);line-height:1.7;}
+.portal-help{font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;padding:.8rem 1rem;background:rgba(99,102,241,.06);border-left:3px solid var(--blue);border-radius:4px;}
+.portal-actions{display:flex;gap:.85rem;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
+.portal-error{font-size:.8rem;color:var(--red);min-height:1.2rem;padding:.5rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:4px;}
+.portal-reset-link{text-align:right;margin-top:.2rem;margin-bottom:.9rem;}
+.portal-reset-link button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.78rem;text-decoration:underline;transition:color .2s ease;font-weight:500;}
+.portal-reset-link button:hover{color:var(--blue-mid);}
+.portal-session-box{display:none;margin-bottom:1.25rem;padding:1.1rem 1.25rem;background:linear-gradient(165deg, var(--blue-light) 0%, rgba(99,102,241,.08) 100%);border:1px solid var(--blue-border);border-radius:10px;box-shadow:0 4px 12px rgba(30,58,138,.1);}
+.portal-session-box.open{display:block;animation:slideUp .3s ease;}
+.portal-session-box strong{display:block;font-size:.85rem;color:var(--blue);margin-bottom:.4rem;font-weight:600;}
+.portal-session-box p{font-size:.78rem;color:var(--muted);line-height:1.7;}
+.portal-session-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap;}
+@media(max-width:780px){.portal-role-grid{grid-template-columns:1fr;}}
 
 /* ── ERROR MODAL ── */
 .error-overlay{display:none;position:fixed;inset:0;background:rgba(14,14,14,.6);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;animation:fadeIn .3s ease;}
@@ -673,7 +674,7 @@ const translations = {
     'nav.find': 'Trouver un expert',
 
     // Home Hero
-    'hero.badge': 'Staff Augmentation ERP · B2B · Enterprise-grade',
+    'hero.badge': 'Staff Augmentation ERP · Plateforme professionnelle · Enterprise-grade',
     'hero.title': 'Trouvez les meilleurs consultants ERP en quelques clics',
     'hero.subtitle': 'Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.',
     'kpi.active': 'Ressources actives',
@@ -683,16 +684,16 @@ const translations = {
     'hero.btn1': 'Je suis consultant',
     'hero.btn2': 'Trouver un expert',
     'hero.btnPublish': 'Publier une mission',
-    'hero.btn3': 'Offrir mes ressources B2B',
+    'hero.btn3': 'Offrir mes ressources',
     
     // Service Description
     'service.badge': 'Notre service',
-    'service.title': 'La plateforme B2B orientée staff augmentation ERP pour grandes entreprises',
+    'service.title': 'La plateforme de collaboration professionnelle orientée staff augmentation ERP pour grandes entreprises',
     'service.desc': 'ExpertERPHub connecte trois acteurs clés: consultants certifiés, firmes de ressources ERP, et entreprises clientes. Le tout est piloté via un dashboard unique pour suivre disponibilité, statut et traçabilité des ressources en continu.',
     'service.pillar1': '100% spécialisé ERP',
     'service.pillar1_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow et plus — nous ne couvrons que ce domaine, et nous le couvrons en profondeur.',
-    'service.pillar2': 'B2B anonyme & sécurisé',
-    'service.pillar2_desc': 'Les profils des ressources B2B ne divulguent pas d\'informations personnelles. La mise en relation se fait via la plateforme uniquement.',
+    'service.pillar2': 'Collaboration anonyme & sécurisée',
+    'service.pillar2_desc': 'Les profils des ressources ne divulguent pas d\'informations personnelles. La mise en relation se fait via la plateforme uniquement.',
     'service.pillar3': 'Profils approuvés par notre équipe',
     'service.pillar3_desc': 'Chaque consultant ou ressource est validé manuellement avant publication. Zéro profil non vérifié sur la plateforme.',
     'service.pillar4': 'Premiere reponse sous 2h',
@@ -704,12 +705,12 @@ const translations = {
     'card.consultant_desc': 'Vous êtes incorporé et souhaitez plus de visibilité, accéder à des mandats directs et construire votre réputation.',
     'card.consultant_cta': 'S\'inscrire →',
     
-    'card.b2b_offer': 'B2B — Offre',
+    'card.b2b_offer': 'Solutions interentreprises — Offre',
     'card.b2b_offer_sub': 'Entreprise — ressources disponibles',
     'card.b2b_offer_desc': 'Votre firme dispose de consultants ERP qualifiés entre deux mandats. Mettez-les à disposition d\'autres entreprises.',
     'card.b2b_offer_cta': 'Mettre à disposition →',
     
-    'card.b2b_seek': 'B2B — Demande',
+    'card.b2b_seek': 'Solutions interentreprises — Demande',
     'card.b2b_seek_sub': 'Entreprise — cherche ressources',
     'card.b2b_seek_desc': 'Vous avez un projet acquis et manquez d\'experts qualifiés pour le livrer. Accédez rapidement aux ressources certifiées.',
     'card.b2b_seek_cta': 'Déposer une demande →',
@@ -760,15 +761,15 @@ const translations = {
     'ops.card4.title': 'Décision plus rapide',
     'ops.card4.desc': 'Réduisez les délais de staffing grâce à des données à jour et actionnables.',
     'page.companies.hero.btn1': 'Trouver des SMEs pour mon ERP',
-    'page.companies.hero.btn2': 'Besoin d\'une ressource B2B',
+    'page.companies.hero.btn2': 'Besoin d\'une ressource',
     'page.companies.hero.btn3': 'Mettre mes ressources à disposition',
     
     // How it Works
     'page.howitworks.title': 'Comment ça marche',
     'page.howitworks.subtitle': 'Un processus simple et rapide selon votre profil',
     'tab.consultant': 'Consultant',
-    'tab.b2b_offer': 'B2B — Offre ressources',
-    'tab.b2b_seek': 'B2B — Cherche ressources',
+    'tab.b2b_offer': 'Solutions interentreprises — Offre ressources',
+    'tab.b2b_seek': 'Solutions interentreprises — Cherche ressources',
     'tab.erp_impl': 'Implémentation ERP',
     
     // Step descriptions for Consultant
@@ -781,7 +782,7 @@ const translations = {
     'step04.consultant': 'Recevez des mandats',
     'step04.consultant_desc': 'Les entreprises vous contactent directement. Pas d\'intermédiaire, pas de frais cachés.',
     
-    // Step descriptions for B2B Offer
+    // Step descriptions for Solutions Interentreprises - Offre
     'step01.b2b_offer': 'Déclarez vos ressources',
     'step01.b2b_offer_desc': 'Indiquez les consultants disponibles, leurs compétences ERP et leur disponibilité.',
     'step02.b2b_offer': 'Matching automatique',
@@ -789,9 +790,9 @@ const translations = {
     'step03.b2b_offer': 'Mise en relation',
     'step03.b2b_offer_desc': 'Vous êtes contacté directement par les firmes intéressées sous 24–48h.',
     'step04.b2b_offer': 'Placement rapide',
-    'step04.b2b_offer_desc': 'Vos consultants sont placés rapidement, sans friction et en B2B direct.',
+    'step04.b2b_offer_desc': 'Vos consultants sont placés rapidement, sans friction et en collaboration directe.',
     
-    // Step descriptions for B2B Seek
+    // Step descriptions for Solutions Interentreprises - Demande
     'step01.b2b_seek': 'Décrivez votre besoin',
     'step01.b2b_seek_desc': 'ERP, compétences requises, durée du mandat, démarrage souhaité.',
     'step02.b2b_seek': 'Accès au réseau',
@@ -799,7 +800,7 @@ const translations = {
     'step03.b2b_seek': 'Sélection',
     'step03.b2b_seek_desc': 'Comparez les profils, échangez directement, sélectionnez la ressource idéale.',
     'step04.b2b_seek': 'Démarrage rapide',
-    'step04.b2b_seek_desc': 'Contrat B2B direct, onboarding en 48h.',
+    'step04.b2b_seek_desc': 'Accord direct, onboarding en 48h.',
     
     // Step descriptions for ERP Impl
     'step01.erp_impl': 'Partagez votre projet ERP',
@@ -837,7 +838,7 @@ const translations = {
     'nav.find': 'Find an expert',
     
     // Home Hero
-    'hero.badge': 'ERP Staff Augmentation · B2B · Enterprise-grade',
+    'hero.badge': 'ERP Staff Augmentation · Professional Collaboration · Enterprise-grade',
     'hero.title': 'Find the best ERP consultants in just a few clicks',
     'hero.subtitle': 'Accelerate SAP, Oracle, Dynamics, and Workday initiatives with a premium SaaS platform: targeted sourcing, fast validation, and real-time operational visibility.',
     'kpi.active': 'Active resources',
@@ -847,16 +848,16 @@ const translations = {
     'hero.btn1': 'I am a consultant',
     'hero.btn2': 'Find an expert',
     'hero.btnPublish': 'Post a project',
-    'hero.btn3': 'Offer my B2B resources',
+    'hero.btn3': 'Offer my professional resources',
     
     // Service Description
     'service.badge': 'Our service',
-    'service.title': 'The B2B platform built for enterprise ERP staff augmentation',
+    'service.title': 'The professional collaboration platform built for enterprise ERP staff augmentation',
     'service.desc': 'ExpertERPHub connects certified consultants, resource firms, and client companies with one operating model: a single dashboard for live availability, status tracking, and full resource traceability.',
     'service.pillar1': '100% ERP Specialized',
     'service.pillar1_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow and more — we only cover this domain, and we cover it deeply.',
-    'service.pillar2': 'Anonymous & Secure B2B',
-    'service.pillar2_desc': 'B2B resource profiles don\'t disclose personal information. Connection happens through the platform only.',
+    'service.pillar2': 'Anonymous & Secure Collaboration',
+    'service.pillar2_desc': 'Professional resource profiles don\'t disclose personal information. Connection happens through the platform only.',
     'service.pillar3': 'Profiles Approved by Our Team',
     'service.pillar3_desc': 'Every consultant or resource is manually validated before publication. Zero unverified profiles on the platform.',
     'service.pillar4': 'First response under 2h',
@@ -868,12 +869,12 @@ const translations = {
     'card.consultant_desc': 'You are incorporated and want more visibility, access to direct mandates and build your reputation.',
     'card.consultant_cta': 'Register →',
     
-    'card.b2b_offer': 'B2B — Supply',
+    'card.b2b_offer': 'Professional Resource Supply',
     'card.b2b_offer_sub': 'Company — Available Resources',
     'card.b2b_offer_desc': 'Your firm has qualified ERP consultants between mandates. Make them available to other companies.',
     'card.b2b_offer_cta': 'Make Available →',
     
-    'card.b2b_seek': 'B2B — Demand',
+    'card.b2b_seek': 'Professional Resource Request',
     'card.b2b_seek_sub': 'Company — Seeking Resources',
     'card.b2b_seek_desc': 'You have a won mandate and lack qualified experts to deliver. Quickly access certified resources.',
     'card.b2b_seek_cta': 'Submit a Request →',
@@ -924,15 +925,15 @@ const translations = {
     'ops.card4.title': 'Faster decisions',
     'ops.card4.desc': 'Reduce staffing lead times with live and actionable data.',
     'page.companies.hero.btn1': 'Find SMEs for my ERP',
-    'page.companies.hero.btn2': 'Need a B2B resource',
+    'page.companies.hero.btn2': 'Need a professional resource',
     'page.companies.hero.btn3': 'Offer my resources',
     
     // How it Works
     'page.howitworks.title': 'How it works',
     'page.howitworks.subtitle': 'A simple and fast process according to your profile',
     'tab.consultant': 'Consultant',
-    'tab.b2b_offer': 'B2B — Offer resources',
-    'tab.b2b_seek': 'B2B — Seek resources',
+    'tab.b2b_offer': 'Offer resources',
+    'tab.b2b_seek': 'Search resources',
     'tab.erp_impl': 'ERP Implementation',
     
     // Step descriptions for Consultant
@@ -945,7 +946,7 @@ const translations = {
     'step04.consultant': 'Receive mandates',
     'step04.consultant_desc': 'Companies contact you directly. No middleman, no hidden fees.',
     
-    // Step descriptions for B2B Offer
+    // Step descriptions for Professional Resource Supply
     'step01.b2b_offer': 'Declare your resources',
     'step01.b2b_offer_desc': 'List available consultants, their ERP skills and availability.',
     'step02.b2b_offer': 'Automatic matching',
@@ -953,9 +954,9 @@ const translations = {
     'step03.b2b_offer': 'Connection',
     'step03.b2b_offer_desc': 'You are contacted directly by interested firms within 24–48 hours.',
     'step04.b2b_offer': 'Quick placement',
-    'step04.b2b_offer_desc': 'Your consultants are placed quickly, without friction and in direct B2B.',
+    'step04.b2b_offer_desc': 'Your consultants are placed quickly, without friction and through direct professional collaboration.',
     
-    // Step descriptions for B2B Seek
+    // Step descriptions for Professional Resource Request
     'step01.b2b_seek': 'Describe your need',
     'step01.b2b_seek_desc': 'ERP, required skills, mandate duration, desired start date.',
     'step02.b2b_seek': 'Network access',
@@ -963,7 +964,7 @@ const translations = {
     'step03.b2b_seek': 'Selection',
     'step03.b2b_seek_desc': 'Compare profiles, exchange directly, select the ideal resource.',
     'step04.b2b_seek': 'Quick start',
-    'step04.b2b_seek_desc': 'Direct B2B contract, onboarding in 48 hours.',
+    'step04.b2b_seek_desc': 'Direct professional agreement, onboarding in 48 hours.',
     
     // Step descriptions for ERP Impl
     'step01.erp_impl': 'Share your ERP project',
@@ -1111,13 +1112,13 @@ function toggleTheme() {
 
   <!-- Hero -->
   <div class="home-hero">
-    <div class="eyebrow" data-i18n="hero.badge">Marketplace B2B · ERP · Experts certifiés</div>
+    <div class="eyebrow" data-i18n="hero.badge">Plateforme professionnelle · ERP · Experts certifiés</div>
     <h1 class="hero-h1" data-i18n="hero.title">Trouvez les meilleurs consultants ERP en quelques clics</h1>
     <p class="hero-sub" data-i18n="hero.subtitle">Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.</p>
     <div class="hero-ctas">
       <button class="btn-hero-gold" data-action="open-entreprise-modal" data-i18n="hero.btn2">Trouver un expert</button>
       <button class="btn-hero-blue" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="hero.btnPublish">Publier une mission</button>
-      <button class="btn-hero-glass" data-action="show-page" data-page="entreprises" data-i18n="hero.btn3">Offrir mes ressources B2B</button>
+      <button class="btn-hero-glass" data-action="show-page" data-page="entreprises" data-i18n="hero.btn3">Offrir mes ressources professionnelles</button>
     </div>
     <div class="hero-badges">
       <span class="hero-badge">Staff Augmentation ERP</span>
@@ -1173,11 +1174,36 @@ function toggleTheme() {
     </div>
   </div>
 
+  <!-- ── PREMIUM SHOWCASE SECTION ── -->
+  <section class="premium-showcase reveal-up">
+    <div class="showcase-inner">
+      <h2 class="showcase-title">Modèles de Collaboration Professionnelle</h2>
+      <p class="showcase-subtitle">Choisissez le modèle qui correspond à votre stratégie d'expansion</p>
+      <div class="showcase-grid">
+        <div class="showcase-item">
+          <div class="showcase-icon">🔹</div>
+          <h3>Version Classique</h3>
+          <p>Relations interentreprises · Services aux entreprises · Collaboration entre entreprises</p>
+        </div>
+        <div class="showcase-item">
+          <div class="showcase-icon">⚡</div>
+          <h3>Version Moderne</h3>
+          <p>Écosystème d'entreprises · Réseau d'affaires · Plateforme de collaboration professionnelle</p>
+        </div>
+        <div class="showcase-item">
+          <div class="showcase-icon">💎</div>
+          <h3>Version Premium</h3>
+          <p>Réseau intelligent d'entreprises · Plateforme d'experts connectés · Hub de collaboration technologique</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── SERVICE DESCRIPTION ── -->
   <div class="service-desc-section reveal-up">
     <div class="sd-inner">
       <div class="sd-badge" data-i18n="service.badge">Notre service</div>
-      <h2 class="sd-title" data-i18n="service.title">La marketplace B2B qui connecte<br>experts ERP et entreprises — sans friction</h2>
+      <h2 class="sd-title" data-i18n="service.title">La marketplace de collaboration professionnelle qui connecte<br>experts ERP et entreprises — sans friction</h2>
       <p class="sd-sub" data-i18n="service.desc">ExpertERPHub est une plateforme spécialisée qui met en relation trois types d'acteurs du monde ERP : les consultants indépendants certifiés, les firmes qui disposent de ressources à placer, et les entreprises qui ont besoin d'expertise pour implémenter ou opérer leur ERP.</p>
       <div class="sd-pillars">
         <div class="sd-pillar">
@@ -1187,8 +1213,8 @@ function toggleTheme() {
         </div>
         <div class="sd-pillar">
           <div class="sd-pillar-icon">🔒</div>
-          <h4>B2B anonyme &amp; sécurisé</h4>
-          <p>Les profils des ressources B2B ne divulguent pas d'informations personnelles. La mise en relation se fait via la plateforme uniquement.</p>
+          <h4>Collaboration anonyme &amp; sécurisée</h4>
+          <p>Les profils des ressources professionnelles ne divulguent pas d'informations personnelles. La mise en relation se fait via la plateforme uniquement.</p>
         </div>
         <div class="sd-pillar">
           <div class="sd-pillar-icon">✅</div>
@@ -1246,7 +1272,7 @@ function toggleTheme() {
 
       <div class="profil-card blue" data-action="open-entreprise-modal" data-mode="offrir">
         <div class="profil-icon blue-bg">🏢</div>
-        <span class="profil-tag blue" data-i18n="card.b2b_offer">B2B — Offre</span>
+        <span class="profil-tag blue" data-i18n="card.b2b_offer">Solutions interentreprises</span>
         <h3 data-i18n="card.b2b_offer_sub">Entreprise — ressources disponibles</h3>
         <p data-i18n="card.b2b_offer_desc">Votre firme dispose de consultants ERP qualifiés entre deux mandats. Mettez-les à disposition d'autres entreprises.</p>
         <div class="profil-cta blue" data-i18n="card.b2b_offer_cta">Mettre à disposition <span class="profil-arrow">→</span></div>
@@ -1254,7 +1280,7 @@ function toggleTheme() {
 
       <div class="profil-card blue" data-action="open-entreprise-modal" data-mode="chercher">
         <div class="profil-icon blue-bg">🔍</div>
-        <span class="profil-tag blue" data-i18n="card.b2b_seek">B2B — Demande</span>
+        <span class="profil-tag blue" data-i18n="card.b2b_seek">Recherche interentreprises</span>
         <h3 data-i18n="card.b2b_seek_sub">Entreprise — cherche ressources</h3>
         <p data-i18n="card.b2b_seek_desc">Vous avez un projet acquis et manquez d'experts qualifiés pour le livrer. Accédez rapidement aux ressources certifiées.</p>
         <div class="profil-cta blue" data-i18n="card.b2b_seek_cta">Déposer une demande <span class="profil-arrow">→</span></div>
@@ -1276,7 +1302,7 @@ function toggleTheme() {
     <div class="stat-item"><div class="stat-n">380+</div><div class="stat-l" data-i18n="stat.consultants">Consultants certifiés</div></div>
     <div class="stat-item"><div class="stat-n">18</div><div class="stat-l" data-i18n="stat.countries">Pays couverts</div></div>
     <div class="stat-item"><div class="stat-n">Top 10</div><div class="stat-l" data-i18n="stat.erps">ERP supportés</div></div>
-    <div class="stat-item"><div class="stat-n">B2B</div><div class="stat-l" data-i18n="stat.transactions">Transactions directes</div></div>
+    <div class="stat-item"><div class="stat-n">Direct</div><div class="stat-l" data-i18n="stat.transactions">Transactions directes</div></div>
     <div class="stat-item"><div class="stat-n">48h</div><div class="stat-l" data-i18n="stat.time">Délai de matching moyen</div></div>
   </div>
 
@@ -1286,8 +1312,8 @@ function toggleTheme() {
     <p class="sub">Un processus simple selon votre profil.</p>
     <div class="how-tabs">
       <button class="how-tab active-gold" data-action="switch-how-tab" data-tab-target="consultant">Consultant</button>
-      <button class="how-tab" data-action="switch-how-tab" data-tab-target="b2b-offre">B2B — Offre ressources</button>
-      <button class="how-tab" data-action="switch-how-tab" data-tab-target="b2b-cherche">B2B — Cherche ressources</button>
+      <button class="how-tab" data-action="switch-how-tab" data-tab-target="b2b-offre">Offre de ressources</button>
+      <button class="how-tab" data-action="switch-how-tab" data-tab-target="b2b-cherche">Recherche de ressources</button>
       <button class="how-tab" data-action="switch-how-tab" data-tab-target="erp">Implémentation ERP</button>
     </div>
 
@@ -1302,14 +1328,14 @@ function toggleTheme() {
       <div class="how-step"><div class="how-num">01</div><h3>Déclarez vos ressources</h3><p>Indiquez les consultants disponibles, leurs compétences ERP et leur disponibilité.</p></div>
       <div class="how-step"><div class="how-num">02</div><h3>Matching automatique</h3><p>Notre système identifie les entreprises qui ont besoin de vos profils.</p></div>
       <div class="how-step"><div class="how-num">03</div><h3>Mise en relation</h3><p>Vous êtes contacté directement par les firmes intéressées sous 24–48h.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Placement rapide</h3><p>Vos consultants sont placés rapidement, sans friction et en B2B direct.</p></div>
+      <div class="how-step"><div class="how-num">04</div><h3>Placement rapide</h3><p>Vos consultants sont placés rapidement, sans friction et en collaboration directe.</p></div>
     </div>
 
     <div class="how-content" id="how-b2b-cherche">
       <div class="how-step"><div class="how-num">01</div><h3>Décrivez votre besoin</h3><p>ERP, compétences requises, durée du mandat, démarrage souhaité.</p></div>
       <div class="how-step"><div class="how-num">02</div><h3>Accès au réseau</h3><p>Vous accédez immédiatement aux consultants et firmes disponibles correspondant à votre critère.</p></div>
       <div class="how-step"><div class="how-num">03</div><h3>Sélection</h3><p>Comparez les profils, échangez directement, sélectionnez la ressource idéale.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Démarrage rapide</h3><p>Contrat B2B direct, onboarding en 48h.</p></div>
+      <div class="how-step"><div class="how-num">04</div><h3>Démarrage rapide</h3><p>Accord direct, onboarding en 48h.</p></div>
     </div>
 
     <div class="how-content" id="how-erp">
@@ -1433,7 +1459,7 @@ function toggleTheme() {
     <p data-i18n="page.companies.hero.subtitle">Structurez votre staff augmentation ERP avec un dashboard unique: visibilite des ressources, disponibilite temps reel et tracabilite complete.</p>
     <div class="ent-ctas">
       <button class="btn-white" data-action="open-entreprise-modal" data-mode="erp" data-i18n="page.companies.hero.btn1">Trouver des SMEs pour mon ERP</button>
-      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="page.companies.hero.btn2">Besoin d'une ressource B2B</button>
+      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="page.companies.hero.btn2">Besoin d'une ressource qualifiée</button>
       <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="offrir" data-i18n="page.companies.hero.btn3">Mettre mes ressources à disposition</button>
     </div>
   </div>
@@ -1454,11 +1480,11 @@ function toggleTheme() {
 
     <div class="ent-card">
       <div class="ent-card-icon">🔍</div>
-      <h3>B2B — Je cherche une ressource</h3>
+      <h3>Je cherche une ressource qualifiée</h3>
       <p>Vous avez un mandat acquis et manquez d'un expert ERP qualifié. Accédez rapidement à des ressources certifiées.</p>
       <ul>
         <li>Consultants vérifiés disponibles rapidement</li>
-        <li>Placement en B2B direct</li>
+        <li>Mise en relation directe</li>
         <li>Tous niveaux d'expérience</li>
         <li>Démarrage possible en 48h</li>
       </ul>
@@ -1467,12 +1493,12 @@ function toggleTheme() {
 
     <div class="ent-card">
       <div class="ent-card-icon">🏢</div>
-      <h3>B2B — J'offre des ressources</h3>
+      <h3>Je propose des ressources</h3>
       <p>Votre firme dispose de consultants ERP disponibles. Placez-les chez d'autres entreprises qui en ont besoin.</p>
       <ul>
         <li>Valorisez vos consultants sur le banc</li>
         <li>Accès à un réseau d'entreprises qualifiées</li>
-        <li>Contrats B2B directs</li>
+        <li>Accords directs entre entreprises</li>
         <li>Visibilité immédiate sur le marché</li>
       </ul>
       <button class="btn-ent" data-action="open-entreprise-modal" data-mode="offrir">Inscrire mes ressources →</button>
@@ -1503,7 +1529,7 @@ function toggleTheme() {
         <tr><td>Accès à l'expert</td><td class="ours">✓ Direct, sans intermédiaire</td><td class="theirs">✗ Via gestionnaire de compte</td></tr>
         <tr><td>Transparence des tarifs</td><td class="ours">✓ TJM visible et négocié directement</td><td class="theirs">✗ Marges de 40–60% non visibles</td></tr>
         <tr><td>Délai de démarrage</td><td class="ours">✓ 24–48h</td><td class="theirs">✗ 2–6 semaines</td></tr>
-        <tr><td>Flexibilité contractuelle</td><td class="ours">✓ Contrat B2B souple</td><td class="theirs">✗ Contrats rigides, longue durée</td></tr>
+        <tr><td>Flexibilité contractuelle</td><td class="ours">✓ Accord direct souple</td><td class="theirs">✗ Contrats rigides, longue durée</td></tr>
         <tr><td>Spécialisation ERP</td><td class="ours">✓ 100% focalisé ERP</td><td class="theirs">~ Généraliste avec une pratique ERP</td></tr>
         <tr><td>Vérification des experts</td><td class="ours">✓ Certifications validées</td><td class="theirs">~ Variable selon les équipes</td></tr>
       </tbody>
@@ -1531,8 +1557,8 @@ function toggleTheme() {
   <div style="padding:2rem 2.5rem;">
     <div class="how-tabs" style="margin-bottom:2rem;">
       <button class="how-tab active-gold" data-action="switch-how-tab-2" data-tab-target="c2" data-i18n="tab.consultant">Consultant indépendant</button>
-      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c3" data-i18n="tab.b2b_offer">B2B — Offre ressources</button>
-      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c4" data-i18n="tab.b2b_seek">B2B — Cherche ressources</button>
+      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c3" data-i18n="tab.b2b_offer">Offre de ressources</button>
+      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c4" data-i18n="tab.b2b_seek">Recherche de ressources</button>
       <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c5" data-i18n="tab.erp_impl">Implémentation ERP</button>
     </div>
     <div class="how-content active" id="how-c2" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
@@ -1546,14 +1572,14 @@ function toggleTheme() {
       <div class="how-step"><div class="how-num">01</div><h3>Inscrivez votre entreprise</h3><p>Nom, secteur, ERP maîtrisés, nombre de consultants disponibles.</p></div>
       <div class="how-step"><div class="how-num">02</div><h3>Déclarez vos ressources</h3><p>Pour chaque consultant : compétences, niveau, disponibilité, tarif.</p></div>
       <div class="how-step"><div class="how-num">03</div><h3>Matching automatique</h3><p>Votre profil est mis en face des demandes entrantes correspondantes.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Contact et placement</h3><p>Les entreprises demandeuses vous contactent. Vous finalisez le contrat B2B.</p></div>
+      <div class="how-step"><div class="how-num">04</div><h3>Contact et placement</h3><p>Les entreprises demandeuses vous contactent. Vous finalisez l'accord de collaboration.</p></div>
     </div>
     <div class="how-content" id="how-c4" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       <div class="how-step"><div class="how-num">01</div><h3>Décrivez votre besoin</h3><p>ERP concerné, rôle recherché, durée, budget indicatif, démarrage souhaité.</p></div>
       <div class="how-step"><div class="how-num">02</div><h3>Accès aux profils</h3><p>Vous accédez immédiatement aux consultants et firmes disponibles sur ce profil.</p></div>
       <div class="how-step"><div class="how-num">03</div><h3>Shortlist en 24h</h3><p>Notre équipe vous prépare une sélection de 3–5 profils adaptés à votre contexte.</p></div>
       <div class="how-step"><div class="how-num">04</div><h3>Entretien et sélection</h3><p>Échangez directement avec les candidats. Vous choisissez, nous facilitons.</p></div>
-      <div class="how-step"><div class="how-num">05</div><h3>Démarrage en 48h</h3><p>Contrat B2B direct. La ressource démarre dans les meilleurs délais.</p></div>
+      <div class="how-step"><div class="how-num">05</div><h3>Démarrage en 48h</h3><p>Accord direct. La ressource démarre dans les meilleurs délais.</p></div>
     </div>
     <div class="how-content" id="how-c5" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       <div class="how-step"><div class="how-num">01</div><h3>Brief de votre projet ERP</h3><p>ERP cible, modules, secteur d'activité, taille d'équipe, phase actuelle.</p></div>
@@ -1748,13 +1774,13 @@ function toggleTheme() {
           <button type="button" class="type-option" id="topt-chercher" data-action="select-ent-type" data-ent-type="chercher">
             <div style="display:flex;align-items:center;gap:1rem;">
               <div class="t-icon">🔍</div>
-              <div><h4>B2B — Cherche une ressource qualifiée</h4><p>J'ai un mandat et j'ai besoin d'un expert ERP rapidement</p></div>
+              <div><h4>Recherche d'une ressource qualifiée</h4><p>J'ai un mandat et j'ai besoin d'un expert ERP rapidement</p></div>
             </div>
           </button>
           <button type="button" class="type-option" id="topt-offrir" data-action="select-ent-type" data-ent-type="offrir">
             <div style="display:flex;align-items:center;gap:1rem;">
               <div class="t-icon">🏢</div>
-              <div><h4>B2B — Offre des ressources</h4><p>Ma firme dispose de consultants disponibles à placer</p></div>
+              <div><h4>Proposer des ressources</h4><p>Ma firme dispose de consultants disponibles à placer</p></div>
             </div>
           </button>
         </div>
@@ -3780,8 +3806,8 @@ function renderConsultants(list) {
     const location = notes.ville || 'Location non précisée';
     const mode = notes.mode_travail || 'Flexible';
     const dispo = notes.dispo || notes.disponibilite || t('consultant.available');
-    return `<div class="consultant-card${isB2BAnonymous ? ' b2b-resource' : ''}" data-consultant-id="${c.id}" style="cursor:pointer;">
-      ${isB2BAnonymous ? '<div class="cc-card-badge">B2B Partner Resource</div>' : ''}
+    return `<div class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${c.id}" style="cursor:pointer;">
+      ${isB2BAnonymous ? '<div class="cc-card-badge badge-professional">Ressource Professionnelle</div>' : ''}
       <div class="cc-top">
         <div class="cc-avatar${isB2BAnonymous ? ' partner' : ''}">${initials}</div>
         <div class="cc-info">
@@ -3793,7 +3819,7 @@ function renderConsultants(list) {
       <div class="cc-tags">
         ${skills.map(s => `<span class="cc-tag">${s}</span>`).join('')}
         ${mode ? `<span class="cc-tag blue">${mode}</span>` : ''}
-        ${isB2BAnonymous ? '<span class="cc-tag blue">Anonyme B2B</span>' : ''}
+        ${isB2BAnonymous ? '<span class="cc-tag blue">Ressource confidentielle</span>' : ''}
       </div>
       <div class="cc-highlights">
         <div class="cc-highlight">⭐ ${exp} ans d'expérience</div>
