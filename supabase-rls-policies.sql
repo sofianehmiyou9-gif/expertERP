@@ -114,8 +114,17 @@ CREATE POLICY "invitation_codes_public_check"
   TO anon, authenticated
   USING (is_active = true AND used_at IS NULL);
 
--- Only service role (admin) can insert, update, delete
--- (No public INSERT/UPDATE/DELETE policy — admin uses service key)
+-- Allow frontend to mark a code as used once.
+-- This permits updating only active + unused codes, and only toward a used state.
+DROP POLICY IF EXISTS "invitation_codes_mark_used" ON public.invitation_codes;
+CREATE POLICY "invitation_codes_mark_used"
+  ON public.invitation_codes
+  FOR UPDATE
+  TO anon, authenticated
+  USING (is_active = true AND used_at IS NULL)
+  WITH CHECK (is_active = true AND used_at IS NOT NULL);
+
+-- No public INSERT/DELETE policy (admin/service role only)
 
 -- =========================================================
 -- HOW TO CREATE AN INVITATION CODE (run as admin):
