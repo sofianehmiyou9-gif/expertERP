@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recovery Redirect - ExpertERPHub</title>
+<style>
+:root {
+  --ink: #111827;
+  --paper: #f8fafc;
+  --accent: #2563eb;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+h1 {
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+}
+p {
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+a {
+  color: var(--accent);
+}
+.mono {
+  font-family: Consolas, monospace;
+  word-break: break-all;
+  font-size: 0.85rem;
+}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Redirection vers la reinitialisation</h1>
+    <p id="status">Verification du lien en cours...</p>
+    <p id="fallback-copy" class="mono" style="display:none;"></p>
+    <p id="fallback-link" style="display:none;">Si rien ne se passe, cliquez ici: <a id="manual-link" href="reset-password.html">ouvrir la page de reinitialisation</a></p>
+  </div>
+
+  <script>
+  (function () {
+    var search = window.location.search || "";
+    var hash = window.location.hash || "";
+    var target = window.location.origin + "/reset-password.html" + search + hash;
+    var status = document.getElementById("status");
+    var fallbackCopy = document.getElementById("fallback-copy");
+    var fallbackLink = document.getElementById("fallback-link");
+    var manualLink = document.getElementById("manual-link");
+
+    manualLink.href = target;
+    fallbackCopy.textContent = target;
+
+    var hasRecoverySignal = /access_token=|token_hash=|type=recovery|code=/.test(search + hash);
+    if (!hasRecoverySignal) {
+      status.textContent = "Lien de reinitialisation invalide ou incomplet.";
+      fallbackCopy.style.display = "block";
+      fallbackLink.style.display = "block";
+      return;
+    }
+
+    status.textContent = "Redirection vers le formulaire de nouveau mot de passe...";
+    window.location.replace(target);
+
+    window.setTimeout(function () {
+      status.textContent = "Si la redirection automatique n'a pas fonctionne, utilisez le lien ci-dessous.";
+      fallbackCopy.style.display = "block";
+      fallbackLink.style.display = "block";
+    }, 1200);
+  })();
+  </script>
+</body>
+</html>
