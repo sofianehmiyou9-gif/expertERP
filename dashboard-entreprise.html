@@ -177,19 +177,7 @@ tr:hover{background:var(--accent-light);}
     <input type="email" id="email-input" placeholder="Adresse email">
     <input type="password" id="password-input" placeholder="Mot de passe">
     <button id="auth-btn">Se connecter</button>
-    <div class="auth-link"><button type="button" data-action="toggle-reset-box">Mot de passe oublie ?</button></div>
-    <div class="reset-box" id="reset-box">
-      <h4>Mot de passe oublie</h4>
-      <p>Entrez votre email pour recevoir un code de securite, puis definissez directement votre nouveau mot de passe.</p>
-      <input type="email" id="reset-email-input" placeholder="Adresse email">
-      <input type="text" id="reset-code-input" placeholder="Code recu par email" style="display:none;">
-      <input type="password" id="reset-new-password-input" placeholder="Nouveau mot de passe" style="display:none;">
-      <input type="password" id="reset-confirm-password-input" placeholder="Confirmer le mot de passe" style="display:none;">
-      <div class="reset-actions">
-        <button class="btn btn-primary" type="button" id="reset-submit-btn" data-action="send-reset-link">Envoyer le code</button>
-        <button class="btn btn-secondary" type="button" data-action="toggle-reset-box" data-force-open="false">Annuler</button>
-      </div>
-    </div>
+    <div class="auth-link"><button type="button" data-action="open-reset-page">Mot de passe oublie ?</button></div>
     <div class="auth-error" id="auth-error"></div>
   </div>
 </div>
@@ -423,7 +411,6 @@ let currentPlanQty = 5;
 let companyTeam = [];
 let currentAccessRole = 'owner';
 let currentAccessStatus = 'active';
-let resetCodeSent = false;
 
 const RESOURCE_MODULES_BY_ERP = {
   'SAP': ['EWM', 'MM', 'SD', 'PP', 'FI', 'CO', 'HCM', 'WM', 'Basis', 'ABAP'],
@@ -611,71 +598,6 @@ async function sha256Hex(text) {
   const bytes = new TextEncoder().encode(String(text || ''));
   const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-function getResetRedirectUrl() {
-  const host = String(window.location.hostname || '').toLowerCase();
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1';
-  if (!isLocalHost && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
-    return window.location.origin + '/reset-password.html';
-  }
-  return 'https://expert-erp-sofianehmiyou9-gifs-projects.vercel.app/reset-password.html';
-}
-
-async function requestPasswordResetEmail(email) {
-  const response = await fetch(`${SB_URL}/auth/v1/recover`, {
-    method: 'POST',
-    headers: {
-      apikey: SB_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      email: email,
-      redirect_to: getResetRedirectUrl()
-    })
-  });
-  if (!response.ok) {
-    if (response.status === 429) throw new Error('Trop de demandes de reinitialisation. Attendez une minute avant de recommencer.');
-    throw new Error('Impossible d\'envoyer le lien');
-  }
-}
-
-async function verifyRecoveryCode(email, token) {
-  const response = await fetch(`${SB_URL}/auth/v1/verify`, {
-    method: 'POST',
-    headers: {
-      apikey: SB_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email: email, token: token, type: 'recovery' })
-  });
-  if (!response.ok) {
-    if (response.status === 429) throw new Error('Trop de tentatives de verification. Attendez une minute avant de recommencer.');
-    throw new Error('Code invalide ou expire');
-  }
-  return response.json();
-}
-
-async function updateAuthPasswordWithToken(token, password) {
-  const response = await fetch(`${SB_URL}/auth/v1/user`, {
-    method: 'PUT',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ password: password })
-  });
-  if (!response.ok) throw new Error('Impossible de mettre a jour le mot de passe');
-}
-
-async function syncLegacyHashesByEmail(email, passwordHash) {
-  const companies = await sbFetch('entreprises', { select: 'id,description', email: `eq.${email}`, type_demande: 'eq.offrir' });
-  for (const company of companies) {
-    const description = parseNotes(company.description);
-    description.auth_password_sha256 = passwordHash;
-    await sbUpdate('entreprises', company.id, { description: JSON.stringify(description) });
-  }
 }
 
 function persistPortalSession(email) {
@@ -1383,85 +1305,10 @@ function showAuthError(msg) {
   document.getElementById('auth-error').textContent = msg;
 }
 
-function toggleResetBox(forceOpen) {
-  const box = document.getElementById('reset-box');
-  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !box.classList.contains('open');
-  box.classList.toggle('open', shouldOpen);
-
-  if (shouldOpen) {
-    const email = document.getElementById('email-input').value.trim();
-    document.getElementById('reset-email-input').value = email;
-    document.getElementById('auth-error').textContent = '';
-    resetCodeSent = false;
-    refreshResetBoxUi();
-  }
-}
-
-function refreshResetBoxUi() {
-  const codeInput = document.getElementById('reset-code-input');
-  const newPasswordInput = document.getElementById('reset-new-password-input');
-  const confirmPasswordInput = document.getElementById('reset-confirm-password-input');
-  const submitBtn = document.getElementById('reset-submit-btn');
-  if (codeInput) codeInput.style.display = resetCodeSent ? '' : 'none';
-  if (newPasswordInput) newPasswordInput.style.display = resetCodeSent ? '' : 'none';
-  if (confirmPasswordInput) confirmPasswordInput.style.display = resetCodeSent ? '' : 'none';
-  if (submitBtn) submitBtn.textContent = resetCodeSent ? 'Verifier le code' : 'Envoyer le code';
-}
-
-async function sendResetLink() {
-  const email = document.getElementById('reset-email-input').value.trim();
-
-  if (!email) {
-    showAuthError('Email requis pour envoyer le code');
-    return;
-  }
-  try {
-    const companies = await sbFetch('entreprises', { select: 'id', email: `eq.${email}`, type_demande: 'eq.offrir', limit: '1' });
-    if (!companies || companies.length === 0) {
-      showAuthError('Aucun compte entreprise avec dashboard associe a cet email.');
-      return;
-    }
-    if (!resetCodeSent) {
-      await requestPasswordResetEmail(email);
-      document.getElementById('email-input').value = email;
-      resetCodeSent = true;
-      refreshResetBoxUi();
-      showAuthError('Code de securite envoye a cet email.');
-      return;
-    }
-
-    const code = document.getElementById('reset-code-input').value.trim();
-    const newPassword = document.getElementById('reset-new-password-input').value;
-    const confirmPassword = document.getElementById('reset-confirm-password-input').value;
-    if (!code) {
-      showAuthError('Code requis.');
-      return;
-    }
-    if (!newPassword || newPassword.length < 8) {
-      showAuthError('Le mot de passe doit contenir au moins 8 caracteres.');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      showAuthError('Les mots de passe ne correspondent pas.');
-      return;
-    }
-
-    const verifyResult = await verifyRecoveryCode(email, code);
-    const accessToken = verifyResult.access_token || verifyResult.session?.access_token || '';
-    if (!accessToken) throw new Error('Session de recuperation invalide');
-    await updateAuthPasswordWithToken(accessToken, newPassword);
-    const passwordHash = await sha256Hex(newPassword);
-    await syncLegacyHashesByEmail(email, passwordHash);
-
-    document.getElementById('email-input').value = email;
-    document.getElementById('reset-code-input').value = '';
-    document.getElementById('reset-new-password-input').value = '';
-    document.getElementById('reset-confirm-password-input').value = '';
-    toggleResetBox(false);
-    showAuthError('Mot de passe mis a jour. Vous pouvez vous connecter.');
-  } catch (e) {
-    showAuthError(e.message || 'Impossible de traiter la demande pour le moment.');
-  }
+function openResetPage() {
+  const email = document.getElementById('email-input').value.trim();
+  const target = 'reset-password.html' + (email ? ('?email=' + encodeURIComponent(email)) : '');
+  window.location.href = target;
 }
 
 function bindDashboardActions() {
@@ -1472,11 +1319,7 @@ function bindDashboardActions() {
     if (!trigger) return;
     const action = trigger.dataset.action;
     if (action === 'set-language') return setLanguage(trigger.dataset.lang || 'fr');
-    if (action === 'toggle-reset-box') {
-      const forceOpen = trigger.dataset.forceOpen;
-      return toggleResetBox(forceOpen === undefined ? undefined : forceOpen === 'true');
-    }
-    if (action === 'send-reset-link') return sendResetLink();
+    if (action === 'open-reset-page') return openResetPage();
     if (action === 'logout') return logout();
     if (action === 'show-tab') return showTab(trigger.dataset.tabName || 'resources', { currentTarget: trigger });
     if (action === 'toggle-team-member') return toggleTeamMember(trigger.dataset.memberId || '', trigger.dataset.memberStatus || 'active');
