@@ -3055,8 +3055,13 @@ async function consumeInviteCodeOnce(code, email) {
     },
     body: JSON.stringify({ p_code: inviteCode, p_email: userEmail })
   });
-  if (!r.ok) throw new Error(await r.text());
+  if (!r.ok) {
+    const errText = await r.text();
+    console.error('RPC consume_invitation_code failed (' + r.status + '):', errText);
+    return false;
+  }
   const result = await r.json();
+  console.log('RPC result:', result);
   if (result === true) return true;
   if (result === false) return false;
   if (result && typeof result === 'object' && 'consume_invitation_code' in result) return !!result.consume_invitation_code;
@@ -3066,8 +3071,13 @@ async function consumeInviteCodeOnce(code, email) {
 async function consultantEmailExists(email) {
   const normalizedEmail = String(email || '').trim().toLowerCase();
   if (!normalizedEmail) return false;
-  const rows = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(normalizedEmail) + '&limit=1');
-  return Array.isArray(rows) && rows.length > 0;
+  try {
+    const rows = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(normalizedEmail) + '&limit=1');
+    return Array.isArray(rows) && rows.length > 0;
+  } catch(e) {
+    console.warn('consultantEmailExists check failed (non-blocking):', e.message);
+    return false;
+  }
 }
 
 async function validateInviteCode() {
@@ -3108,8 +3118,9 @@ async function validateInviteCode() {
     fb.textContent = '\u2713 Code valide \u2014 Bienvenue sur ExpertERPHub\u00a0!';
     setTimeout(() => csGatePass(raw, email), 900);
   } catch(e) {
+    console.error('validateInviteCode error:', e);
     fb.className = 'cs-code-feedback invalid';
-    fb.textContent = '\u2717 Erreur de connexion. Veuillez r\u00e9essayer.';
+    fb.textContent = '\u2717 Erreur : ' + (e.message || 'connexion impossible');
     if (btn) btn.disabled = false;
   }
 }
