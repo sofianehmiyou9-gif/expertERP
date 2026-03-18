@@ -3036,7 +3036,23 @@ let CS_STEP = 1;
 const CS_TOTAL = 4;
 let csGatePassed = false;
 let csInviteCode = '';
-let csInviteCodeId = null;
+
+async function consumeInviteCodeOnce(code, email) {
+  const inviteCode = String(code || '').trim().toUpperCase();
+  const userEmail = String(email || '').trim().toLowerCase();
+  if (!inviteCode || !userEmail) return false;
+  const r = await fetch(
+    SB_URL + '/rest/v1/invitation_codes?code=eq.' + encodeURIComponent(inviteCode) + '&is_active=eq.true&used_at=is.null',
+    {
+      method: 'PATCH',
+      headers: { ...SB_HDR, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ used_by_email: userEmail, used_at: new Date().toISOString() })
+    }
+  );
+  if (!r.ok) throw new Error(await r.text());
+  const rows = await r.json();
+  return Array.isArray(rows) && rows.length === 1;
+}
 
 async function validateInviteCode() {
   const input = document.getElementById('cs-invite-code');
@@ -3069,7 +3085,7 @@ async function validateInviteCode() {
     }
     fb.className = 'cs-code-feedback valid';
     fb.textContent = '\u2713 Code valide \u2014 Bienvenue sur ExpertERPHub\u00a0!';
-    setTimeout(() => csGatePass(raw, row.id), 900);
+    setTimeout(() => csGatePass(raw), 900);
   } catch(e) {
     fb.className = 'cs-code-feedback invalid';
     fb.textContent = '\u2717 Erreur de connexion. Veuillez r\u00e9essayer.';
@@ -3077,10 +3093,9 @@ async function validateInviteCode() {
   }
 }
 
-function csGatePass(code, codeId) {
+function csGatePass(code) {
   csGatePassed = true;
   csInviteCode = code;
-  csInviteCodeId = codeId;
   CS_STEP = 1;
   document.getElementById('cs-gate').style.display = 'none';
   const slbls = document.getElementById('cs-step-labels');
@@ -3093,7 +3108,7 @@ function csGatePass(code, codeId) {
 
 function openConsultantModal() {
   CS_STEP = 1;
-  csGatePassed = false; csInviteCode = ''; csInviteCodeId = null;
+  csGatePassed = false; csInviteCode = '';
   selectedModules = {};
   renderErpChips();
   const modContainer = document.getElementById('cs-erp-modules');
@@ -3121,7 +3136,7 @@ function closeConsultantModal() {
   document.body.style.overflow = '';
   document.getElementById('cs-success').style.display = 'none';
   document.getElementById('cs-footer').style.display = '';
-  appliedPromo = null; csGatePassed = false; csInviteCode = ''; csInviteCodeId = null;
+  appliedPromo = null; csGatePassed = false; csInviteCode = '';
   selectedModules = {};
   const promoInput = document.getElementById('cs-promo');
   if (promoInput) { promoInput.value = ''; promoInput.style.borderColor = ''; }
@@ -3265,6 +3280,11 @@ async function submitConsultant() {
   const btn = document.getElementById('cs-btn-next');
   btn.disabled = true; btn.textContent = '⏳ Envoi…';
   try {
+    if (!csGatePassed || !csInviteCode) {
+      alert("Veuillez valider votre code d'invitation avant de continuer.");
+      btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
+      return;
+    }
     const password = document.getElementById('cs-password').value;
     const passwordConfirm = document.getElementById('cs-password-confirm').value;
     if (!password || password.length < 8) {
@@ -3312,18 +3332,18 @@ async function submitConsultant() {
       }),
       statut: 'en_attente'
     };
+
+    const consumed = await consumeInviteCodeOnce(csInviteCode, data.email);
+    if (!consumed) {
+      alert("Ce code d'invitation n'est plus disponible (déjà utilisé ou expiré).");
+      btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
+      return;
+    }
+
     try {
       await registerAuthUser(data.email, password);
     } catch (e) {}
     await sbInsert('consultants', data);
-    if (csInviteCodeId) {
-      try {
-        await fetch(SB_URL + '/rest/v1/invitation_codes?id=eq.' + encodeURIComponent(csInviteCodeId), {
-          method: 'PATCH', headers: SB_HDR,
-          body: JSON.stringify({ used_by_email: data.email, used_at: new Date().toISOString() })
-        });
-      } catch(e) {}
-    }
     document.getElementById('cs-success').style.display = 'block';
     document.getElementById('cs-footer').style.display = 'none';
     for (let i = 1; i <= CS_TOTAL; i++) document.getElementById('cs-step-' + i)?.classList.remove('active');
