@@ -921,24 +921,7 @@ async function initAuth() {
   const emailParam = getUrlParam('email');
   const portalEmail = getPortalEmail();
   if (portalEmail) {
-    currentEmail = portalEmail.trim();
-    const found = await findCompanyAccessByEmail(currentEmail);
-    if (found && found.company && found.company.type_demande === 'offrir') {
-      currentCompany = found.company;
-      currentAccessRole = found.access.role;
-      currentAccessStatus = found.access.status;
-      if (currentAccessStatus === 'disabled') {
-        showAuthError('Acces collaborateur desactive.');
-        showAuthForm();
-        return;
-      }
-      persistPortalSession(currentEmail);
-      showDashboard();
-      loadResources();
-      loadProfile();
-      loadTeam();
-      return;
-    }
+    document.getElementById('email-input').value = portalEmail.trim();
   }
   if (emailParam) {
     document.getElementById('email-input').value = emailParam;

@@ -340,14 +340,7 @@ async function initAuth() {
   const emailParam = getUrlParam('email');
   const portalEmail = getPortalEmail();
   if (portalEmail) {
-    currentEmail = portalEmail.trim();
-    const consultants = await sbFetch('consultants', { select: '*', email: `eq.${currentEmail}` });
-    if (consultants.length > 0) {
-      currentConsultant = consultants[0];
-      persistPortalSession(currentEmail);
-      showDashboard();
-      return;
-    }
+    document.getElementById('email-input').value = portalEmail.trim();
   }
   if (emailParam) {
     document.getElementById('email-input').value = emailParam;

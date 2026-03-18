@@ -1,5 +1,6 @@
 (function () {
   const KEY = 'experterphub_portal_session';
+  const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 
   function normalizeRole(role) {
     const value = String(role || '').toLowerCase();
@@ -13,6 +14,10 @@
       if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (!parsed || !parsed.role) return null;
+      if (parsed.expiresAt && Date.now() > Date.parse(parsed.expiresAt)) {
+        localStorage.removeItem(KEY);
+        return null;
+      }
       parsed.role = normalizeRole(parsed.role);
       return parsed;
     } catch (e) {
@@ -21,11 +26,13 @@
   }
 
   function setSession(session) {
+    const now = Date.now();
     const normalized = {
       role: normalizeRole(session && session.role),
       email: session && session.email ? String(session.email).trim() : '',
       adminGranted: !!(session && session.adminGranted),
-      createdAt: new Date().toISOString()
+      createdAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + SESSION_TTL_MS).toISOString()
     };
     localStorage.setItem(KEY, JSON.stringify(normalized));
     return normalized;
