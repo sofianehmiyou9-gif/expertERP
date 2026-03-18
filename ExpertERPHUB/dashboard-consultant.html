@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant Dashboard — ExpertERPHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e0e0e;--paper:#ffffff;--accent:#1e3a8a;--accent-dark:#1a2e6b;--accent-light:#ebf2fb;
+  --blue:#1e3a8a;--blue-mid:#1d4ed8;--blue-light:#ebf2fb;--blue-border:#bfdbfe;
+  --muted:#8a8580;--border:#e0dbd4;--card:#fff;
+  --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --cta:#f97316;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);}
+a{color:inherit;text-decoration:none;}
+
+/* ── AUTH FORM ── */
+.auth-container{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2.5rem;max-width:400px;width:100%;}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;margin-bottom:2rem;text-align:center;}
+.logo span{color:var(--accent);}
+.auth-card h2{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:1.5rem;}
+.auth-card input{width:100%;padding:.75rem;border:1px solid var(--border);border-radius:4px;margin-bottom:1rem;font-size:.9rem;font-family:'DM Sans',sans-serif;}
+.auth-card button{width:100%;padding:.75rem;background:var(--blue);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:500;font-family:'DM Sans',sans-serif;}
+.auth-card button:hover{background:var(--blue-mid);}
+.auth-error{color:var(--red);font-size:.8rem;margin-top:.5rem;}
+.auth-link{margin-top:.85rem;text-align:right;}
+.auth-link button{width:auto;padding:0;background:none;border:none;color:var(--blue);cursor:pointer;font-size:.8rem;text-decoration:underline;}
+.reset-box{margin-top:1rem;padding:1rem;border:1px solid var(--blue-border);border-radius:6px;background:var(--blue-light);display:none;}
+.reset-box.open{display:block;}
+.reset-box h4{font-size:.9rem;margin-bottom:.6rem;}
+.reset-box p{font-size:.78rem;color:var(--muted);margin-bottom:.75rem;line-height:1.6;}
+.reset-actions{display:flex;gap:.5rem;}
+.reset-actions .btn-secondary{background:#fff;border:1px solid var(--border);}
+
+/* ── DASHBOARD ── */
+.dashboard-container{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.dashboard-card{background:var(--card);border:1px solid var(--border);border-radius:8px;max-width:780px;width:100%;}
+.dashboard-logo{text-align:center;padding:2rem 2rem 1rem;border-bottom:1px solid var(--border);}
+.dashboard-logo .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;}
+.dashboard-logo .logo span{color:var(--accent);}
+.welcome{text-align:center;font-size:.9rem;color:var(--muted);margin-top:1rem;}
+
+/* ── STATUS BANNER ── */
+.status-banner{padding:2rem;text-align:center;border-bottom:1px solid var(--border);font-size:.95rem;line-height:1.6;}
+.status-banner.pending{background:var(--blue-light);color:var(--blue);}
+.status-banner.approved{background:var(--green-bg);color:var(--green);}
+.status-banner.rejected{background:var(--red-bg);color:var(--red);}
+.status-icon{font-size:1.8rem;margin-bottom:.5rem;}
+
+/* ── PROFILE CARD ── */
+.profile-section{padding:2rem;}
+.profile-section h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:1rem;margin-top:1.5rem;}
+.profile-section h3:first-child{margin-top:0;}
+.profile-subsection{margin-bottom:1.5rem;}
+
+/* ── CHIPS ── */
+.chips-container{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.chip{background:var(--blue-light);color:var(--blue);padding:.4rem .8rem;border-radius:16px;font-size:.8rem;font-weight:500;}
+
+/* ── DETAILS ── */
+.detail-group{display:flex;gap:2rem;margin-bottom:1rem;flex-wrap:wrap;}
+.detail{flex:1;min-width:200px;}
+.detail-label{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;}
+.detail-value{font-size:.95rem;color:var(--ink);font-weight:500;}
+
+/* ── AVAILABILITY UPDATE ── */
+.availability-box{background:var(--accent-light);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:2rem;}
+.availability-box h4{font-size:.9rem;margin-bottom:1rem;}
+.availability-controls{display:flex;gap:.75rem;align-items:flex-end;}
+.availability-controls select{padding:.5rem .75rem;border:1px solid var(--border);border-radius:4px;font-size:.85rem;flex:1;}
+.btn{padding:.5rem 1rem;border:none;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;transition:all .2s;}
+.btn-primary{background:var(--cta);color:#fff;}
+.btn-primary:hover{background:var(--red);}
+.btn-secondary{background:var(--border);color:var(--ink);}
+.btn-secondary:hover{background:var(--muted);}
+
+.top-controls{display:flex;justify-content:flex-end;gap:.5rem;margin-bottom:1rem;}
+.lang-btn{background:none;border:1px solid var(--border);padding:.25rem .5rem;border-radius:4px;cursor:pointer;font-size:.75rem;}
+.lang-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-light);}
+
+.notifications-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem;margin:1rem 2rem;}
+.notifications-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:.8rem;}
+.notif-item{padding:.7rem .8rem;border:1px solid var(--border);border-radius:6px;margin-bottom:.6rem;background:var(--paper);}
+.notif-item.unread{border-left:4px solid var(--cta);}
+.notif-meta{font-size:.72rem;color:var(--muted);margin-bottom:.2rem;}
+.request-header{display:flex;justify-content:space-between;align-items:center;gap:.8rem;}
+.request-stats{display:flex;gap:.45rem;flex-wrap:wrap;}
+.request-pill{font-size:.68rem;padding:.2rem .5rem;border-radius:12px;border:1px solid var(--border);}
+.request-pill.new{background:#fff7ed;color:#9a3412;border-color:#fed7aa;}
+.request-pill.read{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+.request-pill.replied{background:#ecfdf5;color:#166534;border-color:#86efac;}
+.notif-clickable{cursor:pointer;transition:all .2s ease;}
+.notif-clickable:hover{border-color:var(--blue);box-shadow:0 6px 18px rgba(0,0,0,.06);}
+.status-badge{display:inline-block;padding:.15rem .45rem;border-radius:10px;font-size:.64rem;margin-left:.4rem;}
+.status-badge.nouveau{background:#fff7ed;color:#9a3412;}
+.status-badge.lu{background:#eff6ff;color:#1d4ed8;}
+.status-badge.repondu{background:#ecfdf5;color:#166534;}
+
+.request-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:1rem;z-index:1200;}
+.request-modal-overlay.open{display:flex;}
+.request-modal{background:var(--card);border:1px solid var(--border);border-radius:10px;max-width:560px;width:100%;padding:1.1rem;}
+.request-modal h4{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:.6rem;}
+.request-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem;}
+.request-field{font-size:.82rem;color:var(--muted);}
+.request-field strong{color:var(--ink);display:block;}
+.request-message{border:1px solid var(--border);border-radius:6px;padding:.65rem;background:var(--paper);font-size:.84rem;line-height:1.55;margin-bottom:.9rem;}
+.request-actions{display:flex;gap:.55rem;flex-wrap:wrap;}
+
+/* ── CONTACT ── */
+.contact-section{border-top:1px solid var(--border);padding-top:1.5rem;text-align:center;font-size:.85rem;color:var(--muted);}
+.contact-link{color:var(--blue);text-decoration:underline;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .detail-group{flex-direction:column;gap:.5rem;}
+  .availability-controls{flex-direction:column;}
+  .availability-controls select{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- Auth Form -->
+<div id="auth-container" class="auth-container" style="display:none;">
+  <div class="auth-card">
+    <div class="top-controls">
+      <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
+      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
+    </div>
+    <div class="logo">Expert<span>ERP</span>Hub</div>
+    <h2 id="auth-title">Acces au tableau de bord</h2>
+    <input type="email" id="email-input" placeholder="Adresse email">
+    <input type="password" id="password-input" placeholder="Mot de passe">
+    <button id="auth-btn">Se connecter</button>
+    <div class="auth-link"><button type="button" data-action="toggle-reset-box">Mot de passe oublie ?</button></div>
+    <div class="reset-box" id="reset-box">
+      <h4>Mot de passe oublie</h4>
+      <p>Entrez votre email. Un lien de reinitialisation sera envoye uniquement au proprietaire de la boite mail.</p>
+      <input type="email" id="reset-email-input" placeholder="Adresse email">
+      <div class="reset-actions">
+        <button class="btn btn-primary" type="button" data-action="send-reset-link">Envoyer le lien</button>
+        <button class="btn btn-secondary" type="button" data-action="toggle-reset-box" data-force-open="false">Annuler</button>
+      </div>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard-container" class="dashboard-container" style="display:none;">
+  <div class="dashboard-card">
+    <div class="dashboard-logo">
+      <div>
+        <div class="logo">Expert<span>ERP</span>Hub</div>
+        <div class="welcome" id="welcome-msg"></div>
+      </div>
+      <button class="btn btn-secondary" data-action="logout">Retour au site</button>
+    </div>
+
+    <div class="status-banner" id="status-banner"></div>
+    <div class="notifications-box">
+      <div class="request-header">
+        <div class="notifications-title" id="notif-title">Demandes recues</div>
+        <div class="request-stats">
+          <span class="request-pill new" id="count-new">0 nouveau</span>
+          <span class="request-pill read" id="count-read">0 lu</span>
+          <span class="request-pill replied" id="count-replied">0 repondu</span>
+        </div>
+      </div>
+      <div id="notif-list"></div>
+    </div>
+
+    <div class="profile-section">
+      <!-- ERPs -->
+      <h3>ERP(s) maîtrisé(s)</h3>
+      <div class="chips-container" id="erps-chips"></div>
+
+      <!-- Basic Info -->
+      <h3>Informations</h3>
+      <div class="detail-group">
+        <div class="detail">
+          <div class="detail-label">Rôle</div>
+          <div class="detail-value" id="role-value">–</div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">Années d'expérience</div>
+          <div class="detail-value" id="exp-value">–</div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">TJM</div>
+          <div class="detail-value" id="tjm-value">–</div>
+        </div>
+      </div>
+
+      <!-- Work Info -->
+      <div class="detail-group">
+        <div class="detail">
+          <div class="detail-label">Mode de travail</div>
+          <div class="detail-value" id="mode-value">–</div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">Ville</div>
+          <div class="detail-value" id="ville-value">–</div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">Langues</div>
+          <div class="detail-value" id="langues-value">–</div>
+        </div>
+      </div>
+
+      <!-- Availability Update -->
+      <h3>Modifier ma disponibilité</h3>
+      <div class="availability-box">
+        <select id="availability-select">
+          <option value="">Sélectionner une disponibilité</option>
+          <option value="Immédiate">Immédiate</option>
+          <option value="Sous 15 jours">Sous 15 jours</option>
+          <option value="Sous 30 jours">Sous 30 jours</option>
+          <option value="Sous 60 jours">Sous 60 jours</option>
+        </select>
+        <button class="btn btn-primary" id="update-btn">Mettre à jour</button>
+      </div>
+
+      <!-- Contact -->
+      <div class="contact-section">
+        <p>Pour toute question, ecrivez-nous a <span class="contact-link">contact@experterphub.com</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="notifications.js"></script>
+<script src="portal-auth.js"></script>
+<script>
+const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+
+let currentEmail = null;
+let currentConsultant = null;
+
+function setLanguage(lang) {
+  ExpertI18n.setLang(lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('lang-' + lang);
+  if (target) target.classList.add('active');
+  applyI18n();
+  if (currentConsultant) renderNotifications();
+}
+
+function applyI18n() {
+  const t = (k) => ExpertI18n.t(k);
+  const authTitle = document.getElementById('auth-title');
+  if (authTitle) authTitle.textContent = t('dashboardConsultant.dashboardAccess');
+  const authBtn = document.getElementById('auth-btn');
+  if (authBtn) authBtn.textContent = t('common.login');
+  const notifTitle = document.getElementById('notif-title');
+  if (notifTitle) notifTitle.textContent = 'Demandes recues';
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch(e) { return {}; }
+}
+
+async function sbFetch(table, query = {}) {
+  const params = new URLSearchParams(query);
+  const response = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  return response.json();
+}
+
+async function sbUpdate(table, id, data) {
+  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.ok;
+}
+
+function getUrlParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+function getPortalEmail() {
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (session && session.role === 'consultant' && session.email) return session.email;
+  return null;
+}
+
+async function sha256Hex(text) {
+  const bytes = new TextEncoder().encode(String(text || ''));
+  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function getResetRedirectUrl() {
+  if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+    return window.location.origin + '/reset-password.html';
+  }
+  return 'https://experterphub.com/reset-password.html';
+}
+
+async function requestPasswordResetEmail(email) {
+  const response = await fetch(`${SB_URL}/auth/v1/recover`, {
+    method: 'POST',
+    headers: {
+      apikey: SB_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      redirect_to: getResetRedirectUrl()
+    })
+  });
+  if (!response.ok) throw new Error('Impossible d\'envoyer le lien');
+}
+
+function persistPortalSession(email) {
+  if (window.ExpertPortalAuth && email) {
+    ExpertPortalAuth.setSession({ role: 'consultant', email: email });
+  }
+}
+
+async function initAuth() {
+  const emailParam = getUrlParam('email');
+  const portalEmail = getPortalEmail();
+  if (portalEmail) {
+    currentEmail = portalEmail.trim();
+    const consultants = await sbFetch('consultants', { select: '*', email: `eq.${currentEmail}` });
+    if (consultants.length > 0) {
+      currentConsultant = consultants[0];
+      persistPortalSession(currentEmail);
+      showDashboard();
+      return;
+    }
+  }
+  if (emailParam) {
+    document.getElementById('email-input').value = emailParam;
+  }
+  showAuthForm();
+}
+
+async function authenticate() {
+  const email = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  if (!email) {
+    showAuthError(ExpertI18n.t('common.emailRequired'));
+    return;
+  }
+  if (!password) {
+    showAuthError('Mot de passe requis');
+    return;
+  }
+
+  const consultants = await sbFetch('consultants', { select: '*', email: `eq.${email}` });
+  if (consultants.length === 0) {
+    showAuthError(ExpertI18n.t('common.emailNotFound'));
+    return;
+  }
+
+  const notes = parseNotes(consultants[0].notes_admin);
+  const hash = await sha256Hex(password);
+  if (notes.auth_password_sha256 && notes.auth_password_sha256 !== hash) {
+    showAuthError('Email ou mot de passe invalide');
+    return;
+  }
+
+  currentEmail = email;
+  currentConsultant = consultants[0];
+  persistPortalSession(email);
+  showDashboard();
+}
+
+function showAuthForm() {
+  document.getElementById('auth-container').style.display = 'flex';
+  document.getElementById('dashboard-container').style.display = 'none';
+}
+
+function showDashboard() {
+  document.getElementById('auth-container').style.display = 'none';
+  document.getElementById('dashboard-container').style.display = 'flex';
+  renderDashboard();
+}
+
+function logout() {
+  currentEmail = null;
+  currentConsultant = null;
+  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
+  window.location.href = 'index.html';
+}
+
+function renderDashboard() {
+  const c = currentConsultant;
+
+  document.getElementById('welcome-msg').textContent = 'Bienvenue, ' + (c.prenom || 'consultant');
+
+  renderStatusBanner();
+  renderERPChips();
+  renderBasicInfo();
+  renderAvailability();
+  renderNotifications();
+}
+
+function renderNotifications() {
+  const container = document.getElementById('notif-list');
+  if (!container || !currentConsultant) return;
+  const list = ExpertNotifications.byConsultant(currentConsultant.id, currentConsultant.email);
+  const counts = ExpertNotifications.countsByConsultant(currentConsultant.id, currentConsultant.email);
+  const cNew = document.getElementById('count-new');
+  const cRead = document.getElementById('count-read');
+  const cReplied = document.getElementById('count-replied');
+  if (cNew) cNew.textContent = `${counts.nouveau} nouveau`;
+  if (cRead) cRead.textContent = `${counts.lu} lu`;
+  if (cReplied) cReplied.textContent = `${counts.repondu} repondu`;
+
+  if (!list.length) {
+    container.innerHTML = `<div class="notif-item">${ExpertI18n.t('dashboardConsultant.noNotifications')}</div>`;
+    return;
+  }
+  container.innerHTML = list.slice(0, 10).map(n => {
+    const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+    const s = n.status || (n.read ? 'lu' : 'nouveau');
+    return `<div class="notif-item notif-clickable ${n.read ? '' : 'unread'}" data-action="open-request-detail" data-request-id="${n.id}">
+      <div class="notif-meta">${n.companyName || 'Entreprise'} · ${when}<span class="status-badge ${s}">${s}</span></div>
+      <div>${(n.message || '').slice(0, 120)}${(n.message || '').length > 120 ? '…' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function openRequestDetail(id) {
+  const n = ExpertNotifications.getById(id);
+  if (!n) return;
+  if (n.status === 'nouveau') {
+    ExpertNotifications.setStatus(id, 'lu');
+  }
+  document.getElementById('rq-company').textContent = n.companyName || 'Entreprise';
+  document.getElementById('rq-email').textContent = n.companyEmail || '—';
+  document.getElementById('rq-phone').textContent = n.companyPhone || '—';
+  document.getElementById('rq-date').textContent = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+  document.getElementById('rq-message').textContent = n.message || '';
+  const emailBtn = document.getElementById('rq-email-btn');
+  emailBtn.href = `mailto:${encodeURIComponent(n.companyEmail || '')}?subject=${encodeURIComponent('Re: Votre demande ExpertERPHub')}`;
+  emailBtn.onclick = function() {
+    ExpertNotifications.setStatus(id, 'repondu');
+    renderNotifications();
+  };
+  const callBtn = document.getElementById('rq-call-btn');
+  if (n.companyPhone) {
+    callBtn.style.display = 'inline-block';
+    callBtn.href = `tel:${n.companyPhone}`;
+  } else {
+    callBtn.style.display = 'none';
+  }
+  document.getElementById('request-modal').classList.add('open');
+  renderNotifications();
+}
+
+function closeRequestDetail() {
+  document.getElementById('request-modal').classList.remove('open');
+}
+
+function renderStatusBanner() {
+  const c = currentConsultant;
+  const bannerEl = document.getElementById('status-banner');
+
+  const notes = parseNotes(c.notes_admin);
+
+  const banners = {
+    'en_attente': {
+      cls: 'pending',
+      icon: '⏳',
+      text: 'Profil en cours de révision — Notre équipe examine votre candidature sous 24–48h.'
+    },
+    'approuve': {
+      cls: 'approved',
+      icon: '✅',
+      text: 'Profil approuvé et publié — Vous êtes visible sur ExpertERPHub.'
+    },
+    'refuse': {
+      cls: 'rejected',
+      icon: '❌',
+      text: 'Profil non retenu par notre équipe.'
+    }
+  };
+
+  const config = banners[c.statut] || banners['en_attente'];
+  bannerEl.className = 'status-banner ' + config.cls;
+
+  let motifHtml = '';
+  if (c.statut === 'refuse' && notes.motif_refus) {
+    motifHtml = `<div style="margin-top:.65rem;padding:.6rem .85rem;background:rgba(0,0,0,.06);border-radius:4px;font-size:.82rem;"><strong>Raison :</strong> ${notes.motif_refus}</div>`;
+  }
+  bannerEl.innerHTML = `<div class="status-icon">${config.icon}</div><div>${config.text}${motifHtml}</div>`;
+}
+
+function renderERPChips() {
+  const source = currentConsultant.competences;
+  const erps = Array.isArray(source)
+    ? source.map(e => String(e).trim()).filter(Boolean)
+    : String(source || '').split(',').map(e => e.trim()).filter(Boolean);
+  const container = document.getElementById('erps-chips');
+  container.innerHTML = erps.map(erp => `<div class="chip">${erp}</div>`).join('');
+}
+
+function renderBasicInfo() {
+  const c = currentConsultant;
+  const notes = parseNotes(c.notes_admin);
+
+  document.getElementById('role-value').textContent = c.titre || '–';
+
+  const exp = notes.annees_exp || '–';
+  document.getElementById('exp-value').textContent = typeof exp === 'number' ? exp + ' ans' : exp;
+
+  const tjm = c.tjm_min && c.tjm_max ? '€' + c.tjm_min + '–€' + c.tjm_max : '–';
+  document.getElementById('tjm-value').textContent = tjm;
+
+  document.getElementById('mode-value').textContent = notes.mode_travail || '–';
+  document.getElementById('ville-value').textContent = notes.ville || '–';
+  document.getElementById('langues-value').textContent = notes.langues || '–';
+}
+
+function renderAvailability() {
+  const c = currentConsultant;
+  const notes = parseNotes(c.notes_admin);
+  const select = document.getElementById('availability-select');
+  select.value = notes.disponibilite || '';
+}
+
+document.getElementById('update-btn').addEventListener('click', async () => {
+  const newAvail = document.getElementById('availability-select').value;
+  if (!newAvail) {
+    alert(ExpertI18n.t('dashboardConsultant.selectAvailability'));
+    return;
+  }
+
+  const notes = parseNotes(currentConsultant.notes_admin);
+
+  notes.disponibilite = newAvail;
+
+  const success = await sbUpdate('consultants', currentConsultant.id, {
+    notes_admin: JSON.stringify(notes)
+  });
+
+  if (success) {
+    alert(ExpertI18n.t('dashboardConsultant.editAvailability') + ' OK');
+    currentConsultant.notes_admin = notes;
+  } else {
+    alert('Update failed');
+  }
+});
+
+document.getElementById('auth-btn').addEventListener('click', authenticate);
+document.getElementById('email-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') authenticate();
+});
+document.getElementById('password-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') authenticate();
+});
+
+function showAuthError(msg) {
+  document.getElementById('auth-error').textContent = msg;
+}
+
+function toggleResetBox(forceOpen) {
+  const box = document.getElementById('reset-box');
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !box.classList.contains('open');
+  box.classList.toggle('open', shouldOpen);
+
+  if (shouldOpen) {
+    const email = document.getElementById('email-input').value.trim();
+    document.getElementById('reset-email-input').value = email;
+    document.getElementById('auth-error').textContent = '';
+  }
+}
+
+async function sendResetLink() {
+  const email = document.getElementById('reset-email-input').value.trim();
+
+  if (!email) {
+    showAuthError('Email requis pour envoyer le lien');
+    return;
+  }
+  try {
+    const consultants = await sbFetch('consultants', { select: 'id', email: `eq.${email}`, limit: '1' });
+    if (!consultants || consultants.length === 0) {
+      showAuthError('Aucun compte consultant associe a cet email.');
+      return;
+    }
+    await requestPasswordResetEmail(email);
+    document.getElementById('email-input').value = email;
+    toggleResetBox(false);
+    showAuthError('Lien de reinitialisation envoye a cet email.');
+  } catch (e) {
+    showAuthError('Impossible d\'envoyer le lien pour le moment.');
+  }
+}
+
+function bindDashboardActions() {
+  if (document.body.dataset.actionsBound === 'true') return;
+  document.body.dataset.actionsBound = 'true';
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-action]');
+    if (trigger) {
+      const action = trigger.dataset.action;
+      if (action === 'set-language') return setLanguage(trigger.dataset.lang || 'fr');
+      if (action === 'toggle-reset-box') {
+        const forceOpen = trigger.dataset.forceOpen;
+        return toggleResetBox(forceOpen === undefined ? undefined : forceOpen === 'true');
+      }
+      if (action === 'send-reset-link') return sendResetLink();
+      if (action === 'logout') return logout();
+      if (action === 'open-request-detail') return openRequestDetail(trigger.dataset.requestId || '');
+      if (action === 'close-request-detail') return closeRequestDetail();
+    }
+
+    const overlay = event.target.closest('#request-modal');
+    if (overlay && event.target === overlay) {
+      closeRequestDetail();
+    }
+  });
+}
+
+initAuth();
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindDashboardActions();
+  const lang = ExpertI18n.getLang();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lang-' + lang);
+  if (btn) btn.classList.add('active');
+  applyI18n();
+  setInterval(() => {
+    if (currentConsultant) renderNotifications();
+  }, 8000);
+});
+</script>
+
+<div class="request-modal-overlay" id="request-modal">
+  <div class="request-modal">
+    <h4>Detail de la demande</h4>
+    <div class="request-grid">
+      <div class="request-field"><strong>Entreprise</strong><span id="rq-company"></span></div>
+      <div class="request-field"><strong>Email</strong><span id="rq-email"></span></div>
+      <div class="request-field"><strong>Telephone</strong><span id="rq-phone"></span></div>
+      <div class="request-field"><strong>Date</strong><span id="rq-date"></span></div>
+    </div>
+    <div class="request-message" id="rq-message"></div>
+    <div class="request-actions">
+      <a class="btn btn-primary" id="rq-email-btn" href="#">Repondre par email</a>
+      <a class="btn btn-secondary" id="rq-call-btn" href="#">Appeler</a>
+      <button class="btn btn-secondary" data-action="close-request-detail">Fermer</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
