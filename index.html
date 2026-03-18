@@ -2188,8 +2188,10 @@ const ACCESS_COPY = {
     invalidCredentials: 'Email ou mot de passe invalide.',
     resetLink: 'Mot de passe oublie ?',
     resetBack: 'Retour a la connexion',
-    resetSubmit: 'Envoyer le lien de reinitialisation →',
-    resetSuccess: 'Si cet email existe, un lien de reinitialisation vient d\'etre envoye.',
+    resetSubmit: 'Envoyer le code de reinitialisation →',
+    resetConfirmSubmit: 'Valider le code et reinitialiser →',
+    resetSuccess: 'Si cet email existe, un code de reinitialisation vient d\'etre envoye.',
+    resetCodeSent: 'Code envoye. Saisissez le code et votre nouveau mot de passe.',
     roleRequired: 'Veuillez choisir un espace.',
     open: 'Ouvrir mon espace →'
   },
@@ -2206,8 +2208,10 @@ const ACCESS_COPY = {
     invalidCredentials: 'Invalid email or password.',
     resetLink: 'Forgot password?',
     resetBack: 'Back to login',
-    resetSubmit: 'Send reset link →',
-    resetSuccess: 'If this email exists, a reset link has just been sent.',
+    resetSubmit: 'Send reset code →',
+    resetConfirmSubmit: 'Verify code and reset →',
+    resetSuccess: 'If this email exists, a reset code has just been sent.',
+    resetCodeSent: 'Code sent. Enter the code and your new password.',
     roleRequired: 'Please choose a dashboard.',
     open: 'Open my dashboard →'
   }
@@ -2217,6 +2221,7 @@ const PORTAL_ADMIN_PASSWORD = 'erphub2026!';
 const ADMIN_PORTAL_REVEAL_KEY = 'experterphub_admin_portal_revealed';
 let portalRole = 'consultant';
 let portalResetMode = false;
+let portalResetStep = 'request';
 let adminRevealClicks = [];
 
 function getResetRedirectUrl() {
@@ -2273,6 +2278,76 @@ async function requestPasswordResetEmail(email) {
       details = '';
     }
     throw new Error(details || 'Impossible d\'envoyer le lien de reinitialisation');
+  }
+}
+
+async function verifyRecoveryCode(email, code) {
+  const response = await fetch(SB_URL + '/auth/v1/verify', {
+    method: 'POST',
+    headers: {
+      apikey: SB_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: String(email || '').trim().toLowerCase(),
+      token: String(code || '').trim(),
+      type: 'recovery'
+    })
+  });
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error('Trop de tentatives de verification. Attendez une minute avant de recommencer.');
+    }
+    let details = '';
+    try {
+      const payload = await response.json();
+      details = payload.error_description || payload.msg || payload.message || '';
+    } catch (e) {
+      details = '';
+    }
+    throw new Error(details || 'Code invalide ou expire');
+  }
+
+  return response.json();
+}
+
+async function updateAuthPasswordWithToken(token, password) {
+  const response = await fetch(SB_URL + '/auth/v1/user', {
+    method: 'PUT',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ password: password })
+  });
+
+  if (!response.ok) {
+    let details = '';
+    try {
+      const payload = await response.json();
+      details = payload.error_description || payload.msg || payload.message || '';
+    } catch (e) {
+      details = '';
+    }
+    throw new Error(details || 'Impossible de mettre a jour le mot de passe');
+  }
+}
+
+async function syncLegacyHashesByEmail(email, passwordHash) {
+  const consultants = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
+  for (const c of consultants) {
+    const notes = safeJsonParse(c.notes_admin, {});
+    notes.auth_password_sha256 = passwordHash;
+    await sbUpdate('consultants', c.id, { notes_admin: JSON.stringify(notes) });
+  }
+
+  const companies = await sbSelect('entreprises', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
+  for (const e of companies) {
+    const desc = safeJsonParse(e.description, {});
+    desc.auth_password_sha256 = passwordHash;
+    await sbUpdate('entreprises', e.id, { description: JSON.stringify(desc) });
   }
 }
 
@@ -2399,6 +2474,13 @@ function setPortalFeedback(message, kind) {
 
 function setPortalResetMode(enable) {
   portalResetMode = !!enable;
+  portalResetStep = 'request';
+  const resetCodeInput = document.getElementById('portal-reset-code');
+  const resetNewPwdInput = document.getElementById('portal-reset-new-password');
+  const resetConfirmPwdInput = document.getElementById('portal-reset-confirm-password');
+  if (resetCodeInput) resetCodeInput.value = '';
+  if (resetNewPwdInput) resetNewPwdInput.value = '';
+  if (resetConfirmPwdInput) resetConfirmPwdInput.value = '';
   setPortalFeedback('', 'error');
   refreshPortalResetUi();
 }
@@ -2409,6 +2491,10 @@ function refreshPortalResetUi() {
   const resetLinkWrap = document.getElementById('portal-reset-link');
   const resetLinkBtn = document.querySelector('#portal-reset-link button');
   const submitBtn = document.getElementById('portal-submit-btn');
+  const resetCodeGroup = document.getElementById('portal-reset-code-group');
+  const resetNewPwdGroup = document.getElementById('portal-reset-new-password-group');
+  const resetConfirmPwdGroup = document.getElementById('portal-reset-confirm-password-group');
+  const onResetConfirm = portalResetMode && portalResetStep === 'confirm';
 
   if (resetLinkWrap) resetLinkWrap.style.display = canReset ? 'block' : 'none';
   if (resetLinkBtn) {
@@ -2422,13 +2508,16 @@ function refreshPortalResetUi() {
     pwdLabel.innerHTML = 'Mot de passe <span>*</span>';
   }
   if (pwdInput && !isAdmin) {
-    pwdInput.placeholder = portalResetMode ? 'Laissez vide puis cliquez sur envoyer le lien' : 'Mot de passe compte';
+    pwdInput.placeholder = portalResetMode ? 'Laissez vide puis suivez les etapes de reinitialisation' : 'Mot de passe compte';
   }
   if (pwdInput && portalResetMode) pwdInput.value = '';
   if (document.getElementById('portal-password-group')) {
     document.getElementById('portal-password-group').style.display = isAdmin ? 'block' : (portalResetMode ? 'none' : 'block');
   }
-  if (submitBtn) submitBtn.textContent = portalResetMode ? portalText('resetSubmit') : portalText('open');
+  if (resetCodeGroup) resetCodeGroup.style.display = onResetConfirm ? 'block' : 'none';
+  if (resetNewPwdGroup) resetNewPwdGroup.style.display = onResetConfirm ? 'block' : 'none';
+  if (resetConfirmPwdGroup) resetConfirmPwdGroup.style.display = onResetConfirm ? 'block' : 'none';
+  if (submitBtn) submitBtn.textContent = portalResetMode ? (onResetConfirm ? portalText('resetConfirmSubmit') : portalText('resetSubmit')) : portalText('open');
 }
 
 async function submitPortalAccess() {
@@ -2478,9 +2567,44 @@ async function submitPortalAccess() {
           return;
         }
       }
-      await requestPasswordResetEmail(email);
+
+      if (portalResetStep === 'request') {
+        await requestPasswordResetEmail(email);
+        portalResetStep = 'confirm';
+        refreshPortalResetUi();
+        setPortalFeedback(portalText('resetCodeSent'), 'success');
+        return;
+      }
+
+      const code = document.getElementById('portal-reset-code').value.trim();
+      const newPassword = document.getElementById('portal-reset-new-password').value;
+      const confirmPassword = document.getElementById('portal-reset-confirm-password').value;
+
+      if (!code) {
+        setPortalFeedback('Veuillez saisir le code recu par email.', 'error');
+        return;
+      }
+      if (!newPassword || newPassword.length < 8) {
+        setPortalFeedback('Le mot de passe doit contenir au moins 8 caracteres.', 'error');
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        setPortalFeedback('Les mots de passe ne correspondent pas.', 'error');
+        return;
+      }
+
+      const verifyResult = await verifyRecoveryCode(email, code);
+      const accessToken = verifyResult && verifyResult.access_token ? verifyResult.access_token : '';
+      if (!accessToken) {
+        setPortalFeedback('Code invalide ou expire.', 'error');
+        return;
+      }
+
+      await updateAuthPasswordWithToken(accessToken, newPassword);
+      const passwordHash = await sha256Hex(newPassword);
+      await syncLegacyHashesByEmail(email, passwordHash);
       setPortalResetMode(false);
-      setPortalFeedback(portalText('resetSuccess'), 'success');
+      setPortalFeedback('Mot de passe reinitialise. Vous pouvez vous connecter.', 'success');
       return;
     }
 
@@ -2535,7 +2659,8 @@ async function submitPortalAccess() {
     showError(errorCode, err.message);
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = portalResetMode ? portalText('resetSubmit') : portalText('open');
+    const onResetConfirm = portalResetMode && portalResetStep === 'confirm';
+    submitBtn.textContent = portalResetMode ? (onResetConfirm ? portalText('resetConfirmSubmit') : portalText('resetSubmit')) : portalText('open');
   }
 }
 
