@@ -126,6 +126,31 @@ CREATE POLICY "invitation_codes_mark_used"
   USING (is_active = true AND used_at IS NULL)
   WITH CHECK (is_active = true AND used_at IS NOT NULL);
 
+CREATE OR REPLACE FUNCTION public.consume_invitation_code(p_code TEXT, p_email TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  updated_count INTEGER;
+BEGIN
+  UPDATE public.invitation_codes
+     SET used_by_email = lower(trim(p_email)),
+         used_at = now()
+   WHERE code = upper(trim(p_code))
+     AND is_active = true
+     AND used_at IS NULL
+     AND (expires_at IS NULL OR expires_at > now());
+
+  GET DIAGNOSTICS updated_count = ROW_COUNT;
+  RETURN updated_count = 1;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.consume_invitation_code(TEXT, TEXT) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.consume_invitation_code(TEXT, TEXT) TO anon, authenticated;
+
 -- No public INSERT/DELETE policy (admin/service role only)
 
 -- =========================================================
