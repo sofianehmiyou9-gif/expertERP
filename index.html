@@ -3054,6 +3054,13 @@ async function consumeInviteCodeOnce(code, email) {
   return Array.isArray(rows) && rows.length === 1;
 }
 
+async function consultantEmailExists(email) {
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  if (!normalizedEmail) return false;
+  const rows = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(normalizedEmail) + '&limit=1');
+  return Array.isArray(rows) && rows.length > 0;
+}
+
 async function validateInviteCode() {
   const input = document.getElementById('cs-invite-code');
   const fb = document.getElementById('cs-code-feedback');
@@ -3332,6 +3339,12 @@ async function submitConsultant() {
       }),
       statut: 'en_attente'
     };
+
+    if (await consultantEmailExists(data.email)) {
+      showError('duplicate_email', 'Cet email est déjà utilisé par un consultant. Utilisez une autre adresse email professionnelle pour cette inscription.');
+      btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
+      return;
+    }
 
     const consumed = await consumeInviteCodeOnce(csInviteCode, data.email);
     if (!consumed) {
