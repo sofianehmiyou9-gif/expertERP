@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0e0e0e;--paper:#ffffff;--accent:#1e3a8a;--accent-dark:#1a2e6b;--accent-light:#ebf2fb;
-  --blue:#1e3a8a;--blue-mid:#1d4ed8;--blue-light:#ebf2fb;--blue-border:#bfdbfe;
-  --muted:#8a8580;--border:#e0dbd4;--card:#fff;
-  --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
-  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
-  --cta:#f97316;
+  --ink:#111827;--paper:#f8fafc;--accent:#2563eb;--accent-dark:#1d4ed8;--accent-light:#eff6ff;
+  --blue:#2563eb;--blue-mid:#3b82f6;--blue-light:#eff6ff;--blue-border:#bfdbfe;
+  --muted:#6b7280;--border:#e5e7eb;--card:#fff;
+  --green:#10b981;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#ef4444;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --cta:#f59e0b;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);}
@@ -140,6 +140,27 @@ tr:hover{background:var(--accent-light);}
   .quick-add-grid{grid-template-columns:1fr;}
   .team-form{grid-template-columns:1fr;}
 }
+
+  /* ── KPI SECTION ── */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+  .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:.4rem;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
+  .kpi-card.kpi-blue::before{background:#2563eb;}
+  .kpi-card.kpi-green::before{background:#10b981;}
+  .kpi-card.kpi-amber::before{background:#f59e0b;}
+  .kpi-card.kpi-violet::before{background:#8b5cf6;}
+  .kpi-icon{font-size:1.3rem;}
+  .kpi-value{font-size:2rem;font-weight:700;line-height:1.1;color:var(--ink);font-family:'DM Mono',monospace;}
+  .kpi-label{font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
+  .kpi-trend{font-size:.75rem;font-weight:500;color:var(--muted);}
+  .kpi-trend.up{color:#10b981;}
+  .kpi-chart-row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.75rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:2.5rem;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  .kpi-chart-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:.9rem;color:var(--ink);}
+  .kpi-chart-legend{display:flex;flex-direction:column;gap:.6rem;}
+  .kpi-legend-item{display:flex;align-items:center;gap:.6rem;font-size:.83rem;color:var(--ink);}
+  .kpi-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.kpi-grid{grid-template-columns:1fr;}.kpi-chart-row{flex-direction:column;gap:1rem;}}
 </style>
 </head>
 <body>
@@ -388,6 +409,54 @@ const RESOURCE_CITY_GROUPS = {
   ]
 };
 
+        <!-- ── KPI CARDS ── -->
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-icon">👥</div>
+            <div class="kpi-value" id="kpi-total">0</div>
+            <div class="kpi-label">Total Consultants</div>
+            <div class="kpi-trend" id="kpi-total-trend">0/0 slots</div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-icon">✅</div>
+            <div class="kpi-value" id="kpi-approved">0</div>
+            <div class="kpi-label">Validés &amp; Publiés</div>
+            <div class="kpi-trend up" id="kpi-approved-pct">—</div>
+          </div>
+          <div class="kpi-card kpi-amber">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-value" id="kpi-tjm">—</div>
+            <div class="kpi-label">TJM Moyen</div>
+            <div class="kpi-trend">$/jour</div>
+          </div>
+          <div class="kpi-card kpi-violet">
+            <div class="kpi-icon">📋</div>
+            <div class="kpi-value" id="kpi-slots">—</div>
+            <div class="kpi-label">Slots Restants</div>
+            <div class="kpi-trend" id="kpi-slots-sub">sur le plan</div>
+          </div>
+        </div>
+
+        <!-- ── DONUT CHART ── -->
+        <div class="kpi-chart-row">
+          <div>
+            <div class="kpi-chart-title">Répartition par statut</div>
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#e5e7eb" stroke-width="16"/>
+              <circle id="kpi-arc-approved" cx="60" cy="60" r="48" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <circle id="kpi-arc-pending"  cx="60" cy="60" r="48" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <circle id="kpi-arc-rejected" cx="60" cy="60" r="48" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <text x="60" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#111827" id="kpi-donut-center">0</text>
+            </svg>
+          </div>
+          <div class="kpi-chart-legend">
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publiés : 0</span></div>
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En révision : 0</span></div>
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
+          </div>
+        </div>
+
+        <div class="plan-box">
 function populateResourceModuleSelect(selectId, erpValue) {
   const select = document.getElementById(selectId);
   if (!select) return;
@@ -958,6 +1027,52 @@ async function loadResources() {
   currentUsedSlots = filtered.length;
   currentPlanQty = getCompanyPlanQty();
   updatePlanDisplay(filtered.length);
+}
+    renderKPIs(filtered);
+  }
+function renderKPIs(filtered) {
+  const total = filtered.length;
+  const approved = filtered.filter(r => r.statut === 'approuvé').length;
+  const pending  = filtered.filter(r => r.statut === 'en_attente').length;
+  const rejected = filtered.filter(r => r.statut === 'refusé').length;
+
+  const tjmValues = filtered.map(r => {
+    if (r.tjm_min && r.tjm_max) return (Number(r.tjm_min) + Number(r.tjm_max)) / 2;
+    if (r.tjm_min) return Number(r.tjm_min);
+    if (r.tjm_max) return Number(r.tjm_max);
+    return null;
+  }).filter(v => v !== null);
+  const avgTjm = tjmValues.length ? Math.round(tjmValues.reduce((a, b) => a + b, 0) / tjmValues.length) : null;
+
+  const planQty = currentPlanQty || getCompanyPlanQty();
+  const slotsLeft = Math.max(planQty - total, 0);
+
+  const el = id => document.getElementById(id);
+  if (el('kpi-total'))        el('kpi-total').textContent = total;
+  if (el('kpi-total-trend'))  el('kpi-total-trend').textContent = total + '/' + planQty + ' slots';
+  if (el('kpi-approved'))     el('kpi-approved').textContent = approved;
+  if (el('kpi-approved-pct')) el('kpi-approved-pct').textContent = total ? Math.round((approved / total) * 100) + '%' : '—';
+  if (el('kpi-tjm'))          el('kpi-tjm').textContent = avgTjm ? '$' + avgTjm : '—';
+  if (el('kpi-slots'))        el('kpi-slots').textContent = slotsLeft;
+  if (el('kpi-slots-sub'))    el('kpi-slots-sub').textContent = 'sur ' + planQty + ' du plan';
+  if (el('kpi-donut-center')) el('kpi-donut-center').textContent = total;
+  if (el('leg-approved'))     el('leg-approved').textContent = 'Publiés : ' + approved;
+  if (el('leg-pending'))      el('leg-pending').textContent = 'En révision : ' + pending;
+  if (el('leg-rejected'))     el('leg-rejected').textContent = 'Refusés : ' + rejected;
+
+  const C = 2 * Math.PI * 48;
+  function setArc(id, count, offset) {
+    const circle = el(id);
+    if (!circle) return;
+    if (total === 0) { circle.setAttribute('stroke-dasharray', '0 ' + C); return; }
+    const arc = (count / total) * C;
+    const off = (offset / total) * C;
+    circle.setAttribute('stroke-dasharray', arc.toFixed(2) + ' ' + (C - arc).toFixed(2));
+    circle.setAttribute('stroke-dashoffset', (-off).toFixed(2));
+  }
+  setArc('kpi-arc-approved', approved, 0);
+  setArc('kpi-arc-pending',  pending,  approved);
+  setArc('kpi-arc-rejected', rejected, approved + pending);
 }
 
 function updatePlanDisplay(usedSlots) {
