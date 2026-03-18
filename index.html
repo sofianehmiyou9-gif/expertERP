@@ -2603,6 +2603,10 @@ async function submitPortalAccess() {
       await updateAuthPasswordWithToken(accessToken, newPassword);
       const passwordHash = await sha256Hex(newPassword);
       await syncLegacyHashesByEmail(email, passwordHash);
+      if (window.ExpertPortalAuth) {
+        ExpertPortalAuth.goToDashboard(portalRole, email);
+        return;
+      }
       setPortalResetMode(false);
       setPortalFeedback('Mot de passe reinitialise. Vous pouvez vous connecter.', 'success');
       return;

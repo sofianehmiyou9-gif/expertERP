@@ -386,12 +386,28 @@ function persistPortalSession(email) {
 async function initAuth() {
   const emailParam = getUrlParam('email');
   const portalEmail = getPortalEmail();
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
   if (portalEmail) {
     document.getElementById('email-input').value = portalEmail.trim();
   }
   if (emailParam) {
     document.getElementById('email-input').value = emailParam;
   }
+
+  if (session && session.role === 'consultant' && session.email) {
+    try {
+      const consultants = await sbFetch('consultants', { select: '*', email: `eq.${session.email}` });
+      if (consultants.length > 0) {
+        currentEmail = session.email;
+        currentConsultant = consultants[0];
+        showDashboard();
+        return;
+      }
+    } catch (e) {
+      // Fallback to manual auth form if session refresh fails.
+    }
+  }
+
   showAuthForm();
 }
 

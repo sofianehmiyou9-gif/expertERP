@@ -967,12 +967,36 @@ function canAddSlots(countToAdd) {
 async function initAuth() {
   const emailParam = getUrlParam('email');
   const portalEmail = getPortalEmail();
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
   if (portalEmail) {
     document.getElementById('email-input').value = portalEmail.trim();
   }
   if (emailParam) {
     document.getElementById('email-input').value = emailParam;
   }
+
+  if (session && session.role === 'entreprise' && session.email) {
+    try {
+      const found = await findCompanyAccessByEmail(session.email);
+      if (found && found.company && found.company.type_demande === 'offrir') {
+        const access = found.access;
+        if (!access || access.status !== 'disabled') {
+          currentEmail = session.email;
+          currentCompany = found.company;
+          currentAccessRole = access?.role || 'viewer';
+          currentAccessStatus = access?.status || 'active';
+          showDashboard();
+          loadResources();
+          loadProfile();
+          loadTeam();
+          return;
+        }
+      }
+    } catch (e) {
+      // Fallback to manual auth form if session refresh fails.
+    }
+  }
+
   showAuthForm();
 }
 
