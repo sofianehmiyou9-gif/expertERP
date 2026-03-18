@@ -1,0 +1,566 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Consultant — ExpertERPHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e0e0e;--paper:#f5f2ed;--accent:#1e3a8a;--accent-dark:#1a2e6b;--accent-light:#e8f0ff;
+  --blue:#1e3a8a;--blue-mid:#2d5282;--blue-light:#ebf2fb;--blue-border:#b8d0eb;
+  --muted:#8a8580;--border:#e0dbd4;--card:#fff;
+  --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --orange:#f97316;--orange-bg:#fff7ed;--orange-border:#fed7aa;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.12);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.15);
+  --shadow-xl: 0 24px 64px rgba(0,0,0,.18);
+  --shadow-3d: 0 8px 32px rgba(0,0,0,.1), 0 4px 16px rgba(0,0,0,.08);
+}
+[data-theme="dark"]{
+  --ink:#f5f2ed;--paper:#0e0e0e;--accent:#60a5fa;--accent-dark:#3b82f6;--accent-light:#1e3a5f;
+  --blue:#60a5fa;--blue-mid:#3b82f6;--blue-light:#1e3a5f;--blue-border:#3b82f6;
+  --muted:#8a8580;--border:#2a2a2a;--card:#1a1a1a;
+  --green:#22c55e;--green-bg:#14532d;--green-border:#16a34a;
+  --red:#ef4444;--red-bg:#7f1d1d;--red-border:#dc2626;
+  --orange:#fb923c;--orange-bg:#9a3412;--orange-border:#f97316;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.4);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.5);
+  --shadow-xl: 0 24px 64px rgba(0,0,0,.6);
+  --shadow-3d: 0 8px 32px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);letter-spacing:-.3px;}
+a{color:inherit;text-decoration:none;}
+nav{position:sticky;top:0;z-index:200;background:rgba(245,242,237,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(224,219,212,.5);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:70px;box-shadow:var(--shadow-sm);}
+[data-theme="dark"] nav{background:rgba(14,14,14,.95);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;cursor:pointer;background:none;border:none;padding:0;color:var(--ink);transition:all .3s ease;}
+.logo:hover{color:var(--accent);transform:scale(1.02);}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2.5rem;align-items:center;}
+.nav-link{font-size:.85rem;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:all .3s ease;padding:.5rem 0;position:relative;font-weight:500;letter-spacing:.5px;}
+.nav-link:after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--accent);transition:width .3s ease;}
+.nav-link:hover{color:var(--ink);}
+.nav-link:hover:after,.nav-link.active:after{width:100%;}
+.nav-link.active{color:var(--ink);}
+.nav-r{display:flex;gap:.75rem;align-items:center;}
+.btn-outline{font-family:'DM Mono',monospace;font-size:.7rem;padding:.45rem 1.2rem;background:transparent;color:var(--ink);border:1.5px solid var(--ink);cursor:pointer;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;position:relative;overflow:hidden;}
+.btn-outline:before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--ink);z-index:-1;transition:left .3s ease;}
+.btn-outline:hover{color:var(--paper);border-color:var(--ink);}
+.btn-outline:hover:before{left:0;}
+.btn-solid{font-family:'DM Mono',monospace;font-size:.7rem;padding:.45rem 1.2rem;background:var(--blue);color:#fff;border:none;cursor:pointer;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;position:relative;overflow:hidden;box-shadow:var(--shadow-md);}
+.btn-solid:before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:var(--blue-mid);transform:scaleX(0);transform-origin:right;transition:transform .3s ease;z-index:-1;}
+.btn-solid:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.btn-solid:hover:before{transform:scaleX(1);}
+.lang-selector{display:flex;gap:.4rem;align-items:center;padding-left:1rem;border-left:1px solid var(--border);}
+.lang-btn{background:none;border:none;font-family:'DM Mono',monospace;font-size:.7rem;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:all .2s;border-radius:2px;letter-spacing:.05em;font-weight:500;}
+.lang-btn:hover{color:var(--ink);}
+.lang-btn.active{color:var(--blue);background:var(--blue-light);padding:.3rem .7rem;}
+.theme-toggle{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);transition:all .2s;padding:.3rem;}
+.theme-toggle:hover{color:var(--ink);}
+.profile-hero{padding:5rem 2.5rem 3rem;background:linear-gradient(125deg, #0f172a 0%, #1e3a8a 40%, #3b82f6 72%, #6366f1 100%);color:#fff;position:relative;overflow:hidden;animation:heroPulse 12s ease-in-out infinite;background-size:180% 180%;}
+.profile-hero:before{content:'';position:absolute;inset:0;background:linear-gradient(to right, rgba(255,255,255,.12) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.08) 1px, transparent 1px);background-size:32px 32px;opacity:.22;pointer-events:none;}
+.profile-hero:after{content:'';position:absolute;right:-80px;top:-40px;width:340px;height:340px;background:radial-gradient(circle, rgba(99,102,241,.38) 0%, rgba(59,130,246,.25) 35%, transparent 70%);filter:blur(8px);pointer-events:none;}
+.profile-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+.profile-header{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:center;}
+.profile-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg, #fff 0%, rgba(255,255,255,.8) 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:600;color:var(--blue);box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(-5deg);}
+.profile-info h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;margin-bottom:.5rem;letter-spacing:-.03em;}
+.profile-info .role{font-size:1.1rem;color:rgba(255,255,255,.9);margin-bottom:.5rem;}
+.profile-info .location{font-size:.9rem;color:rgba(255,255,255,.7);}
+.profile-erp-row{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.9rem;}
+.profile-erp-chip{display:inline-flex;align-items:center;gap:0;padding:.28rem;border-radius:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.18);}
+.profile-erp-label{display:none;}
+.erp-logo-wrap{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;position:relative;flex-shrink:0;background:#fff;border:1px solid rgba(30,58,138,.14);border-radius:12px;padding:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 10px rgba(15,23,42,.12);}
+.erp-logo-img{display:block;width:100%;height:100%;max-width:32px;max-height:32px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 2px 4px rgba(15,23,42,.16));}
+.erp-logo-mark{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 .46rem;border-radius:11px;background:linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);color:#fff;font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.06em;font-weight:700;line-height:1;border:1px solid rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);}
+.erp-logo-mark.sap{background:linear-gradient(135deg, #0f6cbd 0%, #1d4ed8 100%);}
+.erp-logo-mark.oracle{background:linear-gradient(135deg, #c74634 0%, #ea4335 100%);}
+.erp-logo-mark.dynamics{background:linear-gradient(135deg, #0a5cc2 0%, #2563eb 100%);}
+.erp-logo-mark.workday{background:linear-gradient(135deg, #f59e0b 0%, #f97316 100%);}
+.erp-logo-mark.servicenow{background:linear-gradient(135deg, #16a34a 0%, #22c55e 100%);}
+.erp-logo-mark.salesforce{background:linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);}
+.erp-logo-mark.successfactors{background:linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);}
+.erp-logo-mark.netsuite{background:linear-gradient(135deg, #334155 0%, #475569 100%);}
+.erp-logo-mark.infor{background:linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);}
+.erp-logo-mark.default{background:linear-gradient(135deg, #1e293b 0%, #334155 100%);}
+.profile-stats{display:flex;gap:2rem;}
+.stat{text-align:center;}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#fff;margin-bottom:.25rem;}
+.stat-l{font-size:.8rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;}
+.profile-content{display:grid;grid-template-columns:2fr 1fr;gap:3rem;margin-top:3rem;}
+.profile-main{background:rgba(255,255,255,.86);border:1px solid rgba(59,130,246,.18);border-radius:18px;padding:3rem;box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(1deg);backdrop-filter:blur(10px);}
+.profile-sidebar{background:rgba(255,255,255,.86);border:1px solid rgba(59,130,246,.18);border-radius:18px;padding:2rem;box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(-1deg);height:fit-content;backdrop-filter:blur(10px);}
+.section{margin-bottom:3rem;}
+.section h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:1.5rem;letter-spacing:-.02em;color:var(--accent);}
+.section p{font-size:.95rem;line-height:1.8;margin-bottom:1rem;}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;}
+.skill-tag{display:flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border:1px solid rgba(99,102,241,.22);border-radius:999px;background:linear-gradient(120deg,#eef2ff 0%,#dbeafe 100%);color:#1e3a8a;font-weight:600;transition:all .25s ease;}
+.skill-tag:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px rgba(59,130,246,.2);border-color:#6366f1;}
+.skill-tag.erp-skill{justify-content:flex-start;border-radius:16px;background:linear-gradient(120deg,#ffffff 0%,#eef2ff 100%);}
+.skill-tag .erp-logo-wrap{min-width:30px;height:30px;border-radius:9px;padding:2px;}
+.skill-tag .erp-logo-img{max-width:24px;max-height:24px;}
+.skill-tag .erp-logo-mark{min-width:24px;height:24px;font-size:.48rem;border-radius:7px;}
+.experience-item{background:var(--paper);border:1px solid rgba(59,130,246,.16);border-radius:12px;padding:1.25rem 1.25rem 1.25rem 1.8rem;margin-bottom:1rem;position:relative;}
+.experience-item:before{content:'';position:absolute;left:.7rem;top:1.1rem;width:8px;height:8px;border-radius:50%;background:linear-gradient(120deg,#3b82f6,#6366f1);box-shadow:0 0 0 4px rgba(59,130,246,.16);}
+.experience-item:after{content:'';position:absolute;left:.95rem;top:1.8rem;bottom:-1rem;width:2px;background:linear-gradient(180deg,rgba(59,130,246,.25),rgba(99,102,241,.08));}
+.exp-title{font-weight:600;margin-bottom:.25rem;}
+.exp-company{color:var(--muted);margin-bottom:.25rem;}
+.exp-period{color:var(--muted);font-size:.85rem;}
+.contact-form{background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);border:1px solid rgba(59,130,246,.2);border-radius:16px;padding:2rem;box-shadow:0 14px 28px rgba(15,23,42,.08);}
+.contact-form h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;margin-bottom:1rem;color:var(--orange);}
+.contact-form .form-input,.contact-form textarea{width:100%;padding:.9rem 1rem;border:1px solid #dbe3f0;border-radius:14px;background:#fff;transition:all .24s ease;}
+.contact-form textarea{resize:vertical;min-height:120px;margin-bottom:1.5rem;}
+.contact-form .form-input:focus,.contact-form textarea:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.16),0 10px 22px rgba(59,130,246,.12);transform:translateY(-1px);}
+.btn-contact{font-family:'DM Mono',monospace;font-size:.8rem;padding:.8rem 2rem;background:linear-gradient(120deg,#2563eb 0%,#6366f1 100%);color:#fff;border:none;cursor:pointer;border-radius:999px;letter-spacing:.08em;text-transform:uppercase;transition:all .24s ease;font-weight:700;box-shadow:0 12px 24px rgba(59,130,246,.35);}
+.btn-contact:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 0 4px rgba(99,102,241,.22),0 18px 30px rgba(59,130,246,.45);}
+
+@keyframes heroPulse{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;background:var(--paper);}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;letter-spacing:-.5px;}
+.footer-logo span{color:var(--accent);}
+.footer-links{display:flex;gap:2rem;}
+.footer-link{font-size:.8rem;color:var(--muted);cursor:pointer;transition:all .2s ease;font-weight:500;}
+.footer-link:hover{color:var(--ink);}
+.footer-copy{font-size:.75rem;color:var(--muted);font-weight:500;}
+@media(max-width:768px){
+  .profile-header{grid-template-columns:1fr;text-align:center;}
+  .profile-content{grid-template-columns:1fr;}
+  .profile-stats{justify-content:center;margin-top:2rem;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <button class="logo" id="nav-home-logo" data-nav-href="index.html">Expert<span>ERP</span>Hub</button>
+  <div class="nav-links">
+    <button class="nav-link" data-nav-href="index.html">Accueil</button>
+    <button class="nav-link active" data-nav-href="index.html#consultants">Consultants</button>
+    <button class="nav-link" data-nav-href="index.html#entreprises">Entreprises</button>
+  </div>
+  <div class="nav-r">
+    <button class="btn-outline" data-nav-href="index.html">Trouver un expert</button>
+    <div class="lang-selector">
+      <button class="lang-btn active" id="lang-fr" data-lang="fr">FR</button>
+      <button class="lang-btn" id="lang-en" data-lang="en">EN</button>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" data-action="toggle-theme">🌙</button>
+  </div>
+</nav>
+
+<div class="profile-hero">
+  <div class="profile-inner">
+    <div class="profile-header">
+      <div class="profile-avatar" id="profile-avatar">JD</div>
+      <div class="profile-info">
+        <h1 id="profile-name">Jean Dupont</h1>
+        <div class="role" id="profile-role">Consultant SAP EWM</div>
+        <div class="location" id="profile-location">Paris, France</div>
+        <div class="profile-erp-row" id="profile-erp-row">
+          <span class="profile-erp-chip"><span class="erp-logo-wrap"><img class="erp-logo-img" src="assets/erp-logos/sap-s4hana.svg" alt="SAP S/4HANA"><span class="erp-logo-mark sap" style="display:none;">SAP</span></span><span class="profile-erp-label">SAP S/4HANA</span></span>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat"><div class="stat-n" id="profile-exp">8</div><div class="stat-l">ans exp</div></div>
+        <div class="stat"><div class="stat-n" id="profile-rate">650</div><div class="stat-l">€/jour</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="profile-content" style="padding:3rem 2.5rem;">
+  <div class="profile-main">
+    <div class="section">
+      <h2>Résumé professionnel</h2>
+      <p id="profile-resume">Consultant SAP expérimenté avec plus de 8 ans d'expérience dans les modules EWM et WM. Spécialisé dans l'implémentation et l'optimisation des processus logistiques pour les entreprises manufacturières et de distribution.</p>
+    </div>
+
+    <div class="section">
+      <h2>Compétences ERP</h2>
+      <div class="skills-grid" id="profile-skills">
+        <div class="skill-tag">SAP EWM</div>
+        <div class="skill-tag">SAP WM</div>
+        <div class="skill-tag">SAP MM</div>
+        <div class="skill-tag">SAP SD</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Expériences professionnelles</h2>
+      <div id="profile-experiences">
+        <div class="experience-item">
+          <div class="exp-title">Consultant Senior SAP EWM</div>
+          <div class="exp-company">ABC Consulting</div>
+          <div class="exp-period">2020 - Présent · 4 ans</div>
+          <p>Implémentation complète du module EWM pour un client du secteur manufacturier. Gestion de projet, formation équipe, go-live réussi.</p>
+        </div>
+        <div class="experience-item">
+          <div class="exp-title">Consultant SAP WM</div>
+          <div class="exp-company">XYZ Solutions</div>
+          <div class="exp-period">2016 - 2020 · 4 ans</div>
+          <p>Support et optimisation des processus warehouse management. Résolution d'incidents critiques et amélioration des performances.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-sidebar">
+    <div class="contact-form">
+      <h3 id="contact-title">Contacter ce consultant</h3>
+      <input class="form-input" id="company-name" placeholder="Nom entreprise" style="margin-bottom:0.7rem;">
+      <input class="form-input" id="company-email" placeholder="Email entreprise" style="margin-bottom:0.7rem;">
+      <input class="form-input" id="company-phone" placeholder="Telephone entreprise" style="margin-bottom:0.7rem;">
+      <textarea placeholder="Décrivez votre projet et vos besoins..." id="contact-message"></textarea>
+      <button class="btn-contact" id="contact-btn" data-action="send-contact">Envoyer le message</button>
+    </div>
+
+    <div class="section">
+      <h2>Informations</h2>
+      <p><strong>Disponibilité:</strong> <span id="profile-availability">Immédiate</span></p>
+      <p><strong>Mode de travail:</strong> <span id="profile-mode">Hybride</span></p>
+      <p><strong>Langues:</strong> <span id="profile-languages">Français (natif), Anglais (courant)</span></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Expert<span>ERP</span>Hub</div>
+  <div class="footer-links">
+    <span class="footer-link" data-nav-href="index.html">Accueil</span>
+    <span class="footer-link" data-nav-href="index.html#consultants">Consultants</span>
+    <span class="footer-link" data-nav-href="index.html#entreprises">Entreprises</span>
+  </div>
+  <div class="footer-copy">© 2026 ExpertERPHub. Tous droits réservés.</div>
+</footer>
+
+<script src="i18n.js"></script>
+<script src="notifications.js"></script>
+<script>
+const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+
+let currentConsultant = null;
+
+function setLanguage(lang) {
+  ExpertI18n.setLang(lang);
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  const btn = document.getElementById('lang-' + lang);
+  if (btn) btn.classList.add('active');
+  applyI18n();
+}
+
+function applyI18n() {
+  const t = (k) => ExpertI18n.t(k);
+  document.title = 'ExpertERPHub - ' + t('consultant.profileTitle');
+  const nav = document.querySelectorAll('.nav-link');
+  if (nav[0]) nav[0].textContent = t('common.home');
+  if (nav[1]) nav[1].textContent = t('common.consultants');
+  if (nav[2]) nav[2].textContent = t('common.companies');
+  const findBtn = document.querySelector('.btn-outline');
+  if (findBtn) findBtn.textContent = t('common.findExpert');
+  const h2 = document.querySelectorAll('.section h2');
+  if (h2[0]) h2[0].textContent = t('consultant.professionalSummary');
+  if (h2[1]) h2[1].textContent = t('consultant.erpSkills');
+  if (h2[2]) h2[2].textContent = t('consultant.professionalExperience');
+  if (h2[3]) h2[3].textContent = t('consultant.information');
+  refreshContactFormLabels();
+  const cm = document.getElementById('contact-message');
+  if (cm) cm.placeholder = t('consultant.contactPlaceholder');
+  const cb = document.getElementById('contact-btn');
+  if (cb) cb.textContent = t('consultant.sendMessage');
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const toggle = document.getElementById('theme-toggle');
+  if (body.dataset.theme === 'dark') {
+    body.dataset.theme = 'light';
+    toggle.textContent = '🌙';
+  } else {
+    body.dataset.theme = 'dark';
+    toggle.textContent = '☀️';
+  }
+  localStorage.setItem('theme', body.dataset.theme);
+}
+
+async function sbSelectById(table, id) {
+  const url = `${SB_URL}/rest/v1/${table}?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
+  const response = await fetch(url, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  if (!response.ok) throw new Error('fetch_failed');
+  return response.json();
+}
+
+async function sbInsert(table, data) {
+  const response = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.ok;
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch (e) { return {}; }
+}
+
+function isB2BResource(consultant) {
+  const notes = parseNotes(consultant?.notes_admin);
+  return notes.source === 'import_b2b';
+}
+
+function refreshContactFormLabels() {
+  const contactTitle = document.getElementById('contact-title');
+  if (!contactTitle) return;
+  const b2b = isB2BResource(currentConsultant);
+  contactTitle.textContent = b2b
+    ? 'Contacter l\'administrateur de cette ressource'
+    : ExpertI18n.t('consultant.contactConsultant');
+}
+
+const ERP_BRANDS = [
+  { key: 'sap', label: 'SAP S/4HANA', mark: 'SAP', logo: 'assets/erp-logos/sap-s4hana.svg', match: ['sap'] },
+  { key: 'oracle', label: 'Oracle', mark: 'ORA', logo: 'assets/erp-logos/oracle.svg', match: ['oracle'] },
+  { key: 'dynamics', label: 'Dynamics 365', mark: 'D365', logo: 'assets/erp-logos/dynamics365.svg', match: ['microsoft dynamics', 'dynamics 365', 'dynamics'] },
+  { key: 'workday', label: 'Workday', mark: 'WD', logo: 'assets/erp-logos/workday.svg', match: ['workday'] },
+  { key: 'salesforce', label: 'Salesforce', mark: 'SF', logo: 'assets/erp-logos/salesforce.svg', match: ['salesforce'] },
+  { key: 'servicenow', label: 'ServiceNow', mark: 'SN', logo: 'assets/erp-logos/servicenow.svg', match: ['servicenow', 'service now'] },
+  { key: 'successfactors', label: 'SuccessFactors', mark: 'SFS', logo: 'assets/erp-logos/successfactors.svg', match: ['successfactors', 'success factors'] },
+  { key: 'netsuite', label: 'NetSuite', mark: 'NS', logo: 'assets/erp-logos/netsuite.svg', match: ['netsuite'] },
+  { key: 'infor', label: 'Infor', mark: 'INF', logo: 'assets/erp-logos/infor.svg', match: ['infor'] }
+];
+
+function detectErpBrand(value) {
+  const text = String(value || '').toLowerCase();
+  return ERP_BRANDS.find((brand) => brand.match.some((needle) => text.includes(needle))) || null;
+}
+
+function extractErpBrands(skills) {
+  const found = [];
+  skills.forEach((skill) => {
+    const brand = detectErpBrand(skill);
+    if (brand && !found.some((item) => item.key === brand.key)) found.push(brand);
+  });
+  return found;
+}
+
+function renderErpBrandVisual(brand) {
+  return `<span class="erp-logo-wrap"><img class="erp-logo-img" src="${brand.logo || ''}" alt="${brand.label}"><span class="erp-logo-mark ${brand.key}" style="display:none;">${brand.mark}</span></span>`;
+}
+
+function bindErpLogoFallbacks(scope = document) {
+  scope.querySelectorAll('.erp-logo-wrap img').forEach((img) => {
+    if (img.dataset.fallbackBound === 'true') return;
+    img.dataset.fallbackBound = 'true';
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+      if (img.nextElementSibling) img.nextElementSibling.style.display = 'inline-flex';
+    });
+  });
+}
+
+function bindStaticActions() {
+  document.querySelectorAll('[data-nav-href]').forEach((node) => {
+    node.addEventListener('click', () => {
+      window.location.href = node.dataset.navHref || 'index.html';
+    });
+  });
+
+  document.querySelectorAll('[data-lang]').forEach((node) => {
+    node.addEventListener('click', () => {
+      setLanguage(node.dataset.lang || 'fr');
+    });
+  });
+
+  document.querySelectorAll('[data-action="toggle-theme"]').forEach((node) => {
+    node.addEventListener('click', toggleTheme);
+  });
+
+  document.querySelectorAll('[data-action="send-contact"]').forEach((node) => {
+    node.addEventListener('click', sendContactMessage);
+  });
+}
+
+function renderProfileErpRow(skills) {
+  const container = document.getElementById('profile-erp-row');
+  if (!container) return;
+  const brands = extractErpBrands(skills);
+  if (!brands.length) {
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = brands.map((brand) => `
+    <span class="profile-erp-chip">
+      ${renderErpBrandVisual(brand)}
+      <span class="profile-erp-label">${brand.label}</span>
+    </span>
+  `).join('');
+  bindErpLogoFallbacks(container);
+}
+
+function readUrlId() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('id');
+}
+
+function renderConsultant(consultant) {
+  const notes = parseNotes(consultant.notes_admin);
+  currentConsultant = consultant;
+
+  document.getElementById('profile-avatar').textContent = ((consultant.prenom || '?')[0] + (consultant.nom || '?')[0]).toUpperCase();
+  document.getElementById('profile-name').textContent = `${consultant.prenom || ''} ${consultant.nom || ''}`.trim();
+  document.getElementById('profile-role').textContent = consultant.titre || '—';
+  document.getElementById('profile-location').textContent = notes.ville || '—';
+  document.getElementById('profile-exp').textContent = notes.annees_exp || '—';
+  document.getElementById('profile-rate').textContent = consultant.tjm_min || '—';
+  document.getElementById('profile-resume').textContent = notes.resume || '—';
+  document.getElementById('profile-availability').textContent = notes.disponibilite || notes.dispo || ExpertI18n.t('consultant.immediate');
+  document.getElementById('profile-mode').textContent = notes.mode_travail || '—';
+  document.getElementById('profile-languages').textContent = notes.langues || '—';
+
+  const skillsContainer = document.getElementById('profile-skills');
+  skillsContainer.innerHTML = '';
+  const rawSkills = Array.isArray(consultant.competences) ? consultant.competences : String(consultant.competences || '').split(',').map(s => s.trim()).filter(Boolean);
+  renderProfileErpRow(rawSkills);
+  if (rawSkills.length) {
+    rawSkills.forEach((skill) => {
+      const brand = detectErpBrand(skill);
+      const tag = document.createElement('div');
+      tag.className = `skill-tag${brand ? ' erp-skill' : ''}`;
+      tag.innerHTML = brand
+        ? `${renderErpBrandVisual(brand)}<span>${skill}</span>`
+        : `<span>${skill}</span>`;
+      skillsContainer.appendChild(tag);
+    });
+  } else if (notes.erp_modules) {
+    Object.entries(notes.erp_modules).forEach(([erp, mods]) => {
+      const safeMods = Array.isArray(mods) ? mods : (mods.modules || []);
+      safeMods.forEach((mod) => {
+        const brand = detectErpBrand(erp);
+        const tag = document.createElement('div');
+        tag.className = `skill-tag${brand ? ' erp-skill' : ''}`;
+        tag.innerHTML = brand
+          ? `${renderErpBrandVisual(brand)}<span>${erp} ${mod}</span>`
+          : `<span>${erp} ${mod}</span>`;
+        skillsContainer.appendChild(tag);
+      });
+    });
+  }
+  bindErpLogoFallbacks(skillsContainer);
+
+  const expContainer = document.getElementById('profile-experiences');
+  expContainer.innerHTML = '';
+  const exps = Array.isArray(notes.experiences) ? notes.experiences : [];
+  exps.forEach((exp) => {
+    const item = document.createElement('div');
+    item.className = 'experience-item';
+    item.innerHTML = `
+      <div class="exp-title">${exp.titre || '—'}</div>
+      <div class="exp-company">${exp.entreprise || '—'}</div>
+      <div class="exp-period">${exp.periode || ''}${exp.secteur ? ' · ' + exp.secteur : ''}</div>
+      <p>${exp.description || ''}</p>
+    `;
+    expContainer.appendChild(item);
+  });
+
+  refreshContactFormLabels();
+}
+
+async function loadConsultant() {
+  const id = readUrlId();
+  if (!id) {
+    document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileNotFound')}</p>`;
+    return;
+  }
+  try {
+    const data = await sbSelectById('consultants', id);
+    if (!data || !data.length) {
+      document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileNotFound')}</p>`;
+      return;
+    }
+    renderConsultant(data[0]);
+  } catch (e) {
+    console.error(e);
+    document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileLoadError')}</p>`;
+  }
+}
+
+async function sendContactMessage() {
+  const message = document.getElementById('contact-message').value.trim();
+  if (!message) {
+    alert(ExpertI18n.t('consultant.messageEmpty'));
+    return;
+  }
+  if (!currentConsultant) {
+    alert('Profil indisponible. Rechargez la page puis réessayez.');
+    return;
+  }
+
+  const notes = parseNotes(currentConsultant.notes_admin);
+  const b2b = notes.source === 'import_b2b';
+  const recipientEmail = b2b
+    ? String(notes.entreprise_email || '').trim() || currentConsultant.email
+    : currentConsultant.email;
+  const recipientId = b2b ? null : currentConsultant.id;
+  const recipientType = b2b ? 'entreprise_admin' : 'consultant';
+
+  const companyName = document.getElementById('company-name').value.trim() || 'Entreprise';
+  const companyEmail = document.getElementById('company-email').value.trim() || 'non-renseigne@local';
+  const companyPhone = document.getElementById('company-phone').value.trim();
+  const notif = {
+    id: Date.now(),
+    consultantId: recipientId,
+    consultantEmail: recipientEmail,
+    recipientType: recipientType,
+    recipientEmail: recipientEmail,
+    companyName: companyName,
+    companyEmail: companyEmail,
+    companyPhone: companyPhone || null,
+    companyId: companyEmail,
+    message: message,
+    createdAt: new Date().toISOString(),
+    read: false,
+    status: 'nouveau',
+    type: 'message'
+  };
+
+  ExpertNotifications.push(notif);
+  try {
+    await sbInsert('notifications', notif);
+  } catch (e) {
+    console.warn('notifications table unavailable, kept in localStorage only');
+  }
+
+  alert(b2b
+    ? 'Message envoye a l\'administrateur de la ressource.'
+    : ExpertI18n.t('consultant.messageSent'));
+  document.getElementById('contact-message').value = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindStaticActions();
+  const lang = ExpertI18n.getLang();
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  const langBtn = document.getElementById('lang-' + lang);
+  if (langBtn) langBtn.classList.add('active');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.dataset.theme = 'dark';
+    const th = document.getElementById('theme-toggle');
+    if (th) th.textContent = '☀️';
+  }
+  applyI18n();
+  loadConsultant();
+  bindErpLogoFallbacks();
+});
+</script>
+</body>
+</html>
