@@ -316,9 +316,9 @@ function getResetRedirectUrl() {
   const host = String(window.location.hostname || '').toLowerCase();
   const isLocalHost = host === 'localhost' || host === '127.0.0.1';
   if (!isLocalHost && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
-    return window.location.origin + '/recovery.html';
+    return window.location.origin + '/reset-password.html';
   }
-  return 'https://experterphub.com/recovery.html';
+  return 'https://experterphub.com/reset-password.html';
 }
 
 async function requestPasswordResetEmail(email) {

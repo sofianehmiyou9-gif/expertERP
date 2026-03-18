@@ -50,6 +50,19 @@ a {
   word-break: break-all;
   font-size: 0.85rem;
 }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
 </style>
 </head>
 <body>
@@ -57,7 +70,7 @@ a {
     <h1>Redirection vers la reinitialisation</h1>
     <p id="status">Verification du lien en cours...</p>
     <p id="fallback-copy" class="mono" style="display:none;"></p>
-    <p id="fallback-link" style="display:none;">Si rien ne se passe, cliquez ici: <a id="manual-link" href="reset-password.html">ouvrir la page de reinitialisation</a></p>
+    <p id="fallback-link" style="display:none;"><a id="manual-link" class="btn" href="reset-password.html">Continuer vers la reinitialisation</a></p>
   </div>
 
   <script>
@@ -81,9 +94,14 @@ a {
       return;
     }
 
-    status.textContent = "Le lien est valide. Ouvrez le formulaire ci-dessous si votre email ou navigateur bloque la redirection automatique.";
-    fallbackCopy.style.display = "block";
-    fallbackLink.style.display = "block";
+    status.textContent = "Lien valide. Redirection en cours...";
+    window.location.assign(target);
+
+    window.setTimeout(function () {
+      status.textContent = "Si vous restez sur cette page, cliquez sur le bouton ci-dessous.";
+      fallbackCopy.style.display = "block";
+      fallbackLink.style.display = "block";
+    }, 1200);
   })();
   </script>
 </body>
