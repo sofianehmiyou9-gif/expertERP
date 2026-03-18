@@ -2207,8 +2207,11 @@ function redirectRecoveryLinkToResetPageIfNeeded() {
   const queryParams = new URLSearchParams(window.location.search || '');
   const token = hashParams.get('access_token') || queryParams.get('access_token');
   const type = (hashParams.get('type') || queryParams.get('type') || '').toLowerCase();
+  const tokenHash = queryParams.get('token_hash') || hashParams.get('token_hash');
+  const authCode = queryParams.get('code') || hashParams.get('code');
 
-  if (!token) return;
+  const hasRecoverySignal = !!token || type === 'recovery' || !!tokenHash || !!authCode;
+  if (!hasRecoverySignal) return;
   if (type && type !== 'recovery') return;
 
   const hash = window.location.hash || '';
