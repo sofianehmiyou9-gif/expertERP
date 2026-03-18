@@ -1,0 +1,23 @@
+# Dépendances / build artifacts
+node_modules/
+dist/
+.cache/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Variables d'environnement locales
+.env
+.env.local
+.env.*.local
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
