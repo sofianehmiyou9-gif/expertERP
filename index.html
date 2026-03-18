@@ -2434,7 +2434,11 @@ async function submitPortalAccess() {
       }
       const notes = safeJsonParse(consultants[0].notes_admin, {});
       const inputHash = await sha256Hex(password);
-      if (notes.auth_password_sha256 && notes.auth_password_sha256 !== inputHash) {
+      if (!notes.auth_password_sha256) {
+        setPortalFeedback('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.', 'error');
+        return;
+      }
+      if (notes.auth_password_sha256 !== inputHash) {
         setPortalFeedback(portalText('invalidCredentials'), 'error');
         return;
       }
@@ -2449,7 +2453,11 @@ async function submitPortalAccess() {
     }
     const desc = safeJsonParse(companies[0].description, {});
     const inputHash = await sha256Hex(password);
-    if (desc.auth_password_sha256 && desc.auth_password_sha256 !== inputHash) {
+    if (!desc.auth_password_sha256) {
+      setPortalFeedback('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.', 'error');
+      return;
+    }
+    if (desc.auth_password_sha256 !== inputHash) {
       setPortalFeedback(portalText('invalidCredentials'), 'error');
       return;
     }

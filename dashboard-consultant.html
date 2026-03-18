@@ -368,7 +368,11 @@ async function authenticate() {
 
   const notes = parseNotes(consultants[0].notes_admin);
   const hash = await sha256Hex(password);
-  if (notes.auth_password_sha256 && notes.auth_password_sha256 !== hash) {
+  if (!notes.auth_password_sha256) {
+    showAuthError('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.');
+    return;
+  }
+  if (notes.auth_password_sha256 !== hash) {
     showAuthError('Email ou mot de passe invalide');
     return;
   }
