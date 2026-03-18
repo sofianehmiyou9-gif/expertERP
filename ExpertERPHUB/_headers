@@ -1,6 +1,0 @@
-/*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'sha256-W427TeWzdoS9NrntwvbMO8iqkLijpfBKqF7QKwXcnus=' 'sha256-GMh/NIGpmfh4AUgTwqVrDlWAO0SZlnuljF3fzKYXGSI=' 'sha256-7bTrBoJiu8gNy+XHrep4qosZzQdl5RSjmiFue8d+UZo=' 'sha256-RjPdScJcay/Dtkv07KJ3IlmiYkY/ZK5oNykL3xyeVPM=' 'sha256-+cBzVarJpNQGkwRqVy+Bz6kOi+wgVahCCNIZLJGncvE=' 'sha256-7deCTQMh6Q8Bjgvf8yU3RPuoExgPXZG7qhOM5c5SOl4=' 'sha256-7+rW6a0nbWhPGaHX8dbtDxn04dXZOXOhdCX6DZLsWvI=' 'sha256-1jV/0fbC7mbeK6eE6cAHhrOOK2ijoQdw1OzS7UogBX4='; script-src-attr 'none'; connect-src 'self' https://aqvkcbeezzbmoiykzfyo.supabase.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; media-src 'self'; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests
-  Referrer-Policy: strict-origin-when-cross-origin
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
