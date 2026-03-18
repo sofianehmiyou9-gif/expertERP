@@ -476,6 +476,67 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 .modal-close:hover{color:var(--ink);transform:rotate(90deg);}
 .modal-body{padding:2rem 2.5rem;}
 .modal-footer{padding:1.5rem 2.5rem 2rem;border-top:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:1rem;position:sticky;bottom:0;background:var(--card);z-index:2;box-shadow:0 -8px 24px rgba(0,0,0,.06);}
+
+/* ── ENTERPRISE MODAL REFINEMENT ── */
+.ent-modal-box{max-width:760px;border:1px solid rgba(37,99,235,.14);border-radius:24px;background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,250,252,.98) 100%);box-shadow:0 28px 80px rgba(15,23,42,.26);overflow:hidden;}
+.ent-modal-box:before{content:'';position:absolute;inset:0 0 auto 0;height:180px;background:radial-gradient(circle at top left, rgba(59,130,246,.16), transparent 55%),linear-gradient(135deg, rgba(255,255,255,.7), rgba(255,255,255,0));pointer-events:none;}
+.ent-modal-header{padding:2rem 2.4rem 1.35rem;background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,250,252,.96) 100%);border-bottom:1px solid rgba(148,163,184,.18);}
+.ent-modal-kicker{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:.9rem;padding:.38rem .72rem;border-radius:999px;border:1px solid rgba(37,99,235,.18);background:rgba(255,255,255,.78);font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#1d4ed8;font-weight:700;}
+.ent-modal-kicker:before{content:'Enterprise';display:inline-flex;align-items:center;justify-content:center;padding:.18rem .36rem;border-radius:999px;background:#dbeafe;color:#1e3a8a;font-size:.54rem;letter-spacing:.08em;}
+.ent-modal-header h2{font-size:2.1rem;font-weight:400;line-height:1.05;margin-bottom:.45rem;color:#0f172a;max-width:520px;}
+.ent-modal-sub{font-size:.94rem;color:#64748b;letter-spacing:.01em;max-width:560px;line-height:1.65;}
+.ent-modal-box .modal-close{top:1.1rem;right:1.15rem;width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.82);border:1px solid rgba(148,163,184,.22);backdrop-filter:blur(10px);}
+.ent-modal-box .modal-close:hover{transform:none;background:#fff;border-color:rgba(37,99,235,.24);box-shadow:0 8px 18px rgba(15,23,42,.12);}
+.ent-modal-box .modal-body{padding:1.75rem 2.4rem 2rem;}
+.ent-modal-box .modal-footer{padding:1.2rem 2.4rem 1.5rem;background:rgba(255,255,255,.92);border-top:1px solid rgba(148,163,184,.18);backdrop-filter:blur(12px);}
+.ent-modal-box .mi-progress-bar{height:6px;margin-top:1.1rem;margin-bottom:0;background:rgba(191,219,254,.45);border-radius:999px;overflow:hidden;}
+.ent-modal-box .mi-bar-fill{border-radius:999px;background:linear-gradient(90deg, #1d4ed8 0%, #3b82f6 100%);box-shadow:0 6px 18px rgba(37,99,235,.3);}
+.ent-step-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.4rem;padding-bottom:1rem;border-bottom:1px solid rgba(226,232,240,.9);}
+.ent-step-copy h3{font-family:'Cormorant Garamond',serif;font-size:1.65rem;font-weight:400;line-height:1.1;color:#0f172a;margin-bottom:.35rem;}
+.ent-step-copy p{font-size:.93rem;color:#64748b;line-height:1.7;max-width:520px;}
+.ent-step-chip{display:inline-flex;align-items:center;justify-content:center;min-width:112px;padding:.45rem .75rem;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#1d4ed8;font-weight:700;white-space:nowrap;}
+.ent-type-selector{display:grid;grid-template-columns:1fr;gap:.95rem;}
+.ent-type-card{width:100%;padding:1.15rem 1.2rem 1.2rem;border:1px solid rgba(148,163,184,.26);border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(248,250,252,.92) 100%);text-align:left;cursor:pointer;transition:all .28s cubic-bezier(.22,1,.36,1);box-shadow:0 10px 24px rgba(15,23,42,.06);position:relative;overflow:hidden;color:#0f172a;}
+.ent-type-card:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, rgba(59,130,246,.08), transparent 45%, rgba(15,23,42,.02));opacity:0;transition:opacity .25s ease;pointer-events:none;}
+.ent-type-card:hover{transform:translateY(-3px);border-color:rgba(37,99,235,.36);box-shadow:0 18px 34px rgba(15,23,42,.12);}
+.ent-type-card:hover:before{opacity:1;}
+.ent-type-card.selected{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.14), 0 20px 38px rgba(37,99,235,.14);background:linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);}
+.ent-type-card.selected .ent-type-badge{background:#2563eb;color:#fff;border-color:#2563eb;}
+.ent-type-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.9rem;}
+.ent-type-badge{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:30px;padding:0 .5rem;border-radius:999px;background:#f8fafc;border:1px solid rgba(148,163,184,.24);font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#475569;font-weight:700;}
+.ent-type-label{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:#64748b;font-weight:700;}
+.ent-type-main{display:grid;grid-template-columns:72px 1fr;gap:1rem;align-items:flex-start;}
+.ent-type-icon{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:20px;background:linear-gradient(145deg, #eff6ff 0%, #dbeafe 100%);border:1px solid rgba(37,99,235,.16);font-family:'DM Mono',monospace;font-size:.88rem;letter-spacing:.14em;text-transform:uppercase;color:#1e40af;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.85), 0 10px 22px rgba(37,99,235,.12);}
+.ent-type-content h4{font-size:1.18rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.35rem;color:#0f172a;}
+.ent-type-content p{font-size:.9rem;color:#64748b;line-height:1.7;margin-bottom:.85rem;max-width:430px;}
+.ent-type-meta{display:flex;flex-wrap:wrap;gap:.45rem;}
+.ent-type-meta span{display:inline-flex;align-items:center;padding:.3rem .55rem;border-radius:999px;background:rgba(226,232,240,.66);font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:#475569;font-weight:700;}
+.ent-footer-actions{display:flex;gap:.6rem;align-items:center;}
+.ent-modal-box .step-count{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#64748b;}
+.ent-modal-box .btn-next-modal.blue{padding:.82rem 1.7rem;border-radius:12px;background:linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);box-shadow:0 14px 28px rgba(37,99,235,.24);}
+.ent-modal-box .btn-next-modal.blue:hover{transform:translateY(-2px);box-shadow:0 18px 32px rgba(37,99,235,.28);}
+.ent-modal-box .btn-back-modal{border-radius:12px;background:#fff;}
+
+@media(max-width:780px){
+  .ent-modal-box{max-width:100%;border-radius:20px;}
+  .ent-modal-header,.ent-modal-box .modal-body,.ent-modal-box .modal-footer{padding-left:1.2rem;padding-right:1.2rem;}
+  .ent-step-intro{flex-direction:column;align-items:flex-start;gap:.75rem;}
+  .ent-type-main{grid-template-columns:1fr;gap:.8rem;}
+  .ent-type-icon{width:58px;height:58px;border-radius:16px;}
+  .ent-type-content h4{font-size:1.03rem;}
+  .ent-modal-box .modal-footer{flex-direction:column;align-items:stretch;}
+  .ent-footer-actions{width:100%;justify-content:space-between;}
+  .ent-modal-box .btn-next-modal.blue,.ent-modal-box .btn-back-modal{flex:1;justify-content:center;text-align:center;}
+}
+
+@media(max-width:560px){
+  .ent-modal-header h2{font-size:1.7rem;}
+  .ent-step-copy h3{font-size:1.35rem;}
+  .ent-type-card{padding:1rem;}
+  .ent-type-top{margin-bottom:.7rem;}
+  .ent-type-content p{font-size:.84rem;}
+}
+
 .form-group{margin-bottom:1.25rem;perspective:1000px;}
 .form-label{display:block;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:.5rem;font-weight:600;}
 .form-label span{color:#ef4444;}
@@ -1752,35 +1813,78 @@ function toggleTheme() {
      MODAL — ENTREPRISE (3 types)
 ══════════════════════════════════════════════════ -->
 <div class="overlay" id="overlay-entreprise" data-overlay-close="entreprise">
-  <div class="modal-box">
+  <div class="modal-box ent-modal-box">
     <button class="modal-close" data-action="close-entreprise-modal">×</button>
-    <div class="modal-header">
+    <div class="modal-header ent-modal-header">
+      <div class="ent-modal-kicker">Parcours</div>
       <h2 id="ent-modal-title">Rejoindre ExpertERPHub</h2>
-      <p id="ent-modal-sub">Sélectionnez votre type de profil entreprise</p>
+      <p class="ent-modal-sub" id="ent-modal-sub">Sélectionnez le parcours entreprise qui correspond à votre besoin opérationnel.</p>
       <div class="mi-progress-bar" style="margin-top:1rem;"><div class="mi-bar-fill blue" id="ent-bar" style="width:33%"></div></div>
     </div>
 
     <div class="modal-body">
       <!-- Step 1: Type selection -->
       <div class="mi-step active" id="ent-step-1">
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.25rem;">Quel est votre besoin ?</p>
-        <div class="type-selector" style="grid-template-columns:1fr;">
-          <button type="button" class="type-option" id="topt-erp" data-action="select-ent-type" data-ent-type="erp">
-            <div style="display:flex;align-items:center;gap:1rem;">
-              <div class="t-icon">⚙️</div>
-              <div><h4>Implémentation ERP</h4><p>Je cherche des SMEs / analystes pour accompagner mon projet ERP</p></div>
+        <div class="ent-step-intro">
+          <div class="ent-step-copy">
+            <h3>Quel est votre besoin&nbsp;?</h3>
+            <p>Choisissez un parcours clair et adapté à votre contexte. Chaque option structure ensuite le formulaire avec les bonnes informations métier.</p>
+          </div>
+          <div class="ent-step-chip">Étape stratégique</div>
+        </div>
+        <div class="type-selector ent-type-selector">
+          <button type="button" class="type-option ent-type-card" id="topt-erp" data-action="select-ent-type" data-ent-type="erp">
+            <div class="ent-type-top">
+              <span class="ent-type-badge">01</span>
+              <span class="ent-type-label">Transformation ERP</span>
+            </div>
+            <div class="ent-type-main">
+              <div class="ent-type-icon">ERP</div>
+              <div class="ent-type-content">
+                <h4>Implémentation ERP</h4>
+                <p>Je structure un projet ERP et j’ai besoin d’expertise fonctionnelle, métier ou de pilotage pour cadrer et sécuriser l’exécution.</p>
+                <div class="ent-type-meta">
+                  <span>SMEs</span>
+                  <span>Analystes</span>
+                  <span>Cadrage projet</span>
+                </div>
+              </div>
             </div>
           </button>
-          <button type="button" class="type-option" id="topt-chercher" data-action="select-ent-type" data-ent-type="chercher">
-            <div style="display:flex;align-items:center;gap:1rem;">
-              <div class="t-icon">🔍</div>
-              <div><h4>Recherche d'une ressource qualifiée</h4><p>J'ai un mandat et j'ai besoin d'un expert ERP rapidement</p></div>
+          <button type="button" class="type-option ent-type-card" id="topt-chercher" data-action="select-ent-type" data-ent-type="chercher">
+            <div class="ent-type-top">
+              <span class="ent-type-badge">02</span>
+              <span class="ent-type-label">Renfort ciblé</span>
+            </div>
+            <div class="ent-type-main">
+              <div class="ent-type-icon">TAL</div>
+              <div class="ent-type-content">
+                <h4>Recherche d’une ressource qualifiée</h4>
+                <p>J’ai un besoin immédiat de capacité ou d’expertise ERP pour renforcer une équipe, livrer un mandat ou accélérer un démarrage.</p>
+                <div class="ent-type-meta">
+                  <span>Renfort rapide</span>
+                  <span>Expertise ERP</span>
+                  <span>Disponibilité</span>
+                </div>
+              </div>
             </div>
           </button>
-          <button type="button" class="type-option" id="topt-offrir" data-action="select-ent-type" data-ent-type="offrir">
-            <div style="display:flex;align-items:center;gap:1rem;">
-              <div class="t-icon">🏢</div>
-              <div><h4>Proposer des ressources</h4><p>Ma firme dispose de consultants disponibles à placer</p></div>
+          <button type="button" class="type-option ent-type-card" id="topt-offrir" data-action="select-ent-type" data-ent-type="offrir">
+            <div class="ent-type-top">
+              <span class="ent-type-badge">03</span>
+              <span class="ent-type-label">Partenariat capacitaire</span>
+            </div>
+            <div class="ent-type-main">
+              <div class="ent-type-icon">SUP</div>
+              <div class="ent-type-content">
+                <h4>Proposer des ressources</h4>
+                <p>Ma firme dispose de consultants disponibles et je souhaite les positionner auprès d’entreprises qui recherchent un renfort qualifié.</p>
+                <div class="ent-type-meta">
+                  <span>Consultants disponibles</span>
+                  <span>Visibilité marché</span>
+                  <span>Placement direct</span>
+                </div>
+              </div>
             </div>
           </button>
         </div>
@@ -2021,7 +2125,7 @@ function toggleTheme() {
 
     <div class="modal-footer" id="ent-footer">
       <span class="step-count" id="ent-step-count">Étape 1 sur 3</span>
-      <div style="display:flex;gap:.5rem;">
+      <div class="ent-footer-actions">
         <button class="btn-back-modal" id="ent-btn-back" style="display:none" data-action="ent-back">← Retour</button>
         <button class="btn-next-modal blue" id="ent-btn-next" data-action="ent-next">Suivant →</button>
       </div>
