@@ -17,6 +17,10 @@
       "destination": "/dashboard-admin.html"
     },
     {
+      "source": "/dashboard-admin-v2",
+      "destination": "/dashboard-admin-v2.html"
+    },
+    {
       "source": "/inscription-consultant",
       "destination": "/inscription-consultant.html"
     },
