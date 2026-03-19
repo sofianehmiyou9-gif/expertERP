@@ -176,9 +176,9 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
 
 <div class="profile-content" style="padding:3rem 2.5rem;">
   <div class="profile-main">
-    <div class="section">
+    <div class="section" id="resume-section">
       <h2>Résumé professionnel</h2>
-      <p id="profile-resume">Consultant SAP expérimenté avec plus de 8 ans d'expérience dans les modules EWM et WM. Spécialisé dans l'implémentation et l'optimisation des processus logistiques pour les entreprises manufacturières et de distribution.</p>
+      <p id="profile-resume">Consultant SAP expérimenté avec plus de 8 ans d'expérience dans les modules EWM et WM.</p>
     </div>
 
     <div class="section">
@@ -211,6 +211,11 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
     <div class="section" id="certif-section" style="display:none;">
       <h2>Certifications</h2>
       <div id="profile-certifs" class="certifs-grid"></div>
+    </div>
+
+    <div class="section" id="projets-section" style="display:none;">
+      <h2>Projets &amp; expériences</h2>
+      <div id="profile-projets"></div>
     </div>  </div>
 
   <div class="profile-sidebar">
@@ -223,12 +228,13 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
       <button class="btn-contact" id="contact-btn" data-action="send-contact">Envoyer le message</button>
     </div>
 
-    <div class="section">
-      <h2>Informations</h2>
-      <p><strong>Disponibilité:</strong> <span id="profile-availability">Immédiate</span></p>
-      <p><strong>Mode de travail:</strong> <span id="profile-mode">Hybride</span></p>
-      <p><strong>Langues:</strong> <span id="profile-languages">Français (natif), Anglais (courant)</span></p>
-    </div>
+      <div class="section">
+        <h2>Informations</h2>
+        <p><strong>Disponibilité:</strong> <span id="profile-availability">Immédiate</span></p>
+        <p><strong>Tarif:</strong> <span id="profile-rate-line">—</span></p>
+        <p><strong>Mode de travail:</strong> <span id="profile-mode">Hybride</span></p>
+        <p><strong>Langues:</strong> <span id="profile-languages">Français (natif), Anglais (courant)</span></p>
+      </div>
   </div>
 </div>
 
@@ -427,13 +433,26 @@ function renderConsultant(consultant) {
   document.getElementById('profile-name').textContent = `${consultant.prenom || ''} ${consultant.nom || ''}`.trim();
   document.getElementById('profile-role').textContent = consultant.titre || '—';
   document.getElementById('profile-location').textContent = notes.ville || '—';
-  document.getElementById('profile-exp').textContent = notes.annees_exp || '—';
+  document.getElementById('profile-location').textContent = notes.ville ? notes.ville + ', Canada' : '—';
+  const expRaw = notes.annees_exp;
+  const expClean = expRaw ? String(expRaw).replace(/\s*ans?.*$/i, '').trim() : '—';
+  document.getElementById('profile-exp').textContent = expClean;
   const tjmType = notes.tjm_type || 'jour';
   const tjmValue = notes.tjm_value || consultant.tjm_min;
   document.getElementById('profile-rate').textContent = tjmValue || '—';
   const rateLabelEl = document.getElementById('profile-rate-label');
   if (rateLabelEl) rateLabelEl.textContent = tjmValue ? (tjmType === 'heure' ? '$/h' : '$/jour') : '$/jour';
-  document.getElementById('profile-resume').textContent = notes.resume || '—';
+  const rateLineEl = document.getElementById('profile-rate-line');
+  if (rateLineEl) rateLineEl.textContent = tjmValue ? tjmValue + (tjmType === 'heure' ? ' $/h' : ' $/jour') : '—';
+  const resumeText = notes.resume || notes.experiences_projets || notes.experiences_test || '';
+  const resumeSection = document.getElementById('resume-section');
+  const resumeEl = document.getElementById('profile-resume');
+  if (resumeText) {
+    if (resumeSection) resumeSection.style.display = '';
+    if (resumeEl) resumeEl.textContent = resumeText;
+  } else {
+    if (resumeSection) resumeSection.style.display = 'none';
+  }
   document.getElementById('profile-availability').textContent = notes.disponibilite || notes.dispo || ExpertI18n.t('consultant.immediate');
   document.getElementById('profile-mode').textContent = notes.mode_travail || '—';
   document.getElementById('profile-languages').textContent = notes.langues || '—';
@@ -494,6 +513,20 @@ function renderConsultant(consultant) {
         expContainer.appendChild(item);
       });
     }
+  }
+
+  // Expériences projets (toujours visible si renseigné)
+  const projetsSection = document.getElementById('projets-section');
+  const projetsContainer = document.getElementById('profile-projets');
+  const projStr = notes.experiences_projets || notes.experiences_test || '';
+  if (projStr && projetsContainer) {
+    if (projetsSection) projetsSection.style.display = '';
+    const projets = String(projStr).split(/\n/).map(s => s.trim()).filter(Boolean);
+    projetsContainer.innerHTML = projets.map(p =>
+      '<div class="experience-item"><p>' + p.replace(/,/g, '</p><p>') + '</p></div>'
+    ).join('');
+  } else if (projetsSection) {
+    projetsSection.style.display = 'none';
   }
 
   // Certifications
