@@ -3011,17 +3011,41 @@ function bindNavScrollFx() {
 function bindOverlayDismissals() {
   // Désactive la fermeture automatique sur clic overlay pour éviter la perte de données accidentelle
   // La fermeture ne se fait que via la croix ou un bouton dédié
+  // Ajout d'un seul écouteur global pour la touche Échap
+  if (!window.__modalEscListenerBound) {
+    document.addEventListener('keydown', function escCloseModal(e) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        const overlays = [
+          { id: 'overlay-consultant', close: typeof closeConsultantModal === 'function' ? closeConsultantModal : null },
+          { id: 'overlay-entreprise', close: typeof closeEntrepriseModal === 'function' ? closeEntrepriseModal : null },
+          { id: 'overlay-portal', close: typeof closePortalModal === 'function' ? closePortalModal : null }
+        ];
+        overlays.forEach(({ id, close }) => {
+          const el = document.getElementById(id);
+          if (el && el.classList.contains('open') && close) close();
+        });
+      }
+    });
+    window.__modalEscListenerBound = true;
+  }
+  // Ajout de la fermeture sur clic sur l'overlay (extérieur de la modale)
   ['overlay-consultant', 'overlay-entreprise', 'overlay-portal'].forEach((id) => {
     const overlay = document.getElementById(id);
     if (!overlay || overlay.dataset.bound === 'true') return;
     overlay.dataset.bound = 'true';
-    // Suppression de la fermeture sur clic overlay
-    // overlay.addEventListener('click', (event) => {
-    //   if (event.target !== overlay) return;
-    //   if (id === 'overlay-consultant') closeConsultantModal();
-    //   if (id === 'overlay-entreprise') closeEntrepriseModal();
-    //   if (id === 'overlay-portal') closePortalModal();
-    // });
+    let mouseDownOnOverlay = false;
+    overlay.addEventListener('mousedown', function (event) {
+      if (event.target === overlay) mouseDownOnOverlay = true;
+      else mouseDownOnOverlay = false;
+    });
+    overlay.addEventListener('mouseup', function (event) {
+      if (event.target === overlay && mouseDownOnOverlay) {
+        if (id === 'overlay-consultant' && typeof closeConsultantModal === 'function') closeConsultantModal();
+        if (id === 'overlay-entreprise' && typeof closeEntrepriseModal === 'function') closeEntrepriseModal();
+        if (id === 'overlay-portal' && typeof closePortalModal === 'function') closePortalModal();
+      }
+      mouseDownOnOverlay = false;
+    });
   });
 }
 
