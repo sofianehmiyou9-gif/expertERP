@@ -118,6 +118,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(245,242,237,.95);backdrop-
 .btn-contact:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 0 4px rgba(99,102,241,.22),0 18px 30px rgba(59,130,246,.45);}
 
 @keyframes heroPulse{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.certifs-grid{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.5rem;}
+.certif-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1rem;border:1px solid rgba(59,130,246,.22);border-radius:999px;font-size:.84rem;background:linear-gradient(120deg,#eef2ff 0%,#dbeafe 100%);color:#1e3a8a;line-height:1.4;}
+.certif-badge.certified{background:linear-gradient(120deg,#fffbeb 0%,#fef3c7 100%);border-color:rgba(245,158,11,.38);color:#78350f;font-weight:600;}
+.certif-star-pub{color:#f59e0b;font-size:1rem;flex-shrink:0;}
 footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;background:var(--paper);}
 .footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;letter-spacing:-.5px;}
 .footer-logo span{color:var(--accent);}
@@ -164,7 +168,7 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
       </div>
       <div class="profile-stats">
         <div class="stat"><div class="stat-n" id="profile-exp">8</div><div class="stat-l">ans exp</div></div>
-        <div class="stat"><div class="stat-n" id="profile-rate">650</div><div class="stat-l">€/jour</div></div>
+        <div class="stat"><div class="stat-n" id="profile-rate">650</div><div class="stat-l" id="profile-rate-label">$/jour</div></div>
       </div>
     </div>
   </div>
@@ -204,7 +208,10 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
         </div>
       </div>
     </div>
-  </div>
+    <div class="section" id="certif-section" style="display:none;">
+      <h2>Certifications</h2>
+      <div id="profile-certifs" class="certifs-grid"></div>
+    </div>  </div>
 
   <div class="profile-sidebar">
     <div class="contact-form">
@@ -421,7 +428,11 @@ function renderConsultant(consultant) {
   document.getElementById('profile-role').textContent = consultant.titre || '—';
   document.getElementById('profile-location').textContent = notes.ville || '—';
   document.getElementById('profile-exp').textContent = notes.annees_exp || '—';
-  document.getElementById('profile-rate').textContent = consultant.tjm_min || '—';
+  const tjmType = notes.tjm_type || 'jour';
+  const tjmValue = notes.tjm_value || consultant.tjm_min;
+  document.getElementById('profile-rate').textContent = tjmValue || '—';
+  const rateLabelEl = document.getElementById('profile-rate-label');
+  if (rateLabelEl) rateLabelEl.textContent = tjmValue ? (tjmType === 'heure' ? '$/h' : '$/jour') : '$/jour';
   document.getElementById('profile-resume').textContent = notes.resume || '—';
   document.getElementById('profile-availability').textContent = notes.disponibilite || notes.dispo || ExpertI18n.t('consultant.immediate');
   document.getElementById('profile-mode').textContent = notes.mode_travail || '—';
@@ -460,17 +471,49 @@ function renderConsultant(consultant) {
   const expContainer = document.getElementById('profile-experiences');
   expContainer.innerHTML = '';
   const exps = Array.isArray(notes.experiences) ? notes.experiences : [];
-  exps.forEach((exp) => {
-    const item = document.createElement('div');
-    item.className = 'experience-item';
-    item.innerHTML = `
-      <div class="exp-title">${exp.titre || '—'}</div>
-      <div class="exp-company">${exp.entreprise || '—'}</div>
-      <div class="exp-period">${exp.periode || ''}${exp.secteur ? ' · ' + exp.secteur : ''}</div>
-      <p>${exp.description || ''}</p>
-    `;
-    expContainer.appendChild(item);
-  });
+  if (exps.length) {
+    exps.forEach((exp) => {
+      const item = document.createElement('div');
+      item.className = 'experience-item';
+      item.innerHTML = `
+        <div class="exp-title">${exp.titre || '—'}</div>
+        <div class="exp-company">${exp.entreprise || '—'}</div>
+        <div class="exp-period">${exp.periode || ''}${exp.secteur ? ' · ' + exp.secteur : ''}</div>
+        <p>${exp.description || ''}</p>
+      `;
+      expContainer.appendChild(item);
+    });
+  } else {
+    const projStr = notes.experiences_projets || notes.experiences_test || '';
+    if (projStr) {
+      const projets = String(projStr).split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+      projets.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'experience-item';
+        item.innerHTML = `<p>${p}</p>`;
+        expContainer.appendChild(item);
+      });
+    }
+  }
+
+  // Certifications
+  const certifSection = document.getElementById('certif-section');
+  const certifContainer = document.getElementById('profile-certifs');
+  const allCertifs = Array.isArray(notes.certifications)
+    ? notes.certifications.map(s => String(s).trim()).filter(Boolean)
+    : String(notes.certifications || '').split(',').map(s => s.trim()).filter(Boolean);
+  const certValidated = Array.isArray(notes.certifications_validees)
+    ? notes.certifications_validees.map(s => String(s).trim()).filter(Boolean)
+    : String(notes.certifications_validees || '').split(',').map(s => s.trim()).filter(Boolean);
+  if (certifContainer && allCertifs.length) {
+    if (certifSection) certifSection.style.display = '';
+    certifContainer.innerHTML = allCertifs.map(c => {
+      const isVal = certValidated.includes(c);
+      return `<span class="certif-badge${isVal ? ' certified' : ''}">${isVal ? '<span class="certif-star-pub">\u2605</span> ' : ''}${c}</span>`;
+    }).join('');
+  } else if (certifSection) {
+    certifSection.style.display = 'none';
+  }
 
   refreshContactFormLabels();
 }

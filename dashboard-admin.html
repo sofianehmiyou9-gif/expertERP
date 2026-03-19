@@ -205,6 +205,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 .b-pending { background: #fff7ed; color: var(--warning); }
 .b-approved { background: #ecfdf5; color: var(--success); }
 .b-rejected { background: #fef2f2; color: var(--danger); }
+.b-mission { background: #ffedd5; color: #c2410c; }
 .b-other { background: #eef2ff; color: #4338ca; }
 .actions { display: flex; gap: 6px; flex-wrap: wrap; }
 .mini-btn {
@@ -240,6 +241,53 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
   .grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
   .panels { grid-template-columns: 1fr; }
 }
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.42);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+}
+.modal-box {
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.16);
+  width: min(500px, 94vw); max-height: 80vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 18px; border-bottom: 1px solid var(--line);
+}
+.modal-head h3 { margin: 0; font-size: 16px; }
+.modal-close {
+  border: none; background: transparent; font-size: 18px;
+  cursor: pointer; color: var(--muted); padding: 2px 6px; line-height: 1;
+}
+.certif-modal-list {
+  flex: 1; overflow-y: auto; padding: 12px 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.certif-admin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 9px 10px; border-radius: 8px;
+  border: 1px solid var(--line); font-size: 13px;
+}
+.certif-name { flex: 1; line-height: 1.4; }
+.certif-validate-btn {
+  border: 1px solid var(--line); background: #f9fafb;
+  border-radius: 999px; padding: 4px 12px; font-size: 12px;
+  cursor: pointer; white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace; color: var(--muted);
+  transition: background .15s;
+}
+.certif-validate-btn.valid {
+  background: #ecfdf5; border-color: #99f6e4; color: var(--success);
+}
+.certif-empty-modal { color: var(--muted); font-size: 13px; padding: 12px 0; font-style: italic; }
+.modal-foot {
+  padding: 12px 18px; border-top: 1px solid var(--line);
+  display: flex; justify-content: flex-end;
+}
+.mini-btn.certif { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
 </style>
 </head>
 <body>
@@ -330,12 +378,26 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
   </main>
 </div>
 
+<div id="certif-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="certif-modal-title">Certifications</h3>
+      <button class="modal-close" id="certif-modal-close">✕</button>
+    </div>
+    <div id="certif-modal-list" class="certif-modal-list"></div>
+    <div class="modal-foot">
+      <button class="btn" id="certif-modal-save">Enregistrer les validations</button>
+    </div>
+  </div>
+</div>
+
 <script src="portal-auth.js"></script>
 <script>
 const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
 const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 const ADMIN_PWD = 'erphub2026!';
-const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse'];
+const ADMIN_AUTH_KEY = 'admin-auth-v2';
+const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse', 'en_mission'];
 
 const state = { consultants: [], entreprises: [], view: 'overview' };
 
@@ -343,6 +405,7 @@ function statusClass(status) {
   const s = String(status || '').toLowerCase();
   if (s === 'en_attente') return 'b-pending';
   if (s === 'approuve' || s === 'approuvé') return 'b-approved';
+  if (s === 'en_mission' || s === 'mission') return 'b-mission';
   if (s === 'desactive' || s === 'expire') return 'b-other';
   if (s === 'refuse') return 'b-rejected';
   return 'b-other';
@@ -358,6 +421,7 @@ function toDbStatut(raw) {
   const s = String(raw || '').toLowerCase();
   if (s === 'approuvé') return 'approuve';
   if (s === 'refusé') return 'refuse';
+  if (s === 'en mission' || s === 'mission') return 'en_mission';
   if (s === 'desactive' || s === 'expire') return 'refuse';
   if (DB_ALLOWED_STATUTS.includes(s)) return s;
   return 'en_attente';
@@ -371,6 +435,7 @@ function normalizeConsultantStatus(c) {
   if (notes.admin_state === 'refuse') return 'refuse';
   if (c && c.statut === 'approuvé') return 'approuve';
   if (c && c.statut === 'refusé') return 'refuse';
+  if (c && c.statut === 'en mission') return 'en_mission';
   return (c && c.statut) || 'en_attente';
 }
 
@@ -492,6 +557,7 @@ function renderConsultants() {
       '<button class="mini-btn wait" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="en_attente">Pending</button>' +
       '<button class="mini-btn stop" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="refuse">Reject</button>' +
       '<button class="mini-btn off" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="desactive">Disable</button>' +
+      '<button class="mini-btn certif" data-action="open-certif-modal" data-id="' + safe(c.id) + '">Certif ★</button>' +
       '</div></td>' +
       '</tr>';
   }).join('');
@@ -520,6 +586,53 @@ function renderEntreprises() {
       '</tr>';
   }).join('');
   document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">No result</td></tr>';
+}
+
+function parseCertificationsAdmin(val) {
+  if (Array.isArray(val)) return val.map(s => String(s).trim()).filter(Boolean);
+  return String(val || '').split(',').map(s => s.trim()).filter(Boolean);
+}
+
+let certifModalConsultant = null;
+let certifModalValidated = [];
+
+function openCertifModal(id) {
+  const c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return;
+  certifModalConsultant = c;
+  const notes = parseNotes(c.notes_admin);
+  const certs = parseCertificationsAdmin(notes.certifications);
+  certifModalValidated = [...parseCertificationsAdmin(notes.certifications_validees)];
+  const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || 'Consultant';
+  document.getElementById('certif-modal-title').textContent = 'Certifications — ' + name;
+  const container = document.getElementById('certif-modal-list');
+  if (!certs.length) {
+    container.innerHTML = '<div class="certif-empty-modal">Aucune certification déclarée par ce consultant.<br><span style="font-size:12px;color:#9ca3af;margin-top:6px;display:block;">Le consultant doit d’abord remplir ses certifications depuis son tableau de bord.</span></div>';
+  } else {
+    container.innerHTML = '';
+    certs.forEach(cert => {
+      const row = document.createElement('div');
+      row.className = 'certif-admin-row';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'certif-name';
+      nameSpan.textContent = cert;
+      const btn = document.createElement('button');
+      const isValid = certifModalValidated.includes(cert);
+      btn.className = 'certif-validate-btn' + (isValid ? ' valid' : '');
+      btn.textContent = isValid ? '★ Validé' : '☆ Valider';
+      btn.addEventListener('click', () => {
+        const idx = certifModalValidated.indexOf(cert);
+        if (idx >= 0) certifModalValidated.splice(idx, 1);
+        else certifModalValidated.push(cert);
+        btn.classList.toggle('valid', certifModalValidated.includes(cert));
+        btn.textContent = certifModalValidated.includes(cert) ? '★ Validé' : '☆ Valider';
+      });
+      row.appendChild(nameSpan);
+      row.appendChild(btn);
+      container.appendChild(row);
+    });
+  }
+  document.getElementById('certif-modal').classList.remove('hidden');
 }
 
 async function setConsultantStatus(id, status) {
@@ -582,6 +695,7 @@ async function setEntrepriseStatus(id, status) {
 }
 
 function setView(view) {
+  document.getElementById('certif-modal').classList.add('hidden');
   state.view = view;
   document.querySelectorAll('.menu button').forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
   document.getElementById('overview-view').classList.toggle('hidden', view !== 'overview');
@@ -608,7 +722,8 @@ function openApp() {
 document.getElementById('login-btn').addEventListener('click', () => {
   const pwd = document.getElementById('pwd').value;
   if (pwd === ADMIN_PWD) {
-    sessionStorage.setItem('admin-auth-v2', 'true');
+    sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+    localStorage.setItem(ADMIN_AUTH_KEY, 'true');
     if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
     openApp();
   } else {
@@ -616,11 +731,39 @@ document.getElementById('login-btn').addEventListener('click', () => {
   }
 });
 
+document.getElementById('certif-modal-close').addEventListener('click', () => {
+  document.getElementById('certif-modal').classList.add('hidden');
+});
+
+document.getElementById('certif-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('certif-modal')) {
+    document.getElementById('certif-modal').classList.add('hidden');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.getElementById('certif-modal').classList.add('hidden');
+});
+
+document.getElementById('certif-modal-save').addEventListener('click', async () => {
+  if (!certifModalConsultant) return;
+  const notes = parseNotes(certifModalConsultant.notes_admin);
+  notes.certifications_validees = certifModalValidated;
+  const ok = await sbUpdate('consultants', certifModalConsultant.id, { notes_admin: JSON.stringify(notes) });
+  if (!ok) { alert('Erreur lors de la sauvegarde'); return; }
+  document.getElementById('certif-modal').classList.add('hidden');
+  await loadData();
+});
+
 document.getElementById('pwd').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('login-btn').click();
 });
 
-if (sessionStorage.getItem('admin-auth-v2') === 'true') {
+const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+const hasPortalAdmin = !!(portalSession && portalSession.role === 'admin' && portalSession.adminGranted);
+if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || localStorage.getItem(ADMIN_AUTH_KEY) === 'true' || hasPortalAdmin) {
+  sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+  localStorage.setItem(ADMIN_AUTH_KEY, 'true');
   openApp();
 }
 
@@ -641,10 +784,15 @@ document.addEventListener('click', async (event) => {
   if (action === 'set-entreprise-status') {
     await setEntrepriseStatus(el.dataset.id, el.dataset.status);
   }
+  if (action === 'open-certif-modal') {
+    openCertifModal(el.dataset.id);
+  }
 });
 
 document.getElementById('logout-btn').addEventListener('click', () => {
-  sessionStorage.removeItem('admin-auth-v2');
+  sessionStorage.removeItem(ADMIN_AUTH_KEY);
+  localStorage.removeItem(ADMIN_AUTH_KEY);
+  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
   window.location.href = 'index.html';
 });
 </script>

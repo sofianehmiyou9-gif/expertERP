@@ -92,12 +92,22 @@
         input[type="tel"],
         textarea {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 4px;
+            padding: 0.85rem 0.95rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
             font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem;
+            color: #0f172a;
+            background: #fff;
             transition: all .3s ease;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="tel"]::placeholder,
+        textarea::placeholder {
+            color: #64748b;
+            opacity: 1;
         }
 
         input[type="text"]:focus,
@@ -105,8 +115,8 @@
         input[type="tel"]:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(200, 169, 110, .1);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
         }
 
         textarea {
