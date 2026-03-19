@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ExpertERPHub — Plateforme de collaboration professionnelle pour Experts ERP</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
 (function () {
   var path = String(window.location.pathname || '').toLowerCase();
@@ -19,7 +19,7 @@
   if (!hasRecoverySignal) return;
   if (type && type !== 'recovery') return;
 
-  var target = window.location.origin + '/reset-password.html' + (window.location.search || '') + (window.location.hash || '');
+  var target = window.location.origin + '/reset-password' + (window.location.search || '') + (window.location.hash || '');
   window.location.replace(target);
 })();
 </script>
@@ -44,7 +44,7 @@
   --shadow-xl: 0 24px 64px rgba(0,0,0,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:radial-gradient(circle at 12% -8%, rgba(99,102,241,.08), transparent 32%),radial-gradient(circle at 88% -4%, rgba(59,130,246,.08), transparent 30%),var(--paper);color:var(--ink);letter-spacing:-.3px;}
+body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 12% -8%, rgba(99,102,241,.08), transparent 32%),radial-gradient(circle at 88% -4%, rgba(59,130,246,.08), transparent 30%),var(--paper);color:var(--ink);letter-spacing:-.3px;}
 a{color:inherit;text-decoration:none;}
 /* ── DARK MODE ── */
 [data-theme="dark"]{
@@ -106,6 +106,8 @@ nav.nav-scrolled{height:68px;background:rgba(248,250,252,.9);box-shadow:0 12px 2
 .btn-solid{font-family:'DM Mono',monospace;font-size:.67rem;padding:.62rem 1rem;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;cursor:pointer;border-radius:12px;letter-spacing:.06em;text-transform:uppercase;transition:all .25s ease;position:relative;overflow:hidden;box-shadow:0 10px 22px rgba(37,99,235,.22);font-weight:700;}
 .btn-solid:before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:var(--blue-mid);transform:scaleX(0);transform-origin:right;transition:transform .3s ease;z-index:-1;}
 .btn-solid:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}.btn-solid:hover:before{transform:scaleX(1);}
+
+:focus-visible{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px;}
 
 /* ── PAGES ── */
 .page{display:none;}
@@ -764,17 +766,17 @@ const translations = {
     'nav.find': 'Rechercher un expert',
 
     // Home Hero
-    'hero.badge': 'Staff Augmentation ERP · Plateforme professionnelle · Enterprise-grade',
+    'hero.badge': 'Plateforme professionnelle · ERP · Enterprise-grade',
     'hero.title': 'Trouvez les meilleurs consultants ERP en quelques clics',
     'hero.subtitle': 'Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.',
-    'kpi.active': 'Ressources actives',
-    'kpi.response': 'Premiere reponse moyenne',
-    'kpi.traceability': 'Profils traces en temps reel',
-    'kpi.staffing': 'Cycles staffing < 48h',
+    'kpi.active': 'Consultants sur la plateforme',
+    'kpi.response': 'Délai moyen de première réponse',
+    'kpi.traceability': 'Des profils validés manuellement',
+    'kpi.staffing': 'De la demande au matching',
     'hero.btn1': 'Je suis consultant',
-    'hero.btn2': 'Trouver un expert',
+    'hero.btn2': 'Trouver un expert ERP',
     'hero.btnPublish': 'Publier une mission',
-    'hero.btn3': 'Offrir mes ressources',
+    'hero.btn3': 'Proposer des ressources',
     
     // Service Description
     'service.badge': 'Notre service',
@@ -786,8 +788,8 @@ const translations = {
     'service.pillar2_desc': 'Les profils des ressources ne divulguent pas d\'informations personnelles. La mise en relation se fait via la plateforme uniquement.',
     'service.pillar3': 'Profils approuvés par notre équipe',
     'service.pillar3_desc': 'Chaque consultant ou ressource est validé manuellement avant publication. Zéro profil non vérifié sur la plateforme.',
-    'service.pillar4': 'Premiere reponse sous 2h',
-    'service.pillar4_desc': 'Accuse de reception rapide, qualification du besoin et shortlist ciblee en moins de 48h.',
+    'service.pillar4': 'Première réponse sous 2h',
+    'service.pillar4_desc': 'Accusé de réception rapide, qualification du besoin et shortlist ciblée en moins de 48h.',
     
     // Profile Cards — Who
     'card.consultant': 'Consultant',
@@ -931,14 +933,14 @@ const translations = {
     'hero.badge': 'ERP Staff Augmentation · Professional Collaboration · Enterprise-grade',
     'hero.title': 'Find the best ERP consultants in just a few clicks',
     'hero.subtitle': 'Accelerate SAP, Oracle, Dynamics, and Workday initiatives with a premium SaaS platform: targeted sourcing, fast validation, and real-time operational visibility.',
-    'kpi.active': 'Active resources',
-    'kpi.response': 'Average first response',
-    'kpi.traceability': 'Profiles tracked in real-time',
-    'kpi.staffing': 'Staffing cycles < 48h',
+    'kpi.active': 'Consultants on the platform',
+    'kpi.response': 'Average first response time',
+    'kpi.traceability': 'Profiles manually validated',
+    'kpi.staffing': 'From request to matching',
     'hero.btn1': 'I am a consultant',
-    'hero.btn2': 'Find an expert',
+    'hero.btn2': 'Find an ERP expert',
     'hero.btnPublish': 'Post a project',
-    'hero.btn3': 'Offer my professional resources',
+    'hero.btn3': 'Offer resources',
     
     // Service Description
     'service.badge': 'Our service',
@@ -1188,10 +1190,10 @@ function toggleTheme() {
     <button class="btn-outline" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
     <button class="btn-solid" data-action="open-entreprise-modal" data-i18n="nav.find">Rechercher un expert</button>
     <div class="lang-selector">
-      <button class="lang-btn active" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
-      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
+      <button class="lang-btn active" id="lang-fr" data-action="set-language" data-lang="fr" aria-label="Passer en français">FR</button>
+      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en" aria-label="Switch to English">EN</button>
     </div>
-    <button class="theme-toggle" id="theme-toggle" data-action="toggle-theme">🌙</button>
+    <button class="theme-toggle" id="theme-toggle" data-action="toggle-theme" aria-label="Activer le mode sombre">🌙</button>
   </div>
 </nav>
 
@@ -1206,15 +1208,14 @@ function toggleTheme() {
     <h1 class="hero-h1" data-i18n="hero.title">Trouvez les meilleurs consultants ERP en quelques clics</h1>
     <p class="hero-sub" data-i18n="hero.subtitle">Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.</p>
     <div class="hero-ctas">
-      <button class="btn-hero-gold" data-action="open-entreprise-modal" data-i18n="hero.btn2">Trouver un expert</button>
-      <button class="btn-hero-blue" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="hero.btnPublish">Publier une mission</button>
-      <button class="btn-hero-glass" data-action="show-page" data-page="entreprises" data-i18n="hero.btn3">Offrir mes ressources professionnelles</button>
+      <button class="btn-hero-gold" data-action="open-entreprise-modal" data-i18n="hero.btn2">Trouver un expert ERP</button>
+      <button class="btn-hero-glass" data-action="show-page" data-page="entreprises" data-i18n="hero.btn3">Proposer des ressources</button>
     </div>
     <div class="hero-badges">
-      <span class="hero-badge">Staff Augmentation ERP</span>
+      <span class="hero-badge">Experts ERP validés</span>
       <span class="hero-badge">Dashboard Unique</span>
-      <span class="hero-badge">Disponibilite Temps Reel</span>
-      <span class="hero-badge">Traceabilite Ressource</span>
+      <span class="hero-badge">Disponibilité temps réel</span>
+      <span class="hero-badge">Traçabilité ressource</span>
     </div>
   </div>
 
@@ -1222,19 +1223,19 @@ function toggleTheme() {
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-top"><span class="kpi-value">380+</span><span class="kpi-unit">ERP</span></div>
-        <div class="kpi-label" data-i18n="kpi.active">Ressources actives</div>
+        <div class="kpi-label" data-i18n="kpi.active">Consultants sur la plateforme</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-top"><span class="kpi-value">2h</span><span class="kpi-unit">AVG</span></div>
-        <div class="kpi-label" data-i18n="kpi.response">Premiere reponse moyenne</div>
+        <div class="kpi-label" data-i18n="kpi.response">Délai moyen de première réponse</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-top"><span class="kpi-value">100%</span><span class="kpi-unit">LIVE</span></div>
-        <div class="kpi-label" data-i18n="kpi.traceability">Profils traces en temps reel</div>
+        <div class="kpi-label" data-i18n="kpi.traceability">Des profils validés manuellement</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-top"><span class="kpi-value">48h</span><span class="kpi-unit">SLA</span></div>
-        <div class="kpi-label" data-i18n="kpi.staffing">Cycles staffing &lt; 48h</div>
+        <div class="kpi-label" data-i18n="kpi.staffing">De la demande au matching</div>
       </div>
     </div>
   </div>
@@ -1537,6 +1538,7 @@ function toggleTheme() {
       </div>
     </div>
   </div>
+  <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:1rem;">D'autres experts rejoignent la plateforme chaque semaine.</p>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -1690,7 +1692,7 @@ function toggleTheme() {
 ══════════════════════════════════════════════════ -->
 <div class="overlay" id="overlay-consultant" data-overlay-close="consultant">
   <div class="modal-box">
-    <button class="modal-close" data-action="close-consultant-modal">×</button>
+    <button class="modal-close" data-action="close-consultant-modal" aria-label="Fermer">×</button>
     <div class="modal-header">
       <h2>Rejoindre ExpertERPHub</h2>
       <p>Profil consultant · Inscription gratuite</p>
@@ -1864,7 +1866,7 @@ function toggleTheme() {
 ══════════════════════════════════════════════════ -->
 <div class="overlay" id="overlay-entreprise" data-overlay-close="entreprise">
   <div class="modal-box ent-modal-box">
-    <button class="modal-close" data-action="close-entreprise-modal">×</button>
+    <button class="modal-close" data-action="close-entreprise-modal" aria-label="Fermer">×</button>
     <div class="modal-header ent-modal-header">
       <div class="ent-modal-kicker">Parcours</div>
       <h2 id="ent-modal-title">Rejoindre ExpertERPHub</h2>
@@ -2185,36 +2187,36 @@ function toggleTheme() {
 
 <div class="overlay" id="overlay-portal" data-overlay-close="portal">
   <div class="modal-box portal-modal-box">
-    <button class="modal-close" data-action="close-portal-modal">×</button>
+    <button class="modal-close" data-action="close-portal-modal" aria-label="Fermer">×</button>
     <div class="modal-header">
-      <h2>Acces securise aux espaces ExpertERPHub</h2>
-      <p>Selectionnez votre role et connectez-vous a votre tableau de bord en un seul point d'acces.</p>
+      <h2>Accès sécurisé aux espaces ExpertERPHub</h2>
+      <p>Sélectionnez votre rôle et connectez-vous à votre tableau de bord en un seul point d'accès.</p>
     </div>
     <div class="modal-body">
       <div class="portal-session-box" id="portal-session-box">
         <strong>Session active detectee</strong>
         <p id="portal-session-text"></p>
         <div class="portal-session-actions">
-          <button class="btn-back-modal" type="button" data-action="disconnect-portal-session">Se deconnecter</button>
-            <button class="btn-next-modal blue" type="button" data-action="continue-portal-session">Acceder a mon espace</button>
+          <button class="btn-back-modal" type="button" data-action="disconnect-portal-session">Se déconnecter</button>
+            <button class="btn-next-modal blue" type="button" data-action="continue-portal-session">Accéder à mon espace</button>
         </div>
       </div>
-      <p class="portal-help" id="portal-help-text">Choisissez votre type d'espace. Les identifiants sont verifiés selon votre role pour un acces rapide et securise.</p>
+      <p class="portal-help" id="portal-help-text">Choisissez votre type d'espace. Les identifiants sont vérifiés selon votre rôle pour un accès rapide et sécurisé.</p>
       <div class="portal-role-grid">
         <button type="button" class="portal-role-card" id="portal-role-consultant" data-action="select-portal-role" data-role="consultant">
           <span class="portal-role-icon">🧑</span>
           <span class="portal-role-title">Consultant</span>
-          <span class="portal-role-desc">Suivi des demandes, disponibilite et profil professionnel.</span>
+          <span class="portal-role-desc">Suivi des demandes, disponibilité et profil professionnel.</span>
         </button>
         <button type="button" class="portal-role-card" id="portal-role-entreprise" data-action="select-portal-role" data-role="entreprise">
           <span class="portal-role-icon">🏢</span>
           <span class="portal-role-title">Entreprise</span>
-          <span class="portal-role-desc">Gestion des ressources, abonnement et parametres du compte.</span>
+          <span class="portal-role-desc">Gestion des ressources, abonnement et paramètres du compte.</span>
         </button>
-        <button type="button" class="portal-role-card hidden-admin" id="portal-role-admin" data-action="select-portal-role" data-role="admin">
+        <button type="button" class="portal-role-card hidden-admin" id="portal-role-admin" data-action="select-portal-role" data-role="admin" style="display:none;">
           <span class="portal-role-icon">🛡️</span>
           <span class="portal-role-title">Admin</span>
-          <span class="portal-role-desc">Supervision des validations, statuts et operationnel plateforme.</span>
+          <span class="portal-role-desc">Supervision des validations, statuts et opérationnel plateforme.</span>
         </button>
       </div>
       <div class="form-group" id="portal-email-group">
@@ -2226,8 +2228,8 @@ function toggleTheme() {
         <input class="form-input" id="portal-password" type="password" placeholder="Mot de passe">
       </div>
       <div class="form-group" id="portal-reset-code-group" style="display:none;">
-        <label class="form-label">Code de securite <span>*</span></label>
-        <input class="form-input" id="portal-reset-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Code recu par email">
+        <label class="form-label">Code de sécurité <span>*</span></label>
+        <input class="form-input" id="portal-reset-code" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Code reçu par email">
       </div>
       <div class="form-group" id="portal-reset-new-password-group" style="display:none;">
         <label class="form-label">Nouveau mot de passe <span>*</span></label>
@@ -2245,7 +2247,7 @@ function toggleTheme() {
     <div class="modal-footer">
       <div class="portal-actions">
         <button class="btn-back-modal" type="button" data-action="close-portal-modal">Fermer</button>
-        <button class="btn-next-modal blue" type="button" id="portal-submit-btn" data-action="submit-portal-access">Acceder a mon tableau de bord →</button>
+        <button class="btn-next-modal blue" type="button" id="portal-submit-btn" data-action="submit-portal-access">Accéder à mon tableau de bord →</button>
       </div>
     </div>
   </div>
@@ -2254,6 +2256,7 @@ function toggleTheme() {
 <!-- ══════════════════════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════════════════════ -->
+<script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
 <script>
 // ── Supabase ──
@@ -2386,25 +2389,25 @@ const ACCESS_COPY = {
     guest: 'Espace client',
     session: 'Mon espace',
     continue: 'Continuer vers mon tableau de bord',
-    disconnect: 'Se deconnecter',
-    consultantNotFound: 'Aucun consultant associe a cet email.',
-    companyNotFound: 'Aucune entreprise avec espace client associee a cet email.',
+    disconnect: 'Se déconnecter',
+    consultantNotFound: 'Aucun consultant associé à cet email.',
+    companyNotFound: 'Aucune entreprise avec espace client associée à cet email.',
     adminPassword: 'Mot de passe administrateur incorrect.',
     emailRequired: 'Veuillez saisir votre email professionnel.',
     passwordRequired: 'Veuillez saisir votre mot de passe.',
     invalidCredentials: 'Email ou mot de passe invalide.',
-    resetLink: 'Mot de passe oublie ?',
-    resetBack: 'Annuler la reinitialisation',
-    resetSubmit: 'Envoyer le code de reinitialisation →',
-    resetConfirmSubmit: 'Valider le code et reinitialiser →',
-    resetSuccess: 'Si cet email existe, un code de reinitialisation vient d\'etre envoye.',
+    resetLink: 'Mot de passe oublié ?',
+    resetBack: 'Annuler la réinitialisation',
+    resetSubmit: 'Envoyer le code de réinitialisation →',
+    resetConfirmSubmit: 'Valider le code et réinitialiser →',
+    resetSuccess: 'Si cet email existe, un code de réinitialisation vient d\'être envoyé.',
     invalidEmail: 'Veuillez saisir un email professionnel valide.',
-    resetCodeSent: 'Code envoye. Saisissez le code et votre nouveau mot de passe.',
-    resetHelpDefault: 'Choisissez votre type d\'espace. Les identifiants sont verifies selon votre role pour un acces rapide et securise.',
-    resetHelpRequest: 'Etape 1. Saisissez votre email professionnel puis envoyez le code de reinitialisation.',
-    resetHelpConfirm: 'Etape 2. Saisissez le code recu par email puis choisissez votre nouveau mot de passe.',
+    resetCodeSent: 'Code envoyé. Saisissez le code et votre nouveau mot de passe.',
+    resetHelpDefault: 'Choisissez votre type d\'espace. Les identifiants sont vérifiés selon votre rôle pour un accès rapide et sécurisé.',
+    resetHelpRequest: 'Étape 1. Saisissez votre email professionnel puis envoyez le code de réinitialisation.',
+    resetHelpConfirm: 'Étape 2. Saisissez le code reçu par email puis choisissez votre nouveau mot de passe.',
     roleRequired: 'Veuillez choisir un espace.',
-    open: 'Acceder a mon tableau de bord →'
+    open: 'Accéder à mon tableau de bord →'
   },
   en: {
     guest: 'Client area',
@@ -2443,9 +2446,9 @@ function getResetRedirectUrl() {
   const host = String(window.location.hostname || '').toLowerCase();
   const isLocalHost = host === 'localhost' || host === '127.0.0.1';
   if (!isLocalHost && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
-    return window.location.origin + '/reset-password.html';
+    return window.location.origin + '/reset-password';
   }
-  return 'https://expert-erp-sofianehmiyou9-gifs-projects.vercel.app/reset-password.html';
+  return window.location.origin + '/reset-password';
 }
 
 function redirectRecoveryLinkToResetPageIfNeeded() {
@@ -2466,7 +2469,7 @@ function redirectRecoveryLinkToResetPageIfNeeded() {
 
   const hash = window.location.hash || '';
   const search = hash ? '' : (window.location.search || '');
-  window.location.replace(window.location.origin + '/reset-password.html' + search + hash);
+  window.location.replace(window.location.origin + '/reset-password' + search + hash);
 }
 
 async function requestPasswordResetEmail(email) {
@@ -2858,7 +2861,7 @@ async function submitPortalAccess() {
       const notes = safeJsonParse(consultants[0].notes_admin, {});
       const inputHash = await sha256Hex(password);
       if (!notes.auth_password_sha256) {
-        setPortalFeedback('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.', 'error');
+        setPortalFeedback('Compte non sécurisé. Utilisez "Mot de passe oublié" pour initialiser l\'accès.', 'error');
         return;
       }
       if (notes.auth_password_sha256 !== inputHash) {
@@ -2877,7 +2880,7 @@ async function submitPortalAccess() {
     const desc = safeJsonParse(companies[0].description, {});
     const inputHash = await sha256Hex(password);
     if (!desc.auth_password_sha256) {
-      setPortalFeedback('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.', 'error');
+      setPortalFeedback('Compte non sécurisé. Utilisez "Mot de passe oublié" pour initialiser l\'accès.', 'error');
       return;
     }
     if (desc.auth_password_sha256 !== inputHash) {

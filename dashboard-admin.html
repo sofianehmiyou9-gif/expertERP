@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard V2 - ExpertERPHub</title>
+<title>Espace Administration - ExpertERPHub</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f7f9fb;
+  --bg: #f8fafc;
   --panel: #ffffff;
-  --ink: #131b2e;
-  --muted: #677286;
-  --line: #eef2f7;
-  --brand: #004ac6;
-  --brand-soft: #dbe1ff;
-  --success: #0f766e;
-  --warning: #b45309;
-  --danger: #b91c1c;
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --brand: #2563eb;
+  --brand-soft: #eff6ff;
+  --success: #16a34a;
+  --warning: #ea580c;
+  --danger: #dc2626;
   --shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
 }
 * { box-sizing: border-box; }
@@ -29,7 +29,7 @@ body {
 .auth-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(17,24,39,0.44);
+  background: rgba(248,250,252,0.72);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,19 +37,22 @@ body {
 }
 .auth-box {
   width: min(420px, 92vw);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  padding: 26px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.1), 0 4px 16px rgba(0,0,0,.06);
+  padding: 2.5rem;
 }
 .brand {
-  font-family: 'Fraunces', serif;
+  font-family: 'Newsreader', serif;
   font-size: 30px;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
+  text-align: center;
 }
 .brand span { color: var(--brand); }
-.sub { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+.sub { color: var(--muted); margin: 0 0 16px; font-size: 14px; text-align: center; }
+.auth-label { display:block; font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.4rem; }
 .input {
   width: 100%;
   border: 1px solid var(--line);
@@ -68,6 +71,10 @@ body {
   cursor: pointer;
 }
 .btn:disabled { opacity: 0.7; cursor: wait; }
+.auth-back { text-align:center; margin-top:1rem; }
+.auth-back a { font-size:.8rem; color:var(--muted); text-decoration:none; }
+.auth-back a:hover { color:var(--ink); }
+:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 4px; }
 .err { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 8px; }
 .layout {
   display: grid;
@@ -398,10 +405,12 @@ th,
 <div class="auth-overlay" id="auth-overlay">
   <div class="auth-box">
     <h1 class="brand">Expert<span>ERP</span>Hub</h1>
-    <p class="sub">Admin Dashboard V2</p>
-    <input class="input" id="pwd" type="password" placeholder="Admin password">
-    <button class="btn" id="login-btn">Open dashboard</button>
+    <p class="sub">Espace administration</p>
+    <label class="auth-label" for="pwd">Mot de passe</label>
+    <input class="input" id="pwd" type="password" placeholder="Mot de passe administrateur">
+    <button class="btn" id="login-btn">Accéder au tableau de bord</button>
     <div class="err" id="auth-err"></div>
+    <div class="auth-back"><a href="/">← Retour à l'accueil</a></div>
   </div>
 </div>
 
@@ -409,42 +418,42 @@ th,
   <aside class="sidebar">
     <div>
       <div class="side-brand">Expert<span>ERP</span>Hub</div>
-      <div class="side-note">ADMIN V2 READ MODEL</div>
+      <div class="side-note">Pilotage plateforme</div>
     </div>
     <nav class="menu">
-      <button class="active" data-view="overview">Overview</button>
+      <button class="active" data-view="overview">Vue d'ensemble</button>
       <button data-view="consultants">Consultants</button>
       <button data-view="entreprises">Entreprises</button>
     </nav>
-    <button class="logout" id="logout-btn">Logout</button>
+    <button class="logout" id="logout-btn">Déconnexion</button>
   </aside>
 
   <main class="main">
     <div class="topbar">
       <h2 class="title" id="view-title">Overview</h2>
-      <span class="pill" id="sync-pill">syncing...</span>
+      <span class="pill" id="sync-pill">synchronisation...</span>
     </div>
 
     <section id="overview-view">
       <div class="grid">
         <div class="card"><div class="k-label">CONSULTANTS</div><div class="k-val" id="k-consultants">0</div><div class="k-meta" id="k-consultants-meta">Total</div></div>
-        <div class="card"><div class="k-label">PENDING</div><div class="k-val" id="k-pending">0</div><div class="k-meta">Need review</div></div>
-        <div class="card"><div class="k-label">APPROVED</div><div class="k-val" id="k-approved">0</div><div class="k-meta">Visible profiles</div></div>
-        <div class="card"><div class="k-label">ENTREPRISES</div><div class="k-val" id="k-entreprises">0</div><div class="k-meta">Total records</div></div>
+        <div class="card"><div class="k-label">EN ATTENTE</div><div class="k-val" id="k-pending">0</div><div class="k-meta">À relire</div></div>
+        <div class="card"><div class="k-label">APPROUVÉS</div><div class="k-val" id="k-approved">0</div><div class="k-meta">Profils visibles</div></div>
+        <div class="card"><div class="k-label">ENTREPRISES</div><div class="k-val" id="k-entreprises">0</div><div class="k-meta">Total</div></div>
       </div>
 
       <div class="panels">
         <div class="panel">
-          <h3>Consultants latest</h3>
+          <h3>Derniers consultants</h3>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Status</th></tr></thead>
+              <thead><tr><th>Nom</th><th>Email</th><th>Statut</th></tr></thead>
               <tbody id="latest-consultants"></tbody>
             </table>
           </div>
         </div>
         <div class="panel">
-          <h3>Status distribution</h3>
+          <h3>Répartition des statuts</h3>
           <div class="stats-list" id="status-bars"></div>
         </div>
       </div>
@@ -454,11 +463,11 @@ th,
       <div class="panel">
         <div class="panel-head">
           <h3>Consultants</h3>
-          <input id="search-consultants" class="search" placeholder="Search name, email, role">
+          <input id="search-consultants" class="search" placeholder="Rechercher nom, email, rôle">
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr></thead>
             <tbody id="consultants-body"></tbody>
           </table>
         </div>
@@ -469,11 +478,11 @@ th,
       <div class="panel">
         <div class="panel-head">
           <h3>Entreprises</h3>
-          <input id="search-entreprises" class="search" placeholder="Search entreprise, contact, email">
+          <input id="search-entreprises" class="search" placeholder="Rechercher entreprise, contact, email">
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
             <tbody id="entreprises-body"></tbody>
           </table>
         </div>
@@ -628,7 +637,7 @@ function renderOverview() {
   document.getElementById('k-pending').textContent = String(pending);
   document.getElementById('k-approved').textContent = String(approved);
   document.getElementById('k-entreprises').textContent = String(state.entreprises.length);
-  document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approved' : 'Total';
+  document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approuvés' : 'Total';
 
   const latest = state.consultants.slice(0, 8).map(c => {
     const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
@@ -639,7 +648,7 @@ function renderOverview() {
       '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('latest-consultants').innerHTML = latest || '<tr><td colspan="3" class="empty">No consultant data</td></tr>';
+  document.getElementById('latest-consultants').innerHTML = latest || '<tr><td colspan="3" class="empty">Aucune donnée consultant</td></tr>';
 
   const buckets = {};
   state.consultants.forEach(c => {
@@ -655,7 +664,7 @@ function renderOverview() {
       '<div class="line"><span style="width:' + pct + '%"></span></div>' +
     '</div>';
   }).join('');
-  document.getElementById('status-bars').innerHTML = bars || '<div class="empty">No status data</div>';
+  document.getElementById('status-bars').innerHTML = bars || '<div class="empty">Aucune donnée de statut</div>';
 }
 
 function renderConsultants() {
@@ -678,13 +687,13 @@ function renderConsultants() {
       '<option value="approuve">Approuver</option>' +
       '<option value="en_attente">En attente</option>' +
       '<option value="refuse">Refuser</option>' +
-      '<option value="desactive">Desactiver</option>' +
+      '<option value="desactive">Désactiver</option>' +
       '<option value="certif">Certif ★</option>' +
       '</select>' +
       '</div></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="5" class="empty">No result</td></tr>';
+  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="5" class="empty">Aucun résultat</td></tr>';
 }
 
 function renderEntreprises() {
@@ -706,12 +715,12 @@ function renderEntreprises() {
       '<option value="approuve">Approuver</option>' +
       '<option value="en_attente">En attente</option>' +
       '<option value="refuse">Refuser</option>' +
-      '<option value="desactive">Desactiver</option>' +
+      '<option value="desactive">Désactiver</option>' +
       '</select>' +
       '</div></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">No result</td></tr>';
+  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun résultat</td></tr>';
 }
 
 function parseCertificationsAdmin(val) {
@@ -831,7 +840,8 @@ function setView(view) {
   document.getElementById('overview-view').classList.toggle('hidden', view !== 'overview');
   document.getElementById('consultants-view').classList.toggle('hidden', view !== 'consultants');
   document.getElementById('entreprises-view').classList.toggle('hidden', view !== 'entreprises');
-  document.getElementById('view-title').textContent = view.charAt(0).toUpperCase() + view.slice(1);
+  const titleMap = { overview: 'Vue d\'ensemble', consultants: 'Consultants', entreprises: 'Entreprises' };
+  document.getElementById('view-title').textContent = titleMap[view] || view;
 }
 
 function renderAll() {
@@ -844,8 +854,8 @@ function openApp() {
   document.getElementById('auth-overlay').style.display = 'none';
   document.getElementById('app').classList.remove('hidden');
   loadData().catch(err => {
-    document.getElementById('sync-pill').textContent = 'sync error';
-    alert('Supabase load error: ' + err.message);
+    document.getElementById('sync-pill').textContent = 'erreur sync';
+    alert('Erreur de chargement Supabase : ' + err.message);
   });
 }
 
@@ -857,7 +867,7 @@ document.getElementById('login-btn').addEventListener('click', () => {
     if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
     openApp();
   } else {
-    document.getElementById('auth-err').textContent = 'Incorrect password';
+    document.getElementById('auth-err').textContent = 'Mot de passe incorrect';
   }
 });
 

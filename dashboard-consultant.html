@@ -32,7 +32,7 @@ a{color:inherit;text-decoration:none;}
 /* auth */
 .auth-container{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
 .auth-card{background:rgba(255,255,255,.92);border-radius:32px;padding:2.25rem;max-width:430px;width:100%;box-shadow:var(--shadow-float);backdrop-filter:blur(20px);}
-.top-controls{display:flex;justify-content:flex-end;gap:.45rem;margin-bottom:1rem;}
+.top-controls{position:fixed;top:1rem;right:1rem;display:flex;justify-content:flex-end;gap:.45rem;z-index:100;}
 .lang-btn{background:var(--surface-high);border:none;padding:.45rem .8rem;border-radius:999px;cursor:pointer;font-size:.74rem;font-family:'Inter',sans-serif;transition:all .2s ease;color:var(--slate);}
 .lang-btn.active{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-container));box-shadow:0 8px 18px rgba(37,99,235,.2);}
 .logo{font-family:'Newsreader',serif;font-size:2rem;font-weight:500;text-align:center;letter-spacing:-.03em;}
@@ -46,6 +46,7 @@ a{color:inherit;text-decoration:none;}
 .auth-error{color:var(--red);font-size:.8rem;margin-top:.7rem;min-height:1rem;text-align:center;}
 .auth-link{margin-top:.9rem;text-align:right;}
 .auth-link button{width:auto;padding:0;background:none;border:none;color:var(--primary);cursor:pointer;font-size:.82rem;text-decoration:underline;box-shadow:none;}
+:focus-visible{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px;}
 
 /* dashboard */
 .dashboard-container{display:flex;justify-content:center;min-height:100vh;padding:2rem;}
@@ -220,19 +221,21 @@ a{color:inherit;text-decoration:none;}
 </head>
 <body>
 
+<div class="top-controls">
+  <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
+  <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
+</div>
+
 <!-- Auth Form -->
 <div id="auth-container" class="auth-container" style="display:none;">
   <div class="auth-card">
-    <div class="top-controls">
-      <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
-      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
-    </div>
     <div class="logo">Expert<span>ERP</span>Hub</div>
-    <h2 id="auth-title">Acces au tableau de bord</h2>
+    <h2 id="auth-title">Accès à votre espace consultant</h2>
     <input type="email" id="email-input" placeholder="Adresse email">
     <input type="password" id="password-input" placeholder="Mot de passe">
     <button id="auth-btn">Se connecter</button>
     <div class="auth-link"><button type="button" data-action="open-reset-page">Mot de passe oublie ?</button></div>
+    <div class="auth-link" style="text-align:center;margin-top:.75rem;"><a href="/" style="font-size:.8rem;color:#6b7280;text-decoration:none;">← Retour à l'accueil</a></div>
     <div class="auth-error" id="auth-error"></div>
   </div>
 </div>
@@ -1301,7 +1304,7 @@ function showAuthError(msg) {
 
 function openResetPage() {
   const email = document.getElementById('email-input').value.trim();
-  const target = 'reset-password.html' + (email ? ('?email=' + encodeURIComponent(email)) : '');
+  const target = '/reset-password' + (email ? ('?email=' + encodeURIComponent(email)) : '');
   window.location.href = target;
 }
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entreprise Dashboard â€” ExpertERPHub</title>
+<title>Espace Entreprise — ExpertERPHub</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -16,7 +16,7 @@
   --shadow-sm:0 8px 20px rgba(15,23,42,.06);--shadow-md:0 18px 40px rgba(15,23,42,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:radial-gradient(circle at 15% 0%,rgba(59,130,246,.08),transparent 32%),radial-gradient(circle at 85% 8%,rgba(14,165,233,.08),transparent 28%),var(--paper);color:var(--ink);}
+body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 15% 0%,rgba(59,130,246,.08),transparent 32%),radial-gradient(circle at 85% 8%,rgba(14,165,233,.08),transparent 28%),var(--paper);color:var(--ink);}
 a{color:inherit;text-decoration:none;}
 
 /* â”€â”€ AUTH FORM â”€â”€ */
@@ -331,23 +331,112 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
   .kpi-grid{grid-template-columns:1fr;}
   .kpi-chart-row{flex-direction:column;gap:1rem;}
 }
+
+/* Readability pass: denser information with clearer scale */
+html{font-size:16px;}
+body{line-height:1.5;}
+.content{
+  max-width:1440px;
+  margin:0 auto;
+  padding:1.75rem clamp(1rem,2.2vw,2.2rem);
+}
+.section-title{font-size:clamp(1.85rem,2.4vw,2.35rem);}
+.section-sub{font-size:.96rem;color:#5b667d;}
+
+.tab-button{
+  font-size:.79rem;
+  padding:.78rem 1.2rem;
+}
+
+.kpi-grid{
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1rem;
+}
+.kpi-card{padding:1.2rem 1.3rem;}
+.kpi-icon{font-size:.74rem;}
+.kpi-value{font-size:2rem;}
+.kpi-label{font-size:.75rem;}
+.kpi-trend{font-size:.84rem;}
+
+.kpi-chart-row{
+  display:grid;
+  grid-template-columns:minmax(170px,220px) 1fr;
+  gap:1.2rem;
+  align-items:center;
+}
+.kpi-chart-legend{gap:.7rem;}
+.kpi-legend-item{font-size:.9rem;}
+
+.plan-title{font-size:1.5rem;}
+.plan-subtitle{font-size:.92rem;}
+.progress-label{font-size:.85rem;}
+
+.table-container{overflow:auto;}
+th{
+  font-size:.74rem;
+  letter-spacing:.08em;
+  padding:.95rem 1rem;
+}
+td{
+  font-size:.93rem;
+  padding:.9rem 1rem;
+  vertical-align:middle;
+}
+
+.import-section h3{font-size:1.55rem;}
+.drop-zone{padding:1.7rem 1rem;}
+.drop-icon{font-size:1.8rem;}
+.drop-label{font-size:.95rem;}
+.drop-hint{font-size:.78rem;}
+
+.quick-add-title{font-size:1.4rem;}
+.quick-add-grid{
+  grid-template-columns:repeat(2,minmax(250px,1fr));
+  gap:.85rem;
+}
+.quick-add-grid select,
+.quick-add-grid input[type=text],
+.quick-add-grid input[type=number],
+.quick-add-search,
+.team-form select,
+.team-form input{font-size:.93rem;}
+
+.btn{font-size:.78rem;padding:.8rem 1.15rem;}
+.resource-card-link{color:var(--accent);font-weight:600;text-decoration:none;}
+.resource-card-link:hover{text-decoration:underline;}
+.resource-map{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+.top-controls{position:fixed;top:1rem;right:1rem;display:flex;justify-content:flex-end;gap:.45rem;z-index:100;}
+:focus-visible{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px;}
+
+@media(max-width:900px){
+  .kpi-chart-row{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .section-sub{font-size:.9rem;}
+  .tab-button{font-size:.75rem;}
+  th{font-size:.68rem;}
+  td{font-size:.9rem;}
+  .quick-add-grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
+<div class="top-controls">
+  <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
+  <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
+</div>
+
 <!-- Auth Form -->
 <div id="auth-container" class="auth-container" style="display:none;">
   <div class="auth-card">
-    <div class="top-controls">
-      <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
-      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
-    </div>
     <div class="logo">Expert<span>ERP</span>Hub</div>
-    <h2 id="auth-title">Acces au tableau de bord</h2>
+    <h2 id="auth-title">Accès à votre espace entreprise</h2>
     <input type="email" id="email-input" placeholder="Adresse email">
     <input type="password" id="password-input" placeholder="Mot de passe">
     <button id="auth-btn">Se connecter</button>
     <div class="auth-link"><button type="button" data-action="open-reset-page">Mot de passe oublie ?</button></div>
+    <div class="auth-link" style="text-align:center;margin-top:.75rem;"><a href="/" style="font-size:.8rem;color:#6b7280;text-decoration:none;">← Retour à l'accueil</a></div>
     <div class="auth-error" id="auth-error"></div>
   </div>
 </div>
@@ -391,14 +480,14 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
           <div class="kpi-trend up" id="kpi-approved-pct">0%</div>
         </div>
         <div class="kpi-card kpi-amber">
-          <div class="kpi-icon">TJM</div>
-          <div class="kpi-value" id="kpi-tjm">â€”</div>
+          <div class="kpi-icon">Taux</div>
+          <div class="kpi-value" id="kpi-tjm">--</div>
           <div class="kpi-label">Moyen</div>
-          <div class="kpi-trend">$/jour</div>
+          <div class="kpi-trend" id="kpi-rate-unit">$/jour</div>
         </div>
         <div class="kpi-card kpi-violet">
           <div class="kpi-icon">Slots</div>
-          <div class="kpi-value" id="kpi-slots">â€”</div>
+          <div class="kpi-value" id="kpi-slots">--</div>
           <div class="kpi-label">Restants</div>
           <div class="kpi-trend" id="kpi-slots-sub">sur le plan</div>
         </div>
@@ -424,11 +513,11 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
 
       <div class="plan-box">
         <div class="plan-title" id="plan-title">Plan Starter</div>
-        <div class="plan-subtitle" id="plan-subtitle">Slots utilisÃ©s</div>
+        <div class="plan-subtitle" id="plan-subtitle">Slots utilises</div>
         <div class="progress-bar">
           <div class="progress-fill" id="progress-fill" style="width:0%"></div>
         </div>
-        <div class="progress-label" id="progress-label">0/5 ressources utilisÃ©es</div>
+        <div class="progress-label" id="progress-label">0/5 ressources utilisees</div>
       </div>
 
       <div class="table-container">
@@ -437,9 +526,10 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
             <tr>
               <th>Identifiant</th>
               <th>ERP(s)</th>
-              <th>RÃ´le</th>
-              <th>TJM</th>
+              <th>Role</th>
+              <th>Taux</th>
               <th>Statut de validation</th>
+              <th>Carte liee</th>
               <th>Date soumission</th>
             </tr>
           </thead>
@@ -451,7 +541,7 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
       <div class="import-section">
         <h3 id="import-title">Importer plus de ressources</h3>
         <div class="drop-zone" id="drop-zone">
-          <div class="drop-icon">ðŸ“</div>
+          <div class="drop-icon">📁</div>
           <div class="drop-label" id="drop-label">Glissez et deposez un fichier CSV ou Excel</div>
           <div class="drop-hint" id="drop-hint">ou cliquez pour parcourir</div>
         </div>
@@ -494,7 +584,11 @@ tbody tr{border-top:1px solid rgba(195,198,215,.16);}
               <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
               <option>7</option><option>8</option><option>9</option><option>10</option><option>12</option><option>15</option>
             </select>
-            <input type="number" id="qa-tjm" min="1" step="1" inputmode="numeric" placeholder="TJM ($/jour) *">
+            <input type="number" id="qa-tjm" min="1" step="1" inputmode="numeric" placeholder="Taux ($) *">
+            <select id="qa-rate-unit">
+              <option value="jour">Journalier</option>
+              <option value="heure">Horaire</option>
+            </select>
             <select id="qa-dispo">
               <option value="">Disponibilite</option>
               <option>Immediat</option><option>Sous 15 jours</option><option>Sous 30 jours</option><option>Sous 60 jours</option>
@@ -793,7 +887,63 @@ function generateInternalResourceEmail() {
   return 'res_' + Date.now() + '_' + Math.random().toString(16).slice(2, 8) + '@internal.experterphub.local';
 }
 
+function sanitizeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildResourceCode(seed) {
+  const base = String(seed || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '');
+  const hint = (base.slice(0, 3) || 'RES').padEnd(3, 'X');
+  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return 'RES-' + hint + '-' + rand;
+}
+
+function getResourceInternalName(resource) {
+  const notes = parseNotes(resource?.notes_admin);
+  const internal = String(notes.resource_internal_name || '').trim();
+  if (internal) return internal;
+
+  const first = String(resource?.prenom || '').trim();
+  const last = String(resource?.nom || '').trim();
+  const full = (first + ' ' + last).trim();
+  if (!full || first.toLowerCase() === 'ressource') return '';
+  return full;
+}
+
+function normalizeRateUnit(raw) {
+  const value = String(raw || '').trim().toLowerCase();
+  if (value === 'heure' || value === 'horaire' || value === 'hour' || value === 'hourly' || value === 'h') return 'heure';
+  return 'jour';
+}
+
+function getResourceRateUnit(resource) {
+  const notes = parseNotes(resource?.notes_admin);
+  return normalizeRateUnit(notes.rate_unit);
+}
+
+function formatRateRange(resource) {
+  const min = Number(resource?.tjm_min || 0);
+  const max = Number(resource?.tjm_max || 0);
+  if (!min && !max) return '-';
+  const unit = getResourceRateUnit(resource);
+  const suffix = unit === 'heure' ? '/h' : '/jour';
+  if (min && max) return '$' + min + '-' + max + ' ' + suffix;
+  return '$' + (min || max) + ' ' + suffix;
+}
+
 function formatResourceId(resource) {
+  const notes = parseNotes(resource?.notes_admin);
+  const custom = String(notes.resource_code || '').trim();
+  if (custom) return custom;
   const raw = String(resource?.id || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, 8).toUpperCase();
   return raw ? 'RES-' + raw : 'RES-LOCAL';
 }
@@ -906,7 +1056,7 @@ function renderTeam() {
   tbody.innerHTML = companyTeam.map((member) => {
     const roleClass = String(member.role || 'viewer');
     const statusClass = member.status === 'disabled' ? 'disabled' : roleClass;
-    const invited = member.invited_at ? formatDate(member.invited_at) : 'â€”';
+    const invited = member.invited_at ? formatDate(member.invited_at) : '--';
     const isOwner = member.role === 'owner';
     const canManageTeam = currentAccessRole === 'owner';
     const toggleBtn = member.status === 'disabled'
@@ -1174,13 +1324,23 @@ async function loadResources() {
       'refuse': '<span class="badge badge-rejected">Refuse</span>'
     };
     const statusKey = normalizeStatus(r.statut);
+    const resourceCode = formatResourceId(r);
+    const internalName = getResourceInternalName(r);
+    const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
+    const erps = Array.isArray(r.competences) ? r.competences.join(', ') : (r.competences || '-');
+    const role = r.titre || '-';
+    const tjmLabel = formatRateRange(r);
+    const mapLine = internalName
+      ? '<div class="resource-map">Nom interne: ' + sanitizeHtml(internalName) + '</div>'
+      : '<div class="resource-map">Nom interne non renseigne</div>';
 
     return `<tr>
-      <td>${formatResourceId(r)}</td>
-      <td>${Array.isArray(r.competences) ? r.competences.join(', ') : (r.competences || 'â€“')}</td>
-      <td>${r.titre || 'â€“'}</td>
-      <td>${r.tjm_min && r.tjm_max ? 'â‚¬' + r.tjm_min + 'â€“' + r.tjm_max : 'â€“'}</td>
+      <td>${sanitizeHtml(resourceCode)}</td>
+      <td>${sanitizeHtml(erps)}</td>
+      <td>${sanitizeHtml(role)}</td>
+      <td>${sanitizeHtml(tjmLabel)}</td>
       <td>${statusMap[statusKey] || r.statut}</td>
+      <td><a class="resource-card-link" href="${cardUrl}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
       <td>${formatDate(r.created_at)}</td>
     </tr>`;
   }).join('');
@@ -1196,13 +1356,18 @@ function renderKPIs(filtered) {
   const pending  = filtered.filter(r => normalizeStatus(r.statut) === 'en_attente').length;
   const rejected = filtered.filter(r => normalizeStatus(r.statut) === 'refuse').length;
 
+  const rateUnits = new Set(filtered.map((r) => getResourceRateUnit(r)));
+  const rateUnit = rateUnits.size === 1 ? Array.from(rateUnits)[0] : 'mixte';
+
   const tjmValues = filtered.map(r => {
     if (r.tjm_min && r.tjm_max) return (Number(r.tjm_min) + Number(r.tjm_max)) / 2;
     if (r.tjm_min) return Number(r.tjm_min);
     if (r.tjm_max) return Number(r.tjm_max);
     return null;
   }).filter(v => v !== null);
-  const avgTjm = tjmValues.length ? Math.round(tjmValues.reduce((a, b) => a + b, 0) / tjmValues.length) : null;
+  const avgTjm = (tjmValues.length && rateUnit !== 'mixte')
+    ? Math.round(tjmValues.reduce((a, b) => a + b, 0) / tjmValues.length)
+    : null;
 
   const planQty = currentPlanQty || getCompanyPlanQty();
   const slotsLeft = Math.max(planQty - total, 0);
@@ -1213,6 +1378,7 @@ function renderKPIs(filtered) {
   if (el('kpi-approved'))     el('kpi-approved').textContent = approved;
   if (el('kpi-approved-pct')) el('kpi-approved-pct').textContent = total ? Math.round((approved / total) * 100) + '%' : '-';
   if (el('kpi-tjm'))          el('kpi-tjm').textContent = avgTjm ? '$' + avgTjm : '-';
+  if (el('kpi-rate-unit'))    el('kpi-rate-unit').textContent = rateUnit === 'heure' ? '$/h' : (rateUnit === 'jour' ? '$/jour' : 'mixte');
   if (el('kpi-slots'))        el('kpi-slots').textContent = slotsLeft;
   if (el('kpi-slots-sub'))    el('kpi-slots-sub').textContent = 'sur ' + planQty + ' du plan';
   if (el('kpi-donut-center')) el('kpi-donut-center').textContent = total;
@@ -1350,10 +1516,14 @@ document.getElementById('import-btn').addEventListener('click', async () => {
       const row = {};
       headers.forEach((h, idx) => row[h] = values[idx] || null);
 
+      const internalName = String(row.nom || '').trim() || ('Ressource importee ' + i);
+      const resourceCode = buildResourceCode(internalName);
+      const rateUnit = normalizeRateUnit(row.taux_unite || row.rate_unit || row.unite_taux || row.unite || 'jour');
+
       consultants.push({
         email: row.email || generateInternalResourceEmail(),
-        prenom: row.nom ? row.nom.split(' ')[0] : '',
-        nom: row.nom || '',
+        prenom: 'Ressource',
+        nom: resourceCode,
         titre: row.role || '',
         competences: row.erp || '',
         tjm_min: parseInt(row.tjm) || 0,
@@ -1367,7 +1537,10 @@ document.getElementById('import-btn').addEventListener('click', async () => {
           disponibilite: row.disponibilite || '',
           mode_travail: row.mode_travail || '',
           ville: row.ville || '',
-          langues: row.langues || ''
+          langues: row.langues || '',
+          rate_unit: rateUnit,
+          resource_internal_name: internalName,
+          resource_code: resourceCode
         }
       });
     }
@@ -1386,7 +1559,7 @@ document.getElementById('import-btn').addEventListener('click', async () => {
     document.getElementById('file-input').value = '';
     applyAccessPermissions();
     loadResources();
-    alert('Ressources importÃ©es avec succÃ¨s');
+    alert('Ressources importees avec succes');
   };
   reader.readAsText(uploadedFile);
 });
@@ -1402,19 +1575,22 @@ document.getElementById('qa-add-btn').addEventListener('click', async () => {
   const modules = document.getElementById('qa-modules').value.trim();
   const exp = document.getElementById('qa-exp').value.trim();
   const tjmValue = document.getElementById('qa-tjm').value.trim();
+  const rateUnit = normalizeRateUnit(document.getElementById('qa-rate-unit').value);
   const tjm = parseInt(tjmValue, 10);
   const dispo = document.getElementById('qa-dispo').value.trim();
   const mode = document.getElementById('qa-mode').value.trim();
   const ville = document.getElementById('qa-ville').value.trim();
   const langues = document.getElementById('qa-langues').value.trim();
   const fullName = document.getElementById('qa-name').value.trim();
+  const internalName = fullName || 'Ressource manuelle';
+  const resourceCode = buildResourceCode(internalName);
 
   if (!erp || !modules || !role || !tjmValue || !ville) {
-    alert('ERP, module, TJM et ville sont obligatoires.');
+    alert('ERP, module, taux et ville sont obligatoires.');
     return;
   }
   if (!Number.isFinite(tjm) || tjm <= 0) {
-    alert('Le TJM doit etre un nombre positif.');
+    alert('Le taux doit etre un nombre positif.');
     return;
   }
   if (!canAddSlots(1)) {
@@ -1422,14 +1598,10 @@ document.getElementById('qa-add-btn').addEventListener('click', async () => {
     return;
   }
 
-  const parts = fullName ? fullName.split(/\s+/) : [];
-  const prenom = parts.length > 1 ? parts.slice(0, -1).join(' ') : (fullName || 'Ressource');
-  const nom = parts.length > 1 ? parts.slice(-1).join(' ') : null;
-
   const payload = {
     email: email,
-    prenom: prenom,
-    nom: nom,
+    prenom: 'Ressource',
+    nom: resourceCode,
     titre: role,
     competences: [erp],
     tjm_min: tjm,
@@ -1445,16 +1617,21 @@ document.getElementById('qa-add-btn').addEventListener('click', async () => {
       disponibilite: dispo || '',
       mode_travail: mode || '',
       ville: ville || '',
-      langues: langues || ''
+      langues: langues || '',
+      rate_unit: rateUnit,
+      resource_internal_name: internalName,
+      resource_code: resourceCode
     }
   };
 
   try {
     await sbInsert('consultants', payload);
-    ['qa-name','qa-erp','qa-role','qa-modules','qa-exp','qa-tjm','qa-dispo','qa-mode','qa-ville','qa-ville-search','qa-langues'].forEach((id) => {
+    ['qa-name','qa-erp','qa-role','qa-modules','qa-exp','qa-tjm','qa-rate-unit','qa-dispo','qa-mode','qa-ville','qa-ville-search','qa-langues'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.value = '';
     });
+    const unitSelect = document.getElementById('qa-rate-unit');
+    if (unitSelect) unitSelect.value = 'jour';
     populateResourceModuleSelect('qa-modules', '');
     populateCitySelect('qa-ville', '');
     await loadResources();
@@ -1480,7 +1657,7 @@ function showAuthError(msg) {
 
 function openResetPage() {
   const email = document.getElementById('email-input').value.trim();
-  const target = 'reset-password.html' + (email ? ('?email=' + encodeURIComponent(email)) : '');
+  const target = '/reset-password' + (email ? ('?email=' + encodeURIComponent(email)) : '');
   window.location.href = target;
 }
 
