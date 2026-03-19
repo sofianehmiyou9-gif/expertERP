@@ -234,7 +234,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 }
 .stat-row .line > span { display: block; height: 100%; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
 .empty { padding: 18px 14px; color: var(--muted); font-size: 13px; }
-.hidden { display: none; }
+.hidden { display: none !important; }
 @media (max-width: 980px) {
   .layout { grid-template-columns: 1fr; }
   .sidebar { position: static; }
@@ -247,6 +247,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
   display: flex; align-items: center; justify-content: center;
   z-index: 200;
 }
+.modal-overlay.modal-hidden { display: none !important; }
 .modal-box {
   background: #fff; border-radius: 16px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.16);
@@ -378,7 +379,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
   </main>
 </div>
 
-<div id="certif-modal" class="modal-overlay hidden">
+<div id="certif-modal" class="modal-overlay modal-hidden">
   <div class="modal-box">
     <div class="modal-head">
       <h3 id="certif-modal-title">Certifications</h3>
@@ -596,6 +597,10 @@ function parseCertificationsAdmin(val) {
 let certifModalConsultant = null;
 let certifModalValidated = [];
 
+function closeCertifModal() {
+  document.getElementById('certif-modal').classList.add('modal-hidden');
+}
+
 function openCertifModal(id) {
   const c = state.consultants.find(x => String(x.id) === String(id));
   if (!c) return;
@@ -632,7 +637,7 @@ function openCertifModal(id) {
       container.appendChild(row);
     });
   }
-  document.getElementById('certif-modal').classList.remove('hidden');
+  document.getElementById('certif-modal').classList.remove('modal-hidden');
 }
 
 async function setConsultantStatus(id, status) {
@@ -695,7 +700,7 @@ async function setEntrepriseStatus(id, status) {
 }
 
 function setView(view) {
-  document.getElementById('certif-modal').classList.add('hidden');
+  closeCertifModal();
   state.view = view;
   document.querySelectorAll('.menu button').forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
   document.getElementById('overview-view').classList.toggle('hidden', view !== 'overview');
@@ -731,18 +736,14 @@ document.getElementById('login-btn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('certif-modal-close').addEventListener('click', () => {
-  document.getElementById('certif-modal').classList.add('hidden');
-});
+document.getElementById('certif-modal-close').addEventListener('click', closeCertifModal);
 
 document.getElementById('certif-modal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('certif-modal')) {
-    document.getElementById('certif-modal').classList.add('hidden');
-  }
+  if (e.target === document.getElementById('certif-modal')) closeCertifModal();
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') document.getElementById('certif-modal').classList.add('hidden');
+  if (e.key === 'Escape') closeCertifModal();
 });
 
 document.getElementById('certif-modal-save').addEventListener('click', async () => {
@@ -751,7 +752,7 @@ document.getElementById('certif-modal-save').addEventListener('click', async () 
   notes.certifications_validees = certifModalValidated;
   const ok = await sbUpdate('consultants', certifModalConsultant.id, { notes_admin: JSON.stringify(notes) });
   if (!ok) { alert('Erreur lors de la sauvegarde'); return; }
-  document.getElementById('certif-modal').classList.add('hidden');
+  closeCertifModal();
   await loadData();
 });
 
