@@ -3009,16 +3009,19 @@ function bindNavScrollFx() {
 }
 
 function bindOverlayDismissals() {
+  // Désactive la fermeture automatique sur clic overlay pour éviter la perte de données accidentelle
+  // La fermeture ne se fait que via la croix ou un bouton dédié
   ['overlay-consultant', 'overlay-entreprise', 'overlay-portal'].forEach((id) => {
     const overlay = document.getElementById(id);
     if (!overlay || overlay.dataset.bound === 'true') return;
     overlay.dataset.bound = 'true';
-    overlay.addEventListener('click', (event) => {
-      if (event.target !== overlay) return;
-      if (id === 'overlay-consultant') closeConsultantModal();
-      if (id === 'overlay-entreprise') closeEntrepriseModal();
-      if (id === 'overlay-portal') closePortalModal();
-    });
+    // Suppression de la fermeture sur clic overlay
+    // overlay.addEventListener('click', (event) => {
+    //   if (event.target !== overlay) return;
+    //   if (id === 'overlay-consultant') closeConsultantModal();
+    //   if (id === 'overlay-entreprise') closeEntrepriseModal();
+    //   if (id === 'overlay-portal') closePortalModal();
+    // });
   });
 }
 
