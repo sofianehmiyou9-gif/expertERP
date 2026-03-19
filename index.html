@@ -616,31 +616,33 @@ nav.nav-scrolled{height:64px;background:rgba(245,242,237,.88);box-shadow:var(--s
 /* ── PORTAL ROLE CARDS 3D ── */
 .portal-trigger{border-color:var(--blue);color:var(--blue);}
 .portal-trigger:before{background:var(--blue);}
-.portal-role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem;perspective:1200px;}
+.portal-modal-box{max-width:760px !important;width:min(92vw,760px);}
+.portal-role-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem;margin:.95rem 0 1.1rem;perspective:1200px;}
 .portal-role-card{
-  border:1.5px solid var(--border);border-radius:12px;padding:1.5rem 1.25rem;cursor:pointer;background:linear-gradient(165deg, var(--card) 0%, var(--paper) 100%);transition:all .35s cubic-bezier(.34,.1,.64,.1);min-height:140px;display:flex;flex-direction:column;gap:.6rem;justify-content:flex-start;position:relative;transform:perspective(1000px) rotateY(0deg) rotateX(0deg);box-shadow:0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5);
+  border:1.5px solid var(--border);border-radius:12px;padding:1rem .95rem;cursor:pointer;background:linear-gradient(165deg, var(--card) 0%, var(--paper) 100%);transition:all .3s cubic-bezier(.34,.1,.64,.1);min-height:118px;display:flex;flex-direction:column;gap:.35rem;justify-content:flex-start;position:relative;transform:perspective(1000px) rotateY(0deg) rotateX(0deg);box-shadow:0 6px 20px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .portal-role-card:hover{
-  border-color:var(--blue);background:linear-gradient(165deg, #ffffff 0%, var(--blue-light) 100%);transform:perspective(1000px) rotateY(3deg) rotateX(-2deg) translateY(-4px);box-shadow:0 16px 40px rgba(30,58,138,.22), inset 0 1px 0 rgba(255,255,255,.8);
+  border-color:var(--blue);background:linear-gradient(165deg, #ffffff 0%, var(--blue-light) 100%);transform:perspective(1000px) rotateY(2deg) rotateX(-1deg) translateY(-3px);box-shadow:0 14px 30px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.8);
 }
 .portal-role-card.selected{border-color:var(--blue);background:linear-gradient(165deg, var(--blue-light) 0%, rgba(99,102,241,.05) 100%);box-shadow:0 0 0 3px rgba(30,58,138,.2), 0 12px 32px rgba(30,58,138,.18), inset 0 1px 0 rgba(255,255,255,.6);}
 .portal-role-card.hidden-admin{display:none;}
-.portal-role-icon{font-size:1.6rem;transition:transform .3s ease;}
+.portal-role-icon{font-size:1.35rem;transition:transform .3s ease;line-height:1;}
 .portal-role-card:hover .portal-role-icon{transform:scale(1.15) rotate(8deg);}
 .portal-role-title{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600;}
-.portal-role-desc{font-size:.78rem;color:var(--muted);line-height:1.7;}
-.portal-help{font-size:.8rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;padding:.8rem 1rem;background:rgba(99,102,241,.06);border-left:3px solid var(--blue);border-radius:4px;}
+.portal-role-desc{font-size:.76rem;color:var(--muted);line-height:1.55;}
+.portal-help{font-size:.82rem;color:#334155;line-height:1.65;margin-bottom:.25rem;padding:.75rem .95rem;background:linear-gradient(180deg,rgba(99,102,241,.08),rgba(99,102,241,.04));border:1px solid rgba(99,102,241,.2);border-left:3px solid var(--blue);border-radius:8px;}
 .portal-actions{display:flex;gap:.85rem;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
-.portal-error{font-size:.8rem;color:var(--red);min-height:1.2rem;padding:.5rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:4px;}
+.portal-error{font-size:.78rem;color:var(--red);min-height:1.2rem;padding:.55rem .65rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:6px;}
 .portal-reset-link{text-align:right;margin-top:.2rem;margin-bottom:.9rem;}
 .portal-reset-link button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.78rem;text-decoration:underline;transition:color .2s ease;font-weight:500;}
 .portal-reset-link button:hover{color:var(--blue-mid);}
-.portal-session-box{display:none;margin-bottom:1.25rem;padding:1.1rem 1.25rem;background:linear-gradient(165deg, var(--blue-light) 0%, rgba(99,102,241,.08) 100%);border:1px solid var(--blue-border);border-radius:10px;box-shadow:0 4px 12px rgba(30,58,138,.1);}
+.portal-session-box{display:none;margin-bottom:.95rem;padding:.9rem 1rem;background:linear-gradient(165deg, var(--blue-light) 0%, rgba(99,102,241,.08) 100%);border:1px solid var(--blue-border);border-radius:10px;box-shadow:0 4px 12px rgba(30,58,138,.1);}
 .portal-session-box.open{display:block;animation:slideUp .3s ease;}
-.portal-session-box strong{display:block;font-size:.85rem;color:var(--blue);margin-bottom:.4rem;font-weight:600;}
-.portal-session-box p{font-size:.78rem;color:var(--muted);line-height:1.7;}
-.portal-session-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap;}
-@media(max-width:780px){.portal-role-grid{grid-template-columns:1fr;}}
+.portal-session-box strong{display:block;font-size:.8rem;color:var(--blue);margin-bottom:.2rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;}
+.portal-session-box p{font-size:.77rem;color:var(--muted);line-height:1.6;}
+.portal-session-actions{display:flex;gap:.55rem;justify-content:flex-end;margin-top:.7rem;flex-wrap:wrap;}
+@media(max-width:980px){.portal-modal-box{max-width:650px !important;}}
+@media(max-width:780px){.portal-modal-box{max-width:94vw !important;}.portal-role-grid{grid-template-columns:1fr;gap:.7rem;}}
 
 /* ── ERROR MODAL ── */
 .error-overlay{display:none;position:fixed;inset:0;background:rgba(14,14,14,.6);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;animation:fadeIn .3s ease;}
@@ -2173,37 +2175,37 @@ function toggleTheme() {
 </div>
 
 <div class="overlay" id="overlay-portal" data-overlay-close="portal">
-  <div class="modal-box" style="max-width:560px;">
+  <div class="modal-box portal-modal-box">
     <button class="modal-close" data-action="close-portal-modal">×</button>
     <div class="modal-header">
-      <h2>Connexion a votre espace</h2>
-      <p>Accedez a votre tableau de bord directement depuis ExpertERPHub</p>
+      <h2>Acces securise aux espaces ExpertERPHub</h2>
+      <p>Selectionnez votre role et connectez-vous a votre tableau de bord en un seul point d'acces.</p>
     </div>
     <div class="modal-body">
       <div class="portal-session-box" id="portal-session-box">
-        <strong>Session detectee</strong>
+        <strong>Session active detectee</strong>
         <p id="portal-session-text"></p>
         <div class="portal-session-actions">
           <button class="btn-back-modal" type="button" data-action="disconnect-portal-session">Se deconnecter</button>
           <button class="btn-next-modal blue" type="button" data-action="continue-portal-session">Continuer vers mon espace</button>
         </div>
       </div>
-      <p class="portal-help">Choisissez votre espace pour ouvrir votre tableau de bord depuis le website.</p>
+      <p class="portal-help">Choisissez votre type d'espace. Les identifiants sont verifiés selon votre role pour un acces rapide et securise.</p>
       <div class="portal-role-grid">
         <button type="button" class="portal-role-card" id="portal-role-consultant" data-action="select-portal-role" data-role="consultant">
           <span class="portal-role-icon">🧑</span>
           <span class="portal-role-title">Consultant</span>
-          <span class="portal-role-desc">Acces a vos demandes, disponibilites et profil.</span>
+          <span class="portal-role-desc">Suivi des demandes, disponibilite et profil professionnel.</span>
         </button>
         <button type="button" class="portal-role-card" id="portal-role-entreprise" data-action="select-portal-role" data-role="entreprise">
           <span class="portal-role-icon">🏢</span>
           <span class="portal-role-title">Entreprise</span>
-          <span class="portal-role-desc">Acces a vos ressources, votre abonnement et votre profil.</span>
+          <span class="portal-role-desc">Gestion des ressources, abonnement et parametres du compte.</span>
         </button>
         <button type="button" class="portal-role-card hidden-admin" id="portal-role-admin" data-action="select-portal-role" data-role="admin">
           <span class="portal-role-icon">🛡️</span>
           <span class="portal-role-title">Admin</span>
-          <span class="portal-role-desc">Pilotage des consultants, entreprises et validations.</span>
+          <span class="portal-role-desc">Supervision des validations, statuts et operationnel plateforme.</span>
         </button>
       </div>
       <div class="form-group" id="portal-email-group">
@@ -2232,10 +2234,10 @@ function toggleTheme() {
       <div class="portal-error" id="portal-error"></div>
     </div>
     <div class="modal-footer">
-      <span class="step-count">Point d'entree unique website</span>
+      <span class="step-count">Point d'acces securise</span>
       <div class="portal-actions">
         <button class="btn-back-modal" type="button" data-action="close-portal-modal">Fermer</button>
-        <button class="btn-next-modal blue" type="button" id="portal-submit-btn" data-action="submit-portal-access">Ouvrir mon espace →</button>
+        <button class="btn-next-modal blue" type="button" id="portal-submit-btn" data-action="submit-portal-access">Acceder a mon tableau de bord →</button>
       </div>
     </div>
   </div>
@@ -2347,7 +2349,7 @@ const ACCESS_COPY = {
   fr: {
     guest: 'Espace client',
     session: 'Mon espace',
-    continue: 'Continuer vers mon espace',
+    continue: 'Continuer vers mon tableau de bord',
     disconnect: 'Se deconnecter',
     consultantNotFound: 'Aucun consultant associe a cet email.',
     companyNotFound: 'Aucune entreprise avec espace client associee a cet email.',
@@ -2362,7 +2364,7 @@ const ACCESS_COPY = {
     resetSuccess: 'Si cet email existe, un code de reinitialisation vient d\'etre envoye.',
     resetCodeSent: 'Code envoye. Saisissez le code et votre nouveau mot de passe.',
     roleRequired: 'Veuillez choisir un espace.',
-    open: 'Ouvrir mon espace →'
+    open: 'Acceder a mon tableau de bord →'
   },
   en: {
     guest: 'Client area',
@@ -2382,7 +2384,7 @@ const ACCESS_COPY = {
     resetSuccess: 'If this email exists, a reset code has just been sent.',
     resetCodeSent: 'Code sent. Enter the code and your new password.',
     roleRequired: 'Please choose a dashboard.',
-    open: 'Open my dashboard →'
+    open: 'Access my dashboard →'
   }
 };
 
