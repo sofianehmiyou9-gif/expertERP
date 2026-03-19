@@ -2196,7 +2196,7 @@ function toggleTheme() {
             <button class="btn-next-modal blue" type="button" data-action="continue-portal-session">Acceder a mon espace</button>
         </div>
       </div>
-      <p class="portal-help">Choisissez votre type d'espace. Les identifiants sont verifiés selon votre role pour un acces rapide et securise.</p>
+      <p class="portal-help" id="portal-help-text">Choisissez votre type d'espace. Les identifiants sont verifiés selon votre role pour un acces rapide et securise.</p>
       <div class="portal-role-grid">
         <button type="button" class="portal-role-card" id="portal-role-consultant" data-action="select-portal-role" data-role="consultant">
           <span class="portal-role-icon">🧑</span>
@@ -2363,11 +2363,14 @@ const ACCESS_COPY = {
     passwordRequired: 'Veuillez saisir votre mot de passe.',
     invalidCredentials: 'Email ou mot de passe invalide.',
     resetLink: 'Mot de passe oublie ?',
-    resetBack: 'Retour a la connexion',
+    resetBack: 'Annuler la reinitialisation',
     resetSubmit: 'Envoyer le code de reinitialisation →',
     resetConfirmSubmit: 'Valider le code et reinitialiser →',
     resetSuccess: 'Si cet email existe, un code de reinitialisation vient d\'etre envoye.',
     resetCodeSent: 'Code envoye. Saisissez le code et votre nouveau mot de passe.',
+    resetHelpDefault: 'Choisissez votre type d\'espace. Les identifiants sont verifies selon votre role pour un acces rapide et securise.',
+    resetHelpRequest: 'Etape 1. Saisissez votre email professionnel puis envoyez le code de reinitialisation.',
+    resetHelpConfirm: 'Etape 2. Saisissez le code recu par email puis choisissez votre nouveau mot de passe.',
     roleRequired: 'Veuillez choisir un espace.',
     open: 'Acceder a mon tableau de bord →'
   },
@@ -2383,11 +2386,14 @@ const ACCESS_COPY = {
     passwordRequired: 'Please enter your password.',
     invalidCredentials: 'Invalid email or password.',
     resetLink: 'Forgot password?',
-    resetBack: 'Back to login',
+    resetBack: 'Cancel reset',
     resetSubmit: 'Send reset code →',
     resetConfirmSubmit: 'Verify code and reset →',
     resetSuccess: 'If this email exists, a reset code has just been sent.',
     resetCodeSent: 'Code sent. Enter the code and your new password.',
+    resetHelpDefault: 'Choose your workspace. Credentials are verified according to your role for a fast and secure access.',
+    resetHelpRequest: 'Step 1. Enter your work email and send the password reset code.',
+    resetHelpConfirm: 'Step 2. Enter the code received by email, then choose your new password.',
     roleRequired: 'Please choose a dashboard.',
     open: 'Access my dashboard →'
   }
@@ -2670,6 +2676,7 @@ function refreshPortalResetUi() {
   const resetLinkWrap = document.getElementById('portal-reset-link');
   const resetLinkBtn = document.querySelector('#portal-reset-link button');
   const submitBtn = document.getElementById('portal-submit-btn');
+  const helpText = document.getElementById('portal-help-text');
   const resetCodeGroup = document.getElementById('portal-reset-code-group');
   const resetNewPwdGroup = document.getElementById('portal-reset-new-password-group');
   const resetConfirmPwdGroup = document.getElementById('portal-reset-confirm-password-group');
@@ -2680,6 +2687,10 @@ function refreshPortalResetUi() {
     resetLinkBtn.textContent = portalResetMode ? portalText('resetBack') : portalText('resetLink');
     resetLinkBtn.dataset.enabled = portalResetMode ? 'false' : 'true';
   }
+  if (helpText) {
+    if (!portalResetMode) helpText.textContent = portalText('resetHelpDefault');
+    else helpText.textContent = onResetConfirm ? portalText('resetHelpConfirm') : portalText('resetHelpRequest');
+  }
 
   const pwdLabel = document.getElementById('portal-password-label');
   const pwdInput = document.getElementById('portal-password');
@@ -2687,7 +2698,7 @@ function refreshPortalResetUi() {
     pwdLabel.innerHTML = 'Mot de passe <span>*</span>';
   }
   if (pwdInput && !isAdmin) {
-    pwdInput.placeholder = portalResetMode ? 'Laissez vide puis suivez les etapes de reinitialisation' : 'Mot de passe compte';
+    pwdInput.placeholder = portalResetMode ? 'Le mot de passe sera defini a l\'etape suivante' : 'Mot de passe compte';
   }
   if (pwdInput && portalResetMode) pwdInput.value = '';
   if (document.getElementById('portal-password-group')) {
