@@ -206,6 +206,21 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 .b-approved { background: #ecfdf5; color: var(--success); }
 .b-rejected { background: #fef2f2; color: var(--danger); }
 .b-other { background: #eef2ff; color: #4338ca; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.mini-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.mini-btn.ok { border-color: #99f6e4; color: var(--success); background: #f0fdfa; }
+.mini-btn.wait { border-color: #fed7aa; color: var(--warning); background: #fffbeb; }
+.mini-btn.stop { border-color: #fecaca; color: var(--danger); background: #fef2f2; }
+.mini-btn.off { border-color: #d1d5db; color: #4b5563; background: #f9fafb; }
+.muted-note { color: var(--muted); font-size: 11px; }
 .stats-list { padding: 8px 14px 14px; }
 .stat-row { margin-bottom: 12px; }
 .stat-row .line {
@@ -291,7 +306,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody id="consultants-body"></tbody>
           </table>
         </div>
@@ -306,7 +321,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th></tr></thead>
+            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody id="entreprises-body"></tbody>
           </table>
         </div>
@@ -320,6 +335,7 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
 const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 const ADMIN_PWD = 'erphub2026!';
+const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse'];
 
 const state = { consultants: [], entreprises: [], view: 'overview' };
 
@@ -327,8 +343,43 @@ function statusClass(status) {
   const s = String(status || '').toLowerCase();
   if (s === 'en_attente') return 'b-pending';
   if (s === 'approuve' || s === 'approuvé') return 'b-approved';
+  if (s === 'desactive' || s === 'expire') return 'b-other';
   if (s === 'refuse') return 'b-rejected';
   return 'b-other';
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch(e) { return {}; }
+}
+
+function toDbStatut(raw) {
+  const s = String(raw || '').toLowerCase();
+  if (s === 'approuvé') return 'approuve';
+  if (s === 'refusé') return 'refuse';
+  if (s === 'desactive' || s === 'expire') return 'refuse';
+  if (DB_ALLOWED_STATUTS.includes(s)) return s;
+  return 'en_attente';
+}
+
+function normalizeConsultantStatus(c) {
+  const notes = parseNotes(c && c.notes_admin);
+  if (notes.admin_state === 'deleted') return 'deleted';
+  if (notes.admin_state === 'expire') return 'expire';
+  if (notes.admin_state === 'desactive') return 'desactive';
+  if (notes.admin_state === 'refuse') return 'refuse';
+  if (c && c.statut === 'approuvé') return 'approuve';
+  if (c && c.statut === 'refusé') return 'refuse';
+  return (c && c.statut) || 'en_attente';
+}
+
+function normalizeEntrepriseStatus(e) {
+  const description = parseNotes(e && e.description);
+  if (description.admin_state === 'desactive') return 'desactive';
+  if (e && e.statut === 'approuvé') return 'approuve';
+  if (e && e.statut === 'refusé') return 'refuse';
+  return (e && e.statut) || 'en_attente';
 }
 
 function safe(v) {
@@ -348,6 +399,27 @@ async function sbSelect(table, params) {
   return res.json();
 }
 
+async function sbUpdate(table, id, data) {
+  const payload = Object.assign({}, data);
+  if (Object.prototype.hasOwnProperty.call(payload, 'statut')) {
+    payload.statut = toDbStatut(payload.statut);
+  }
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(id), {
+    method: 'PATCH',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    console.error('sbUpdate failed:', table, id, payload, await res.text());
+  }
+  return res.ok;
+}
+
 async function loadData() {
   document.getElementById('sync-pill').textContent = 'syncing...';
   const [consultants, entreprises] = await Promise.all([
@@ -362,9 +434,9 @@ async function loadData() {
 
 function renderOverview() {
   const total = state.consultants.length;
-  const pending = state.consultants.filter(c => String(c.statut || '').toLowerCase() === 'en_attente').length;
+  const pending = state.consultants.filter(c => String(normalizeConsultantStatus(c)).toLowerCase() === 'en_attente').length;
   const approved = state.consultants.filter(c => {
-    const s = String(c.statut || '').toLowerCase();
+    const s = String(normalizeConsultantStatus(c) || '').toLowerCase();
     return s === 'approuve' || s === 'approuvé';
   }).length;
   document.getElementById('k-consultants').textContent = String(total);
@@ -375,7 +447,7 @@ function renderOverview() {
 
   const latest = state.consultants.slice(0, 8).map(c => {
     const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
-    const st = c.statut || 'n/a';
+    const st = normalizeConsultantStatus(c) || 'n/a';
     return '<tr>' +
       '<td>' + safe(name) + '</td>' +
       '<td>' + safe(c.email || '-') + '</td>' +
@@ -386,7 +458,7 @@ function renderOverview() {
 
   const buckets = {};
   state.consultants.forEach(c => {
-    const key = String(c.statut || 'unknown').toLowerCase();
+    const key = String(normalizeConsultantStatus(c) || 'unknown').toLowerCase();
     buckets[key] = (buckets[key] || 0) + 1;
   });
   const max = Math.max(1, ...Object.values(buckets));
@@ -408,15 +480,22 @@ function renderConsultants() {
     return !q || hay.includes(q);
   }).map(c => {
     const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
-    const st = c.statut || 'n/a';
+    const st = normalizeConsultantStatus(c) || 'n/a';
+    const reason = parseNotes(c.notes_admin).motif_refus ? '<div class="muted-note">' + safe(parseNotes(c.notes_admin).motif_refus) + '</div>' : '';
     return '<tr>' +
       '<td>' + safe(name) + '</td>' +
       '<td>' + safe(c.email || '-') + '</td>' +
       '<td>' + safe(c.titre || '-') + '</td>' +
-      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span>' + reason + '</td>' +
+      '<td><div class="actions">' +
+      '<button class="mini-btn ok" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="approuve">Approve</button>' +
+      '<button class="mini-btn wait" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="en_attente">Pending</button>' +
+      '<button class="mini-btn stop" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="refuse">Reject</button>' +
+      '<button class="mini-btn off" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="desactive">Disable</button>' +
+      '</div></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="4" class="empty">No result</td></tr>';
+  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="5" class="empty">No result</td></tr>';
 }
 
 function renderEntreprises() {
@@ -425,16 +504,81 @@ function renderEntreprises() {
     const hay = [e.nom, e.contact, e.email, e.type_demande].join(' ').toLowerCase();
     return !q || hay.includes(q);
   }).map(e => {
-    const st = e.statut || 'n/a';
+    const st = normalizeEntrepriseStatus(e) || 'n/a';
     return '<tr>' +
       '<td>' + safe(e.nom || '-') + '</td>' +
       '<td>' + safe(e.contact || '-') + '</td>' +
       '<td>' + safe(e.email || '-') + '</td>' +
       '<td>' + safe(e.type_demande || '-') + '</td>' +
       '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '<td><div class="actions">' +
+      '<button class="mini-btn ok" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="approuve">Approve</button>' +
+      '<button class="mini-btn wait" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="en_attente">Pending</button>' +
+      '<button class="mini-btn stop" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="refuse">Reject</button>' +
+      '<button class="mini-btn off" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="desactive">Disable</button>' +
+      '</div></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="5" class="empty">No result</td></tr>';
+  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">No result</td></tr>';
+}
+
+async function setConsultantStatus(id, status) {
+  const consultant = state.consultants.find(c => String(c.id) === String(id));
+  if (!consultant) return alert('Consultant introuvable');
+  const notes = parseNotes(consultant.notes_admin);
+  notes.admin_decision_date = new Date().toISOString().split('T')[0];
+
+  let payload = { statut: toDbStatut(status), notes_admin: JSON.stringify(notes) };
+  if (status === 'desactive') {
+    notes.admin_state = 'desactive';
+    payload = { notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'approuve') {
+    delete notes.admin_state;
+    delete notes.motif_refus;
+    payload = { statut: toDbStatut('approuve'), notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'en_attente') {
+    delete notes.admin_state;
+    payload = { statut: toDbStatut('en_attente'), notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'refuse') {
+    const reason = prompt('Motif du refus (optionnel):', notes.motif_refus || '');
+    if (reason !== null && reason.trim()) notes.motif_refus = reason.trim();
+    payload = { statut: toDbStatut('refuse'), notes_admin: JSON.stringify(notes) };
+  }
+
+  const ok = await sbUpdate('consultants', id, payload);
+  if (!ok) return alert('Erreur mise a jour consultant');
+  await loadData();
+}
+
+async function setEntrepriseStatus(id, status) {
+  const entreprise = state.entreprises.find(e => String(e.id) === String(id));
+  if (!entreprise) return alert('Entreprise introuvable');
+  const description = parseNotes(entreprise.description);
+  description.admin_decision_date = new Date().toISOString().split('T')[0];
+
+  let payload = {};
+  if (status === 'desactive') {
+    description.admin_state = 'desactive';
+    payload = { statut: 'refuse', description: JSON.stringify(description) };
+  } else if (status === 'approuve') {
+    delete description.admin_state;
+    delete description.motif_refus;
+    payload = { statut: 'approuve', description: JSON.stringify(description) };
+  } else if (status === 'en_attente') {
+    delete description.admin_state;
+    payload = { statut: 'en_attente', description: JSON.stringify(description) };
+  } else {
+    const reason = prompt('Motif du refus (optionnel):', description.motif_refus || '');
+    if (reason !== null && reason.trim()) description.motif_refus = reason.trim();
+    payload = { statut: toDbStatut(status), description: JSON.stringify(description) };
+  }
+
+  const ok = await sbUpdate('entreprises', id, payload);
+  if (!ok) return alert('Erreur mise a jour entreprise');
+  await loadData();
 }
 
 function setView(view) {
@@ -486,6 +630,18 @@ document.querySelectorAll('.menu button').forEach(btn => {
 
 document.getElementById('search-consultants').addEventListener('input', renderConsultants);
 document.getElementById('search-entreprises').addEventListener('input', renderEntreprises);
+
+document.addEventListener('click', async (event) => {
+  const el = event.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+  if (action === 'set-consultant-status') {
+    await setConsultantStatus(el.dataset.id, el.dataset.status);
+  }
+  if (action === 'set-entreprise-status') {
+    await setEntrepriseStatus(el.dataset.id, el.dataset.status);
+  }
+});
 
 document.getElementById('logout-btn').addEventListener('click', () => {
   sessionStorage.removeItem('admin-auth-v2');
