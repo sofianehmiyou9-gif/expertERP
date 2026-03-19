@@ -14,11 +14,7 @@
     },
     {
       "source": "/dashboard-admin",
-      "destination": "/dashboard-admin-v2.html"
-    },
-    {
-      "source": "/dashboard-admin.html",
-      "destination": "/dashboard-admin-v2.html"
+      "destination": "/dashboard-admin.html"
     },
     {
       "source": "/dashboard-admin-v2",

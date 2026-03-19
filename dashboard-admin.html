@@ -3,540 +3,356 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — ExpertERPHub</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Admin Dashboard V2 - ExpertERPHub</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#0e0e0e;--paper:#f5f2ed;--accent:#c8a96e;--accent-dark:#9a7d4a;--accent-light:#fdf6ec;
-  --blue:#1e3a5f;--blue-mid:#2d5282;--blue-light:#ebf2fb;--blue-border:#b8d0eb;
-  --muted:#8a8580;--border:#e0dbd4;--card:#fff;
-  --green:#065f46;--green-bg:#ecfdf5;--green-border:#a7f3d0;
-  --red:#7f1d1d;--red-bg:#fef2f2;--red-border:#fca5a5;
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --brand: #1f4ad8;
+  --brand-soft: #e9efff;
+  --success: #0f766e;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);}
-a{color:inherit;text-decoration:none;}
-
-/* ── AUTH MODAL ── */
-.auth-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;}
-.auth-modal{background:var(--card);border-radius:8px;padding:2rem;max-width:350px;width:90%;}
-.auth-modal h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-bottom:1.5rem;}
-.auth-modal input{width:100%;padding:.75rem;border:1px solid var(--border);border-radius:4px;margin-bottom:1rem;font-size:.9rem;}
-.auth-modal button{width:100%;padding:.75rem;background:var(--blue);color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:500;}
-.auth-modal button:hover{background:var(--blue-mid);}
-.auth-error{color:var(--red);font-size:.8rem;margin-top:.5rem;}
-
-/* ── LAYOUT ── */
-.dashboard{display:flex;height:100vh;}
-.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
-.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.header{border-bottom:1px solid var(--border);padding:1.5rem 2rem;background:var(--card);}
-.logo{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;margin-bottom:2rem;padding:1rem;}
-.logo span{color:var(--accent);}
-.admin-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;background:var(--blue-light);color:var(--blue);padding:.3rem .6rem;border-radius:2px;margin-left:.5rem;}
-
-/* ── SIDEBAR NAV ── */
-.sidebar-nav{flex:1;}
-.sidebar-tab{padding:1rem;border:none;background:none;width:100%;text-align:left;font-size:.85rem;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'DM Sans',sans-serif;}
-.sidebar-tab:hover{color:var(--ink);background:var(--accent-light);}
-.sidebar-tab.active{color:var(--accent-dark);background:var(--accent-light);border-left:3px solid var(--accent);padding-left:calc(1rem - 3px);}
-.sidebar-footer{padding:1rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);}
-
-/* ── CONTENT ── */
-.content{flex:1;overflow-y:scroll;scrollbar-gutter:stable;padding:2rem;}
-.tab-pane{display:none;}
-.tab-pane.active{display:block;}
-
-/* ── STATS CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2rem;}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;}
-.stat-label{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;font-family:'DM Mono',monospace;letter-spacing:.05em;}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--blue);}
-
-/* ── FILTERS ── */
-.filter-bar{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;}
-.filter-bar select,.filter-bar input{padding:.5rem .75rem;border:1px solid var(--border);border-radius:4px;font-size:.85rem;font-family:'DM Sans',sans-serif;}
-.filter-bar input{flex:1;min-width:200px;}
-
-/* ── TABLE ── */
-.table-container{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-#consultants-tab .table-container{overflow:visible;}
-table{width:100%;border-collapse:collapse;}
-thead{background:var(--accent-light);}
-th{padding:1rem;text-align:left;font-size:.8rem;font-weight:600;color:var(--ink);font-family:'DM Mono',monospace;letter-spacing:.05em;}
-td{padding:1rem;border-top:1px solid var(--border);font-size:.85rem;}
-tr:hover{background:var(--accent-light);}
-
-/* ── BADGES ── */
-.badge{display:inline-block;padding:.3rem .6rem;border-radius:12px;font-size:.7rem;font-weight:500;font-family:'DM Mono',monospace;}
-.badge-pending{background:#fef3c7;color:#92400e;}
-.badge-approved{background:var(--green-bg);color:var(--green);}
-.badge-rejected{background:var(--red-bg);color:var(--red);}
-.badge-professional{background:var(--blue-light);color:var(--blue);margin-left:.4rem;}
-
-/* ── BUTTONS ── */
-.btn-sm{padding:.4rem .8rem;font-size:.75rem;border:none;border-radius:3px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em;transition:all .2s;}
-.btn-approve{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
-.btn-approve:hover{background:var(--green);color:#fff;}
-.btn-reject{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
-.btn-reject:hover{background:var(--red);color:#fff;}
-.btn-delete{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
-.btn-delete:hover{background:var(--red);color:#fff;}
-.btn-view{background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-border);}
-.btn-view:hover{background:var(--blue);color:#fff;}
-.btn-request{background:var(--accent-light);color:var(--accent-dark);border:1px solid var(--accent);}
-.btn-request:hover{background:var(--accent-dark);color:#fff;}
-
-/* ── ACTIONS DROPDOWN (SaaS) ── */
-.actions-dropdown{position:relative;display:inline-block;}
-.actions-trigger{
-  display:inline-flex;align-items:center;gap:.35rem;
-  padding:.42rem .72rem;border-radius:8px;
-  border:1px solid var(--border);background:var(--card);color:var(--ink);
-  font-size:.74rem;font-family:'DM Mono',monospace;letter-spacing:.04em;cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);transition:all .2s ease;
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 10% 10%, #dbeafe 0%, transparent 32%), radial-gradient(circle at 85% 15%, #ede9fe 0%, transparent 36%), var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
 }
-.actions-trigger:hover{border-color:var(--blue-border);box-shadow:0 6px 16px rgba(30,58,138,.12);}
-.actions-menu{
-  position:absolute;right:0;top:calc(100% + 8px);min-width:190px;z-index:30;
-  background:var(--card);border:1px solid var(--border);border-radius:10px;
-  box-shadow:0 16px 32px rgba(0,0,0,.12);
-  opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;
-  transition:opacity .16s ease, transform .16s ease;
-}
-.actions-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-.actions-menu.dropup{top:auto;bottom:calc(100% + 8px);transform:translateY(6px) scale(.98);}
-.actions-menu.dropup.open{transform:translateY(0) scale(1);}
-.actions-item{
-  width:100%;border:none;background:transparent;text-align:left;cursor:pointer;
-  padding:.58rem .78rem;font-size:.8rem;font-family:'DM Sans',sans-serif;
-  display:flex;align-items:center;justify-content:space-between;transition:background .15s ease;
-}
-.actions-item:hover{background:var(--accent-light);}
-.actions-item + .actions-item{border-top:1px solid var(--border);}
-.actions-item.approve{color:var(--green);}
-.actions-item.pending{color:#c2410c;}
-.actions-item.disable{color:#6b7280;}
-.actions-item.reject{color:var(--red);}
-.actions-item.delete{color:var(--red);}
-
-/* ── ENTREPRISE GROUPS ── */
-.enterprise-groups{display:flex;flex-direction:column;gap:1rem;}
-.enterprise-card{background:var(--card);border:1px solid var(--border);border-radius:12px;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.05);transition:box-shadow .2s ease,border-color .2s ease;}
-.enterprise-card:hover{border-color:#d6c6ad;box-shadow:0 14px 30px rgba(0,0,0,.08);}
-.enterprise-header{display:flex;justify-content:space-between;gap:1rem;padding:1.2rem 1.25rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--accent-light),rgba(253,246,236,.45));border-radius:12px 12px 0 0;}
-.enterprise-main{display:flex;flex-direction:column;gap:.5rem;min-width:0;flex:1;}
-.enterprise-title-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
-.enterprise-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:var(--ink);}
-.enterprise-meta{display:flex;flex-wrap:wrap;gap:.6rem 1rem;font-size:.8rem;color:var(--muted);}
-.enterprise-meta strong{color:var(--ink);font-weight:600;}
-.enterprise-summary{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;}
-.enterprise-chip{display:inline-flex;align-items:center;padding:.28rem .58rem;border-radius:999px;font-size:.68rem;font-family:'DM Mono',monospace;letter-spacing:.04em;border:1px solid var(--border);background:var(--card);color:var(--ink);}
-.enterprise-body{padding:1rem 1.25rem 1.2rem;display:flex;flex-direction:column;gap:.9rem;overflow:visible;border-radius:0 0 12px 12px;}
-.enterprise-toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;}
-.enterprise-toolbar h3{font-size:.9rem;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
-.resource-count{font-size:.78rem;color:var(--muted);}
-.nested-table{width:100%;border:1px solid var(--border);border-radius:10px;overflow:visible;background:var(--card);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);}
-.nested-table table{width:100%;border-collapse:collapse;}
-.nested-table th{background:var(--blue-light);font-size:.72rem;padding:.78rem .9rem;color:var(--blue);}
-.nested-table td{padding:.72rem .9rem;font-size:.8rem;vertical-align:top;border-top:1px solid #edf1f6;}
-.nested-table tbody tr:hover{background:#fafcff;}
-.nested-empty{padding:1rem;border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-size:.82rem;background:rgba(245,242,237,.5);}
-.resource-actions{white-space:nowrap;}
-.resource-inline-actions{display:grid;grid-template-columns:repeat(2,minmax(88px,1fr));gap:.38rem;min-width:190px;}
-.resource-inline-actions .enterprise-action{
-  padding:.34rem .52rem;font-size:.64rem;letter-spacing:.03em;border-radius:999px;
-  border:1px solid var(--border);background:#fff;color:var(--ink);cursor:pointer;
-  font-family:'DM Mono',monospace;transition:all .15s ease;
-}
-.resource-inline-actions .enterprise-action:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.08);}
-.resource-inline-actions .enterprise-action.approve{border-color:var(--green-border);color:var(--green);background:var(--green-bg);}
-.resource-inline-actions .enterprise-action.pending{border-color:#f8d8b0;color:#a85513;background:#fff7ed;}
-.resource-inline-actions .enterprise-action.reject{border-color:var(--red-border);color:var(--red);background:var(--red-bg);}
-.resource-inline-actions .enterprise-action.disable{border-color:#d1d5db;color:#4b5563;background:#f9fafb;}
-.resource-inline-actions .enterprise-action.is-active{box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);font-weight:600;}
-
-/* ── CONSULTANT DETAIL MODAL ── */
-.consultant-modal-content {
-  background: var(--card);
-  border-radius: 8px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 2rem;
-}
-.consultant-header {
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17,24,39,0.44);
   display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
-.consultant-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--ink);
+.auth-box {
+  width: min(420px, 92vw);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 26px;
 }
-.consultant-title {
-  font-size: .85rem;
-  color: var(--muted);
-  margin-top: .3rem;
+.brand {
+  font-family: 'Fraunces', serif;
+  font-size: 30px;
+  margin: 0 0 6px;
 }
-.consultant-close-btn {
-  background: none;
+.brand span { color: var(--brand); }
+.sub { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+.input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.btn {
   border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--muted);
-  padding: 0;
-  width: 30px;
-  height: 30px;
-}
-.consultant-close-btn:hover {
-  color: var(--ink);
-}
-.consultant-section {
-  margin-bottom: 1.5rem;
-}
-.consultant-section-title {
-  font-size: .75rem;
-  font-family: 'DM Mono', monospace;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: .5rem;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 12px;
+  padding: 11px 14px;
   font-weight: 600;
+  cursor: pointer;
 }
-.consultant-details {
+.btn:disabled { opacity: 0.7; cursor: wait; }
+.err { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 8px; }
+.layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  font-size: .85rem;
-  margin-bottom: 1rem;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
 }
-.consultant-detail-item {
+.sidebar {
+  background: #0f172a;
+  color: #dbeafe;
+  padding: 22px 16px;
   display: flex;
   flex-direction: column;
+  gap: 18px;
 }
-.consultant-detail-label {
-  color: var(--muted);
-  font-size: .75rem;
-  margin-bottom: .25rem;
-  font-weight: 500;
+.side-brand {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  color: #fff;
+  line-height: 1.1;
 }
-.consultant-detail-value {
-  color: var(--ink);
-  font-weight: 500;
+.side-brand span { color: #93c5fd; }
+.side-note {
+  color: #93a4c5;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
 }
-.consultant-full-width {
-  grid-column: 1 / -1;
+.menu button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #c7d2fe;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  font-size: 14px;
 }
-.consultant-skills {
+.menu button.active, .menu button:hover {
+  background: #1e293b;
+  border-color: #334155;
+  color: #fff;
+}
+.logout {
+  margin-top: auto;
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.main { padding: 24px; }
+.topbar {
   display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
 }
-.consultant-skill-tag {
-  background: var(--blue-light);
-  color: var(--blue);
-  padding: .3rem .6rem;
-  border-radius: 12px;
-  font-size: .7rem;
-  font-weight: 500;
+.title {
+  margin: 0;
+  font-family: 'Fraunces', serif;
+  font-size: 30px;
 }
-.consultant-actions {
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.k-label { color: var(--muted); font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+.k-val { font-size: 30px; font-family: 'Fraunces', serif; margin-top: 4px; }
+.k-meta { color: var(--muted); font-size: 12px; }
+.panels {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 12px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.panel h3 {
+  margin: 0;
+  padding: 14px 14px 0;
+  font-size: 16px;
+}
+.panel-head {
   display: flex;
-  gap: .5rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
 }
-.consultant-actions .btn-sm {
-  flex: 1;
+.search {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  width: min(300px, 100%);
+  font-size: 13px;
 }
-.cv-preview {
-  background: var(--accent-light);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1rem;
-  margin-top: .5rem;
-  font-size: .8rem;
-  color: var(--ink);
-  max-height: 300px;
-  overflow-y: auto;
-  line-height: 1.6;
+.table-wrap { max-height: 420px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
 }
-.request-success {
-  background: var(--green-bg);
-  border: 1px solid var(--green-border);
-  color: var(--green);
-  padding: 1rem;
-  border-radius: 4px;
-  margin-top: 1rem;
-  font-size: .85rem;
+th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
 }
-
-/* ── RESPONSIVE ── */
-@media(max-width:768px){
-  .dashboard{flex-direction:column;}
-  .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .filter-bar{flex-direction:column;}
-  .filter-bar input{width:100%;}
-  table{font-size:.75rem;}
-  th,td{padding:.75rem;}
-  .enterprise-header{flex-direction:column;align-items:flex-start;}
-  .enterprise-toolbar{flex-direction:column;align-items:flex-start;}
+.b-pending { background: #fff7ed; color: var(--warning); }
+.b-approved { background: #ecfdf5; color: var(--success); }
+.b-rejected { background: #fef2f2; color: var(--danger); }
+.b-other { background: #eef2ff; color: #4338ca; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.mini-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.mini-btn.ok { border-color: #99f6e4; color: var(--success); background: #f0fdfa; }
+.mini-btn.wait { border-color: #fed7aa; color: var(--warning); background: #fffbeb; }
+.mini-btn.stop { border-color: #fecaca; color: var(--danger); background: #fef2f2; }
+.mini-btn.off { border-color: #d1d5db; color: #4b5563; background: #f9fafb; }
+.muted-note { color: var(--muted); font-size: 11px; }
+.stats-list { padding: 8px 14px 14px; }
+.stat-row { margin-bottom: 12px; }
+.stat-row .line {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.stat-row .line > span { display: block; height: 100%; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+.empty { padding: 18px 14px; color: var(--muted); font-size: 13px; }
+.hidden { display: none; }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+  .panels { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-box">
+    <h1 class="brand">Expert<span>ERP</span>Hub</h1>
+    <p class="sub">Admin Dashboard V2</p>
+    <input class="input" id="pwd" type="password" placeholder="Admin password">
+    <button class="btn" id="login-btn">Open dashboard</button>
+    <div class="err" id="auth-err"></div>
+  </div>
+</div>
 
-<div class="dashboard" id="dashboard" style="display:none;">
+<div class="layout hidden" id="app">
   <aside class="sidebar">
-    <div class="logo">Expert<span>ERP</span>Hub <span class="admin-badge">Admin</span></div>
-    <nav class="sidebar-nav">
-      <button class="sidebar-tab active" data-tab="overview">Vue d'ensemble</button>
-      <button class="sidebar-tab" data-tab="consultants">Consultants</button>
-      <button class="sidebar-tab" data-tab="entreprises">Entreprises</button>
-    </nav>
-    <div class="sidebar-footer">
-      <button class="btn-sm btn-view" style="width:100%;margin-bottom:.75rem;" data-action="logout-admin">Deconnexion</button>
-      © 2026 ExpertERP
+    <div>
+      <div class="side-brand">Expert<span>ERP</span>Hub</div>
+      <div class="side-note">ADMIN V2 READ MODEL</div>
     </div>
+    <nav class="menu">
+      <button class="active" data-view="overview">Overview</button>
+      <button data-view="consultants">Consultants</button>
+      <button data-view="entreprises">Entreprises</button>
+    </nav>
+    <button class="logout" id="logout-btn">Logout</button>
   </aside>
 
-  <div class="main-content">
-    <header class="header">
-      <h1>Panneau d'administration</h1>
-    </header>
+  <main class="main">
+    <div class="topbar">
+      <h2 class="title" id="view-title">Overview</h2>
+      <span class="pill" id="sync-pill">syncing...</span>
+    </div>
 
-    <div class="content">
-      <!-- Overview Tab -->
-      <div class="tab-pane active" id="overview-tab">
-        <h2 style="margin-bottom:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.8rem;">Vue d'ensemble</h2>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Total Consultants</div>
-            <div class="stat-value" id="stat-total-consultants">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">En attente d'approbation</div>
-            <div class="stat-value" id="stat-pending-consultants">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Consultants approuvés</div>
-            <div class="stat-value" id="stat-approved-consultants">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Total Entreprises</div>
-            <div class="stat-value" id="stat-total-enterprises">0</div>
-          </div>
-        </div>
+    <section id="overview-view">
+      <div class="grid">
+        <div class="card"><div class="k-label">CONSULTANTS</div><div class="k-val" id="k-consultants">0</div><div class="k-meta" id="k-consultants-meta">Total</div></div>
+        <div class="card"><div class="k-label">PENDING</div><div class="k-val" id="k-pending">0</div><div class="k-meta">Need review</div></div>
+        <div class="card"><div class="k-label">APPROVED</div><div class="k-val" id="k-approved">0</div><div class="k-meta">Visible profiles</div></div>
+        <div class="card"><div class="k-label">ENTREPRISES</div><div class="k-val" id="k-entreprises">0</div><div class="k-meta">Total records</div></div>
       </div>
 
-      <!-- Consultants Tab -->
-      <div class="tab-pane" id="consultants-tab">
-        <h2 style="margin-bottom:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.8rem;">Consultants</h2>
-
-        <div class="filter-bar">
-          <select id="status-filter">
-            <option value="">Tous les statuts</option>
-            <option value="en_attente">En attente</option>
-            <option value="approuve">Approuvé</option>
-            <option value="refuse">Refusé</option>
-            <option value="desactive">Desactive</option>
-            <option value="expire">Expire</option>
-          </select>
-          <input type="text" id="search-input" placeholder="Rechercher par email ou nom...">
+      <div class="panels">
+        <div class="panel">
+          <h3>Consultants latest</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Status</th></tr></thead>
+              <tbody id="latest-consultants"></tbody>
+            </table>
+          </div>
         </div>
+        <div class="panel">
+          <h3>Status distribution</h3>
+          <div class="stats-list" id="status-bars"></div>
+        </div>
+      </div>
+    </section>
 
-        <div class="table-container">
-          <table id="consultants-table">
-            <thead>
-              <tr>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>ERP(s)</th>
-                <th>Rôle</th>
-                <th>TJM</th>
-                <th>Statut</th>
-                <th>Demandes</th>
-                <th>Date</th>
-                <th>Expiration</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="consultants-tbody">
-            </tbody>
+    <section id="consultants-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Consultants</h3>
+          <input id="search-consultants" class="search" placeholder="Search name, email, role">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="consultants-body"></tbody>
           </table>
         </div>
       </div>
+    </section>
 
-      <!-- Entreprises Tab -->
-      <div class="tab-pane" id="entreprises-tab">
-        <h2 style="margin-bottom:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.8rem;">Entreprises</h2>
-
-        <div class="filter-bar">
-          <select id="enterprise-status-filter">
-            <option value="">Tous les statuts entreprise</option>
-            <option value="en_attente">En attente</option>
-            <option value="approuve">Approuvé</option>
-            <option value="refuse">Refusé</option>
-            <option value="desactive">Desactive</option>
-          </select>
-          <select id="enterprise-type-filter">
-            <option value="">Tous les types</option>
-            <option value="offrir">Offrir des ressources</option>
-            <option value="chercher">Chercher une ressource</option>
-            <option value="erp">Projet ERP</option>
-          </select>
-          <select id="enterprise-resource-status-filter">
-            <option value="">Tous les statuts ressource</option>
-            <option value="en_attente">Ressources en attente</option>
-            <option value="approuve">Ressources approuvées</option>
-            <option value="refuse">Ressources refusées</option>
-            <option value="desactive">Ressources desactivees</option>
-            <option value="expire">Ressources expirees</option>
-          </select>
-          <input type="text" id="enterprise-search-input" placeholder="Rechercher une entreprise, un email, une ressource...">
+    <section id="entreprises-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Entreprises</h3>
+          <input id="search-entreprises" class="search" placeholder="Search entreprise, contact, email">
         </div>
-
-        <div class="enterprise-groups" id="entreprises-tbody"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Edit Subscription Modal -->
-<div class="auth-overlay" id="subscription-modal" style="display:none;">
-  <div class="auth-modal" style="max-width:500px;">
-    <h2 style="margin-bottom:.5rem;">Gérer l'abonnement</h2>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.25rem;">Modifiez la date d'expiration de l'abonnement.</p>
-    <p style="font-size:.82rem;margin-bottom:1rem;"><strong>Entreprise :</strong> <span id="sub-enterprise-name"></span></p>
-    <label style="font-size:.82rem;color:var(--muted);margin-bottom:.5rem;display:block;font-weight:500;">Date d'expiration</label>
-    <input type="date" id="sub-expiration-date" style="width:100%;padding:.65rem .85rem;border:1px solid var(--border);border-radius:4px;margin-bottom:1rem;font-size:.85rem;font-family:'DM Sans',sans-serif;">
-    <input type="hidden" id="sub-id">
-    <div style="display:flex;gap:.5rem;justify-content:flex-end;">
-      <button data-action="close-subscription-modal" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:transparent;border:1px solid var(--border);border-radius:2px;cursor:pointer;">Annuler</button>
-      <button data-action="save-subscription-date" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-border);border-radius:2px;cursor:pointer;">Enregistrer</button>
-    </div>
-    <div id="sub-error" style="color:var(--red);font-size:.78rem;margin-top:.5rem;"></div>
-  </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="auth-overlay" id="delete-modal" style="display:none;">
-  <div class="auth-modal" style="max-width:440px;">
-    <h2 style="margin-bottom:.5rem;">Supprimer ce consultant ?</h2>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.25rem;">Cette action est définitive. Le consultant et toutes ses données seront supprimés de la plateforme.</p>
-    <p style="font-size:.82rem;color:var(--red);margin-bottom:1.25rem;"><strong>Consultant :</strong> <span id="delete-consultant-name"></span></p>
-    <input type="hidden" id="delete-id">
-    <div style="display:flex;gap:.5rem;justify-content:flex-end;">
-      <button data-action="close-delete-modal" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:transparent;border:1px solid var(--border);border-radius:2px;cursor:pointer;">Annuler</button>
-      <button data-action="confirm-delete" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);border-radius:2px;cursor:pointer;">Oui, supprimer</button>
-    </div>
-    <div id="delete-error" style="color:var(--red);font-size:.78rem;margin-top:.5rem;"></div>
-  </div>
-</div>
-
-<!-- Reject Reason Modal -->
-<div class="auth-overlay" id="reject-modal" style="display:none;">
-  <div class="auth-modal" style="max-width:440px;">
-    <h2 style="margin-bottom:.5rem;" id="reject-modal-title">Refuser ce consultant</h2>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:.5rem;" id="reject-modal-subtitle">Le consultant verra cette raison dans son tableau de bord.</p>
-    <p style="font-size:.82rem;color:var(--ink);margin-bottom:1.25rem;"><strong>Cible :</strong> <span id="reject-target-name">—</span></p>
-    <textarea id="reject-reason" rows="4" placeholder="Ex: Expérience insuffisante dans le module requis, certifications non vérifiées…" style="width:100%;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.65rem .85rem;border:1px solid var(--border);border-radius:4px;resize:vertical;margin-bottom:.75rem;"></textarea>
-    <input type="hidden" id="reject-id">
-    <input type="hidden" id="reject-target-type" value="consultant">
-    <div style="display:flex;gap:.5rem;justify-content:flex-end;">
-      <button data-action="close-reject-modal" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:transparent;border:1px solid var(--border);border-radius:2px;cursor:pointer;">Annuler</button>
-      <button data-action="confirm-reject" style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem 1rem;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);border-radius:2px;cursor:pointer;">Confirmer le refus</button>
-    </div>
-    <div id="reject-error" style="color:var(--red);font-size:.78rem;margin-top:.5rem;"></div>
-  </div>
-</div>
-
-<!-- Consultant Detail Modal -->
-<div class="auth-overlay" id="consultant-modal" style="display:none;">
-  <div class="consultant-modal-content">
-    <div class="consultant-header">
-      <div>
-        <div class="consultant-name" id="detail-consultant-name"></div>
-        <div class="consultant-title" id="detail-consultant-title"></div>
-      </div>
-      <button class="consultant-close-btn" data-action="close-consultant-detail">✕</button>
-    </div>
-
-    <div class="consultant-section">
-      <div class="consultant-section-title">Informations principales</div>
-      <div class="consultant-details">
-        <div class="consultant-detail-item">
-          <div class="consultant-detail-label">Email</div>
-          <div class="consultant-detail-value" id="detail-email"></div>
-        </div>
-        <div class="consultant-detail-item">
-          <div class="consultant-detail-label">TJM Min.</div>
-          <div class="consultant-detail-value" id="detail-tjm"></div>
-        </div>
-        <div class="consultant-detail-item">
-          <div class="consultant-detail-label">Statut</div>
-          <div id="detail-status"></div>
-        </div>
-        <div class="consultant-detail-item">
-          <div class="consultant-detail-label">Inscription</div>
-          <div class="consultant-detail-value" id="detail-date"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="entreprises-body"></tbody>
+          </table>
         </div>
       </div>
-    </div>
-
-    <div class="consultant-section">
-      <div class="consultant-section-title">Compétences ERP</div>
-      <div class="consultant-skills" id="detail-skills"></div>
-    </div>
-
-    <div class="consultant-section">
-      <div class="consultant-section-title">CV / Bio</div>
-      <div class="cv-preview" id="detail-cv"></div>
-    </div>
-
-    <div class="consultant-section">
-      <div class="consultant-section-title">Demandes de consultation</div>
-      <div id="request-message" style="display:none;" class="request-success">✓ Demande envoyée avec succès!</div>
-      <div id="request-status" style="font-size:.85rem;color:var(--muted);"></div>
-    </div>
-
-    <div class="consultant-actions">
-      <button class="btn-sm btn-request" data-action="request-consultant" id="request-btn">📬 Demander ce consultant</button>
-      <button class="btn-sm" data-action="close-consultant-detail" style="background:var(--border);color:var(--muted);border:1px solid var(--border);">Fermer</button>
-    </div>
-  </div>
+    </section>
+  </main>
 </div>
 
-<!-- Auth Modal -->
-<div class="auth-overlay" id="auth-overlay">
-  <div class="auth-modal">
-    <h2>Accès administrateur</h2>
-    <input type="password" id="password-input" placeholder="Mot de passe" autocomplete="off">
-    <button id="auth-btn">Se connecter</button>
-    <div class="auth-error" id="auth-error"></div>
-  </div>
-</div>
-
-<script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
 <script>
 const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
 const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 const ADMIN_PWD = 'erphub2026!';
-
-let allConsultants = [];
-let allEntreprises = [];
-
 const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse'];
+
+const state = { consultants: [], entreprises: [], view: 'overview' };
+
+function statusClass(status) {
+  const s = String(status || '').toLowerCase();
+  if (s === 'en_attente') return 'b-pending';
+  if (s === 'approuve' || s === 'approuvé') return 'b-approved';
+  if (s === 'desactive' || s === 'expire') return 'b-other';
+  if (s === 'refuse') return 'b-rejected';
+  return 'b-other';
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch(e) { return {}; }
+}
 
 function toDbStatut(raw) {
   const s = String(raw || '').toLowerCase();
@@ -547,249 +363,173 @@ function toDbStatut(raw) {
   return 'en_attente';
 }
 
-async function sbFetch(table, query = {}) {
-  const params = new URLSearchParams(query);
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+function normalizeConsultantStatus(c) {
+  const notes = parseNotes(c && c.notes_admin);
+  if (notes.admin_state === 'deleted') return 'deleted';
+  if (notes.admin_state === 'expire') return 'expire';
+  if (notes.admin_state === 'desactive') return 'desactive';
+  if (notes.admin_state === 'refuse') return 'refuse';
+  if (c && c.statut === 'approuvé') return 'approuve';
+  if (c && c.statut === 'refusé') return 'refuse';
+  return (c && c.statut) || 'en_attente';
+}
+
+function normalizeEntrepriseStatus(e) {
+  const description = parseNotes(e && e.description);
+  if (description.admin_state === 'desactive') return 'desactive';
+  if (e && e.statut === 'approuvé') return 'approuve';
+  if (e && e.statut === 'refusé') return 'refuse';
+  return (e && e.statut) || 'en_attente';
+}
+
+function safe(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function sbSelect(table, params) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + params, {
+    headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
   });
-  return response.json();
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
 
 async function sbUpdate(table, id, data) {
-  const payload = { ...data };
+  const payload = Object.assign({}, data);
   if (Object.prototype.hasOwnProperty.call(payload, 'statut')) {
     payload.statut = toDbStatut(payload.statut);
   }
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(id), {
     method: 'PATCH',
     headers: {
       apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
+      Authorization: 'Bearer ' + SB_KEY,
       'Content-Type': 'application/json',
       'Prefer': 'return=minimal'
     },
     body: JSON.stringify(payload)
   });
-  if (!response.ok) {
-    const msg = await response.text();
-    console.error('sbUpdate failed', { table, id, data: payload, status: response.status, message: msg });
+  if (!res.ok) {
+    console.error('sbUpdate failed:', table, id, payload, await res.text());
   }
-  return response.ok;
+  return res.ok;
 }
 
-async function sbDelete(table, id) {
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
-    method: 'DELETE',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
-      'Prefer': 'return=minimal'
-    }
+async function loadData() {
+  document.getElementById('sync-pill').textContent = 'syncing...';
+  const [consultants, entreprises] = await Promise.all([
+    sbSelect('consultants', 'select=*&order=created_at.desc'),
+    sbSelect('entreprises', 'select=*&order=created_at.desc')
+  ]);
+  state.consultants = Array.isArray(consultants) ? consultants : [];
+  state.entreprises = Array.isArray(entreprises) ? entreprises : [];
+  renderAll();
+  document.getElementById('sync-pill').textContent = 'live';
+}
+
+function renderOverview() {
+  const total = state.consultants.length;
+  const pending = state.consultants.filter(c => String(normalizeConsultantStatus(c)).toLowerCase() === 'en_attente').length;
+  const approved = state.consultants.filter(c => {
+    const s = String(normalizeConsultantStatus(c) || '').toLowerCase();
+    return s === 'approuve' || s === 'approuvé';
+  }).length;
+  document.getElementById('k-consultants').textContent = String(total);
+  document.getElementById('k-pending').textContent = String(pending);
+  document.getElementById('k-approved').textContent = String(approved);
+  document.getElementById('k-entreprises').textContent = String(state.entreprises.length);
+  document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approved' : 'Total';
+
+  const latest = state.consultants.slice(0, 8).map(c => {
+    const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
+    const st = normalizeConsultantStatus(c) || 'n/a';
+    return '<tr>' +
+      '<td>' + safe(name) + '</td>' +
+      '<td>' + safe(c.email || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('latest-consultants').innerHTML = latest || '<tr><td colspan="3" class="empty">No consultant data</td></tr>';
+
+  const buckets = {};
+  state.consultants.forEach(c => {
+    const key = String(normalizeConsultantStatus(c) || 'unknown').toLowerCase();
+    buckets[key] = (buckets[key] || 0) + 1;
   });
-  return response.ok;
-}
-
-function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('fr-FR');
-}
-
-function getStatusBadge(statut) {
-  const badges = {
-    'en_attente': '<span class="badge badge-pending">En attente</span>',
-    'approuve': '<span class="badge badge-approved">Approuvé</span>',
-    'refuse': '<span class="badge badge-rejected">Refusé</span>',
-    'desactive': '<span class="badge badge-rejected">Desactive</span>',
-    'expire': '<span class="badge badge-rejected">Expire</span>',
-    'deleted': '<span class="badge badge-rejected">Supprimé</span>'
-  };
-  return badges[statut] || `<span class="badge">${statut}</span>`;
-}
-
-function normalizeConsultantStatus(c) {
-  const notes = parseNotes(c?.notes_admin);
-  if (notes.admin_state === 'deleted') return 'deleted';
-  if (notes.admin_state === 'expire') return 'expire';
-  if (notes.admin_state === 'desactive') return 'desactive';
-  if (notes.admin_state === 'refuse') return 'refuse';
-  if (c?.statut === 'approuvé') return 'approuve';
-  if (c?.statut === 'refusé') return 'refuse';
-  return c?.statut || '';
-}
-
-function getEnterpriseDescription(e) {
-  return parseNotes(e?.description);
-}
-
-function normalizeEnterpriseStatus(e) {
-  const description = getEnterpriseDescription(e);
-  if (description.admin_state === 'desactive') return 'desactive';
-  if (e?.statut === 'approuvé') return 'approuve';
-  if (e?.statut === 'refusé') return 'refuse';
-  return e?.statut || 'en_attente';
-}
-
-function getEnterprisePlanLabel(e) {
-  const description = getEnterpriseDescription(e);
-  const rawPlan = description.plan || description.qty || '–';
-  return rawPlan || '–';
-}
-
-function getEnterpriseResources(enterprise) {
-  const ownerEmail = String(enterprise?.email || '').trim().toLowerCase();
-  return allConsultants.filter((consultant) => {
-    const notes = parseNotes(consultant.notes_admin);
-    return String(notes.entreprise_email || '').trim().toLowerCase() === ownerEmail && normalizeConsultantStatus(consultant) !== 'deleted';
-  });
-}
-
-function parseNotes(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
-  try { return JSON.parse(raw); } catch(e) { return {}; }
-}
-
-async function loadConsultants() {
-  allConsultants = await sbFetch('consultants', { select: '*' });
-  await syncConsultantExpirations();
-  renderConsultants();
-  updateStats();
-}
-
-function getConsultantExpiryDate(c) {
-  const notes = parseNotes(c.notes_admin);
-  if (notes.date_expiration) return notes.date_expiration;
-  if (c.date_expiration) return c.date_expiration;
-  if (!c.created_at) return null;
-  const d = new Date(c.created_at);
-  d.setFullYear(d.getFullYear() + 1);
-  return d.toISOString().split('T')[0];
-}
-
-async function syncConsultantExpirations() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const tasks = allConsultants.map(async (c) => {
-    const notes = parseNotes(c.notes_admin);
-    const expiry = getConsultantExpiryDate(c);
-    if (expiry && !notes.date_expiration) notes.date_expiration = expiry;
-    if (!notes.date_creation && c.created_at) notes.date_creation = String(c.created_at).split('T')[0];
-    if (expiry) {
-      const e = new Date(expiry);
-      e.setHours(0, 0, 0, 0);
-      if (e < today) {
-        notes.admin_state = 'expire';
-      }
-      await sbUpdate('consultants', c.id, { notes_admin: JSON.stringify(notes) });
-    } else {
-      await sbUpdate('consultants', c.id, { notes_admin: JSON.stringify(notes) });
-    }
-  });
-  await Promise.all(tasks);
-}
-
-async function loadEntreprises() {
-  if (!allConsultants.length) {
-    allConsultants = await sbFetch('consultants', { select: '*' });
-  }
-  allEntreprises = await sbFetch('entreprises', { select: '*' });
-  renderEntreprises();
-  updateStats();
+  const max = Math.max(1, ...Object.values(buckets));
+  const bars = Object.keys(buckets).sort().map(key => {
+    const count = buckets[key];
+    const pct = Math.round((count / max) * 100);
+    return '<div class="stat-row">' +
+      '<div>' + safe(key) + ' (' + count + ')</div>' +
+      '<div class="line"><span style="width:' + pct + '%"></span></div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('status-bars').innerHTML = bars || '<div class="empty">No status data</div>';
 }
 
 function renderConsultants() {
-  const statusFilter = document.getElementById('status-filter').value;
-  const searchTerm = document.getElementById('search-input').value.toLowerCase();
-
-  let filtered = allConsultants.filter(c => normalizeConsultantStatus(c) !== 'deleted');
-
-  if (statusFilter) {
-    filtered = filtered.filter(c => normalizeConsultantStatus(c) === statusFilter);
-  }
-
-  if (searchTerm) {
-    filtered = filtered.filter(c =>
-      (c.email || '').toLowerCase().includes(searchTerm) ||
-      (c.prenom || '').toLowerCase().includes(searchTerm) ||
-      (c.nom || '').toLowerCase().includes(searchTerm)
-    );
-  }
-
-  const tbody = document.getElementById('consultants-tbody');
-  tbody.innerHTML = filtered.map(c => {
-    const notes = parseNotes(c.notes_admin);
-    const status = normalizeConsultantStatus(c);
-    const demands = window.ExpertNotifications ? ExpertNotifications.countsByConsultant(c.id, c.email).total : 0;
-    const expiry = getConsultantExpiryDate(c);
-    const isB2B = notes.source === 'import_b2b';
-    const skills = Array.isArray(c.competences) ? c.competences.join(', ') : (c.competences || '');
-    const motif = notes.motif_refus ? `<div style="font-size:.7rem;color:var(--red);margin-top:.25rem;">↳ ${notes.motif_refus}</div>` : '';
-
-    return `<tr>
-      <td>${c.prenom || '—'} ${c.nom || ''}${isB2B ? ' <span class="badge badge-professional">Professionnelle</span>' : ''}</td>
-      <td>${c.email || ''}</td>
-      <td style="font-size:.78rem;">${skills || '—'}</td>
-      <td>${c.titre || '—'}</td>
-      <td>${c.tjm_min ? c.tjm_min + '$/j' : '—'}</td>
-      <td>${getStatusBadge(status)}${motif}</td>
-      <td><strong>${demands}</strong></td>
-      <td>${c.created_at ? formatDate(c.created_at) : '—'}</td>
-      <td>${expiry ? formatDate(expiry) : '—'}</td>
-      <td>
-        <div class="actions-dropdown">
-          <button class="actions-trigger" data-action="toggle-action-menu" data-menu-id="actions-menu-${c.id}">Actions <span>⋮</span></button>
-          <div class="actions-menu" id="actions-menu-${c.id}">
-            <button class="actions-item approve" data-action="set-consultant-status" data-consultant-id="${c.id}" data-status="approuve">Approuver <span>✓</span></button>
-            <button class="actions-item pending" data-action="set-consultant-status" data-consultant-id="${c.id}" data-status="en_attente">Mettre en attente <span>●</span></button>
-            <button class="actions-item disable" data-action="set-consultant-status" data-consultant-id="${c.id}" data-status="desactive">Desactiver <span>–</span></button>
-            <button class="actions-item delete" data-action="open-delete-modal" data-consultant-id="${c.id}" data-consultant-name="${((c.prenom || '') + ' ' + (c.nom || '')).trim().replace(/"/g, '&quot;')}">Supprimer <span>🗑</span></button>
-          </div>
-        </div>
-      </td>
-    </tr>`;
+  const q = document.getElementById('search-consultants').value.trim().toLowerCase();
+  const rows = state.consultants.filter(c => {
+    const hay = [c.prenom, c.nom, c.email, c.titre].join(' ').toLowerCase();
+    return !q || hay.includes(q);
+  }).map(c => {
+    const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
+    const st = normalizeConsultantStatus(c) || 'n/a';
+    const reason = parseNotes(c.notes_admin).motif_refus ? '<div class="muted-note">' + safe(parseNotes(c.notes_admin).motif_refus) + '</div>' : '';
+    return '<tr>' +
+      '<td>' + safe(name) + '</td>' +
+      '<td>' + safe(c.email || '-') + '</td>' +
+      '<td>' + safe(c.titre || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span>' + reason + '</td>' +
+      '<td><div class="actions">' +
+      '<button class="mini-btn ok" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="approuve">Approve</button>' +
+      '<button class="mini-btn wait" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="en_attente">Pending</button>' +
+      '<button class="mini-btn stop" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="refuse">Reject</button>' +
+      '<button class="mini-btn off" data-action="set-consultant-status" data-id="' + safe(c.id) + '" data-status="desactive">Disable</button>' +
+      '</div></td>' +
+      '</tr>';
   }).join('');
+  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="5" class="empty">No result</td></tr>';
 }
 
-function closeAllActionMenus() {
-  document.querySelectorAll('.actions-menu.open').forEach(m => {
-    m.classList.remove('open');
-    m.classList.remove('dropup');
-  });
-}
-
-function toggleActionMenuById(event, menuId, triggerEl) {
-  event.stopPropagation();
-  const menu = document.getElementById(menuId);
-  if (!menu) return;
-  const isOpen = menu.classList.contains('open');
-  closeAllActionMenus();
-  if (!isOpen) {
-    const anchor = triggerEl || event.currentTarget || event.target;
-    const triggerRect = anchor.getBoundingClientRect();
-    const menuHeight = Math.max(menu.scrollHeight || 0, 180);
-    const spaceBelow = window.innerHeight - triggerRect.bottom;
-    if (spaceBelow < menuHeight + 16) menu.classList.add('dropup');
-    else menu.classList.remove('dropup');
-    menu.classList.add('open');
-  }
-}
-
-function toggleActionMenu(event, consultantId) {
-  toggleActionMenuById(event, 'actions-menu-' + consultantId, event.currentTarget || event.target);
+function renderEntreprises() {
+  const q = document.getElementById('search-entreprises').value.trim().toLowerCase();
+  const rows = state.entreprises.filter(e => {
+    const hay = [e.nom, e.contact, e.email, e.type_demande].join(' ').toLowerCase();
+    return !q || hay.includes(q);
+  }).map(e => {
+    const st = normalizeEntrepriseStatus(e) || 'n/a';
+    return '<tr>' +
+      '<td>' + safe(e.nom || '-') + '</td>' +
+      '<td>' + safe(e.contact || '-') + '</td>' +
+      '<td>' + safe(e.email || '-') + '</td>' +
+      '<td>' + safe(e.type_demande || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '<td><div class="actions">' +
+      '<button class="mini-btn ok" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="approuve">Approve</button>' +
+      '<button class="mini-btn wait" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="en_attente">Pending</button>' +
+      '<button class="mini-btn stop" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="refuse">Reject</button>' +
+      '<button class="mini-btn off" data-action="set-entreprise-status" data-id="' + safe(e.id) + '" data-status="desactive">Disable</button>' +
+      '</div></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">No result</td></tr>';
 }
 
 async function setConsultantStatus(id, status) {
-  const consultant = allConsultants.find(c => String(c.id) === String(id));
-  if (!consultant) {
-    console.error('Consultant not found for status update:', id);
-    alert('Ressource introuvable pour la mise a jour du statut.');
-    return;
-  }
-  const notes = parseNotes(consultant?.notes_admin);
+  const consultant = state.consultants.find(c => String(c.id) === String(id));
+  if (!consultant) return alert('Consultant introuvable');
+  const notes = parseNotes(consultant.notes_admin);
   notes.admin_decision_date = new Date().toISOString().split('T')[0];
-  let payload = { statut: toDbStatut(status), notes_admin: JSON.stringify(notes) };
 
+  let payload = { statut: toDbStatut(status), notes_admin: JSON.stringify(notes) };
   if (status === 'desactive') {
-    // Avoid DB check-constraint conflicts: persist disabled state only in notes_admin.
     notes.admin_state = 'desactive';
     payload = { notes_admin: JSON.stringify(notes) };
   }
@@ -802,424 +542,111 @@ async function setConsultantStatus(id, status) {
     delete notes.admin_state;
     payload = { statut: toDbStatut('en_attente'), notes_admin: JSON.stringify(notes) };
   }
+  if (status === 'refuse') {
+    const reason = prompt('Motif du refus (optionnel):', notes.motif_refus || '');
+    if (reason !== null && reason.trim()) notes.motif_refus = reason.trim();
+    payload = { statut: toDbStatut('refuse'), notes_admin: JSON.stringify(notes) };
+  }
 
   const ok = await sbUpdate('consultants', id, payload);
-  if (ok) {
-    await loadConsultants();
-    // Keep enterprise tab in sync when status is changed from nested resource rows.
-    renderEntreprises();
+  if (!ok) return alert('Erreur mise a jour consultant');
+  await loadData();
+}
+
+async function setEntrepriseStatus(id, status) {
+  const entreprise = state.entreprises.find(e => String(e.id) === String(id));
+  if (!entreprise) return alert('Entreprise introuvable');
+  const description = parseNotes(entreprise.description);
+  description.admin_decision_date = new Date().toISOString().split('T')[0];
+
+  let payload = {};
+  if (status === 'desactive') {
+    description.admin_state = 'desactive';
+    payload = { statut: 'refuse', description: JSON.stringify(description) };
+  } else if (status === 'approuve') {
+    delete description.admin_state;
+    delete description.motif_refus;
+    payload = { statut: 'approuve', description: JSON.stringify(description) };
+  } else if (status === 'en_attente') {
+    delete description.admin_state;
+    payload = { statut: 'en_attente', description: JSON.stringify(description) };
   } else {
-    alert('Erreur de mise a jour du statut');
-  }
-}
-
-async function setEnterpriseStatus(id, status) {
-  try {
-    const enterprise = allEntreprises.find((item) => String(item.id) === String(id));
-    if (!enterprise) {
-      console.error('Enterprise not found:', id);
-      alert('Erreur: Entreprise non trouvée');
-      return;
-    }
-    
-    const description = getEnterpriseDescription(enterprise);
-    description.admin_decision_date = new Date().toISOString().split('T')[0];
-    
-    let payload = {};
-    
-    if (status === 'desactive') {
-      description.admin_state = 'desactive';
-      payload = { statut: 'refuse', description: JSON.stringify(description) };
-    } else if (status === 'approuve') {
-      delete description.admin_state;
-      delete description.motif_refus;
-      payload = { statut: 'approuve', description: JSON.stringify(description) };
-    } else if (status === 'en_attente') {
-      delete description.admin_state;
-      delete description.motif_refus;
-      payload = { statut: 'en_attente', description: JSON.stringify(description) };
-    } else {
-      payload = { statut: toDbStatut(status), description: JSON.stringify(description) };
-    }
-    
-    console.log('Updating enterprise:', { id, status, payload });
-    const ok = await sbUpdate('entreprises', id, payload);
-    if (ok) {
-      console.log('Enterprise status updated successfully');
-      await loadEntreprises();
-    } else {
-      console.error('sbUpdate returned false for enterprise:', id);
-      alert('Erreur de mise à jour du statut entreprise. Vérifiez la console pour plus de détails.');
-    }
-  } catch (e) {
-    console.error('Error in setEnterpriseStatus:', e);
-    alert('Erreur: ' + e.message);
-  }
-}
-
-function isSubscriptionActive(dateExpiration) {
-  if (!dateExpiration) return false;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const expDate = new Date(dateExpiration);
-  expDate.setHours(0, 0, 0, 0);
-  return expDate >= today;
-}
-
-function getSubscriptionBadge(dateExpiration) {
-  const isActive = isSubscriptionActive(dateExpiration);
-  if (isActive) {
-    const today = new Date();
-    const expDate = new Date(dateExpiration);
-    const daysLeft = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-    if (daysLeft <= 7) {
-      return `<span class="badge" style="background:#fef3c7;color:#92400e;">Expire bientôt (${daysLeft}j)</span>`;
-    }
-    return '<span class="badge badge-approved">Actif</span>';
-  }
-  return '<span class="badge badge-rejected">Expiré</span>';
-}
-
-function renderEntreprises() {
-  const statusFilter = document.getElementById('enterprise-status-filter')?.value || '';
-  const typeFilter = document.getElementById('enterprise-type-filter')?.value || '';
-  const resourceStatusFilter = document.getElementById('enterprise-resource-status-filter')?.value || '';
-  const searchTerm = (document.getElementById('enterprise-search-input')?.value || '').toLowerCase();
-  const typeMap = { erp: 'ERP', chercher: 'Chercher', offrir: 'Offrir' };
-
-  let filtered = allEntreprises.slice();
-  if (statusFilter) filtered = filtered.filter((e) => normalizeEnterpriseStatus(e) === statusFilter);
-  if (typeFilter) filtered = filtered.filter((e) => e.type_demande === typeFilter);
-
-  const container = document.getElementById('entreprises-tbody');
-  container.innerHTML = filtered.map((enterprise) => {
-    const resources = getEnterpriseResources(enterprise);
-    const searchedResources = resources.filter((resource) => {
-      const skills = Array.isArray(resource.competences) ? resource.competences.join(' ') : String(resource.competences || '');
-      const haystack = [resource.email, resource.prenom, resource.nom, resource.titre, skills].join(' ').toLowerCase();
-      return !searchTerm || haystack.includes(searchTerm);
-    });
-    const visibleResources = searchedResources.filter((resource) => !resourceStatusFilter || normalizeConsultantStatus(resource) === resourceStatusFilter);
-    const companyHaystack = [enterprise.nom, enterprise.contact, enterprise.email, typeMap[enterprise.type_demande] || enterprise.type_demande].join(' ').toLowerCase();
-    const matchesCompany = !searchTerm || companyHaystack.includes(searchTerm);
-    if (!matchesCompany && !visibleResources.length) return '';
-
-    const status = normalizeEnterpriseStatus(enterprise);
-    const plan = getEnterprisePlanLabel(enterprise);
-    const inscriptionDate = enterprise.created_at ? formatDate(enterprise.created_at) : '–';
-    const expirationDate = enterprise.date_expiration ? formatDate(enterprise.date_expiration) : '–';
-    const subscriptionBadge = getSubscriptionBadge(enterprise.date_expiration);
-    const escapeId = String(enterprise.id).replace(/'/g, "\\'");
-
-    const resourceRows = visibleResources.map((resource) => {
-      const resourceStatus = normalizeConsultantStatus(resource);
-      const skills = Array.isArray(resource.competences) ? resource.competences.join(', ') : (resource.competences || '—');
-      const approveActive = resourceStatus === 'approuve' ? ' is-active' : '';
-      const pendingActive = resourceStatus === 'en_attente' ? ' is-active' : '';
-      const rejectActive = resourceStatus === 'refuse' ? ' is-active' : '';
-      const disableActive = resourceStatus === 'desactive' ? ' is-active' : '';
-      return `<tr>
-        <td>${resource.prenom || '—'} ${resource.nom || ''}</td>
-        <td>${resource.email || '—'}</td>
-        <td>${skills}</td>
-        <td>${resource.titre || '—'}</td>
-        <td>${resource.tjm_min ? resource.tjm_min + '$/j' : '—'}</td>
-        <td>${getStatusBadge(resourceStatus)}</td>
-        <td class="resource-actions">
-          <div class="resource-inline-actions">
-            <button class="enterprise-action approve${approveActive}" data-action="set-consultant-status" data-consultant-id="${resource.id}" data-status="approuve">Approuver</button>
-            <button class="enterprise-action pending${pendingActive}" data-action="set-consultant-status" data-consultant-id="${resource.id}" data-status="en_attente">Attente</button>
-            <button class="enterprise-action reject${rejectActive}" data-action="open-reject-modal" data-target-id="${resource.id}" data-target-type="consultant" data-target-label="${((resource.prenom || '') + ' ' + (resource.nom || '')).trim().replace(/"/g, '&quot;')}">Refuser</button>
-            <button class="enterprise-action disable${disableActive}" data-action="set-consultant-status" data-consultant-id="${resource.id}" data-status="desactive">Desactiver</button>
-          </div>
-        </td>
-      </tr>`;
-    }).join('');
-
-    const resourcesHtml = enterprise.type_demande === 'offrir'
-      ? (resourceRows
-        ? `<div class="nested-table"><table><thead><tr><th>Ressource</th><th>Email</th><th>ERP</th><th>Role</th><th>TJM</th><th>Statut</th><th>Actions</th></tr></thead><tbody>${resourceRows}</tbody></table></div>`
-        : '<div class="nested-empty">Aucune ressource ne correspond aux filtres pour cette entreprise.</div>')
-      : '<div class="nested-empty">Cette entreprise n\'a pas de ressources a afficher pour ce type de demande.</div>';
-
-    return `<section class="enterprise-card">
-      <div class="enterprise-header">
-        <div class="enterprise-main">
-          <div class="enterprise-title-row">
-            <div class="enterprise-title">${enterprise.nom || 'Entreprise sans nom'}</div>
-            ${getStatusBadge(status)}
-            <span class="enterprise-chip">${typeMap[enterprise.type_demande] || enterprise.type_demande || '–'}</span>
-            <span class="enterprise-chip">Plan: ${plan}</span>
-          </div>
-          <div class="enterprise-meta">
-            <span><strong>Contact:</strong> ${enterprise.contact || '—'}</span>
-            <span><strong>Email:</strong> ${enterprise.email || '—'}</span>
-            <span><strong>Inscription:</strong> ${inscriptionDate}</span>
-            <span><strong>Expiration:</strong> <span style="cursor:pointer;text-decoration:underline;" data-action="open-subscription-modal" data-enterprise-id="${escapeId}" data-enterprise-name="${String(enterprise.nom || '').replace(/"/g, '&quot;')}" data-expiration-date="${enterprise.date_expiration || ''}">${expirationDate}</span></span>
-          </div>
-          <div class="enterprise-summary">
-            ${subscriptionBadge}
-            <span class="enterprise-chip">${resources.length} ressource(s) liee(s)</span>
-            ${resourceStatusFilter ? `<span class="enterprise-chip">Filtre ressource: ${resourceStatusFilter}</span>` : ''}
-          </div>
-        </div>
-        <div class="resource-count">Gestion des statuts par ressource</div>
-      </div>
-      <div class="enterprise-body">
-        <div class="enterprise-toolbar">
-          <h3>Ressources liees</h3>
-          <div class="resource-count">${visibleResources.length}/${resources.length} ressource(s) affichee(s)</div>
-        </div>
-        ${resourcesHtml}
-      </div>
-    </section>`;
-  }).filter(Boolean).join('');
-
-  if (!container.innerHTML.trim()) {
-    container.innerHTML = '<div class="nested-empty">Aucune entreprise ne correspond aux filtres actuels.</div>';
-  }
-}
-
-async function approveConsultant(id) {
-  await setConsultantStatus(id, 'approuve');
-}
-
-function openRejectModal(id, targetType = 'consultant', targetLabel = '') {
-  document.getElementById('reject-id').value = id;
-  document.getElementById('reject-target-type').value = targetType;
-  document.getElementById('reject-reason').value = '';
-  document.getElementById('reject-error').textContent = '';
-  document.getElementById('reject-modal-title').textContent = targetType === 'entreprise' ? 'Refuser cette entreprise' : 'Refuser ce consultant';
-  document.getElementById('reject-modal-subtitle').textContent = targetType === 'entreprise'
-    ? 'L\'entreprise verra cette raison dans son suivi admin.'
-    : 'Le consultant verra cette raison dans son tableau de bord.';
-  document.getElementById('reject-target-name').textContent = targetLabel || '';
-  document.getElementById('reject-modal').style.display = 'flex';
-  setTimeout(() => document.getElementById('reject-reason').focus(), 100);
-}
-
-async function confirmReject() {
-  const id = document.getElementById('reject-id').value; // UUID — no parseInt
-  const targetType = document.getElementById('reject-target-type').value || 'consultant';
-  const reason = document.getElementById('reject-reason').value.trim();
-  if (!reason) {
-    document.getElementById('reject-error').textContent = 'La raison est obligatoire.';
-    return;
-  }
-  const btn = document.querySelector('#reject-modal button:last-child');
-  btn.disabled = true; btn.textContent = '⏳';
-  let ok = false;
-  if (targetType === 'entreprise') {
-    const enterprise = allEntreprises.find((item) => String(item.id) === String(id));
-    const description = getEnterpriseDescription(enterprise);
-    description.motif_refus = reason;
-    description.admin_decision_date = new Date().toISOString().split('T')[0];
-    ok = await sbUpdate('entreprises', id, { statut: 'refuse', description: JSON.stringify(description) });
-  } else {
-    const consultant = allConsultants.find(c => String(c.id) === String(id));
-    const notes = parseNotes(consultant?.notes_admin);
-    notes.motif_refus = reason;
-    notes.admin_decision_date = new Date().toISOString().split('T')[0];
-    // Try canonical statut update first; if DB constraint rejects it (400), fallback to notes_admin state.
-    ok = await sbUpdate('consultants', id, { statut: 'refuse', notes_admin: JSON.stringify(notes) });
-    if (!ok) {
-      notes.admin_state = 'refuse';
-      ok = await sbUpdate('consultants', id, { notes_admin: JSON.stringify(notes) });
-    }
-  }
-  if (ok) {
-    document.getElementById('reject-modal').style.display = 'none';
-    await loadConsultants();
-    await loadEntreprises();
-  } else {
-    btn.disabled = false; btn.textContent = 'Confirmer le refus';
-    document.getElementById('reject-error').textContent = 'Erreur Supabase. Vérifiez les permissions RLS.';
-  }
-}
-
-function openDeleteModal(id, name) {
-  document.getElementById('delete-id').value = id;
-  document.getElementById('delete-consultant-name').textContent = name;
-  document.getElementById('delete-error').textContent = '';
-  document.getElementById('delete-modal').style.display = 'flex';
-}
-
-async function confirmDelete() {
-  const id = document.getElementById('delete-id').value;
-  const btn = document.querySelector('#delete-modal button:last-child');
-  btn.disabled = true;
-  btn.textContent = '⏳ Suppression...';
-
-  const consultant = allConsultants.find(c => String(c.id) === String(id));
-  const consultantEmail = consultant?.email || '';
-
-  // Best effort cleanup of local notifications linked to this consultant.
-  if (window.ExpertNotifications && typeof ExpertNotifications.removeByConsultant === 'function') {
-    ExpertNotifications.removeByConsultant(id, consultantEmail);
+    const reason = prompt('Motif du refus (optionnel):', description.motif_refus || '');
+    if (reason !== null && reason.trim()) description.motif_refus = reason.trim();
+    payload = { statut: toDbStatut(status), description: JSON.stringify(description) };
   }
 
-  const hardDeleteOk = await sbDelete('consultants', id);
-  if (hardDeleteOk) {
-    document.getElementById('delete-modal').style.display = 'none';
-    loadConsultants();
-    return;
-  }
-
-  // Fallback if hard delete is blocked (RLS/FK): mark as deleted to hide it everywhere.
-  const notes = parseNotes(consultant?.notes_admin);
-  notes.admin_state = 'deleted';
-  notes.deleted_at = new Date().toISOString();
-  const softDeleteOk = await sbUpdate('consultants', id, { notes_admin: JSON.stringify(notes) });
-  if (softDeleteOk) {
-    document.getElementById('delete-modal').style.display = 'none';
-    loadConsultants();
-  } else {
-    btn.disabled = false;
-    btn.textContent = 'Oui, supprimer';
-    document.getElementById('delete-error').textContent = 'Erreur Supabase. Suppression refusée (hard + soft delete). Vérifiez les permissions RLS.';
-  }
+  const ok = await sbUpdate('entreprises', id, payload);
+  if (!ok) return alert('Erreur mise a jour entreprise');
+  await loadData();
 }
 
-function updateStats() {
-  const visibleConsultants = allConsultants.filter(c => normalizeConsultantStatus(c) !== 'deleted');
-  document.getElementById('stat-total-consultants').textContent = visibleConsultants.length;
-  document.getElementById('stat-pending-consultants').textContent = visibleConsultants.filter(c => normalizeConsultantStatus(c) === 'en_attente').length;
-  document.getElementById('stat-approved-consultants').textContent = visibleConsultants.filter(c => normalizeConsultantStatus(c) === 'approuve').length;
-  document.getElementById('stat-total-enterprises').textContent = allEntreprises.length;
+function setView(view) {
+  state.view = view;
+  document.querySelectorAll('.menu button').forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+  document.getElementById('overview-view').classList.toggle('hidden', view !== 'overview');
+  document.getElementById('consultants-view').classList.toggle('hidden', view !== 'consultants');
+  document.getElementById('entreprises-view').classList.toggle('hidden', view !== 'entreprises');
+  document.getElementById('view-title').textContent = view.charAt(0).toUpperCase() + view.slice(1);
 }
 
-function showTab(tabName) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.getElementById(tabName + '-tab').classList.add('active');
-
-  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-  if (tabName === 'consultants') loadConsultants();
-  if (tabName === 'entreprises') loadEntreprises();
+function renderAll() {
+  renderOverview();
+  renderConsultants();
+  renderEntreprises();
 }
 
-function openSubscriptionModal(id, name, expirationDate) {
-  document.getElementById('sub-id').value = id;
-  document.getElementById('sub-enterprise-name').textContent = name;
-  document.getElementById('sub-expiration-date').value = expirationDate || '';
-  document.getElementById('sub-error').textContent = '';
-  document.getElementById('subscription-modal').style.display = 'flex';
-  setTimeout(() => document.getElementById('sub-expiration-date').focus(), 100);
-}
-
-async function saveSubscriptionDate() {
-  const id = document.getElementById('sub-id').value;
-  const newDate = document.getElementById('sub-expiration-date').value;
-  if (!newDate) {
-    document.getElementById('sub-error').textContent = 'Veuillez sélectionner une date.';
-    return;
-  }
-  const btn = document.querySelector('#subscription-modal button:last-child');
-  btn.disabled = true; btn.textContent = '⏳';
-  
-  const ok = await sbUpdate('entreprises', id, { date_expiration: newDate });
-  if (ok) {
-    document.getElementById('subscription-modal').style.display = 'none';
-    loadEntreprises();
-  } else {
-    btn.disabled = false; btn.textContent = 'Enregistrer';
-    document.getElementById('sub-error').textContent = 'Erreur Supabase. Vérifiez les permissions RLS.';
-  }
-}
-
-function checkAuth() {
-  const stored = sessionStorage.getItem('admin-auth');
-  const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-  if (stored === 'true' || (portalSession && portalSession.role === 'admin' && portalSession.adminGranted)) {
-    sessionStorage.setItem('admin-auth', 'true');
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'flex';
-    loadConsultants();
-    loadEntreprises();
-  }
-}
-
-function logoutAdmin() {
-  sessionStorage.removeItem('admin-auth');
-  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
-  window.location.href = 'index.html';
-}
-
-function bindAdminActionHandlers() {
-  if (document.body.dataset.actionsBound === 'true') return;
-  document.body.dataset.actionsBound = 'true';
-  document.addEventListener('click', async (event) => {
-    const trigger = event.target.closest('[data-action]');
-    if (!trigger) return;
-    const action = trigger.dataset.action;
-    if (!action) return;
-
-    if (action === 'logout-admin') return logoutAdmin();
-    if (action === 'close-subscription-modal') return document.getElementById('subscription-modal').style.display = 'none';
-    if (action === 'save-subscription-date') return saveSubscriptionDate();
-    if (action === 'close-delete-modal') return document.getElementById('delete-modal').style.display = 'none';
-    if (action === 'confirm-delete') return confirmDelete();
-    if (action === 'close-reject-modal') return document.getElementById('reject-modal').style.display = 'none';
-    if (action === 'confirm-reject') return confirmReject();
-    if (action === 'close-consultant-detail') return closeConsultantModal();
-    if (action === 'request-consultant') return requestConsultant();
-    if (action === 'toggle-action-menu') return toggleActionMenuById(event, trigger.dataset.menuId || '', trigger);
-    if (action === 'set-consultant-status') {
-      closeAllActionMenus();
-      return setConsultantStatus(trigger.dataset.consultantId || '', trigger.dataset.status || 'en_attente');
-    }
-    if (action === 'open-delete-modal') {
-      closeAllActionMenus();
-      return openDeleteModal(trigger.dataset.consultantId || '', trigger.dataset.consultantName || '');
-    }
-    if (action === 'open-reject-modal') {
-      return openRejectModal(trigger.dataset.targetId || '', trigger.dataset.targetType || 'consultant', trigger.dataset.targetLabel || '');
-    }
-    if (action === 'open-subscription-modal') {
-      return openSubscriptionModal(trigger.dataset.enterpriseId || '', trigger.dataset.enterpriseName || '', trigger.dataset.expirationDate || '');
-    }
+function openApp() {
+  document.getElementById('auth-overlay').style.display = 'none';
+  document.getElementById('app').classList.remove('hidden');
+  loadData().catch(err => {
+    document.getElementById('sync-pill').textContent = 'sync error';
+    alert('Supabase load error: ' + err.message);
   });
 }
 
-document.getElementById('auth-btn').addEventListener('click', () => {
-  const pwd = document.getElementById('password-input').value;
+document.getElementById('login-btn').addEventListener('click', () => {
+  const pwd = document.getElementById('pwd').value;
   if (pwd === ADMIN_PWD) {
-    sessionStorage.setItem('admin-auth', 'true');
+    sessionStorage.setItem('admin-auth-v2', 'true');
     if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'flex';
-    loadConsultants();
-    loadEntreprises();
+    openApp();
   } else {
-    document.getElementById('auth-error').textContent = 'Mot de passe incorrect';
+    document.getElementById('auth-err').textContent = 'Incorrect password';
   }
 });
 
-document.getElementById('password-input').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') document.getElementById('auth-btn').click();
+document.getElementById('pwd').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
 });
 
-document.querySelectorAll('.sidebar-tab').forEach(tab => {
-  tab.addEventListener('click', () => showTab(tab.dataset.tab));
+if (sessionStorage.getItem('admin-auth-v2') === 'true') {
+  openApp();
+}
+
+document.querySelectorAll('.menu button').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
 });
 
-document.getElementById('status-filter').addEventListener('change', renderConsultants);
-document.getElementById('search-input').addEventListener('input', renderConsultants);
-document.getElementById('enterprise-status-filter').addEventListener('change', renderEntreprises);
-document.getElementById('enterprise-type-filter').addEventListener('change', renderEntreprises);
-document.getElementById('enterprise-resource-status-filter').addEventListener('change', renderEntreprises);
-document.getElementById('enterprise-search-input').addEventListener('input', renderEntreprises);
+document.getElementById('search-consultants').addEventListener('input', renderConsultants);
+document.getElementById('search-entreprises').addEventListener('input', renderEntreprises);
 
-document.addEventListener('click', (event) => {
-  if (event.target.closest('[data-action="toggle-action-menu"]')) return;
-  if (event.target.closest('.actions-menu')) return;
-  closeAllActionMenus();
+document.addEventListener('click', async (event) => {
+  const el = event.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+  if (action === 'set-consultant-status') {
+    await setConsultantStatus(el.dataset.id, el.dataset.status);
+  }
+  if (action === 'set-entreprise-status') {
+    await setEntrepriseStatus(el.dataset.id, el.dataset.status);
+  }
 });
 
-bindAdminActionHandlers();
-checkAuth();
+document.getElementById('logout-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('admin-auth-v2');
+  window.location.href = 'index.html';
+});
 </script>
-
 </body>
 </html>
