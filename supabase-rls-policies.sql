@@ -47,7 +47,8 @@ END $$;
 --
 -- Expected app behavior after this section:
 -- - consultants: public read only approved profiles; public insert allowed
--- - entreprises: public insert allowed; no public read/update/delete
+-- - consultants: public status updates allowed for current admin dashboard model
+-- - entreprises: public read + status updates allowed for current admin dashboard model
 -- - invitation_codes flow remains unchanged (SECTION C)
 
 -- 1) Remove broad open-access policies.
@@ -85,7 +86,31 @@ CREATE POLICY entreprises_public_insert
   TO anon, authenticated
   WITH CHECK (true);
 
--- Optional: no public SELECT/UPDATE/DELETE policy on entreprises.
+-- Compatibility with current admin dashboard (client-side with anon key):
+-- allow reading and status updates for entreprises.
+DROP POLICY IF EXISTS entreprises_public_read ON public.entreprises;
+CREATE POLICY entreprises_public_read
+  ON public.entreprises
+  FOR SELECT
+  TO anon, authenticated
+  USING (true);
+
+DROP POLICY IF EXISTS entreprises_public_update ON public.entreprises;
+CREATE POLICY entreprises_public_update
+  ON public.entreprises
+  FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- Compatibility with current admin dashboard status actions on consultants.
+DROP POLICY IF EXISTS consultants_public_update ON public.consultants;
+CREATE POLICY consultants_public_update
+  ON public.consultants
+  FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
 
 -- 5) Idempotency helpers: avoid duplicate policy creation on repeated runs.
 -- If you need rerun safety, drop these named policies first:
