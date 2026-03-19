@@ -39,6 +39,61 @@ BEGIN
   END IF;
 END $$;
 
+-- =========================================================
+-- SECTION E - PHASE 2 RLS (PROGRESSIVE HARDENING)
+-- =========================================================
+-- Goal: replace permissive FOR ALL policies with minimal access
+-- while preserving current signup and listing flows.
+--
+-- Expected app behavior after this section:
+-- - consultants: public read only approved profiles; public insert allowed
+-- - entreprises: public insert allowed; no public read/update/delete
+-- - invitation_codes flow remains unchanged (SECTION C)
+
+-- 1) Remove broad open-access policies.
+DROP POLICY IF EXISTS entreprises_open_access ON public.entreprises;
+DROP POLICY IF EXISTS consultants_open_access ON public.consultants;
+
+-- 2) Keep grants broad enough for policy evaluation, but policy will enforce limits.
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.entreprises TO anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.consultants TO anon, authenticated;
+
+-- 3) Consultants policies.
+-- Public can read only approved consultants (supports public consultant list).
+CREATE POLICY consultants_public_read_approved
+  ON public.consultants
+  FOR SELECT
+  TO anon, authenticated
+  USING (
+    lower(coalesce(statut, '')) IN ('approuve', 'approuvé')
+    AND coalesce(admin_state, '') NOT IN ('desactive', 'expire', 'deleted')
+  );
+
+-- Public can insert consultant signup rows.
+CREATE POLICY consultants_public_insert
+  ON public.consultants
+  FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- Optional: deny public update/delete by not creating UPDATE/DELETE policies.
+
+-- 4) Entreprises policies.
+-- Public insert for enterprise signup.
+CREATE POLICY entreprises_public_insert
+  ON public.entreprises
+  FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- Optional: no public SELECT/UPDATE/DELETE policy on entreprises.
+
+-- 5) Idempotency helpers: avoid duplicate policy creation on repeated runs.
+-- If you need rerun safety, drop these named policies first:
+-- DROP POLICY IF EXISTS consultants_public_read_approved ON public.consultants;
+-- DROP POLICY IF EXISTS consultants_public_insert ON public.consultants;
+-- DROP POLICY IF EXISTS entreprises_public_insert ON public.entreprises;
+
 -- Create permissive policies for current app behavior
 DO $$
 BEGIN
