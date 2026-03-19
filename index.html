@@ -32,6 +32,13 @@
   --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
   --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
   --cta:#f97316;
+  --primary:#004ac6;--primary-light:#eff6ff;--primary-hover:#003da3;
+  --text-main:#111827;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --bg-page:#f8fafc;--bg-card:#ffffff;--green-available:#16a34a;
+  --radius-card:16px;--radius-btn:8px;--radius-chip:20px;
+  --shadow-card:0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 8px 32px rgba(0,74,198,.12);
+  --font-main:'Inter','DM Sans',system-ui,sans-serif;
   --bg-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%231e3a8a' stroke-opacity='.08' stroke-width='1'%3E%3Cpath d='M0 30h180M0 90h180M0 150h180M30 0v180M90 0v180M150 0v180'/%3E%3C/g%3E%3C/svg%3E");
   --bg-waves:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='280' viewBox='0 0 1200 280'%3E%3Cpath d='M0 160C170 80 330 220 520 150C700 85 860 225 1200 120V280H0Z' fill='%23ffffff' fill-opacity='.08'/%3E%3Cpath d='M0 190C200 120 370 260 560 185C760 110 950 240 1200 165V280H0Z' fill='%23ffffff' fill-opacity='.12'/%3E%3C/svg%3E");
   --bg-dots:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='%231e3a8a' fill-opacity='.08'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='50' r='2'/%3E%3Ccircle cx='140' cy='25' r='2'/%3E%3Ccircle cx='190' cy='70' r='2'/%3E%3Ccircle cx='50' cy='120' r='2'/%3E%3Ccircle cx='110' cy='150' r='2'/%3E%3Ccircle cx='170' cy='120' r='2'/%3E%3Ccircle cx='30' cy='190' r='2'/%3E%3Ccircle cx='90' cy='205' r='2'/%3E%3Ccircle cx='200' cy='185' r='2'/%3E%3C/g%3E%3C/svg%3E");
@@ -351,14 +358,43 @@ nav.nav-scrolled{height:68px;background:rgba(248,250,252,.9);box-shadow:0 12px 2
 .filter-input:focus,.filter-select:focus{border-color:var(--electric);box-shadow:0 0 0 4px rgba(59,130,246,.16);background:#fff;}
 .filter-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:2rem;background-image:var(--select-arrow),linear-gradient(180deg,#ffffff,#f8fafc);background-repeat:no-repeat;background-position:right .7rem center,center;background-size:11px 8px,100% 100%;cursor:pointer;}
 
-.consultants-grid{padding:2.2rem 2.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;}
-.consultant-card{background:linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(248,250,252,.94) 100%);border:1px solid rgba(59,130,246,.22);border-radius:16px;padding:1.1rem;transition:all .26s cubic-bezier(.165,.84,.44,1);position:relative;overflow:hidden;backdrop-filter:blur(8px);}
-.consultant-card:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, rgba(59,130,246,.14) 0%, transparent 55%);opacity:0;transition:opacity .25s ease;}
-.consultant-card:after{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(130deg, rgba(59,130,246,.4), rgba(99,102,241,.2), rgba(30,58,138,.25));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
-.consultant-card:hover{transform:translateY(-6px) scale(1.01);border-color:rgba(59,130,246,.46);box-shadow:0 16px 36px rgba(30,58,138,.2);}
-.consultant-card:hover:before{opacity:1;}
-.consultant-card.professional-resource{border-color:rgba(59,130,246,.42);background:linear-gradient(180deg, rgba(30,58,138,.08) 0%, rgba(248,250,252,.96) 100%);}
-.consultant-card.professional-resource:before{background:linear-gradient(130deg, rgba(30,58,138,.2) 0%, transparent 60%);opacity:.35;}
+.consultants-grid{padding:2.2rem 2.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;}
+.consultant-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:24px;transition:box-shadow .2s,transform .2s;position:relative;display:flex;flex-direction:column;gap:18px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);min-height:100%;}
+.consultant-card:hover{box-shadow:0 8px 32px rgba(0,74,198,.12);transform:translateY(-2px);}
+.consultant-card.professional-resource{border-color:#dbe7ff;}
+.consultant-card.professional-resource .consultant-card-name{letter-spacing:.02em;}
+.consultant-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.consultant-card-identity{display:flex;gap:16px;min-width:0;flex:1;}
+.consultant-card-avatar-wrap{position:relative;flex-shrink:0;}
+.consultant-card-avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:24px;font-weight:700;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.24);}
+.consultant-card-availability-dot{position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:50%;background:#16a34a;border:2px solid #ffffff;box-sizing:content-box;}
+.consultant-card-availability-dot.unavailable{background:#6b7280;}
+.consultant-card-main{min-width:0;display:flex;flex-direction:column;gap:8px;}
+.consultant-card-name{font-size:22px;line-height:1.18;font-weight:700;color:#111827;}
+.consultant-card-meta-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;color:#6b7280;font-size:14px;line-height:1.5;}
+.consultant-card-verified{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:20px;background:#eff6ff;color:#004ac6;font-size:12px;font-weight:600;}
+.consultant-card-role{font-weight:600;color:#374151;}
+.consultant-card-location-row{color:#6b7280;font-size:14px;}
+.consultant-card-status{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#f0fdf4;color:#15803d;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;}
+.consultant-card-status.unavailable{background:#f3f4f6;color:#6b7280;}
+.consultant-card-status-symbol{font-size:12px;line-height:1;}
+.consultant-card-skills{display:flex;flex-wrap:wrap;gap:8px;}
+.consultant-card-skill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;background:#f1f5f9;color:#334155;font-size:12px;line-height:1.4;}
+.consultant-card-skill.primary{background:#eff6ff;color:#004ac6;font-weight:600;}
+.consultant-card-bio{font-size:14px;line-height:1.55;color:#6b7280;display:-webkit-box;line-clamp:2;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:43px;}
+.consultant-card-summary{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
+.consultant-card-expand{border:none;background:none;color:#004ac6;font-size:18px;font-weight:700;line-height:1;cursor:pointer;padding:0;align-self:flex-end;}
+.consultant-card-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:12px 0;}
+.consultant-card-stat{padding:0 10px;font-size:14px;color:#374151;display:flex;flex-direction:column;gap:4px;min-width:0;}
+.consultant-card-stat + .consultant-card-stat{border-left:1px solid #e5e7eb;}
+.consultant-card-stat-label{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#9ca3af;font-weight:700;}
+.consultant-card-stat-value{font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.consultant-card-actions{display:flex;flex-direction:column;gap:8px;margin-top:auto;}
+.consultant-card-btn{width:100%;min-height:46px;border-radius:8px;font-size:14px;font-weight:600;padding:12px 16px;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s;}
+.consultant-card-btn.primary{background:#004ac6;color:#ffffff;border:1px solid #004ac6;}
+.consultant-card-btn.primary:hover{background:#003da3;border-color:#003da3;}
+.consultant-card-btn.secondary{background:transparent;color:#004ac6;border:1px solid #004ac6;}
+.consultant-card-btn.secondary:hover{background:#eff6ff;}
 
 /* ── PREMIUM SHOWCASE SECTION ── */
 .premium-showcase{padding:6rem 2.5rem;background:#0f172a url('assets/bg-images/platform-showcase.png') center/cover no-repeat;background-blend-mode:overlay;position:relative;overflow:hidden;color:#fff;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);}
@@ -418,15 +454,24 @@ nav.nav-scrolled{height:68px;background:rgba(248,250,252,.9);box-shadow:0 12px 2
   .filters-bar{position:sticky;top:0;z-index:90;padding:.85rem 1rem;gap:.55rem;background:rgba(248,250,252,.95);backdrop-filter:blur(12px);}
   .filter-input,.filter-select{width:100%;min-width:0;font-size:.82rem;}
 
-  .consultants-grid{padding:1rem;grid-template-columns:1fr;gap:.9rem;}
-  .consultant-card{padding:1rem;border-radius:14px;}
-  .cc-top{gap:.7rem;}
-  .cc-avatar{width:46px;height:46px;font-size:.78rem;}
-  .cc-info h3{font-size:.92rem;}
-  .cc-info .role{font-size:.74rem;line-height:1.4;}
-  .cc-highlights{grid-template-columns:1fr;gap:.35rem;}
-  .cc-actions{margin-top:.7rem;gap:.45rem;}
-  .cc-btn{min-height:42px;font-size:.62rem;}
+  .consultants-grid{padding:1rem;grid-template-columns:1fr;gap:16px;}
+  .consultant-card{padding:20px;gap:16px;}
+  .consultant-card-head{flex-direction:column;align-items:flex-start;}
+  .consultant-card-status{order:-1;}
+  .consultant-card-name{font-size:20px;}
+  .consultant-card-stats{grid-template-columns:1fr;gap:10px;}
+  .consultant-card-stat{padding:0;}
+  .consultant-card-stat + .consultant-card-stat{border-left:none;border-top:1px solid #e5e7eb;padding-top:10px;}
+}
+
+@media(max-width:1120px){
+  .consultants-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+@media(max-width:520px){
+  .consultant-card-identity{gap:12px;}
+  .consultant-card-avatar{width:64px;height:64px;font-size:22px;}
+  .consultant-card-name{font-size:18px;}
 }
 
 @media(max-width:520px){
@@ -4147,51 +4192,143 @@ function renderErpBrandBadges(skills) {
   `).join('')}</div>`;
 }
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatConsultantMemberSince(consultant) {
+  const rawValue = consultant?.created_at || consultant?.updated_at || null;
+  if (!rawValue) return 'Membre récent';
+  const date = new Date(rawValue);
+  if (Number.isNaN(date.getTime())) return 'Membre récent';
+  return `Membre depuis ${date.getFullYear()}`;
+}
+
+function normalizeAvailabilityState(rawValue) {
+  const value = String(rawValue || '').trim().toLowerCase();
+  if (!value) return { available: true, label: 'Disponible' };
+  if (/(non|indispo|occup|bient[oô]t|later|busy|unavailable)/.test(value)) {
+    return { available: false, label: 'Indisponible' };
+  }
+  return { available: true, label: 'Disponible' };
+}
+
+function generateAvatarColor(name) {
+  const source = String(name || 'ER').trim() || 'ER';
+  let hash = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    hash = source.charCodeAt(index) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue} 58% 46%)`;
+}
+
+function parseExperienceYears(rawValue) {
+  const value = String(rawValue || '').trim();
+  if (!value) return 'Exp. non précisée';
+  return /ans?/i.test(value) ? value : `${value} ans exp.`;
+}
+
+function formatConsultantRate(c, notes) {
+  const rawValue = notes.tjm_value || c.tjm_min || c.tjm || '';
+  if (!rawValue) return 'Tarif sur demande';
+  const unit = String(notes.tjm_type || notes.rate_unit || 'jour').toLowerCase() === 'heure' ? '/h' : '/j';
+  return `${rawValue} $${unit}`;
+}
+
+function getConsultantDisplayLocation(c, notes) {
+  return String(notes.ville || c.ville || 'Localisation non précisée').trim();
+}
+
+function buildConsultantSkills(c, notes) {
+  const directSkills = Array.isArray(c.competences)
+    ? c.competences
+    : String(c.competences || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const moduleSkills = String(c.modules || notes.modules || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const roleSkill = String(c.role || c.titre || notes.role || '').trim();
+  const erpSkill = String(c.erp || notes.erp || '').trim();
+  const combined = [...directSkills, ...moduleSkills];
+  if (erpSkill) combined.unshift(erpSkill);
+  if (roleSkill) combined.push(roleSkill);
+  return [...new Set(combined.filter(Boolean))];
+}
+
 function renderConsultants(list) {
   const grid = document.getElementById('consultants-grid');
   if (!list.length) { grid.innerHTML = '<div class="empty-state"><p>Aucun consultant disponible pour le moment.</p></div>'; return; }
   grid.innerHTML = list.map(c => {
     const notes = (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
     const isB2BAnonymous = notes.source === 'import_b2b';
-    const initials = isB2BAnonymous ? 'RP' : ((c.prenom||'?')[0] + (c.nom||'?')[0]).toUpperCase();
-    const displayName = isB2BAnonymous ? 'Ressource partenaire' : `${c.prenom || ''} ${c.nom || ''}`;
-    const sourceSkills = Array.isArray(c.competences)
-      ? c.competences
-      : String(c.competences || '').split(',').map(s => s.trim()).filter(Boolean);
-    const erpBadges = renderErpBrandBadges(sourceSkills);
-    const skills = sourceSkills.slice(0, 3);
-    const exp = notes.annees_exp || notes.experience || 'N/A';
-    const location = notes.ville || 'Location non précisée';
-    const mode = notes.mode_travail || 'Flexible';
-    const dispo = notes.dispo || notes.disponibilite || t('consultant.available');
-    return `<div class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${c.id}" style="cursor:pointer;">
-      ${isB2BAnonymous ? '<div class="cc-card-badge badge-professional">Ressource Professionnelle</div>' : ''}
-      <div class="cc-top">
-        <div class="cc-avatar${isB2BAnonymous ? ' partner' : ''}">${initials}</div>
-        <div class="cc-info">
-          <h3>${displayName}</h3>
-          <div class="role">${c.titre || 'Consultant ERP'} · ${location}</div>
+    const displayName = isB2BAnonymous
+      ? String(notes.resource_code || 'Ressource partenaire').trim()
+      : `${c.prenom || ''} ${c.nom || ''}`.trim() || c.full_name || 'Consultant ERP';
+    const initials = isB2BAnonymous
+      ? 'RP'
+      : displayName.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase();
+    const title = String(c.role || c.titre || notes.role || 'Consultant ERP').trim();
+    const location = getConsultantDisplayLocation(c, notes);
+    const cleanLocation = location.replace(/, Canada, Canada/i, ', Canada');
+    const memberSince = formatConsultantMemberSince(c);
+    const availability = normalizeAvailabilityState(notes.dispo || notes.disponibilite || c.disponibilite || t('consultant.available'));
+    const skills = buildConsultantSkills(c, notes);
+    const visibleSkills = skills.slice(0, 6);
+    const remainingSkills = Math.max(skills.length - visibleSkills.length, 0);
+    const resume = String(notes.resume || c.resume || '').trim();
+    const mode = String(notes.mode_travail || c.mode_travail || 'Flexible').trim();
+    const experience = parseExperienceYears(notes.annees_exp || c.annees_exp || notes.experience);
+    const rate = formatConsultantRate(c, notes);
+    const avatarStyle = `background:${generateAvatarColor(displayName)};`;
+    const chips = visibleSkills.map((skill, index) => {
+      const isPrimary = index === 0 && /sap|oracle|dynamics|workday|servicenow|salesforce|infor|netsuite/i.test(skill);
+      return `<span class="consultant-card-skill${isPrimary ? ' primary' : ''}">${escapeHtml(skill)}</span>`;
+    }).join('');
+    return `<article class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${escapeHtml(c.id)}" style="cursor:pointer;">
+      <div class="consultant-card-head">
+        <div class="consultant-card-identity">
+          <div class="consultant-card-avatar-wrap">
+            <div class="consultant-card-avatar" style="${avatarStyle}">${escapeHtml(initials || 'ER')}</div>
+            <span class="consultant-card-availability-dot${availability.available ? '' : ' unavailable'}" aria-hidden="true"></span>
+          </div>
+          <div class="consultant-card-main">
+            <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
+            <div class="consultant-card-meta-row">
+              <span class="consultant-card-verified">✅ Expert validé</span>
+              <span class="consultant-card-role">${escapeHtml(title)}</span>
+            </div>
+            <div class="consultant-card-location-row">📍 ${escapeHtml(cleanLocation)} · ${escapeHtml(memberSince)}</div>
+          </div>
+        </div>
+        <span class="consultant-card-status${availability.available ? '' : ' unavailable'}"><span class="consultant-card-status-symbol">${availability.available ? '●' : '○'}</span>${escapeHtml(availability.label)}</span>
+      </div>
+      <div class="consultant-card-skills">
+        ${chips}
+        ${remainingSkills ? `<span class="consultant-card-skill">+${remainingSkills} autres</span>` : ''}
+      </div>
+      ${resume ? `<div class="consultant-card-summary"><p class="consultant-card-bio">${escapeHtml(resume)}</p><button class="consultant-card-expand" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}" aria-label="Voir le profil complet de ${escapeHtml(displayName)}">+</button></div>` : ''}
+      <div class="consultant-card-stats">
+        <div class="consultant-card-stat">
+          <span class="consultant-card-stat-label">TJM</span>
+          <span class="consultant-card-stat-value">${escapeHtml(rate)}</span>
+        </div>
+        <div class="consultant-card-stat">
+          <span class="consultant-card-stat-label">Mode</span>
+          <span class="consultant-card-stat-value">${escapeHtml(mode)}</span>
+        </div>
+        <div class="consultant-card-stat">
+          <span class="consultant-card-stat-label">Expérience</span>
+          <span class="consultant-card-stat-value">${escapeHtml(experience)}</span>
         </div>
       </div>
-      ${erpBadges}
-      <div class="cc-tags">
-        ${skills.map(s => `<span class="cc-tag">${s}</span>`).join('')}
-        ${mode ? `<span class="cc-tag blue">${mode}</span>` : ''}
-        ${isB2BAnonymous ? '<span class="cc-tag blue">Ressource confidentielle</span>' : ''}
+      <div class="consultant-card-actions">
+        <button class="consultant-card-btn primary" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}">Voir le profil complet →</button>
+        <button class="consultant-card-btn secondary" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">Contacter ce consultant</button>
       </div>
-      <div class="cc-highlights">
-        <div class="cc-highlight">⭐ ${exp} ans d'expérience</div>
-        <div class="cc-highlight">📍 ${location}</div>
-      </div>
-      <div class="cc-meta">
-        <span class="cc-dispo">${dispo}</span>
-        <span class="cc-tjm">${c.tjm_min ? c.tjm_min + '$/j' : '—'}</span>
-      </div>
-      <div class="cc-actions">
-        <button class="cc-btn" type="button" data-card-action="profile" data-consultant-id="${c.id}">Voir profil</button>
-        <button class="cc-btn primary" type="button" data-card-action="contact" data-consultant-id="${c.id}">Contacter</button>
-      </div>
-    </div>`;
+    </article>`;
   }).join('');
   bindErpLogoFallbacks(grid);
 }

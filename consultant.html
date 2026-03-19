@@ -7,208 +7,115 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#131b2e;--paper:#f7f9fb;--accent:#004ac6;--accent-dark:#003ea8;--accent-light:#eef3ff;
-  --blue:#004ac6;--blue-mid:#2563eb;--blue-light:#eef3ff;--blue-border:#dbe1ff;
-  --muted:#6b7280;--border:#eef2f7;--card:#fff;
-  --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
-  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
-  --orange:#f97316;--orange-bg:#fff7ed;--orange-border:#fed7aa;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
-  --shadow-md: 0 8px 24px rgba(0,0,0,.12);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,.15);
-  --shadow-xl: 0 24px 64px rgba(0,0,0,.18);
-  --shadow-3d: 0 8px 32px rgba(0,0,0,.1), 0 4px 16px rgba(0,0,0,.08);
-}
-[data-theme="dark"]{
-  --ink:#f5f2ed;--paper:#0e0e0e;--accent:#60a5fa;--accent-dark:#3b82f6;--accent-light:#1e3a5f;
-  --blue:#60a5fa;--blue-mid:#3b82f6;--blue-light:#1e3a5f;--blue-border:#3b82f6;
-  --muted:#8a8580;--border:#2a2a2a;--card:#1a1a1a;
-  --green:#22c55e;--green-bg:#14532d;--green-border:#16a34a;
-  --red:#ef4444;--red-bg:#7f1d1d;--red-border:#dc2626;
-  --orange:#fb923c;--orange-bg:#9a3412;--orange-border:#f97316;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
-  --shadow-md: 0 8px 24px rgba(0,0,0,.4);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,.5);
-  --shadow-xl: 0 24px 64px rgba(0,0,0,.6);
-  --shadow-3d: 0 8px 32px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+  --primary:#004ac6;
+  --primary-light:#eff6ff;
+  --primary-hover:#003da3;
+  --text-main:#111827;
+  --text-secondary:#6b7280;
+  --text-muted:#9ca3af;
+  --border:#e5e7eb;
+  --bg-page:#f8fafc;
+  --bg-card:#ffffff;
+  --green-available:#16a34a;
+  --radius-card:16px;
+  --radius-btn:8px;
+  --radius-chip:20px;
+  --shadow-card:0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover:0 8px 32px rgba(0,74,198,.12);
+  --font-main:'Inter','DM Sans',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 12% 0%, rgba(37,99,235,.08), transparent 25%),radial-gradient(circle at 88% 8%, rgba(0,74,198,.08), transparent 22%),var(--paper);color:var(--ink);letter-spacing:-.2px;}
+body{font-family:var(--font-main);background:var(--bg-page);color:var(--text-main);}
 a{color:inherit;text-decoration:none;}
-nav{position:sticky;top:0;z-index:200;background:rgba(245,242,237,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(224,219,212,.5);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:70px;box-shadow:var(--shadow-sm);}
-[data-theme="dark"] nav{background:rgba(14,14,14,.95);}
-.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;cursor:pointer;background:none;border:none;padding:0;color:var(--ink);transition:all .3s ease;}
-.logo:hover{color:var(--accent);transform:scale(1.02);}
-.logo span{color:var(--accent);}
-.nav-links{display:flex;gap:2.5rem;align-items:center;}
-.nav-link{font-size:.85rem;color:var(--muted);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;transition:all .3s ease;padding:.5rem 0;position:relative;font-weight:500;letter-spacing:.5px;}
-.nav-link:after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:var(--accent);transition:width .3s ease;}
-.nav-link:hover{color:var(--ink);}
-.nav-link:hover:after,.nav-link.active:after{width:100%;}
-.nav-link.active{color:var(--ink);}
-.nav-r{display:flex;gap:.75rem;align-items:center;}
-.btn-outline{font-family:'DM Mono',monospace;font-size:.7rem;padding:.45rem 1.2rem;background:transparent;color:var(--ink);border:1.5px solid var(--ink);cursor:pointer;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;position:relative;overflow:hidden;}
-.btn-outline:before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--ink);z-index:-1;transition:left .3s ease;}
-.btn-outline:hover{color:var(--paper);border-color:var(--ink);}
-.btn-outline:hover:before{left:0;}
-.btn-solid{font-family:'DM Mono',monospace;font-size:.7rem;padding:.45rem 1.2rem;background:var(--blue);color:#fff;border:none;cursor:pointer;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;position:relative;overflow:hidden;box-shadow:var(--shadow-md);}
-.btn-solid:before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:var(--blue-mid);transform:scaleX(0);transform-origin:right;transition:transform .3s ease;z-index:-1;}
-.btn-solid:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
-.btn-solid:hover:before{transform:scaleX(1);}
-.lang-selector{display:flex;gap:.4rem;align-items:center;padding-left:1rem;border-left:1px solid var(--border);}
-.lang-btn{background:none;border:none;font-family:'DM Mono',monospace;font-size:.7rem;padding:.3rem .7rem;cursor:pointer;color:var(--muted);transition:all .2s;border-radius:2px;letter-spacing:.05em;font-weight:500;}
-.lang-btn:hover{color:var(--ink);}
-.lang-btn.active{color:var(--blue);background:var(--blue-light);padding:.3rem .7rem;}
-.theme-toggle{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);transition:all .2s;padding:.3rem;}
-.theme-toggle:hover{color:var(--ink);}
-.profile-hero{padding:5rem 2.5rem 3rem;background:linear-gradient(125deg, #0f172a 0%, #1e3a8a 40%, #3b82f6 72%, #6366f1 100%);color:#fff;position:relative;overflow:hidden;animation:heroPulse 12s ease-in-out infinite;background-size:180% 180%;}
-.profile-hero:before{content:'';position:absolute;inset:0;background:linear-gradient(to right, rgba(255,255,255,.12) 1px, transparent 1px),linear-gradient(to bottom, rgba(255,255,255,.08) 1px, transparent 1px);background-size:32px 32px;opacity:.22;pointer-events:none;}
-.profile-hero:after{content:'';position:absolute;right:-80px;top:-40px;width:340px;height:340px;background:radial-gradient(circle, rgba(99,102,241,.38) 0%, rgba(59,130,246,.25) 35%, transparent 70%);filter:blur(8px);pointer-events:none;}
-.profile-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1;}
-.profile-header{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:center;}
-.profile-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg, #fff 0%, rgba(255,255,255,.8) 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:600;color:var(--blue);box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(-5deg);}
-.profile-info h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;margin-bottom:.5rem;letter-spacing:-.03em;}
-.profile-info .role{font-size:1.1rem;color:rgba(255,255,255,.9);margin-bottom:.5rem;}
-.profile-info .location{font-size:.9rem;color:rgba(255,255,255,.7);}
-.profile-erp-row{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.9rem;}
-.profile-erp-chip{display:inline-flex;align-items:center;gap:0;padding:.28rem;border-radius:14px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(15,23,42,.18);}
-.profile-erp-label{display:none;}
-.erp-logo-wrap{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;position:relative;flex-shrink:0;background:#fff;border:1px solid rgba(30,58,138,.14);border-radius:12px;padding:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 10px rgba(15,23,42,.12);}
-.erp-logo-img{display:block;width:100%;height:100%;max-width:32px;max-height:32px;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 2px 4px rgba(15,23,42,.16));}
-.erp-logo-mark{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 .46rem;border-radius:11px;background:linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);color:#fff;font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.06em;font-weight:700;line-height:1;border:1px solid rgba(255,255,255,.25);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);}
-.erp-logo-mark.sap{background:linear-gradient(135deg, #0f6cbd 0%, #1d4ed8 100%);}
-.erp-logo-mark.oracle{background:linear-gradient(135deg, #c74634 0%, #ea4335 100%);}
-.erp-logo-mark.dynamics{background:linear-gradient(135deg, #0a5cc2 0%, #2563eb 100%);}
-.erp-logo-mark.workday{background:linear-gradient(135deg, #f59e0b 0%, #f97316 100%);}
-.erp-logo-mark.servicenow{background:linear-gradient(135deg, #16a34a 0%, #22c55e 100%);}
-.erp-logo-mark.salesforce{background:linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);}
-.erp-logo-mark.successfactors{background:linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);}
-.erp-logo-mark.netsuite{background:linear-gradient(135deg, #334155 0%, #475569 100%);}
-.erp-logo-mark.infor{background:linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);}
-.erp-logo-mark.default{background:linear-gradient(135deg, #1e293b 0%, #334155 100%);}
-.profile-stats{display:flex;gap:2rem;}
-.stat{text-align:center;}
-.stat-n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#fff;margin-bottom:.25rem;}
-.stat-l{font-size:.8rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.08em;}
-.profile-content{display:grid;grid-template-columns:2fr 1fr;gap:3rem;margin-top:3rem;}
-.profile-main{background:rgba(255,255,255,.86);border:1px solid rgba(59,130,246,.18);border-radius:18px;padding:3rem;box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(1deg);backdrop-filter:blur(10px);}
-.profile-sidebar{background:rgba(255,255,255,.86);border:1px solid rgba(59,130,246,.18);border-radius:18px;padding:2rem;box-shadow:var(--shadow-3d);transform:perspective(1000px) rotateY(-1deg);height:fit-content;backdrop-filter:blur(10px);}
-.section{margin-bottom:3rem;}
-.section h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:1.5rem;letter-spacing:-.02em;color:var(--accent);}
-.section p{font-size:.95rem;line-height:1.8;margin-bottom:1rem;}
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;}
-.skill-tag{display:flex;align-items:center;gap:.5rem;padding:.75rem 1rem;border:1px solid rgba(99,102,241,.22);border-radius:999px;background:linear-gradient(120deg,#eef2ff 0%,#dbeafe 100%);color:#1e3a8a;font-weight:600;transition:all .25s ease;}
-.skill-tag:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px rgba(59,130,246,.2);border-color:#6366f1;}
-.skill-tag.erp-skill{justify-content:flex-start;border-radius:16px;background:linear-gradient(120deg,#ffffff 0%,#eef2ff 100%);}
-.skill-tag .erp-logo-wrap{min-width:30px;height:30px;border-radius:9px;padding:2px;}
-.skill-tag .erp-logo-img{max-width:24px;max-height:24px;}
-.skill-tag .erp-logo-mark{min-width:24px;height:24px;font-size:.48rem;border-radius:7px;}
-.experience-item{background:var(--paper);border:1px solid rgba(59,130,246,.16);border-radius:12px;padding:1.25rem 1.25rem 1.25rem 1.8rem;margin-bottom:1rem;position:relative;}
-.experience-item:before{content:'';position:absolute;left:.7rem;top:1.1rem;width:8px;height:8px;border-radius:50%;background:linear-gradient(120deg,#3b82f6,#6366f1);box-shadow:0 0 0 4px rgba(59,130,246,.16);}
-.experience-item:after{content:'';position:absolute;left:.95rem;top:1.8rem;bottom:-1rem;width:2px;background:linear-gradient(180deg,rgba(59,130,246,.25),rgba(99,102,241,.08));}
-.exp-title{font-weight:600;margin-bottom:.25rem;}
-.exp-company{color:var(--muted);margin-bottom:.25rem;}
-.exp-period{color:var(--muted);font-size:.85rem;}
-.contact-form{background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);border:1px solid rgba(59,130,246,.2);border-radius:16px;padding:2rem;box-shadow:0 14px 28px rgba(15,23,42,.08);}
-.contact-form h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;margin-bottom:1rem;color:var(--orange);}
-.contact-form .form-input,.contact-form textarea{width:100%;padding:.9rem 1rem;border:1px solid #dbe3f0;border-radius:14px;background:#fff;transition:all .24s ease;}
-.contact-form textarea{resize:vertical;min-height:120px;margin-bottom:1.5rem;}
-.contact-form .form-input:focus,.contact-form textarea:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.16),0 10px 22px rgba(59,130,246,.12);transform:translateY(-1px);}
-.btn-contact{font-family:'DM Mono',monospace;font-size:.8rem;padding:.8rem 2rem;background:linear-gradient(120deg,#2563eb 0%,#6366f1 100%);color:#fff;border:none;cursor:pointer;border-radius:999px;letter-spacing:.08em;text-transform:uppercase;transition:all .24s ease;font-weight:700;box-shadow:0 12px 24px rgba(59,130,246,.35);}
-.btn-contact:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 0 4px rgba(99,102,241,.22),0 18px 30px rgba(59,130,246,.45);}
-
-@keyframes heroPulse{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-.certifs-grid{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.5rem;}
-.certif-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem 1rem;border:1px solid rgba(59,130,246,.22);border-radius:999px;font-size:.84rem;background:linear-gradient(120deg,#eef2ff 0%,#dbeafe 100%);color:#1e3a8a;line-height:1.4;}
-.certif-badge.certified{background:linear-gradient(120deg,#fffbeb 0%,#fef3c7 100%);border-color:rgba(245,158,11,.38);color:#78350f;font-weight:600;}
-.certif-star-pub{color:#f59e0b;font-size:1rem;flex-shrink:0;}
-footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;background:var(--paper);}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;letter-spacing:-.5px;}
-.footer-logo span{color:var(--accent);}
-.footer-links{display:flex;gap:2rem;}
-.footer-link{font-size:.8rem;color:var(--muted);cursor:pointer;transition:all .2s ease;font-weight:500;}
-.footer-link:hover{color:var(--ink);}
-.footer-copy{font-size:.75rem;color:var(--muted);font-weight:500;}
-@media(max-width:768px){
-  .profile-header{grid-template-columns:1fr;text-align:center;}
-  .profile-content{grid-template-columns:1fr;}
-  .profile-stats{justify-content:center;margin-top:2rem;}
+button,input,textarea{font:inherit;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(229,231,235,.92);padding:0 24px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:'Newsreader',serif;font-size:1.45rem;font-weight:600;background:none;border:none;color:var(--text-main);cursor:pointer;}
+.logo span{color:var(--primary);}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-link{background:none;border:none;color:var(--text-secondary);font-size:14px;font-weight:600;cursor:pointer;padding:6px 0;position:relative;}
+.nav-link.active,.nav-link:hover{color:var(--text-main);}
+.nav-link.active::after,.nav-link:hover::after{content:'';position:absolute;left:0;right:0;bottom:-16px;height:2px;background:var(--primary);}
+.nav-r{display:flex;align-items:center;gap:10px;}
+.btn-outline,.btn-solid{border-radius:999px;padding:10px 16px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
+.btn-outline{background:#ffffff;border:1px solid var(--border);color:var(--text-main);}
+.btn-solid{background:var(--primary);border:1px solid var(--primary);color:#ffffff;}
+.lang-selector{display:flex;align-items:center;gap:4px;padding:4px;border:1px solid var(--border);border-radius:999px;background:#ffffff;}
+.lang-btn{min-width:36px;height:32px;border:none;border-radius:999px;background:transparent;color:var(--text-secondary);cursor:pointer;font-size:12px;font-weight:700;}
+.lang-btn.active{background:var(--primary);color:#ffffff;}
+.theme-toggle{display:none;}
+.profile-page{max-width:1200px;margin:0 auto;padding:32px 24px 72px;display:flex;gap:40px;align-items:flex-start;}
+.profile-sidebar-column{width:320px;flex:0 0 320px;position:sticky;top:88px;align-self:flex-start;}
+.profile-main-column{flex:1;min-width:0;}
+.profile-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:28px;margin-bottom:20px;box-shadow:var(--shadow-card);}
+.profile-sidebar-card{display:flex;flex-direction:column;gap:24px;}
+.profile-sidebar-header{display:flex;flex-direction:column;align-items:flex-start;gap:16px;}
+.profile-avatar{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#ffffff;box-shadow:inset 0 1px 0 rgba(255,255,255,.18);}
+.profile-name{font-family:'Newsreader',serif;font-size:2rem;line-height:1.05;color:var(--text-main);}
+.profile-role{font-size:16px;color:#374151;margin-top:6px;}
+.profile-availability-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#f0fdf4;color:#166534;font-size:14px;font-weight:600;}
+.profile-availability-pill.unavailable{background:#f3f4f6;color:#6b7280;}
+.availability-dot{width:10px;height:10px;border-radius:50%;background:var(--green-available);display:inline-block;}
+.profile-availability-pill.unavailable .availability-dot{background:#6b7280;}
+.sidebar-primary-cta{width:100%;border:none;border-radius:8px;background:#004ac6;color:#ffffff;padding:14px 16px;font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease;}
+.sidebar-primary-cta:hover{background:#003da3;}
+.profile-info-list{display:flex;flex-direction:column;gap:12px;font-size:14px;color:#374151;}
+.profile-info-line{display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.profile-info-icon{width:18px;flex-shrink:0;color:#6b7280;}
+.profile-sidebar-block{display:flex;flex-direction:column;gap:14px;}
+.sidebar-heading{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;}
+.skills-stack{display:flex;flex-wrap:wrap;gap:8px;}
+.skill-chip{display:inline-flex;align-items:center;padding:6px 12px;border-radius:20px;background:#f1f5f9;color:#334155;font-size:12px;line-height:1.4;}
+.skill-chip.primary{background:#eff6ff;color:#004ac6;font-weight:600;}
+.skill-experience-list{display:flex;flex-direction:column;gap:10px;}
+.skill-exp-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;font-size:14px;color:#374151;}
+.skill-exp-label{position:relative;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.skill-exp-label::after{content:'';position:absolute;left:100%;right:-120px;top:50%;height:1px;transform:translateY(-50%);background:repeating-linear-gradient(to right,#cbd5e1 0,#cbd5e1 4px,transparent 4px,transparent 8px);margin-left:10px;}
+.skill-exp-value{font-weight:600;color:var(--text-main);white-space:nowrap;}
+.section-title{font-family:'Newsreader',serif;font-size:1.9rem;line-height:1.1;margin-bottom:18px;color:var(--text-main);}
+.section-text{font-size:16px;line-height:1.7;color:#374151;white-space:pre-line;}
+.experience-list{display:flex;flex-direction:column;gap:16px;}
+.experience-item{display:flex;gap:16px;padding:24px;border:1px solid #e5e7eb;border-radius:12px;background:#ffffff;}
+.experience-icon{width:44px;height:44px;border-radius:12px;background:#eff6ff;color:#004ac6;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0;}
+.experience-body{flex:1;min-width:0;}
+.exp-title{font-size:20px;font-weight:700;color:var(--text-main);margin-bottom:4px;}
+.exp-company-line{font-size:15px;color:#374151;margin-bottom:6px;}
+.exp-sector{font-size:14px;color:#6b7280;margin-bottom:14px;}
+.exp-bullets{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.exp-bullets li{list-style:none;position:relative;padding-left:16px;font-size:15px;line-height:1.6;color:#4b5563;}
+.exp-bullets li::before{content:'•';position:absolute;left:0;top:0;color:#004ac6;font-weight:700;}
+.exp-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.exp-tag{display:inline-flex;align-items:center;padding:6px 12px;border-radius:20px;background:#f1f5f9;color:#334155;font-size:12px;}
+.contact-form{background:#f8fafc;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:8px;}
+.form-label{font-size:14px;font-weight:600;color:#374151;}
+.form-input,.form-textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;background:#ffffff;padding:14px 16px;color:var(--text-main);}
+.form-input:focus,.form-textarea:focus{outline:none;border-color:#004ac6;box-shadow:0 0 0 4px rgba(0,74,198,.12);}
+.form-textarea{min-height:132px;resize:vertical;}
+.btn-contact{background:#004ac6;color:#ffffff;width:100%;border:none;border-radius:8px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease;}
+.btn-contact:hover{background:#003da3;}
+.certifs-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.certif-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:13px;}
+.certif-badge.certified{background:#eff6ff;color:#004ac6;font-weight:600;}
+.empty-block{font-size:15px;color:#6b7280;}
+footer{padding:0 24px 32px;color:#6b7280;}
+.footer-inner{max-width:1200px;margin:0 auto;padding-top:24px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.footer-logo{font-family:'Newsreader',serif;font-size:1.2rem;font-weight:600;color:#111827;}
+.footer-logo span{color:#004ac6;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-link{background:none;border:none;color:#6b7280;cursor:pointer;font-size:14px;}
+:focus-visible{outline:2px solid #004ac6;outline-offset:2px;}
+@media(max-width:980px){
+  .profile-page{flex-direction:column;gap:24px;}
+  .profile-sidebar-column{position:static;width:100%;flex:1 1 auto;}
 }
-
-/* Executive Archive consistency */
-nav{
-  background:rgba(255,255,255,.82);
-  border-bottom:none;
-  box-shadow:0 20px 40px rgba(15,23,42,.06);
-  border-radius:0 0 28px 28px;
+@media(max-width:720px){
+  nav{padding:0 16px;height:auto;min-height:72px;flex-wrap:wrap;justify-content:center;padding-top:12px;padding-bottom:12px;}
+  .nav-links{order:3;width:100%;justify-content:center;gap:18px;}
+  .profile-page{padding:20px 16px 56px;}
+  .profile-card{padding:22px;}
+  .contact-form{padding:24px;}
+  .experience-item{padding:20px;}
 }
-.logo,.profile-info h1,.section h2,.contact-form h3,.footer-logo{font-family:'Newsreader',serif;letter-spacing:-.02em;font-weight:500;}
-.nav-link,.btn-outline,.btn-solid,.lang-btn,.stat-l{font-family:'Inter',sans-serif;letter-spacing:.07em;text-transform:uppercase;font-size:.72rem;font-weight:700;}
-.btn-solid{border-radius:999px;background:linear-gradient(135deg,#004ac6,#2563eb);box-shadow:0 12px 24px rgba(37,99,235,.2);}
-.btn-outline{border-radius:999px;border:none;background:#e8edf3;color:#131b2e;}
-.profile-hero{
-  background:linear-gradient(135deg,#17203a 0%, #0f1a2f 55%, #1f3a7a 100%);
-  animation:none;
-}
-.profile-hero:before{opacity:.14;}
-.profile-avatar{background:linear-gradient(135deg,#f7faff 0%, #d9e4ff 100%);color:#003ea8;}
-.profile-info .role,.profile-info .location,.stat-l{color:rgba(239,244,255,.82);}
-.profile-main,.profile-sidebar,.contact-form{
-  background:rgba(255,255,255,.9);
-  border:none;
-  border-radius:32px;
-  box-shadow:0 20px 40px rgba(15,23,42,.06);
-  transform:none;
-}
-.section{margin-bottom:2.4rem;}
-.section h2{color:#131b2e;font-size:2rem;}
-.section p{color:#4d5a70;line-height:1.75;}
-.skill-tag{
-  border:none;
-  background:#eef3ff;
-  color:#003ea8;
-  border-radius:999px;
-}
-.experience-item{
-  border:none;
-  background:#f2f4f6;
-  border-radius:24px;
-}
-.contact-form .form-input,
-.contact-form textarea{
-  border:none;
-  background:#f2f4f6;
-  border-radius:14px;
-}
-.contact-form .form-input:focus,
-.contact-form textarea:focus{
-  border:none;
-  box-shadow:0 0 0 2px rgba(0,74,198,.2);
-  transform:none;
-}
-.btn-contact{
-  border-radius:999px;
-  background:linear-gradient(135deg,#004ac6,#2563eb);
-  box-shadow:0 12px 24px rgba(37,99,235,.2);
-}
-.btn-contact:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(37,99,235,.28);}
-.certif-badge{
-  border:none;
-  background:#eef3ff;
-  color:#003ea8;
-}
-.certif-badge.certified{
-  border:none;
-  background:linear-gradient(120deg,#fff8e1 0%,#ffe9b2 100%);
-}
-footer{
-  border-top:none;
-  background:transparent;
-}
-.profile-content{gap:1.5rem;margin-top:1.5rem;align-items:start;}
-.profile-main{padding:1.75rem;}
-.profile-sidebar{padding:1.25rem;}
-.section{margin-bottom:1.5rem;}
 </style>
 </head>
 <body>
@@ -229,98 +136,103 @@ footer{
   </div>
 </nav>
 
-<div class="profile-hero">
-  <div class="profile-inner">
-    <div class="profile-header">
-      <div class="profile-avatar" id="profile-avatar">JD</div>
-      <div class="profile-info">
-        <h1 id="profile-name">Jean Dupont</h1>
-        <div class="role" id="profile-role">Consultant SAP EWM</div>
-        <div class="location" id="profile-location">Paris, France</div>
-        <div class="profile-erp-row" id="profile-erp-row">
-          <span class="profile-erp-chip"><span class="erp-logo-wrap"><img class="erp-logo-img" src="assets/erp-logos/sap-s4hana.svg" alt="SAP S/4HANA"><span class="erp-logo-mark sap" style="display:none;">SAP</span></span><span class="profile-erp-label">SAP S/4HANA</span></span>
+<main class="profile-page">
+  <aside class="profile-sidebar-column">
+    <section class="profile-card profile-sidebar-card">
+      <div class="profile-sidebar-header">
+        <div class="profile-avatar" id="profile-avatar">JD</div>
+        <div>
+          <h1 class="profile-name" id="profile-name">Jean Dupont</h1>
+          <p class="profile-role" id="profile-role">Consultant SAP</p>
         </div>
       </div>
-      <div class="profile-stats">
-        <div class="stat"><div class="stat-n" id="profile-exp">8</div><div class="stat-l">ans exp</div></div>
-        <div class="stat"><div class="stat-n" id="profile-rate">650</div><div class="stat-l" id="profile-rate-label">$/jour</div></div>
+
+      <div class="profile-availability-pill" id="profile-availability-pill">
+        <span class="availability-dot" aria-hidden="true"></span>
+        <span id="profile-availability-label">Disponible immédiatement</span>
       </div>
-    </div>
-  </div>
-</div>
 
-<div class="profile-content" style="padding:1.5rem 1.25rem;">
-  <div class="profile-main">
-    <div class="section" id="resume-section">
-      <h2>Résumé professionnel</h2>
-      <p id="profile-resume">Consultant SAP expérimenté avec plus de 8 ans d'expérience dans les modules EWM et WM.</p>
-    </div>
+      <button class="sidebar-primary-cta" id="sidebar-contact-btn" type="button">Contacter ce consultant</button>
 
-    <div class="section">
-      <h2>Compétences ERP</h2>
-      <div class="skills-grid" id="profile-skills">
-        <div class="skill-tag">SAP EWM</div>
-        <div class="skill-tag">SAP WM</div>
-        <div class="skill-tag">SAP MM</div>
-        <div class="skill-tag">SAP SD</div>
+      <div class="profile-info-list">
+        <div class="profile-info-line"><span class="profile-info-icon">✅</span><span id="profile-verified-label">Expert validé ERP</span></div>
+        <div class="profile-info-line"><span class="profile-info-icon">📍</span><span id="profile-location">Paris, France</span></div>
+        <div class="profile-info-line"><span class="profile-info-icon">🗓</span><span id="profile-member-since">Membre depuis janv. 2024</span></div>
+        <div class="profile-info-line"><span class="profile-info-icon">🌐</span><span id="profile-languages">Français, Anglais</span></div>
+        <div class="profile-info-line"><span class="profile-info-icon">💼</span><span id="profile-mode">Hybride</span></div>
+        <div class="profile-info-line"><span class="profile-info-icon">💰</span><span id="profile-rate-line">650 $/jour</span></div>
       </div>
-    </div>
 
-    <div class="section">
-      <h2>Expériences professionnelles</h2>
-      <div id="profile-experiences">
-        <div class="experience-item">
-          <div class="exp-title">Consultant Senior SAP EWM</div>
-          <div class="exp-company">ABC Consulting</div>
-          <div class="exp-period">2020 - Présent · 4 ans</div>
-          <p>Implémentation complète du module EWM pour un client du secteur manufacturier. Gestion de projet, formation équipe, go-live réussi.</p>
-        </div>
-        <div class="experience-item">
-          <div class="exp-title">Consultant SAP WM</div>
-          <div class="exp-company">XYZ Solutions</div>
-          <div class="exp-period">2016 - 2020 · 4 ans</div>
-          <p>Support et optimisation des processus warehouse management. Résolution d'incidents critiques et amélioration des performances.</p>
+      <div class="profile-sidebar-block" id="skills-sidebar-section">
+        <h2 class="sidebar-heading">Compétences ERP</h2>
+        <div class="skills-stack" id="profile-skills">
+          <span class="skill-chip primary">SAP S/4HANA</span>
         </div>
       </div>
-    </div>
-    <div class="section" id="certif-section" style="display:none;">
-      <h2>Certifications</h2>
+
+      <div class="profile-sidebar-block" id="skill-exp-section">
+        <h2 class="sidebar-heading">Expérience par skill</h2>
+        <div class="skill-experience-list" id="profile-skill-experience"></div>
+      </div>
+    </section>
+  </aside>
+
+  <div class="profile-main-column">
+    <section class="profile-card" id="resume-section">
+      <h2 class="section-title" id="resume-heading">Résumé professionnel</h2>
+      <p class="section-text" id="profile-resume">Consultant SAP expérimenté avec plus de 8 ans d'expérience dans les modules EWM et WM.</p>
+    </section>
+
+    <section class="profile-card" id="experiences-section">
+      <h2 class="section-title" id="experiences-heading">Expériences professionnelles</h2>
+      <div class="experience-list" id="profile-experiences"></div>
+    </section>
+
+    <section class="profile-card" id="certif-section" style="display:none;">
+      <h2 class="section-title">Certifications</h2>
       <div id="profile-certifs" class="certifs-grid"></div>
-    </div>
+    </section>
 
-    <div class="section" id="projets-section" style="display:none;">
-      <h2>Projets &amp; expériences</h2>
-      <div id="profile-projets"></div>
-    </div>  </div>
+    <section class="profile-card" id="projets-section" style="display:none;">
+      <h2 class="section-title">Projets complémentaires</h2>
+      <div id="profile-projets" class="experience-list"></div>
+    </section>
 
-  <div class="profile-sidebar">
-    <div class="contact-form">
-      <h3 id="contact-title">Contacter ce consultant</h3>
-      <input class="form-input" id="company-name" placeholder="Nom entreprise" style="margin-bottom:0.7rem;">
-      <input class="form-input" id="company-email" placeholder="Email entreprise" style="margin-bottom:0.7rem;">
-      <input class="form-input" id="company-phone" placeholder="Telephone entreprise" style="margin-bottom:0.7rem;">
-      <textarea placeholder="Décrivez votre projet et vos besoins..." id="contact-message"></textarea>
-      <button class="btn-contact" id="contact-btn" data-action="send-contact">Envoyer le message</button>
-    </div>
-
-      <div class="section">
-        <h2>Informations</h2>
-        <p><strong>Disponibilité:</strong> <span id="profile-availability">Immédiate</span></p>
-        <p><strong>Tarif:</strong> <span id="profile-rate-line">—</span></p>
-        <p><strong>Mode de travail:</strong> <span id="profile-mode">Hybride</span></p>
-        <p><strong>Langues:</strong> <span id="profile-languages">Français (natif), Anglais (courant)</span></p>
-      </div>
+    <section class="profile-card" id="contact-section">
+      <h2 class="section-title" id="contact-title">Contacter ce consultant</h2>
+      <form class="contact-form" id="contact-form">
+        <div class="form-group">
+          <label class="form-label" for="company-name">Votre entreprise</label>
+          <input class="form-input" id="company-name" type="text" required placeholder="Votre entreprise">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="company-email">Email professionnel</label>
+          <input class="form-input" id="company-email" type="email" required placeholder="Email professionnel">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="company-phone">Téléphone</label>
+          <input class="form-input" id="company-phone" type="tel" placeholder="Téléphone">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Votre message</label>
+          <textarea class="form-textarea" id="contact-message" rows="4" required placeholder="Décrivez votre projet et vos besoins…"></textarea>
+        </div>
+        <button class="btn-contact" id="contact-btn" type="submit">Envoyer ma demande →</button>
+      </form>
+    </section>
   </div>
-</div>
+</main>
 
 <footer>
-  <div class="footer-logo">Expert<span>ERP</span>Hub</div>
-  <div class="footer-links">
-    <span class="footer-link" data-nav-href="index.html">Accueil</span>
-    <span class="footer-link" data-nav-href="index.html#consultants">Consultants</span>
-    <span class="footer-link" data-nav-href="index.html#entreprises">Entreprises</span>
+  <div class="footer-inner">
+    <div class="footer-logo">Expert<span>ERP</span>Hub</div>
+    <div class="footer-links">
+      <span class="footer-link" data-nav-href="index.html">Accueil</span>
+      <span class="footer-link" data-nav-href="index.html#consultants">Consultants</span>
+      <span class="footer-link" data-nav-href="index.html#entreprises">Entreprises</span>
+    </div>
+    <div class="footer-copy">© 2026 ExpertERPHub. Tous droits réservés.</div>
   </div>
-  <div class="footer-copy">© 2026 ExpertERPHub. Tous droits réservés.</div>
 </footer>
 
 <script src="i18n.js"></script>
@@ -348,16 +260,21 @@ function applyI18n() {
   if (nav[2]) nav[2].textContent = t('common.companies');
   const findBtn = document.querySelector('.btn-outline');
   if (findBtn) findBtn.textContent = t('common.findExpert');
-  const h2 = document.querySelectorAll('.section h2');
-  if (h2[0]) h2[0].textContent = t('consultant.professionalSummary');
-  if (h2[1]) h2[1].textContent = t('consultant.erpSkills');
-  if (h2[2]) h2[2].textContent = t('consultant.professionalExperience');
-  if (h2[3]) h2[3].textContent = t('consultant.information');
+  const resumeHeading = document.getElementById('resume-heading');
+  if (resumeHeading) resumeHeading.textContent = t('consultant.professionalSummary');
+  const experiencesHeading = document.getElementById('experiences-heading');
+  if (experiencesHeading) experiencesHeading.textContent = t('consultant.professionalExperience');
   refreshContactFormLabels();
+  const companyName = document.getElementById('company-name');
+  if (companyName) companyName.placeholder = 'Votre entreprise';
+  const companyEmail = document.getElementById('company-email');
+  if (companyEmail) companyEmail.placeholder = 'Email professionnel';
+  const companyPhone = document.getElementById('company-phone');
+  if (companyPhone) companyPhone.placeholder = 'Téléphone';
   const cm = document.getElementById('contact-message');
-  if (cm) cm.placeholder = t('consultant.contactPlaceholder');
+  if (cm) cm.placeholder = 'Décrivez votre projet et vos besoins…';
   const cb = document.getElementById('contact-btn');
-  if (cb) cb.textContent = t('consultant.sendMessage');
+  if (cb) cb.textContent = 'Envoyer ma demande →';
 }
 
 function toggleTheme() {
@@ -413,6 +330,12 @@ function refreshContactFormLabels() {
   contactTitle.textContent = b2b
     ? 'Contacter l\'administrateur de cette ressource'
     : ExpertI18n.t('consultant.contactConsultant');
+  const sidebarButton = document.getElementById('sidebar-contact-btn');
+  if (sidebarButton) {
+    sidebarButton.textContent = b2b
+      ? 'Contacter l\'administrateur'
+      : 'Contacter ce consultant';
+  }
 }
 
 const ERP_BRANDS = [
@@ -476,23 +399,22 @@ function bindStaticActions() {
   document.querySelectorAll('[data-action="send-contact"]').forEach((node) => {
     node.addEventListener('click', sendContactMessage);
   });
-}
 
-function renderProfileErpRow(skills) {
-  const container = document.getElementById('profile-erp-row');
-  if (!container) return;
-  const brands = extractErpBrands(skills);
-  if (!brands.length) {
-    container.innerHTML = '';
-    return;
+  const sidebarContactButton = document.getElementById('sidebar-contact-btn');
+  if (sidebarContactButton) {
+    sidebarContactButton.addEventListener('click', () => {
+      const target = document.getElementById('contact-section');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }
-  container.innerHTML = brands.map((brand) => `
-    <span class="profile-erp-chip">
-      ${renderErpBrandVisual(brand)}
-      <span class="profile-erp-label">${brand.label}</span>
-    </span>
-  `).join('');
-  bindErpLogoFallbacks(container);
+
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      sendContactMessage();
+    });
+  }
 }
 
 function readUrlId() {
@@ -514,26 +436,167 @@ async function sbSelectPublicConsultants(limit) {
   return response.json();
 }
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function normalizeCity(value) {
+  return String(value || '').replace(/, Canada, Canada/i, ', Canada').trim();
+}
+
+function formatMemberSince(value) {
+  const date = new Date(value || '');
+  if (Number.isNaN(date.getTime())) return 'Membre depuis récemment';
+  const formatted = new Intl.DateTimeFormat('fr-FR', { month: 'short', year: 'numeric' }).format(date);
+  return `Membre depuis ${formatted}`;
+}
+
+function generateAvatarColor(name) {
+  const source = String(name || 'ER').trim() || 'ER';
+  let hash = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    hash = source.charCodeAt(index) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue} 58% 46%)`;
+}
+
+function getConsultantDisplayName(consultant, notes) {
+  const fullName = `${consultant.prenom || ''} ${consultant.nom || ''}`.trim();
+  if (fullName) return fullName;
+  if (consultant.full_name) return String(consultant.full_name).trim();
+  return String(notes.resource_code || 'Consultant ERP').trim();
+}
+
+function collectSkills(consultant, notes) {
+  const directSkills = Array.isArray(consultant.competences)
+    ? consultant.competences
+    : String(consultant.competences || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const moduleSkills = String(consultant.modules || notes.modules || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const erpSkill = String(consultant.erp || notes.erp || '').trim();
+  const roleSkill = String(consultant.role || consultant.titre || notes.role || '').trim();
+  const combined = [...directSkills, ...moduleSkills];
+  if (erpSkill) combined.unshift(erpSkill);
+  if (roleSkill) combined.push(roleSkill);
+  return [...new Set(combined.filter(Boolean))];
+}
+
+function parseAvailabilityState(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return { available: true, label: 'Disponible immédiatement' };
+  if (/(non|indispo|occup|later|busy|unavailable)/.test(raw)) {
+    return { available: false, label: 'Indisponible' };
+  }
+  return { available: true, label: /immediat|immediate/.test(raw) ? 'Disponible immédiatement' : 'Disponible' };
+}
+
+function parseExperienceYears(rawValue) {
+  const value = String(rawValue || '').trim();
+  if (!value) return { label: 'Expérience non précisée', years: null };
+  const matches = value.match(/\d+/g) || [];
+  const numeric = matches.length ? Math.max(...matches.map((item) => Number(item))) : null;
+  return {
+    label: /ans?/i.test(value) ? value : `${value} ans`,
+    years: numeric
+  };
+}
+
+function formatRate(notes, consultant) {
+  const amount = notes.tjm_value || consultant.tjm || consultant.tjm_min || null;
+  if (!amount) return 'Tarif sur demande';
+  const unit = String(notes.tjm_type || notes.rate_unit || 'jour').toLowerCase() === 'heure' ? 'heure' : 'jour';
+  return `${amount} $/${unit}`;
+}
+
+function buildSkillExperienceData(skills, yearsInfo, notes) {
+  const explicit = Array.isArray(notes.experience_par_skill) ? notes.experience_par_skill : [];
+  if (explicit.length) {
+    return explicit.slice(0, 5).map((item) => ({
+      label: item.skill || item.nom || item.label || 'Skill',
+      value: item.years || item.annees || item.value || '—'
+    }));
+  }
+  const totalYears = yearsInfo.years || 0;
+  return skills.slice(0, 5).map((skill, index) => {
+    const value = totalYears ? Math.max(totalYears - index, 1) : null;
+    return { label: skill, value: value ? `${value} ans` : '—' };
+  });
+}
+
+function extractExperienceBullets(exp) {
+  const fields = [exp.description, exp.details, exp.resume, exp.missions, exp.points];
+  for (const field of fields) {
+    if (!field) continue;
+    if (Array.isArray(field)) {
+      const bullets = field.map((item) => String(item).trim()).filter(Boolean);
+      if (bullets.length) return bullets;
+    }
+    const bullets = String(field)
+      .split(/\n|•|\u2022|;/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+    if (bullets.length) return bullets;
+  }
+  const fallback = [];
+  if (exp.secteur) fallback.push(`Interventions sur des projets ERP dans le secteur ${exp.secteur}.`);
+  if (exp.poste || exp.titre) fallback.push(`Responsabilité principale en tant que ${exp.poste || exp.titre}.`);
+  return fallback.length ? fallback : ['Expérience ERP détaillée disponible sur demande.'];
+}
+
+function extractExperienceTags(exp, skills, consultant, notes) {
+  const rawTags = [];
+  if (Array.isArray(exp.skills)) rawTags.push(...exp.skills);
+  if (Array.isArray(exp.competences)) rawTags.push(...exp.competences);
+  if (typeof exp.skills === 'string') rawTags.push(...exp.skills.split(','));
+  if (typeof exp.competences === 'string') rawTags.push(...exp.competences.split(','));
+  if (typeof exp.modules === 'string') rawTags.push(...exp.modules.split(','));
+  if (exp.erp) rawTags.push(exp.erp);
+  const uniqueTags = [...new Set(rawTags.map((item) => String(item).trim()).filter(Boolean))];
+  if (uniqueTags.length) return uniqueTags.slice(0, 4);
+  return skills.slice(0, 3).length ? skills.slice(0, 3) : [consultant.erp || notes.erp || 'ERP'];
+}
+
 function renderConsultant(consultant) {
   const notes = parseNotes(consultant.notes_admin);
   currentConsultant = consultant;
 
-  document.getElementById('profile-avatar').textContent = ((consultant.prenom || '?')[0] + (consultant.nom || '?')[0]).toUpperCase();
-  document.getElementById('profile-name').textContent = `${consultant.prenom || ''} ${consultant.nom || ''}`.trim();
-  document.getElementById('profile-role').textContent = consultant.titre || '—';
-  document.getElementById('profile-location').textContent = notes.ville || '—';
-  document.getElementById('profile-location').textContent = notes.ville ? notes.ville + ', Canada' : '—';
-  const expRaw = notes.annees_exp;
-  const expClean = expRaw ? String(expRaw).replace(/\s*ans?.*$/i, '').trim() : '—';
-  document.getElementById('profile-exp').textContent = expClean;
-  const tjmType = notes.tjm_type || 'jour';
-  const tjmValue = notes.tjm_value || consultant.tjm_min;
-  document.getElementById('profile-rate').textContent = tjmValue || '—';
-  const rateLabelEl = document.getElementById('profile-rate-label');
-  if (rateLabelEl) rateLabelEl.textContent = tjmValue ? (tjmType === 'heure' ? '$/h' : '$/jour') : '$/jour';
+  const displayName = getConsultantDisplayName(consultant, notes);
+  const initials = displayName.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase() || 'ER';
+  const availability = parseAvailabilityState(notes.disponibilite || notes.dispo || consultant.disponibilite);
+  const location = normalizeCity(notes.ville || consultant.ville || 'Localisation non précisée');
+  const yearsInfo = parseExperienceYears(notes.annees_exp || consultant.annees_exp);
+  const rateText = formatRate(notes, consultant);
+  const skills = collectSkills(consultant, notes);
+  const memberSince = formatMemberSince(consultant.created_at || consultant.updated_at);
+  const roleText = String(consultant.role || consultant.titre || notes.role || `${consultant.erp || notes.erp || 'ERP'} Consultant`).trim();
+  const languages = String(notes.langues || consultant.langues || 'Langues non précisées').trim();
+  const mode = String(notes.mode_travail || consultant.mode_travail || 'Mode flexible').trim();
+  const avatarEl = document.getElementById('profile-avatar');
+  if (avatarEl) {
+    avatarEl.textContent = initials;
+    avatarEl.style.background = generateAvatarColor(displayName);
+  }
+  document.getElementById('profile-name').textContent = displayName;
+  document.getElementById('profile-role').textContent = roleText;
+  document.getElementById('profile-location').textContent = location;
+  document.getElementById('profile-member-since').textContent = memberSince;
+  document.getElementById('profile-languages').textContent = languages;
+  document.getElementById('profile-mode').textContent = mode;
+  const availabilityLabel = document.getElementById('profile-availability-label');
+  if (availabilityLabel) availabilityLabel.textContent = availability.label;
+  const availabilityPill = document.getElementById('profile-availability-pill');
+  if (availabilityPill) availabilityPill.classList.toggle('unavailable', !availability.available);
   const rateLineEl = document.getElementById('profile-rate-line');
-  if (rateLineEl) rateLineEl.textContent = tjmValue ? tjmValue + (tjmType === 'heure' ? ' $/h' : ' $/jour') : '—';
-  const resumeText = notes.resume || notes.experiences_projets || notes.experiences_test || '';
+  if (rateLineEl) rateLineEl.textContent = rateText;
+  const verifiedLabel = document.getElementById('profile-verified-label');
+  if (verifiedLabel) verifiedLabel.textContent = isB2BResource(consultant) ? 'Ressource partenaire validée' : 'Expert validé ERP';
+
+  const resumeText = notes.resume || consultant.resume || notes.experiences_projets || notes.experiences_test || '';
   const resumeSection = document.getElementById('resume-section');
   const resumeEl = document.getElementById('profile-resume');
   if (resumeText) {
@@ -542,52 +605,59 @@ function renderConsultant(consultant) {
   } else {
     if (resumeSection) resumeSection.style.display = 'none';
   }
-  document.getElementById('profile-availability').textContent = notes.disponibilite || notes.dispo || ExpertI18n.t('consultant.immediate');
-  document.getElementById('profile-mode').textContent = notes.mode_travail || '—';
-  document.getElementById('profile-languages').textContent = notes.langues || '—';
 
   const skillsContainer = document.getElementById('profile-skills');
   skillsContainer.innerHTML = '';
-  const rawSkills = Array.isArray(consultant.competences) ? consultant.competences : String(consultant.competences || '').split(',').map(s => s.trim()).filter(Boolean);
-  renderProfileErpRow(rawSkills);
-  if (rawSkills.length) {
-    rawSkills.forEach((skill) => {
-      const brand = detectErpBrand(skill);
-      const tag = document.createElement('div');
-      tag.className = `skill-tag${brand ? ' erp-skill' : ''}`;
-      tag.innerHTML = brand
-        ? `${renderErpBrandVisual(brand)}<span>${skill}</span>`
-        : `<span>${skill}</span>`;
+  if (skills.length) {
+    skills.forEach((skill, index) => {
+      const tag = document.createElement('span');
+      tag.className = `skill-chip${index === 0 ? ' primary' : ''}`;
+      tag.textContent = skill;
       skillsContainer.appendChild(tag);
     });
-  } else if (notes.erp_modules) {
-    Object.entries(notes.erp_modules).forEach(([erp, mods]) => {
-      const safeMods = Array.isArray(mods) ? mods : (mods.modules || []);
-      safeMods.forEach((mod) => {
-        const brand = detectErpBrand(erp);
-        const tag = document.createElement('div');
-        tag.className = `skill-tag${brand ? ' erp-skill' : ''}`;
-        tag.innerHTML = brand
-          ? `${renderErpBrandVisual(brand)}<span>${erp} ${mod}</span>`
-          : `<span>${erp} ${mod}</span>`;
-        skillsContainer.appendChild(tag);
-      });
-    });
+  } else {
+    skillsContainer.innerHTML = '<span class="empty-block">Compétences non renseignées.</span>';
   }
-  bindErpLogoFallbacks(skillsContainer);
+
+  const skillExperienceContainer = document.getElementById('profile-skill-experience');
+  if (skillExperienceContainer) {
+    const rows = buildSkillExperienceData(skills, yearsInfo, notes);
+    skillExperienceContainer.innerHTML = rows.length
+      ? rows.map((row) => `
+        <div class="skill-exp-row">
+          <span class="skill-exp-label">${escapeHtml(row.label)}</span>
+          <span class="skill-exp-value">${escapeHtml(row.value)}</span>
+        </div>
+      `).join('')
+      : '<div class="empty-block">Historique par compétence non renseigné.</div>';
+  }
 
   const expContainer = document.getElementById('profile-experiences');
   expContainer.innerHTML = '';
-  const exps = Array.isArray(notes.experiences) ? notes.experiences : [];
+  const exps = Array.isArray(consultant.experiences)
+    ? consultant.experiences
+    : Array.isArray(notes.experiences)
+      ? notes.experiences
+      : [];
   if (exps.length) {
     exps.forEach((exp) => {
       const item = document.createElement('div');
       item.className = 'experience-item';
+      const bullets = extractExperienceBullets(exp);
+      const tags = extractExperienceTags(exp, skills, consultant, notes);
       item.innerHTML = `
-        <div class="exp-title">${exp.titre || '—'}</div>
-        <div class="exp-company">${exp.entreprise || '—'}</div>
-        <div class="exp-period">${exp.periode || ''}${exp.secteur ? ' · ' + exp.secteur : ''}</div>
-        <p>${exp.description || ''}</p>
+        <div class="experience-icon">🏢</div>
+        <div class="experience-body">
+          <div class="exp-title">${escapeHtml(exp.poste || exp.titre || 'Expérience ERP')}</div>
+          <div class="exp-company-line">${escapeHtml(exp.entreprise || 'Entreprise confidentielle')} — ${escapeHtml(exp.periode || 'Période non précisée')}</div>
+          <div class="exp-sector">Secteur : ${escapeHtml(exp.secteur || 'Non précisé')}</div>
+          <ul class="exp-bullets">
+            ${bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}
+          </ul>
+          <div class="exp-tags">
+            ${tags.map((tag) => `<span class="exp-tag">${escapeHtml(tag)}</span>`).join('')}
+          </div>
+        </div>
       `;
       expContainer.appendChild(item);
     });
@@ -598,9 +668,18 @@ function renderConsultant(consultant) {
       projets.forEach(p => {
         const item = document.createElement('div');
         item.className = 'experience-item';
-        item.innerHTML = `<p>${p}</p>`;
+        item.innerHTML = `
+          <div class="experience-icon">🏢</div>
+          <div class="experience-body">
+            <div class="exp-title">Mission ERP</div>
+            <ul class="exp-bullets"><li>${escapeHtml(p)}</li></ul>
+            <div class="exp-tags">${skills.slice(0, 3).map((tag) => `<span class="exp-tag">${escapeHtml(tag)}</span>`).join('')}</div>
+          </div>
+        `;
         expContainer.appendChild(item);
       });
+    } else {
+      expContainer.innerHTML = '<div class="empty-block">Aucune expérience détaillée n\'est disponible pour le moment.</div>';
     }
   }
 
@@ -612,7 +691,7 @@ function renderConsultant(consultant) {
     if (projetsSection) projetsSection.style.display = '';
     const projets = String(projStr).split(/\n/).map(s => s.trim()).filter(Boolean);
     projetsContainer.innerHTML = projets.map(p =>
-      '<div class="experience-item"><p>' + p.replace(/,/g, '</p><p>') + '</p></div>'
+      '<div class="experience-item"><div class="experience-icon">📌</div><div class="experience-body"><ul class="exp-bullets"><li>' + escapeHtml(p).replace(/, /g, '</li><li>') + '</li></ul></div></div>'
     ).join('');
   } else if (projetsSection) {
     projetsSection.style.display = 'none';
@@ -727,8 +806,11 @@ async function sendContactMessage() {
   }
 
   alert(b2b
-    ? 'Message envoye a l\'administrateur de la ressource.'
+    ? 'Message envoyé à l\'administrateur de la ressource.'
     : ExpertI18n.t('consultant.messageSent'));
+  document.getElementById('company-name').value = '';
+  document.getElementById('company-email').value = '';
+  document.getElementById('company-phone').value = '';
   document.getElementById('contact-message').value = '';
 }
 

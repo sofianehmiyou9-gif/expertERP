@@ -422,10 +422,7 @@ td{
 </head>
 <body>
 
-<div class="top-controls">
-  <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
-  <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
-</div>
+
 
 <!-- Auth Form -->
 <div id="auth-container" class="auth-container" style="display:none;">
@@ -450,6 +447,8 @@ td{
     </div>
     <div class="nav-right">
       <button class="btn btn-secondary" id="logout-btn" data-action="logout">Deconnexion</button>
+      <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
+      <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
     </div>
   </nav>
 
@@ -524,6 +523,7 @@ td{
         <table id="resources-table">
           <thead>
             <tr>
+              <th>Photo</th>
               <th>Identifiant</th>
               <th>ERP(s)</th>
               <th>Role</th>
@@ -855,48 +855,81 @@ function getUrlParam(name) {
   return params.get(name);
 }
 
-function getPortalEmail() {
-  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-  if (session && session.role === 'entreprise' && session.email) return session.email;
-  return null;
-}
+async function loadResources() {
+  const resources = await sbFetch('consultants', { select: '*' });
+  const ownerEmail = getCompanyOwnerEmail();
+  // Photos de test (liens libres ou assets locaux)
+  const testPhotos = [
+    'https://randomuser.me/api/portraits/men/32.jpg',
+    'https://randomuser.me/api/portraits/women/44.jpg',
+    'https://randomuser.me/api/portraits/men/85.jpg',
+    'https://randomuser.me/api/portraits/women/65.jpg',
+    'https://randomuser.me/api/portraits/men/12.jpg'
+  ];
+  const filtered = resources.filter((r, i) => {
+    const notes = parseNotes(r.notes_admin);
+    // Injection photo de test pour les 5 premiers
+    if (i < testPhotos.length) r.photo = testPhotos[i];
+    return String(notes.entreprise_email || '').toLowerCase() === ownerEmail;
+  });
 
-async function sha256Hex(text) {
-  const bytes = new TextEncoder().encode(String(text || ''));
-  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-function persistPortalSession(email) {
-  if (window.ExpertPortalAuth && email) {
-    ExpertPortalAuth.setSession({ role: 'entreprise', email: email });
+  function getInitials(nom, prenom) {
+    const n = (nom||'').trim().charAt(0).toUpperCase();
+    const p = (prenom||'').trim().charAt(0).toUpperCase();
+    return (p + n) || 'C';
   }
-}
+  function avatarColor(seed) {
+    // Palette premium
+    const colors = ['#2563eb','#f59e0b','#10b981','#7c3aed','#ef4444','#0ea5e9'];
+    let sum = 0; for (let i=0; i<seed.length; ++i) sum += seed.charCodeAt(i);
+    return colors[sum % colors.length];
+  }
 
-function formatDate(dateStr) {
-  const lang = (window.ExpertI18n && ExpertI18n.getLang() === 'en') ? 'en-CA' : 'fr-CA';
-  return new Date(dateStr).toLocaleDateString(lang);
-}
+  const tbody = document.getElementById('resources-tbody');
+  tbody.innerHTML = filtered.map((r, i) => {
+    const statusMap = {
+      'en_attente': '<span class="badge badge-pending">En revision</span>',
+      'approuve': '<span class="badge badge-approved">Publie</span>',
+      'refuse': '<span class="badge badge-rejected">Refuse</span>'
+    };
+    const statusKey = normalizeStatus(r.statut);
+    const resourceCode = formatResourceId(r);
+    const internalName = getResourceInternalName(r);
+    const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
+    const erps = Array.isArray(r.competences) ? r.competences.join(', ') : (r.competences || '-');
+    const role = r.titre || '-';
+    const tjmLabel = formatRateRange(r);
+    const mapLine = internalName
+      ? '<div class="resource-map">Nom interne: ' + sanitizeHtml(internalName) + '</div>'
+      : '<div class="resource-map">Nom interne non renseigne</div>';
 
-function formatEmail(email) {
-  if (!email) return '***';
-  return email.substring(0, 3) + '***';
-}
+    // Affichage photo ou avatar fallback
+    let photoHtml = '';
+    if (r.photo) {
+      photoHtml = `<img src="${r.photo}" alt="Photo consultant" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 2px 8px rgba(37,99,235,.08);background:#fff;">`;
+    } else {
+      const initials = getInitials(r.nom, r.prenom);
+      const color = avatarColor(r.nom + r.prenom);
+      photoHtml = `<div style="width:44px;height:44px;border-radius:50%;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;box-shadow:0 2px 8px rgba(37,99,235,.08);">${initials}</div>`;
+    }
 
-function generateInternalResourceEmail() {
-  return 'res_' + Date.now() + '_' + Math.random().toString(16).slice(2, 8) + '@internal.experterphub.local';
-}
+    return `<tr>
+      <td style="text-align:center;">${photoHtml}</td>
+      <td>${sanitizeHtml(resourceCode)}</td>
+      <td>${sanitizeHtml(erps)}</td>
+      <td>${sanitizeHtml(role)}</td>
+      <td>${sanitizeHtml(tjmLabel)}</td>
+      <td>${statusMap[statusKey] || r.statut}</td>
+      <td><a class="resource-card-link" href="${cardUrl}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
+      <td>${formatDate(r.created_at)}</td>
+    </tr>`;
+  }).join('');
 
-function sanitizeHtml(value) {
-  return String(value == null ? '' : value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
+  currentUsedSlots = filtered.length;
+  currentPlanQty = getCompanyPlanQty();
+  updatePlanDisplay(filtered.length);
+  renderKPIs(filtered);
 
-function buildResourceCode(seed) {
   const base = String(seed || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -1203,6 +1236,13 @@ function getPlanLabel(planQty) {
   return 'Plan Enterprise';
 }
 
+
+function getPortalEmail() {
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (session && session.role === 'entreprise' && session.email) return session.email;
+  return null;
+}
+
 function canAddSlots(countToAdd) {
   const required = Number(countToAdd || 0);
   if (required <= 0) return true;
@@ -1308,48 +1348,6 @@ function showDashboard() {
   applyAccessPermissions();
 }
 
-async function loadResources() {
-  const resources = await sbFetch('consultants', { select: '*' });
-  const ownerEmail = getCompanyOwnerEmail();
-  const filtered = resources.filter(r => {
-    const notes = parseNotes(r.notes_admin);
-    return String(notes.entreprise_email || '').toLowerCase() === ownerEmail;
-  });
-
-  const tbody = document.getElementById('resources-tbody');
-  tbody.innerHTML = filtered.map(r => {
-    const statusMap = {
-      'en_attente': '<span class="badge badge-pending">En revision</span>',
-      'approuve': '<span class="badge badge-approved">Publie</span>',
-      'refuse': '<span class="badge badge-rejected">Refuse</span>'
-    };
-    const statusKey = normalizeStatus(r.statut);
-    const resourceCode = formatResourceId(r);
-    const internalName = getResourceInternalName(r);
-    const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
-    const erps = Array.isArray(r.competences) ? r.competences.join(', ') : (r.competences || '-');
-    const role = r.titre || '-';
-    const tjmLabel = formatRateRange(r);
-    const mapLine = internalName
-      ? '<div class="resource-map">Nom interne: ' + sanitizeHtml(internalName) + '</div>'
-      : '<div class="resource-map">Nom interne non renseigne</div>';
-
-    return `<tr>
-      <td>${sanitizeHtml(resourceCode)}</td>
-      <td>${sanitizeHtml(erps)}</td>
-      <td>${sanitizeHtml(role)}</td>
-      <td>${sanitizeHtml(tjmLabel)}</td>
-      <td>${statusMap[statusKey] || r.statut}</td>
-      <td><a class="resource-card-link" href="${cardUrl}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
-      <td>${formatDate(r.created_at)}</td>
-    </tr>`;
-  }).join('');
-
-  currentUsedSlots = filtered.length;
-  currentPlanQty = getCompanyPlanQty();
-  updatePlanDisplay(filtered.length);
-  renderKPIs(filtered);
-}
 function renderKPIs(filtered) {
   const total = filtered.length;
   const approved = filtered.filter(r => normalizeStatus(r.statut) === 'approuve').length;
