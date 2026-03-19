@@ -174,3 +174,65 @@ GRANT EXECUTE ON FUNCTION public.consume_invitation_code(TEXT, TEXT) TO anon, au
 --   WITH CHECK (true);
 --
 -- -- Later: add ownership checks on UPDATE/DELETE.
+
+-- =========================================================
+-- SECTION D - SAFE HARDENING (NO FLOW BREAK)
+-- =========================================================
+-- This section improves consistency and performance without
+-- changing the currently working frontend behavior.
+
+-- Normalize invitation codes and related emails at write time.
+CREATE OR REPLACE FUNCTION public.normalize_invitation_code_row()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.code := upper(trim(NEW.code));
+  IF NEW.created_by_email IS NOT NULL THEN
+    NEW.created_by_email := lower(trim(NEW.created_by_email));
+  END IF;
+  IF NEW.used_by_email IS NOT NULL THEN
+    NEW.used_by_email := lower(trim(NEW.used_by_email));
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_trigger
+    WHERE tgname = 'trg_normalize_invitation_code_row'
+  ) THEN
+    CREATE TRIGGER trg_normalize_invitation_code_row
+    BEFORE INSERT OR UPDATE ON public.invitation_codes
+    FOR EACH ROW
+    EXECUTE FUNCTION public.normalize_invitation_code_row();
+  END IF;
+END $$;
+
+-- Helpful indexes for invitation lookup and consultant email checks.
+CREATE INDEX IF NOT EXISTS invitation_codes_lookup_idx
+  ON public.invitation_codes (code, is_active, used_at, expires_at);
+
+CREATE INDEX IF NOT EXISTS consultants_email_lookup_idx
+  ON public.consultants (lower(email));
+
+-- Optional unique email protection (enabled only when data is clean).
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM public.consultants
+    WHERE email IS NOT NULL
+    GROUP BY lower(trim(email))
+    HAVING COUNT(*) > 1
+  ) THEN
+    RAISE NOTICE 'Unique index on consultants(email) skipped: duplicate emails exist.';
+  ELSE
+    CREATE UNIQUE INDEX IF NOT EXISTS consultants_email_unique_idx
+      ON public.consultants (lower(trim(email)))
+      WHERE email IS NOT NULL;
+  END IF;
+END $$;
