@@ -66,7 +66,6 @@ CREATE POLICY consultants_public_read_approved
   TO anon, authenticated
   USING (
     lower(coalesce(statut, '')) IN ('approuve', 'approuvé')
-    AND coalesce(admin_state, '') NOT IN ('desactive', 'expire', 'deleted')
   );
 
 -- Public can insert consultant signup rows.
