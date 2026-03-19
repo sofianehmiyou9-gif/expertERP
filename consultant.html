@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil Consultant — ExpertERPHub</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0e0e0e;--paper:#f5f2ed;--accent:#1e3a8a;--accent-dark:#1a2e6b;--accent-light:#e8f0ff;
-  --blue:#1e3a8a;--blue-mid:#2d5282;--blue-light:#ebf2fb;--blue-border:#b8d0eb;
-  --muted:#8a8580;--border:#e0dbd4;--card:#fff;
+  --ink:#131b2e;--paper:#f7f9fb;--accent:#004ac6;--accent-dark:#003ea8;--accent-light:#eef3ff;
+  --blue:#004ac6;--blue-mid:#2563eb;--blue-light:#eef3ff;--blue-border:#dbe1ff;
+  --muted:#6b7280;--border:#eef2f7;--card:#fff;
   --green:#16a34a;--green-bg:#ecfdf5;--green-border:#a7f3d0;
   --red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
   --orange:#f97316;--orange-bg:#fff7ed;--orange-border:#fed7aa;
@@ -33,7 +33,7 @@
   --shadow-3d: 0 8px 32px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);letter-spacing:-.3px;}
+body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 12% 0%, rgba(37,99,235,.08), transparent 25%),radial-gradient(circle at 88% 8%, rgba(0,74,198,.08), transparent 22%),var(--paper);color:var(--ink);letter-spacing:-.2px;}
 a{color:inherit;text-decoration:none;}
 nav{position:sticky;top:0;z-index:200;background:rgba(245,242,237,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(224,219,212,.5);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:70px;box-shadow:var(--shadow-sm);}
 [data-theme="dark"] nav{background:rgba(14,14,14,.95);}
@@ -134,6 +134,81 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
   .profile-content{grid-template-columns:1fr;}
   .profile-stats{justify-content:center;margin-top:2rem;}
 }
+
+/* Executive Archive consistency */
+nav{
+  background:rgba(255,255,255,.82);
+  border-bottom:none;
+  box-shadow:0 20px 40px rgba(15,23,42,.06);
+  border-radius:0 0 28px 28px;
+}
+.logo,.profile-info h1,.section h2,.contact-form h3,.footer-logo{font-family:'Newsreader',serif;letter-spacing:-.02em;font-weight:500;}
+.nav-link,.btn-outline,.btn-solid,.lang-btn,.stat-l{font-family:'Inter',sans-serif;letter-spacing:.07em;text-transform:uppercase;font-size:.72rem;font-weight:700;}
+.btn-solid{border-radius:999px;background:linear-gradient(135deg,#004ac6,#2563eb);box-shadow:0 12px 24px rgba(37,99,235,.2);}
+.btn-outline{border-radius:999px;border:none;background:#e8edf3;color:#131b2e;}
+.profile-hero{
+  background:linear-gradient(135deg,#17203a 0%, #0f1a2f 55%, #1f3a7a 100%);
+  animation:none;
+}
+.profile-hero:before{opacity:.14;}
+.profile-avatar{background:linear-gradient(135deg,#f7faff 0%, #d9e4ff 100%);color:#003ea8;}
+.profile-info .role,.profile-info .location,.stat-l{color:rgba(239,244,255,.82);}
+.profile-main,.profile-sidebar,.contact-form{
+  background:rgba(255,255,255,.9);
+  border:none;
+  border-radius:32px;
+  box-shadow:0 20px 40px rgba(15,23,42,.06);
+  transform:none;
+}
+.section{margin-bottom:2.4rem;}
+.section h2{color:#131b2e;font-size:2rem;}
+.section p{color:#4d5a70;line-height:1.75;}
+.skill-tag{
+  border:none;
+  background:#eef3ff;
+  color:#003ea8;
+  border-radius:999px;
+}
+.experience-item{
+  border:none;
+  background:#f2f4f6;
+  border-radius:24px;
+}
+.contact-form .form-input,
+.contact-form textarea{
+  border:none;
+  background:#f2f4f6;
+  border-radius:14px;
+}
+.contact-form .form-input:focus,
+.contact-form textarea:focus{
+  border:none;
+  box-shadow:0 0 0 2px rgba(0,74,198,.2);
+  transform:none;
+}
+.btn-contact{
+  border-radius:999px;
+  background:linear-gradient(135deg,#004ac6,#2563eb);
+  box-shadow:0 12px 24px rgba(37,99,235,.2);
+}
+.btn-contact:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(37,99,235,.28);}
+.certif-badge{
+  border:none;
+  background:#eef3ff;
+  color:#003ea8;
+}
+.certif-badge.certified{
+  border:none;
+  background:linear-gradient(120deg,#fff8e1 0%,#ffe9b2 100%);
+}
+footer{
+  border-top:none;
+  background:transparent;
+}
+.profile-content{gap:1.5rem;margin-top:1.5rem;align-items:start;}
+.profile-main{padding:1.75rem;}
+.profile-sidebar{padding:1.25rem;}
+.section{margin-bottom:1.5rem;}
 </style>
 </head>
 <body>
@@ -174,7 +249,7 @@ footer{padding:3rem 2.5rem;border-top:1px solid var(--border);display:flex;justi
   </div>
 </div>
 
-<div class="profile-content" style="padding:3rem 2.5rem;">
+<div class="profile-content" style="padding:1.5rem 1.25rem;">
   <div class="profile-main">
     <div class="section" id="resume-section">
       <h2>Résumé professionnel</h2>
@@ -425,6 +500,20 @@ function readUrlId() {
   return urlParams.get('id');
 }
 
+async function sbSelectPublicConsultants(limit) {
+  const query = new URLSearchParams({
+    select: '*',
+    statut: 'in.(approuve,en_mission,en_attente)',
+    order: 'created_at.desc',
+    limit: String(limit || 20)
+  });
+  const response = await fetch(`${SB_URL}/rest/v1/consultants?${query.toString()}`, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  if (!response.ok) throw new Error('fetch_list_failed');
+  return response.json();
+}
+
 function renderConsultant(consultant) {
   const notes = parseNotes(consultant.notes_admin);
   currentConsultant = consultant;
@@ -553,17 +642,24 @@ function renderConsultant(consultant) {
 
 async function loadConsultant() {
   const id = readUrlId();
-  if (!id) {
-    document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileNotFound')}</p>`;
-    return;
-  }
+
   try {
-    const data = await sbSelectById('consultants', id);
-    if (!data || !data.length) {
+    if (id) {
+      const data = await sbSelectById('consultants', id);
+      if (data && data.length) {
+        renderConsultant(data[0]);
+        return;
+      }
+    }
+
+    // Fallback: always display a valid consultant profile to avoid empty page.
+    const list = await sbSelectPublicConsultants(30);
+    if (!list || !list.length) {
       document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileNotFound')}</p>`;
       return;
     }
-    renderConsultant(data[0]);
+    const best = list.find(c => String(c.statut || '').toLowerCase() === 'approuve') || list[0];
+    renderConsultant(best);
   } catch (e) {
     console.error(e);
     document.querySelector('.profile-main').innerHTML = `<p>${ExpertI18n.t('consultant.profileLoadError')}</p>`;

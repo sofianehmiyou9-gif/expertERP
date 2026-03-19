@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entreprise Dashboard â€” ExpertERPHub</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0f172a;--paper:#f4f7fb;--accent:#1d4ed8;--accent-dark:#1e3a8a;--accent-light:#eaf1ff;
-  --blue:#1d4ed8;--blue-mid:#2563eb;--blue-light:#eef4ff;--blue-border:#bfdbfe;
-  --muted:#64748b;--border:#dbe4f0;--card:#ffffff;
+  --ink:#131b2e;--paper:#f7f9fb;--accent:#004ac6;--accent-dark:#003ea8;--accent-light:#eef3ff;
+  --blue:#004ac6;--blue-mid:#2563eb;--blue-light:#eef3ff;--blue-border:#dbe1ff;
+  --muted:#677286;--border:#eef2f7;--card:#ffffff;
   --green:#15803d;--green-bg:#ecfdf3;--green-border:#86efac;
   --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
   --orange:#f97316;--orange-dark:#ea580c;
@@ -248,6 +248,47 @@ tr:hover{background:none;}
 .kpi-trend.up{color:var(--green);}
 .kpi-chart-row{background:#fff;border:1px solid var(--border);border-radius:22px;padding:1.25rem 1.75rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:2.5rem;box-shadow:0 8px 20px rgba(15,23,42,.06);}
 .kpi-chart-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;margin-bottom:.9rem;}
+
+/* Executive Archive consistency */
+body{font-family:'Inter',sans-serif;background:radial-gradient(circle at 10% 10%, rgba(37,99,235,.08), transparent 28%),radial-gradient(circle at 82% 8%, rgba(0,74,198,.08), transparent 24%),var(--paper);}
+.logo,.logo-nav,.section-title,.plan-title,.quick-add-title,.import-section h3,.team-title{font-family:'Newsreader',serif;font-weight:500;letter-spacing:-.02em;}
+.tab-button,.profile-label,.kpi-icon,.kpi-label,.badge,.lang-btn{font-family:'Inter',sans-serif;letter-spacing:.08em;text-transform:uppercase;font-weight:700;}
+.navbar{background:linear-gradient(135deg,#17203a 0%, #12192d 100%);border:none;border-radius:0 0 32px 32px;box-shadow:0 20px 40px rgba(15,23,42,.08);}
+.logo-nav{font-size:2rem;color:#fff;}
+.company-name{color:#d3dcf0;background:rgba(255,255,255,.08);border-radius:999px;border:none;}
+.tab-buttons{border:none;background:transparent;padding:.4rem 2rem .2rem;gap:.55rem;}
+.tab-button{border:none;border-radius:999px;padding:.72rem 1.05rem;color:#6e7890;background:#f2f4f6;}
+.tab-button.active{color:#fff;background:linear-gradient(135deg,#004ac6,#2563eb);}
+.content{padding:2rem;}
+.plan-box,.table-container,.import-section,.profile-info,.team-panel,.kpi-card,.kpi-chart-row,.quick-add-section{border:none;border-radius:32px;box-shadow:0 20px 40px rgba(15,23,42,.06);}
+.plan-box{background:linear-gradient(180deg,#ffffff 0%,#f6f9ff 100%);}
+.table-container thead{background:#f2f4f6;}
+th,td{border-top:none;}
+tbody tr{border-top:1px solid rgba(195,198,215,.16);}
+.drop-zone{border:none;background:#f2f4f6;border-radius:24px;}
+.drop-zone:hover{background:#eaf0ff;}
+.btn{border-radius:999px;}
+.btn-primary{background:linear-gradient(135deg,#004ac6,#2563eb);}
+.btn-secondary{border:none;background:#e8edf3;}
+.quick-add-grid select,
+.quick-add-grid input[type=text],
+.quick-add-grid input[type=number],
+.quick-add-search,
+.team-form select,
+.team-form input,
+.auth-card input{
+  border:none;
+  background:#f2f4f6;
+  border-radius:14px;
+}
+.quick-add-grid select:focus,
+.quick-add-grid input[type=text]:focus,
+.quick-add-grid input[type=number]:focus,
+.quick-add-search:focus,
+.team-form select:focus,
+.team-form input:focus,
+.auth-card input:focus{outline:none;box-shadow:0 0 0 2px rgba(0,74,198,.2);}
+.badge-pending,.badge-approved,.badge-rejected{border:none;}
 
 /* formulaire: contraste et lisibilite */
 .auth-card input,
