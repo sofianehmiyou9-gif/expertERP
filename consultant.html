@@ -666,6 +666,15 @@ async function loadConsultant() {
   }
 }
 
+function isLikelyEmail(email) {
+  const value = String(email || '').trim().toLowerCase();
+  if (!value) return false;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) return false;
+  const domain = value.split('@')[1] || '';
+  if (!domain || domain.endsWith('.local') || domain === 'localhost') return false;
+  return true;
+}
+
 async function sendContactMessage() {
   const message = document.getElementById('contact-message').value.trim();
   if (!message) {
@@ -686,8 +695,13 @@ async function sendContactMessage() {
   const recipientType = b2b ? 'entreprise_admin' : 'consultant';
 
   const companyName = document.getElementById('company-name').value.trim() || 'Entreprise';
-  const companyEmail = document.getElementById('company-email').value.trim() || 'non-renseigne@local';
+  const companyEmail = document.getElementById('company-email').value.trim();
   const companyPhone = document.getElementById('company-phone').value.trim();
+  if (!isLikelyEmail(companyEmail)) {
+    alert('Veuillez saisir un email professionnel valide.');
+    return;
+  }
+
   const notif = {
     id: Date.now(),
     consultantId: recipientId,
