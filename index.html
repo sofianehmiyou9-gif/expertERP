@@ -636,7 +636,9 @@ nav.nav-scrolled{height:68px;background:rgba(248,250,252,.9);box-shadow:0 12px 2
 .portal-role-desc{font-size:.76rem;color:var(--muted);line-height:1.55;}
 .portal-help{font-size:.82rem;color:#334155;line-height:1.65;margin-bottom:.25rem;padding:.75rem .95rem;background:linear-gradient(180deg,rgba(34,197,94,.08),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.18);border-left:3px solid #16a34a;border-radius:8px;}
 .portal-actions{display:flex;gap:.75rem;justify-content:flex-end;align-items:center;flex-wrap:nowrap;width:100%;}
-.portal-error{font-size:.78rem;color:var(--red);min-height:1.2rem;padding:.55rem .65rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:6px;}
+.portal-error{display:none;font-size:.78rem;color:var(--red);padding:.55rem .65rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:6px;}
+.portal-error.show{display:block;}
+.portal-error.success{background:rgba(22,163,74,.08);border-left-color:var(--green);color:var(--green);}
 .portal-reset-link{text-align:right;margin-top:.2rem;margin-bottom:.9rem;}
 .portal-reset-link button{background:none;border:none;color:var(--blue);cursor:pointer;font-size:.78rem;text-decoration:underline;transition:color .2s ease;font-weight:500;}
 .portal-reset-link button:hover{color:var(--blue-mid);}
@@ -2643,7 +2645,10 @@ function setPortalFeedback(message, kind) {
   const errorEl = document.getElementById('portal-error');
   if (!errorEl) return;
   errorEl.textContent = message || '';
-  errorEl.style.color = kind === 'success' ? 'var(--green)' : 'var(--red)';
+  errorEl.className = 'portal-error';
+  if (!message) return;
+  errorEl.classList.add('show');
+  if (kind === 'success') errorEl.classList.add('success');
 }
 
 function setPortalResetMode(enable) {
