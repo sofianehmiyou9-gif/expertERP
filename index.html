@@ -4330,11 +4330,14 @@ function getCurrentEntType() {
 }
 
 function openEntrepriseModal(type) {
-  ENT_STEP = type ? 2 : 1; ENT_TYPE = type || '';
-  document.getElementById('overlay-entreprise').dataset.entType = ENT_TYPE;
+  /* Flux simplifié : toujours 2 étapes (infos entreprise → plan + ressources).
+     On saute l'ancien Step 1 (choix de parcours) — toutes les entreprises
+     ont accès à mettre ET chercher des ressources. */
+  ENT_STEP = 2; ENT_TYPE = 'offrir';
+  document.getElementById('overlay-entreprise').dataset.entType = 'offrir';
   offerEntryMode = 'import';
+  selectEntType('offrir');
   updateEntUI();
-  if (type) selectEntType(type);
   setOfferEntryMode('import');
   document.getElementById('overlay-entreprise').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -4344,9 +4347,9 @@ function closeEntrepriseModal() {
   document.body.style.overflow = '';
   document.getElementById('ent-success').style.display = 'none';
   document.getElementById('ent-footer').style.display = '';
-  ENT_STEP = 1;
-  ENT_TYPE = '';
-  document.getElementById('overlay-entreprise').dataset.entType = '';
+  ENT_STEP = 2;
+  ENT_TYPE = 'offrir';
+  document.getElementById('overlay-entreprise').dataset.entType = 'offrir';
   selectedPlan = null;
   importedFileData = null;
   offerEntryMode = 'import';
@@ -4542,11 +4545,6 @@ function initManualResourceForm() {
 }
 
 function validateEntrepriseStep() {
-  const currentType = getCurrentEntType();
-  if (ENT_STEP === 1 && !currentType) {
-    alert('Veuillez sélectionner un type de profil.');
-    return false;
-  }
   if (ENT_STEP === 2) {
     const required = [
       document.getElementById('ent-company').value.trim(),
@@ -4560,15 +4558,7 @@ function validateEntrepriseStep() {
     }
   }
   if (ENT_STEP === 3) {
-    if (currentType === 'erp' && (!document.getElementById('ent-erp-type').value || !document.getElementById('ent-desc-erp').value.trim())) {
-      alert('Veuillez compléter les champs obligatoires de votre projet ERP.');
-      return false;
-    }
-    if (currentType === 'chercher' && (!document.getElementById('ent-b2b-erp').value || !document.getElementById('ent-b2b-role').value || !document.getElementById('ent-desc-chercher').value.trim())) {
-      alert('Veuillez compléter les champs obligatoires de votre besoin en ressources.');
-      return false;
-    }
-    if (currentType === 'offrir' && !selectedPlan) {
+    if (!selectedPlan) {
       alert('Veuillez choisir un plan d\'abonnement.');
       return false;
     }
@@ -4577,18 +4567,12 @@ function validateEntrepriseStep() {
 }
 
 function validateEntrepriseSubmission() {
-  const currentType = getCurrentEntType();
   const company = document.getElementById('ent-company').value.trim();
   const sector = document.getElementById('ent-secteur').value.trim();
   const contact = document.getElementById('ent-contact').value.trim();
   const email = document.getElementById('ent-email').value.trim();
   const password = document.getElementById('ent-password').value;
   const passwordConfirm = document.getElementById('ent-password-confirm').value;
-
-  if (!currentType) {
-    alert('Veuillez sélectionner un type de profil.');
-    return false;
-  }
 
   if (!company || !sector || !contact || !email) {
     alert('Veuillez compléter les informations entreprise obligatoires avant l\'envoi.');
@@ -4605,17 +4589,8 @@ function validateEntrepriseSubmission() {
     return false;
   }
 
-  if (currentType === 'erp' && (!document.getElementById('ent-erp-type').value || !document.getElementById('ent-desc-erp').value.trim())) {
-    alert('Veuillez compléter les champs obligatoires de votre projet ERP.');
-    return false;
-  }
-
-  if (currentType === 'chercher' && (!document.getElementById('ent-b2b-erp').value || !document.getElementById('ent-b2b-role').value || !document.getElementById('ent-desc-chercher').value.trim())) {
-    alert('Veuillez compléter les champs obligatoires de votre besoin en ressources.');
-    return false;
-  }
-
-  if (currentType === 'offrir') {
+  /* Toujours valider le plan (flux unifié "offrir") */
+  {
     if (!selectedPlan) {
       alert('Veuillez choisir un plan d\'abonnement.');
       return false;
@@ -4677,46 +4652,38 @@ function buildOfferRows() {
 }
 
 function updateEntUI() {
-  const currentType = getCurrentEntType();
+  /* Flux simplifié 2 étapes : step 2 = infos entreprise, step 3 = plan + ressources.
+     On affiche "Étape 1 sur 2" / "Étape 2 sur 2" pour l'utilisateur. */
+  const displayStep = ENT_STEP - 1; // step 2 → affiche 1, step 3 → affiche 2
+  const displayTotal = 2;
   for (let i = 1; i <= ENT_TOTAL; i++) {
     document.getElementById('ent-step-' + i)?.classList.toggle('active', i === ENT_STEP);
   }
   const bar = document.getElementById('ent-bar');
-  if (bar) bar.style.width = (ENT_STEP / ENT_TOTAL * 100) + '%';
+  if (bar) bar.style.width = (displayStep / displayTotal * 100) + '%';
   const count = document.getElementById('ent-step-count');
-  if (count) count.textContent = 'Étape ' + ENT_STEP + ' sur ' + ENT_TOTAL;
+  if (count) count.textContent = 'Étape ' + displayStep + ' sur ' + displayTotal;
   const back = document.getElementById('ent-btn-back');
   const next = document.getElementById('ent-btn-next');
-  if (back) back.style.display = ENT_STEP > 1 ? '' : 'none';
+  if (back) back.style.display = ENT_STEP > 2 ? '' : 'none';
   if (next) next.textContent = ENT_STEP === ENT_TOTAL ? 'Envoyer ma demande ✓' : 'Suivant →';
 
-  // Show right sub-form on step 3
+  // Step 3 : toujours afficher le formulaire "offrir" (plan + ressources)
   if (ENT_STEP === 3) {
     ['erp','chercher','offrir'].forEach(t => {
       const el = document.getElementById('ent-form-' + t);
-      if (el) el.style.display = t === currentType ? 'block' : 'none';
+      if (el) el.style.display = t === 'offrir' ? 'block' : 'none';
     });
-    const titles = { erp:'Votre projet ERP', chercher:'Votre besoin en ressources', offrir:'Vos ressources disponibles' };
-    const subs = { erp:'Décrivez votre implémentation ERP', chercher:'Détails du mandat recherché', offrir:'Consultants à placer' };
-    document.getElementById('ent-modal-title').textContent = titles[currentType] || 'Votre demande';
-    document.getElementById('ent-modal-sub').textContent = subs[currentType] || '';
+    document.getElementById('ent-modal-title').textContent = 'Abonnement & Ressources';
+    document.getElementById('ent-modal-sub').textContent = 'Choisissez votre plan et inscrivez vos ressources.';
   } else if (ENT_STEP === 2) {
-    document.getElementById('ent-modal-title').textContent = 'Informations entreprise';
+    document.getElementById('ent-modal-title').textContent = 'Créer votre compte entreprise';
     document.getElementById('ent-modal-sub').textContent = 'Coordonnées de votre organisation';
-  } else {
-    document.getElementById('ent-modal-title').textContent = 'Rejoindre ExpertERPHub';
-    document.getElementById('ent-modal-sub').textContent = 'Sélectionnez votre type de profil entreprise';
   }
 }
 
-function entBack() { if (ENT_STEP > 1) { ENT_STEP--; updateEntUI(); } }
+function entBack() { if (ENT_STEP > 2) { ENT_STEP--; updateEntUI(); } }
 function entNext() {
-  const currentType = getCurrentEntType();
-  if (currentType === 'offrir' && ENT_STEP === 2) {
-    ENT_STEP++;
-    updateEntUI();
-    return;
-  }
   if (!validateEntrepriseStep()) return;
   if (ENT_STEP < ENT_TOTAL) { ENT_STEP++; updateEntUI(); }
   else { submitEntreprise(); }
@@ -4726,8 +4693,6 @@ async function submitEntreprise() {
   const btn = document.getElementById('ent-btn-next');
   btn.disabled = true; btn.textContent = '⏳ Envoi…';
   try {
-    let desc = '';
-    const currentType = getCurrentEntType();
     const company = document.getElementById('ent-company').value.trim();
     const email = document.getElementById('ent-email').value.trim().toLowerCase();
     if (!validateEntrepriseSubmission()) {
@@ -4735,45 +4700,37 @@ async function submitEntreprise() {
       return;
     }
     const entPasswordHash = await sha256Hex(document.getElementById('ent-password').value);
-    // Enterprise login uses SHA-256 in DB — no Supabase Auth signup needed (avoids 429 rate-limit noise).
-    if (currentType === 'erp') {
-      desc = JSON.stringify({ erp: document.getElementById('ent-erp-type').value, phase: document.getElementById('ent-phase').value, users: document.getElementById('ent-users').value, description: document.getElementById('ent-desc-erp').value, auth_password_sha256: entPasswordHash });
-    } else if (currentType === 'chercher') {
-      desc = JSON.stringify({ erp: document.getElementById('ent-b2b-erp').value, role: document.getElementById('ent-b2b-role').value, duree: document.getElementById('ent-b2b-duree').value, start: document.getElementById('ent-b2b-start').value, description: document.getElementById('ent-desc-chercher').value, auth_password_sha256: entPasswordHash });
-    } else {
-      const rows = buildOfferRows();
-      desc = JSON.stringify({
-        plan: selectedPlan,
-        description: document.getElementById('ent-desc-offrir').value,
-        resource_entry_mode: offerEntryMode,
-        fichier_import: importedFileData ? importedFileData.length + ' ressource(s)' : 'non fourni',
-        resources_count: rows.length || (importedFileData && importedFileData[0]?._raw ? 'fichier_excel' : 0),
-        auth_password_sha256: entPasswordHash
-      });
-    }
+    // Flux unifié : toutes les entreprises ont accès à mettre ET chercher des ressources
+    const rows = buildOfferRows();
+    const desc = JSON.stringify({
+      plan: selectedPlan,
+      description: document.getElementById('ent-desc-offrir').value,
+      resource_entry_mode: offerEntryMode,
+      fichier_import: importedFileData ? importedFileData.length + ' ressource(s)' : 'non fourni',
+      resources_count: rows.length || (importedFileData && importedFileData[0]?._raw ? 'fichier_excel' : 0),
+      auth_password_sha256: entPasswordHash
+    });
     // Insert into entreprises table
     // Pour le type "offrir", calculer la date d'expiration (1 an par défaut)
+    // Toutes les entreprises : expiration 1 an par défaut
     const today = new Date();
-    let dateExpiration = null;
-    if (currentType === 'offrir') {
-      const expirationDate = new Date(today);
-      expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-      dateExpiration = expirationDate.toISOString().split('T')[0];
-    }
-    
+    const expirationDate = new Date(today);
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+    const dateExpiration = expirationDate.toISOString().split('T')[0];
+
     await sbInsert('entreprises', {
       nom: company,
       secteur: document.getElementById('ent-secteur').value,
       contact: document.getElementById('ent-contact').value.trim(),
       email: email,
       telephone: document.getElementById('ent-tel').value.trim() || null,
-      type_demande: currentType,
+      type_demande: 'offrir',
       description: desc,
       statut: 'en_attente',
       date_expiration: dateExpiration
     });
-    // If "offrir" with imported file data, insert consultants into Supabase
-    if (currentType === 'offrir') {
+    // Insérer les ressources importées dans Supabase
+    {
       const rows = buildOfferRows();
       for (const row of rows) {
         const resourceEmail = row.email || generateInternalResourceEmail();
