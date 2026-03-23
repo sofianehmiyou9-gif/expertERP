@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de confidentialité - ExpertERPHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+            background-color: #f9fafb;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Newsreader', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #1d4ed8;
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Newsreader', serif;
+            font-size: 2.5rem;
+            color: #111827;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .last-updated {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        h2 {
+            font-family: 'Newsreader', serif;
+            font-size: 1.75rem;
+            color: #111827;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #2563eb;
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            color: #1f2937;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .section {
+            background-color: #ffffff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #2563eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .highlight-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .highlight-box p {
+            color: #1e3a8a;
+            font-size: 0.95rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .rights-list {
+            list-style: none;
+        }
+
+        .rights-list li {
+            padding: 0.75rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .rights-list li:before {
+            content: "✓";
+            color: #2563eb;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        footer {
+            background-color: #1f2937;
+            color: #e5e7eb;
+            padding: 3rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #e5e7eb;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.875rem;
+            }
+
+            h2 {
+                font-size: 1.375rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .data-table th, .data-table td {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        .toc {
+            background-color: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            margin-left: 1.25rem;
+        }
+
+        .toc a {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">ExpertERPHub</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Accueil</a> / Politique de confidentialité
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Politique de confidentialité</h1>
+        <div class="last-updated">
+            <strong>Dernière mise à jour :</strong> Mars 2026
+        </div>
+
+        <div class="toc">
+            <h3>Table des matières</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#donnees">Données collectées</a></li>
+                <li><a href="#finalite">Finalité du traitement</a></li>
+                <li><a href="#base-legale">Base légale du traitement</a></li>
+                <li><a href="#stockage">Stockage et sécurité</a></li>
+                <li><a href="#conservation">Durée de conservation</a></li>
+                <li><a href="#droits">Vos droits</a></li>
+                <li><a href="#cookies">Cookies et technologies de suivi</a></li>
+                <li><a href="#transferts">Transferts internationaux</a></li>
+                <li><a href="#contact">Nous contacter</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="introduction">
+            <h2>Introduction</h2>
+            <p>
+                Bienvenue sur <strong>ExpertERPHub</strong>, une plateforme de mise en relation entre consultants en systèmes ERP et entreprises. Chez ExpertERPHub, la protection de vos données personnelles est une priorité absolue.
+            </p>
+            <p>
+                Cette politique de confidentialité explique comment nous collectons, utilisons, stockons et protégeons vos données personnelles, conformément à la <strong>Loi 25 du Québec (Loi sur la protection des renseignements personnels dans le secteur privé)</strong> et la <strong>Loi sur la protection des renseignements personnels et les documents électroniques (PIPEDA)</strong>.
+            </p>
+            <p>
+                En accédant à ExpertERPHub et en créant un compte, vous acceptez les conditions de cette politique de confidentialité. Si vous n'êtes pas d'accord, veuillez ne pas utiliser notre plateforme.
+            </p>
+        </div>
+
+        <div class="section" id="donnees">
+            <h2>Données collectées</h2>
+            <p>
+                Nous collectons les catégories de données personnelles suivantes pour vous permettre d'utiliser pleinement notre plateforme :
+            </p>
+
+            <h3>Information d'identification</h3>
+            <ul>
+                <li><strong>Nom complet</strong> : utilisé pour vous identifier sur la plateforme</li>
+                <li><strong>Adresse e-mail</strong> : utilisée pour la communication et la création de compte</li>
+                <li><strong>Numéro de téléphone</strong> : collecté optionnellement pour faciliter les contacts directs</li>
+            </ul>
+
+            <h3>Profil professionnel</h3>
+            <ul>
+                <li><strong>Titre professionnel</strong> et <strong>entreprise actuelle</strong></li>
+                <li><strong>Historique professionnel</strong> : expériences passées et rôles antérieurs</li>
+                <li><strong>Curriculum vitae (CV)</strong> : document téléchargé optionnellement pour les consultants</li>
+            </ul>
+
+            <h3>Compétences ERP</h3>
+            <ul>
+                <li><strong>Systèmes ERP maîtrisés</strong> : SAP, Oracle, Microsoft Dynamics, Infor, Odoo, etc.</li>
+                <li><strong>Modules d'expertise</strong> : Finance, RH, Chaîne d'approvisionnement, Production, etc.</li>
+                <li><strong>Années d'expérience</strong> avec chaque système</li>
+                <li><strong>Certifications professionnelles</strong> pertinentes</li>
+            </ul>
+
+            <h3>Données supplémentaires</h3>
+            <ul>
+                <li><strong>Photo de profil</strong> : optionnelle, pour personnaliser votre profil</li>
+                <li><strong>Localisation géographique</strong> : province/région où vous opérez</li>
+                <li><strong>Préférences de communication</strong> : moyens de contact préférés</li>
+                <li><strong>Historique d'interactions</strong> : messages, demandes de mise en relation, mises à jour de profil</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>Information importante</h4>
+                <p>
+                    Certaines données sont obligatoires pour créer un compte (nom, email). D'autres sont optionnelles mais recommandées pour améliorer votre expérience et augmenter les chances de mise en relation réussie.
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="finalite">
+            <h2>Finalité du traitement</h2>
+            <p>
+                Nous utilisons vos données personnelles exclusivement pour les finalités suivantes :
+            </p>
+
+            <h3>1. Mise en relation consultants-entreprises</h3>
+            <p>
+                La finalité principale de ExpertERPHub est de mettre en relation des consultants en ERP qualifiés avec des entreprises ayant besoin de leurs services. Nous traitons vos données pour :
+            </p>
+            <ul>
+                <li>Afficher votre profil aux entreprises recherchant des consultants avec vos compétences</li>
+                <li>Permettre aux entreprises de vous contacter directement</li>
+                <li>Vous notifier des opportunités de projets correspondant à votre profil</li>
+                <li>Faciliter les premiers contacts et les négociations</li>
+            </ul>
+
+            <h3>2. Administration du compte</h3>
+            <ul>
+                <li>Créer et gérer votre compte utilisateur</li>
+                <li>Vérifier votre identité et authentifier vos accès</li>
+                <li>Traiter vos demandes de modification ou de suppression de données</li>
+            </ul>
+
+            <h3>3. Communication et support</h3>
+            <ul>
+                <li>Vous envoyer des mises à jour concernant votre compte</li>
+                <li>Répondre à vos questions et demandes de support</li>
+                <li>Vous informer des changements à nos conditions et politiques</li>
+            </ul>
+
+            <h3>4. Amélioration de la plateforme</h3>
+            <ul>
+                <li>Analyser l'utilisation de la plateforme pour l'améliorer continuellement</li>
+                <li>Développer de nouvelles fonctionnalités basées sur vos besoins</li>
+                <li>Prévenir les abus et assurer la sécurité du service</li>
+            </ul>
+
+            <h3>5. Conformité légale</h3>
+            <ul>
+                <li>Respecter nos obligations légales et réglementaires</li>
+                <li>Répondre aux demandes des autorités compétentes</li>
+            </ul>
+        </div>
+
+        <div class="section" id="base-legale">
+            <h2>Base légale du traitement</h2>
+            <p>
+                Le traitement de vos données personnelles repose sur les fondements légaux suivants :
+            </p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Catégorie de données</th>
+                        <th>Base légale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Données de compte (nom, email, téléphone)</td>
+                        <td>Exécution du contrat de service et consentement de l'utilisateur</td>
+                    </tr>
+                    <tr>
+                        <td>Profil professionnel et CV</td>
+                        <td>Exécution du service de mise en relation et consentement exprès</td>
+                    </tr>
+                    <tr>
+                        <td>Compétences ERP et certifications</td>
+                        <td>Consentement de l'utilisateur et intérêt légitime pour améliorer les mises en relation</td>
+                    </tr>
+                    <tr>
+                        <td>Photo de profil</td>
+                        <td>Consentement exprès de l'utilisateur</td>
+                    </tr>
+                    <tr>
+                        <td>Historique d'interactions</td>
+                        <td>Exécution du contrat et intérêt légitime pour la sécurité</td>
+                    </tr>
+                    <tr>
+                        <td>Données de suivi et analytics</td>
+                        <td>Consentement et intérêt légitime pour améliorer le service</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                En vertu de la <strong>Loi 25 du Québec</strong> et du <strong>PIPEDA</strong>, vous avez le droit de refuser le traitement de vos données ou de retirer votre consentement à tout moment, sauf si la loi nous oblige à continuer le traitement.
+            </p>
+        </div>
+
+        <div class="section" id="stockage">
+            <h2>Stockage et sécurité</h2>
+
+            <h3>Infrastructure d'hébergement</h3>
+            <p>
+                Les données personnelles de ExpertERPHub sont hébergées sur <strong>Supabase</strong>, une plateforme cloud sécurisée basée sur PostgreSQL. Supabase offre une infrastructure hautement sécurisée avec les certifications suivantes :
+            </p>
+            <ul>
+                <li>Conformité SOC 2 Type II</li>
+                <li>Conformité GDPR (pour les résidents de l'UE)</li>
+                <li>Infrastructure distribuée et redondante</li>
+            </ul>
+
+            <h3>Chiffrement des données</h3>
+            <ul>
+                <li><strong>En transit :</strong> Toutes les communications entre votre appareil et nos serveurs sont chiffrées en TLS 1.3</li>
+                <li><strong>Au repos :</strong> Les données sensibles (mots de passe, tokens d'authentification) sont chiffrées avec des algorithmes cryptographiques robustes (bcrypt, scrypt)</li>
+                <li><strong>Sauvegardes :</strong> Nos sauvegardes régulières sont également chiffrées et stockées en toute sécurité</li>
+            </ul>
+
+            <h3>Mesures de sécurité supplémentaires</h3>
+            <ul>
+                <li><strong>Authentification :</strong> Utilisation d'authentification par email et mot de passe sécurisé, avec support optionnel de l'authentification à deux facteurs</li>
+                <li><strong>Contrôle d'accès :</strong> Accès limité aux données personnelles selon les principes du moindre privilège</li>
+                <li><strong>Audit et monitoring :</strong> Enregistrement de toutes les accès sensibles pour détecter les activités suspectes</li>
+                <li><strong>Pare-feu et protection :</strong> Protections contre les attaques DDoS, injections SQL et autres menaces courantes</li>
+                <li><strong>Maintenance de sécurité :</strong> Mises à jour régulières de tous les systèmes et dépendances logicielles</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>Engagement de sécurité</h4>
+                <p>
+                    Bien que nous mettions en place des mesures de sécurité robustes, aucun système ne peut garantir une sécurité absolue. Nous vous recommandons de maintenir votre mot de passe confidentiel et de signaler toute activité suspecte immédiatement.
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="conservation">
+            <h2>Durée de conservation</h2>
+            <p>
+                Nous conservons vos données personnelles aussi longtemps que nécessaire pour fournir nos services et respecter nos obligations légales.
+            </p>
+
+            <h3>Périodes de conservation</h3>
+            <ul>
+                <li><strong>Compte actif :</strong> Vos données sont conservées aussi longtemps que votre compte reste actif</li>
+                <li><strong>Après suppression de compte :</strong>
+                    <ul>
+                        <li>Les données de profil sont supprimées dans un délai de 30 jours</li>
+                        <li>L'historique des interactions est conservé pour 90 jours maximum pour les besoins de support</li>
+                        <li>Les données nécessaires à des fins légales ou de conformité sont conservées selon les exigences applicables</li>
+                    </ul>
+                </li>
+                <li><strong>Données d'audit :</strong> Conservées pendant 1 an à des fins de sécurité et de conformité</li>
+                <li><strong>Sauvegardes :</strong> Les sauvegardes sont conservées pendant 30 jours avant suppression</li>
+            </ul>
+
+            <p>
+                En vertu de la <strong>Loi 25 du Québec</strong>, vous pouvez demander la suppression anticipée de vos données (droit à l'oubli) sauf si nous avons une obligation légale de les conserver plus longtemps.
+            </p>
+        </div>
+
+        <div class="section" id="droits">
+            <h2>Vos droits en vertu de la Loi 25 et du PIPEDA</h2>
+            <p>
+                En tant que résident du Québec ou du Canada, vous avez les droits suivants concernant vos données personnelles :
+            </p>
+
+            <h3>Droits reconnus</h3>
+            <ul class="rights-list">
+                <li><strong>Droit d'accès :</strong> Vous pouvez demander à accéder à toutes les données personnelles que nous conservons à votre sujet</li>
+                <li><strong>Droit de rectification :</strong> Vous pouvez demander la correction de toute information inexacte ou incomplète</li>
+                <li><strong>Droit à l'oubli :</strong> Vous pouvez demander la suppression de vos données personnelles (sauf si nous avons une obligation légale de les conserver)</li>
+                <li><strong>Droit à la portabilité :</strong> Vous pouvez demander une copie de vos données dans un format structuré et lisible</li>
+                <li><strong>Droit de retrait du consentement :</strong> Vous pouvez retirer votre consentement au traitement à tout moment (sans affecter les traitements antérieurs)</li>
+                <li><strong>Droit d'opposition :</strong> Vous pouvez vous opposer au traitement de vos données pour certaines finalités</li>
+                <li><strong>Droit à l'information :</strong> Vous avez le droit d'être informé des pratiques de traitement de vos données</li>
+            </ul>
+
+            <h3>Comment exercer vos droits</h3>
+            <p>
+                Pour exercer l'un de ces droits, contactez-nous à l'adresse email indiquée à la section <a href="#contact">Nous contacter</a>. Nous traiterons votre demande dans un délai de 30 jours conformément à la loi.
+            </p>
+
+            <p>
+                Veuillez noter que nous pouvons vous demander de vérifier votre identité avant de traiter votre demande, afin de protéger la confidentialité de vos données.
+            </p>
+        </div>
+
+        <div class="section" id="cookies">
+            <h2>Cookies et technologies de suivi</h2>
+            <p>
+                ExpertERPHub utilise des cookies et technologies similaires pour améliorer votre expérience utilisateur.
+            </p>
+
+            <h3>Types de cookies utilisés</h3>
+            <ul>
+                <li><strong>Cookies essentiels :</strong> Nécessaires au fonctionnement de la plateforme (authentification, sécurité, préférences de session)</li>
+                <li><strong>Cookies analytiques :</strong> Pour comprendre comment vous utilisez la plateforme et l'améliorer continuellement</li>
+                <li><strong>Cookies de préférences :</strong> Pour mémoriser vos préférences (langue, paramètres d'affichage)</li>
+            </ul>
+
+            <h3>Gestion des cookies</h3>
+            <p>
+                Vous pouvez contrôler l'utilisation des cookies via les paramètres de votre navigateur. La plupart des navigateurs vous permettent de refuser les cookies ou de vous avertir lorsqu'un cookie est envoyé. Veuillez noter que certains cookies sont essentiels au bon fonctionnement de la plateforme.
+            </p>
+
+            <p>
+                Nous vous demanderons votre consentement avant de placer des cookies non-essentiels sur votre appareil, conformément aux exigences légales.
+            </p>
+        </div>
+
+        <div class="section" id="transferts">
+            <h2>Transferts internationaux</h2>
+            <p>
+                Les données personnelles collectées via ExpertERPHub peuvent être transférées vers et stockées dans différentes juridictions, notamment aux États-Unis (où Supabase opère des serveurs).
+            </p>
+
+            <h3>Protection des données lors de transferts</h3>
+            <ul>
+                <li><strong>Conformité légale :</strong> Les transferts sont effectués en conformité avec la législation québécoise et canadienne</li>
+                <li><strong>Mesures de sécurité :</strong> Nous mettons en place des mesures techniques et contractuelles pour protéger vos données durant les transferts</li>
+                <li><strong>Partenaires de confiance :</strong> Nous travaillons uniquement avec des fournisseurs de services offrant des garanties de protection appropriées</li>
+            </ul>
+
+            <p>
+                En utilisant ExpertERPHub, vous consentez au transfert de vos données personnelles vers d'autres juridictions pour les finalités décrites dans cette politique.
+            </p>
+        </div>
+
+        <div class="section" id="contact">
+            <h2>Nous contacter</h2>
+            <p>
+                Si vous avez des questions concernant cette politique de confidentialité, si vous souhaitez exercer vos droits, ou si vous avez des préoccupations concernant le traitement de vos données personnelles, veuillez nous contacter :
+            </p>
+
+            <div class="highlight-box">
+                <h4>Responsable de la protection des données personnelles</h4>
+                <p>
+                    <strong>ExpertERPHub</strong><br>
+                    Adresse e-mail : <a href="mailto:privacy@expertERPhub.com">privacy@expertERPhub.com</a><br>
+                    <br>
+                    Nous nous engageons à traiter votre demande dans un délai de 30 jours et à vous fournir une réponse détaillée.
+                </p>
+            </div>
+
+            <h3>Recours légaux</h3>
+            <p>
+                Si vous estimez que vos droits en matière de protection des données n'ont pas été respectés, vous avez le droit de déposer une plainte auprès de la Commission d'accès à l'information du Québec (CAI) ou de la juridiction compétente dans votre province.
+            </p>
+        </div>
+
+        <div class="section" id="maj">
+            <h2>Mises à jour de cette politique</h2>
+            <p>
+                Cette politique de confidentialité peut être mise à jour périodiquement pour refléter les changements dans nos pratiques, les exigences légales ou d'autres facteurs. Nous vous informerons de tout changement substantiel par email ou par un avis sur la plateforme.
+            </p>
+
+            <p>
+                Votre utilisation continue de ExpertERPHub après les mises à jour constitue votre acceptation de la nouvelle politique de confidentialité. Nous vous recommandons de consulter régulièrement cette page pour rester informé de nos pratiques actuelles.
+            </p>
+
+            <p>
+                <strong>Dernière mise à jour :</strong> Mars 2026
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>À propos</h4>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="conditions.html">Conditions d'utilisation</a></li>
+                    <li><a href="privacy.html">Politique de confidentialité</a></li>
+                    <li><a href="mentions.html">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="mailto:privacy@expertERPhub.com">Demande d'accès aux données</a></li>
+                    <li><a href="mailto:privacy@expertERPhub.com">Signaler un problème</a></li>
+                    <li><a href="mailto:privacy@expertERPhub.com">Contact général</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conformité</h4>
+                <ul>
+                    <li>Loi 25 du Québec (LPP)</li>
+                    <li>PIPEDA (Canada)</li>
+                    <li>RGPD (pour les résidents de l'UE)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ExpertERPHub. Tous droits réservés. | Siège social : Québec, Canada</p>
+        </div>
+    </footer>
+</body>
+</html>

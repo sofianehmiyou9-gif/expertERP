@@ -1805,9 +1805,9 @@ function toggleTheme() {
       <div>
         <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest">Entreprise</h5>
         <ul class="space-y-3">
-          <li><span class="text-slate-500">Politique de confidentialité</span></li>
-          <li><span class="text-slate-500">Conditions d'utilisation</span></li>
-          <li><span class="text-slate-500">Conformité</span></li>
+          <li><a href="privacy.html" class="text-slate-500 hover:text-blue-700 transition-colors">Politique de confidentialité</a></li>
+          <li><a href="conditions.html" class="text-slate-500 hover:text-blue-700 transition-colors">Conditions d'utilisation</a></li>
+          <li><a href="mentions.html" class="text-slate-500 hover:text-blue-700 transition-colors">Mentions légales</a></li>
         </ul>
       </div>
       <div>
@@ -2343,9 +2343,9 @@ function toggleTheme() {
             </span>
             <span class="cgu-text">
               J'ai lu et j'accepte les
-              <button type="button" class="cgu-link" onclick="openCguModal(event)">conditions d'utilisation</button>
+              <a href="conditions.html" target="_blank" class="cgu-link">conditions d'utilisation</a>
               et la
-              <button type="button" class="cgu-link" onclick="openCguModal(event)">politique de confidentialité</button>
+              <a href="privacy.html" target="_blank" class="cgu-link">politique de confidentialité</a>
               d'ExpertERPHub.<span class="cgu-required"> *</span>
             </span>
           </label>
@@ -5209,6 +5209,7 @@ function mapErrorToCode(error) {
   return 'server_error';
 }
 </script>
+<script src="cookie-consent.js"></script>
 </body>
 </html>
 

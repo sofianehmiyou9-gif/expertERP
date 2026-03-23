@@ -376,6 +376,11 @@ body { font-family: 'Manrope', sans-serif; }
           class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant"/>
         <textarea id="contact-message" placeholder="Décrivez votre projet et vos besoins…"
           class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant min-h-[140px] resize-y"></textarea>
+        <!-- Consentement obligatoire -->
+        <label id="contact-consent-label" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.85rem;line-height:1.5;color:#475569;">
+          <input type="checkbox" id="contact-consent" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#2563eb;">
+          <span>J'accepte la <a href="privacy.html" target="_blank" style="color:#2563eb;text-decoration:underline;">politique de confidentialité</a> d'ExpertERPHub. <span style="color:#dc2626;">*</span></span>
+        </label>
         <button id="contact-btn" type="submit" data-action="send-contact"
           class="w-full py-5 bg-primary text-on-primary rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.99]">
           Envoyer ma demande →
@@ -406,9 +411,10 @@ body { font-family: 'Manrope', sans-serif; }
       Expert<span class="not-italic font-bold">ERP</span>Hub
     </div>
     <div class="flex flex-wrap justify-center gap-8 font-manrope text-sm">
-      <button class="text-slate-500 hover:text-primary transition-colors" data-nav-href="index.html">Accueil</button>
-      <button class="text-slate-500 hover:text-primary transition-colors" data-nav-href="index.html">Consultants</button>
-      <button class="text-slate-500 hover:text-primary transition-colors" data-nav-href="index.html">Entreprises</button>
+      <a href="index.html" class="text-slate-500 hover:text-primary transition-colors">Accueil</a>
+      <a href="privacy.html" class="text-slate-500 hover:text-primary transition-colors">Confidentialité</a>
+      <a href="conditions.html" class="text-slate-500 hover:text-primary transition-colors">Conditions</a>
+      <a href="mentions.html" class="text-slate-500 hover:text-primary transition-colors">Mentions légales</a>
     </div>
     <div class="text-slate-500 font-manrope text-sm">© 2026 ExpertERPHub. Tous droits réservés.</div>
   </div>
@@ -996,6 +1002,12 @@ function isLikelyEmail(email) {
 }
 
 async function sendContactMessage() {
+  // Verification consentement
+  var consentBox = document.getElementById('contact-consent');
+  if (consentBox && !consentBox.checked) {
+    alert('Veuillez accepter la politique de confidentialité avant d\'envoyer votre demande.');
+    return;
+  }
   const message = document.getElementById('contact-message').value.trim();
   if (!message) {
     alert(ExpertI18n.t('consultant.messageEmpty'));
@@ -1118,5 +1130,6 @@ document.addEventListener('DOMContentLoaded', () => {
   bindErpLogoFallbacks();
 });
 </script>
+<script src="cookie-consent.js"></script>
 </body>
 </html>

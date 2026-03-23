@@ -288,14 +288,27 @@
                 <textarea id="competences" name="competences" placeholder="Ex: ERP, SAP, Développement Web..."></textarea>
             </div>
 
+            <!-- Consentement obligatoire -->
+            <div class="form-group" style="margin-top:20px;">
+              <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.88rem;line-height:1.5;">
+                <input type="checkbox" id="consent-checkbox" required style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#2563eb;">
+                <span>J'ai lu et j'accepte la <a href="privacy.html" target="_blank" style="color:#2563eb;text-decoration:underline;">politique de confidentialité</a> et les <a href="conditions.html" target="_blank" style="color:#2563eb;text-decoration:underline;">conditions d'utilisation</a> d'ExpertERPHub. <span style="color:#dc2626;">*</span></span>
+              </label>
+            </div>
+
             <button type="submit" class="btn btn-primary">Valider l'Inscription</button>
         </form>
     </div>
 
     <footer>
-        <p>&copy; 2026 ExpertERPHub. Tous droits réservés.</p>
+        <p>&copy; 2026 ExpertERPHub. Tous droits réservés.
+          | <a href="privacy.html" style="color:#6b7280;">Confidentialité</a>
+          | <a href="conditions.html" style="color:#6b7280;">Conditions</a>
+          | <a href="mentions.html" style="color:#6b7280;">Mentions légales</a>
+        </p>
     </footer>
 
     <script src="inscription-consultant.js"></script>
+    <script src="cookie-consent.js"></script>
 </body>
 </html>

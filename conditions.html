@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions d'utilisation - ExpertERPHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #1d4ed8;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .last-updated {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .intro {
+            font-size: 1.1rem;
+            color: #374151;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+            color: #374151;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+            color: #4b5563;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .header-container {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">ExpertERPHub</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1 class="page-title">Conditions d'utilisation</h1>
+        <p class="last-updated">Dernière mise à jour : Mars 2026</p>
+
+        <p class="intro">
+            Bienvenue sur ExpertERPHub. En accédant et en utilisant cette plateforme, vous acceptez de respecter les présentes conditions d'utilisation. Veuillez les lire attentivement avant de créer un compte ou d'utiliser nos services.
+        </p>
+
+        <!-- Section 1 -->
+        <section>
+            <h2>1. Acceptation des conditions</h2>
+            <p>
+                En créant un compte et en utilisant la plateforme ExpertERPHub, vous reconnaissez avoir lu, compris et accepté l'intégralité de ces conditions d'utilisation, ainsi que notre politique de confidentialité. Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser la plateforme. ExpertERPHub se réserve le droit de modifier ces conditions à tout moment.
+            </p>
+        </section>
+
+        <!-- Section 2 -->
+        <section>
+            <h2>2. Description du service</h2>
+            <p>
+                ExpertERPHub est une <strong>plateforme intermédiaire de mise en relation</strong> entre consultants ERP et entreprises québécoises et canadiennes. La plateforme facilite la connexion entre les deux parties mais ne constitue pas un service d'emploi au sens strict. ExpertERPHub n'est pas un employeur ni un prestataire de services direct.
+            </p>
+            <h3>Accès par invitation</h3>
+            <p>
+                L'accès à la plateforme est <strong>réservé aux consultants et entreprises invités</strong>. Les consultants doivent disposer d'un code d'invitation fourni par ExpertERPHub pour accéder au service. Les entreprises doivent être approuvées et recevoir un accès par nos équipes.
+            </p>
+        </section>
+
+        <!-- Section 3 -->
+        <section>
+            <h2>3. Inscription et compte</h2>
+            <h3>Création de compte</h3>
+            <p>
+                Pour accéder à ExpertERPHub, vous devez créer un compte en fournissant :
+            </p>
+            <ul>
+                <li>Une adresse électronique valide et vérifiée</li>
+                <li>Un code d'invitation valide (consultants et entreprises)</li>
+                <li>Les informations professionnelles requises selon votre profil (consultant ou entreprise)</li>
+            </ul>
+            <h3>Responsabilité du compte</h3>
+            <p>
+                Vous êtes responsable de maintenir la confidentialité de vos identifiants de connexion. Vous acceptez de notifier ExpertERPHub immédiatement de toute utilisation non autorisée de votre compte. ExpertERPHub ne sera pas responsable des accès non autorisés découlant d'un manquement à cette obligation.
+            </p>
+        </section>
+
+        <!-- Section 4 -->
+        <section>
+            <h2>4. Obligations des consultants</h2>
+            <p>
+                En tant que consultant, vous vous engagez à :
+            </p>
+            <ul>
+                <li><strong>Fournir des informations exactes et complètes</strong> concernant votre expertise, expérience et compétences ERP</li>
+                <li><strong>Maintenir à jour votre profil</strong> avec des informations précises et actuelles</li>
+                <li><strong>Indiquer votre disponibilité réelle</strong> pour les missions et mises en relation</li>
+                <li><strong>Respecter les délais de réponse</strong> aux demandes de mise en relation des entreprises</li>
+                <li><strong>Communiquer professionnellement</strong> avec les entreprises via la plateforme</li>
+                <li><strong>Signaler tout conflit d'intérêts</strong> ou situation susceptible d'affecter votre disponibilité</li>
+            </ul>
+        </section>
+
+        <!-- Section 5 -->
+        <section>
+            <h2>5. Obligations des entreprises</h2>
+            <p>
+                En tant qu'entreprise utilisatrice, vous vous engagez à :
+            </p>
+            <ul>
+                <li><strong>Respecter les consultants</strong> et traiter toute communication avec professionnalisme</li>
+                <li><strong>Fournir des descriptions précises</strong> de vos besoins et missions disponibles</li>
+                <li><strong>Honorer les paiements</strong> selon les tarifs et conditions convenus</li>
+                <li><strong>Respecter la confidentialité</strong> des informations partagées par les consultants</li>
+                <li><strong>Utiliser la plateforme légalement</strong> et ne pas contourner le système de mise en relation</li>
+            </ul>
+        </section>
+
+        <!-- Section 6 -->
+        <section>
+            <h2>6. Abonnements et facturation</h2>
+            <h3>Plans d'entreprise</h3>
+            <p>
+                Les entreprises accèdent à ExpertERPHub selon des plans d'abonnement basés sur le nombre de ressources consultants accessibles simultanément. Les plans disponibles sont :
+            </p>
+            <ul>
+                <li><strong>Plan Starter</strong> : Accès à un nombre limité de consultants</li>
+                <li><strong>Plan Professional</strong> : Accès étendu avec plus de mises en relation simultanées</li>
+                <li><strong>Plan Enterprise</strong> : Accès illimité et support prioritaire</li>
+            </ul>
+            <h3>Facturation</h3>
+            <p>
+                Les frais d'abonnement sont facturés mensuellement ou annuellement, selon votre choix. Le paiement s'effectue par les moyens acceptés par ExpertERPHub. Les factures seront émises selon votre adresse de facturation enregistrée.
+            </p>
+            <h3>Frais de matching</h3>
+            <p>
+                ExpertERPHub peut facturer des frais de mise en relation ou de commission sur les contrats finalisés, selon les modalités convenues lors de votre inscription. Ces frais seront clairement communiqués.
+            </p>
+        </section>
+
+        <!-- Section 7 -->
+        <section>
+            <h2>7. Limitation de responsabilité</h2>
+            <h3>Rôle de plateforme intermédiaire</h3>
+            <p>
+                ExpertERPHub agit en tant qu'intermédiaire facilitant les mises en relation. Nous ne sommes pas responsables de :
+            </p>
+            <ul>
+                <li>La qualité du travail fourni par les consultants</li>
+                <li>Les litiges entre consultants et entreprises</li>
+                <li>L'exactitude des informations fournies par les utilisateurs</li>
+                <li>Les contrats ou accords conclus directement entre les parties</li>
+                <li>Les dommages indirects ou consécutifs résultant de l'utilisation de la plateforme</li>
+            </ul>
+            <h3>Limitation de dommages</h3>
+            <p>
+                ExpertERPHub ne sera pas responsable de pertes, dommages ou réclamations dépassant le montant total des frais payés par l'utilisateur au cours des trois (3) derniers mois. Dans les juridictions ne permettant pas cette limitation, celle-ci sera interprétée de manière aussi restrictive que possible.
+            </p>
+        </section>
+
+        <!-- Section 8 -->
+        <section>
+            <h2>8. Propriété intellectuelle</h2>
+            <p>
+                Tous les contenus de la plateforme ExpertERPHub, y compris le design, les logos, les textes et les fonctionnalités, sont la propriété exclusive d'ExpertERPHub ou de ses concédants de licence. Vous acceptez de ne pas reproduire, modifier, distribuer ou utiliser ces contenus sans autorisation écrite préalable.
+            </p>
+            <h3>Contenu utilisateur</h3>
+            <p>
+                En mettant en ligne du contenu sur ExpertERPHub (profils, descriptions, messages), vous accordez à ExpertERPHub une licence non exclusive pour utiliser, reproduire et afficher ce contenu à des fins d'exploitation de la plateforme. Vous conservez la propriété de votre contenu.
+            </p>
+        </section>
+
+        <!-- Section 9 -->
+        <section>
+            <h2>9. Résiliation</h2>
+            <h3>Résiliation par l'utilisateur</h3>
+            <p>
+                Vous pouvez demander la résiliation de votre compte à tout moment en contactant legal@expertERPhub.com. Votre demande sera traitée dans les 30 jours. Les données seront conservées ou supprimées selon nos politiques de confidentialité.
+            </p>
+            <h3>Résiliation par ExpertERPHub</h3>
+            <p>
+                ExpertERPHub se réserve le droit de suspendre ou résilier votre accès si :
+            </p>
+            <ul>
+                <li>Vous violez ces conditions d'utilisation</li>
+                <li>Vous enfreignez les lois applicables</li>
+                <li>Vous engagez un comportement abusif ou frauduleux</li>
+                <li>Votre compte n'a pas d'activité pendant une période prolongée</li>
+            </ul>
+            <p>
+                La résiliation entraînera la perte de l'accès à votre compte et à tous les contenus associés.
+            </p>
+        </section>
+
+        <!-- Section 10 -->
+        <section>
+            <h2>10. Modification des conditions</h2>
+            <p>
+                ExpertERPHub se réserve le droit de modifier ces conditions d'utilisation à tout moment. Les modifications importantes seront communiquées par courrier électronique ou par notification sur la plateforme. Votre utilisation continue de ExpertERPHub après la publication des modifications constitue votre acceptation des conditions révisées. Si vous n'acceptez pas les modifications, vous devez cesser d'utiliser le service.
+            </p>
+        </section>
+
+        <!-- Section 11 -->
+        <section>
+            <h2>11. Loi applicable et juridiction</h2>
+            <p>
+                Ces conditions d'utilisation et tous les services fournis par ExpertERPHub sont régis par les lois de la province du Québec, Canada, sans égard aux principes de conflit de lois. Vous acceptez la juridiction exclusive des tribunaux du Québec pour résoudre tout litige découlant de ces conditions ou de votre utilisation de la plateforme.
+            </p>
+            <p>
+                En vertu de la <em>Loi sur la protection du consommateur</em> du Québec et toutes autres lois applicables, ExpertERPHub s'engage à respecter les exigences légales relatives à la protection des consommateurs et données personnelles.
+            </p>
+        </section>
+
+        <!-- Section 12 -->
+        <section>
+            <h2>12. Contact</h2>
+            <p>
+                Pour toute question concernant ces conditions d'utilisation, pour signaler une violation ou pour demander l'exercice de vos droits légaux, veuillez contacter :
+            </p>
+            <p>
+                <strong>ExpertERPHub</strong><br>
+                Courriel : <a href="mailto:legal@expertERPhub.com">legal@expertERPhub.com</a><br>
+                Province : Québec, Canada
+            </p>
+            <p>
+                Nous nous engageons à répondre aux demandes légales dans les délais requis par la loi.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Légal</h3>
+                <ul>
+                    <li><a href="conditions.html">Conditions d'utilisation</a></li>
+                    <li><a href="privacy.html">Politique de confidentialité</a></li>
+                    <li><a href="mentions.html">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Accueil</h3>
+                <ul>
+                    <li><a href="index.html">Retour à l'accueil</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="mailto:legal@expertERPhub.com">Contact légal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ExpertERPHub. Tous droits réservés. | Basé au Québec, Canada</p>
+        </div>
+    </footer>
+</body>
+</html>
