@@ -3201,7 +3201,19 @@ function refreshPortalEntryButton() {
   const btn = document.getElementById('portal-entry-btn');
   if (!btn) return;
   const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-  btn.textContent = session ? portalText('session') : portalText('guest');
+  if (session && session.role && (session.email || session.adminGranted)) {
+    /* ═══ Connecté: bouton visible "Mon Dashboard" avec style accentué ═══ */
+    var roleLabel = session.role === 'entreprise' ? '🏢 Mon Dashboard' : session.role === 'admin' ? '⚙️ Admin' : '👤 Mon Espace';
+    btn.textContent = roleLabel;
+    btn.style.background = 'linear-gradient(135deg,#00288e,#0058be)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = 'transparent';
+  } else {
+    btn.textContent = portalText('guest');
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
 }
 
 function isAdminPortalVisible() {
@@ -3258,6 +3270,12 @@ function handleAdminRevealGesture() {
 }
 
 function openClientSpace() {
+  /* ═══ AMÉLIORATION UX: Si déjà connecté, aller directement au dashboard ═══ */
+  var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (session && session.role && (session.email || session.adminGranted)) {
+    window.location.href = ExpertPortalAuth.getDashboardUrl(session.role, session.email || '');
+    return;
+  }
   refreshAdminPortalVisibility();
   openPortalModal();
 }
