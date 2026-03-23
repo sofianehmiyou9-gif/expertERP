@@ -121,7 +121,7 @@ img{max-width:100%;height:auto;}
 /* Consultant identity */
 .consultant-mini{display:flex;align-items:center;gap:.75rem;padding:.65rem .5rem .75rem;border-bottom:1px solid var(--border);}
 .consultant-avatar,.avatar-badge{display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-full);background:linear-gradient(135deg,var(--brand-light),var(--brand-mid));color:var(--brand);font-weight:700;font-family:var(--font-main);}
-.consultant-avatar{width:42px;height:42px;font-size:.85rem;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.15);}
+.consultant-avatar{width:72px;height:72px;font-size:1.5rem;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.15);}
 .consultant-identity{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1;}
 .consultant-identity strong{font-size:.88rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .consultant-identity span{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -159,7 +159,7 @@ img{max-width:100%;height:auto;}
 
 /* Avatar photo upload */
 .consultant-avatar-wrap{position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
-.consultant-avatar-wrap img{width:40px;height:40px;border-radius:var(--r-full);object-fit:cover;border:2px solid var(--brand-mid);}
+.consultant-avatar-wrap img{width:72px;height:72px;border-radius:var(--r-full);object-fit:cover;border:2px solid var(--brand-mid);}
 .avatar-edit-badge{position:absolute;bottom:-1px;right:-1px;width:16px;height:16px;background:var(--brand);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;pointer-events:none;}
 
 /* &#9472;&#9472; Main area &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
@@ -1778,54 +1778,62 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 8000);
 });
 
-// -- PROFILE PHOTO UPLOAD (avec compression Canvas) --
-function compressImage(file, maxSize, quality) {
+// -- PROFILE PHOTO UPLOAD (compression via FileReader + Canvas) --
+function compressImage(dataUrl, maxDim, quality) {
   return new Promise(function(resolve, reject) {
     var img = new Image();
     img.onload = function() {
-      var w = img.width, h = img.height;
-      // Redimensionner si trop grand (max 200x200 pour avatar)
-      var max = maxSize || 200;
-      if (w > max || h > max) {
-        if (w > h) { h = Math.round(h * max / w); w = max; }
-        else { w = Math.round(w * max / h); h = max; }
+      try {
+        var w = img.naturalWidth || img.width;
+        var h = img.naturalHeight || img.height;
+        var max = maxDim || 400;
+        if (w > max || h > max) {
+          if (w > h) { h = Math.round(h * max / w); w = max; }
+          else { w = Math.round(w * max / h); h = max; }
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        var result = canvas.toDataURL('image/jpeg', quality || 0.65);
+        console.log('[Photo] Compressed:', w + 'x' + h, Math.round(result.length / 1024) + 'KB');
+        resolve(result);
+      } catch(e) {
+        reject(e);
       }
-      var canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
-      // JPEG compresse pour reduire la taille (quality 0.6 ~ 10-30 KB)
-      var dataUrl = canvas.toDataURL('image/jpeg', quality || 0.6);
-      resolve(dataUrl);
     };
     img.onerror = function() { reject(new Error('Image load failed')); };
-    img.src = URL.createObjectURL(file);
+    img.src = dataUrl;
   });
 }
 
-document.getElementById('avatar-file-input').addEventListener('change', async function(e) {
+document.getElementById('avatar-file-input').addEventListener('change', function(e) {
   var file = e.target.files[0];
   if (!file) return;
-  // Limiter la taille originale (2MB max)
-  if (file.size > 2 * 1024 * 1024) {
-    alert('Image trop volumineuse (max 2 MB).');
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Image trop volumineuse (max 5 MB).');
     e.target.value = '';
     return;
   }
-  try {
-    // Compresser l'image via Canvas (200x200, JPEG quality 0.6)
-    var compressedUrl = await compressImage(file, 200, 0.6);
-    console.log('[Photo] Compressed size:', Math.round(compressedUrl.length / 1024), 'KB');
-    // Appliquer visuellement
-    applyAvatarImage(compressedUrl);
-    // Cache local
-    try { localStorage.setItem('consultant_avatar_' + (currentEmail||''), compressedUrl); } catch(err) {}
-    // Sync to Supabase
-    await savePhotoToSupabase(compressedUrl);
-  } catch(err) {
-    console.error('[Photo] Compression error:', err);
-    alert('Erreur lors du traitement de l\'image.');
-  }
+  var reader = new FileReader();
+  reader.onload = async function(ev) {
+    var rawDataUrl = ev.target.result;
+    try {
+      // Compresser via Canvas (400x400 pour bonne qualite carte + profil)
+      var compressed = await compressImage(rawDataUrl, 400, 0.65);
+      // Appliquer visuellement dans le sidebar
+      applyAvatarImage(compressed);
+      // Cache local
+      try { localStorage.setItem('consultant_avatar_' + (currentEmail||''), compressed); } catch(err) {}
+      // Sync to Supabase
+      await savePhotoToSupabase(compressed);
+    } catch(err) {
+      console.error('[Photo] Error:', err);
+      alert('Erreur lors du traitement. Essayez un fichier JPG ou PNG.');
+    }
+  };
+  reader.readAsDataURL(file);
   e.target.value = '';
 });
 
@@ -1878,7 +1886,7 @@ function applyAvatarImage(url) {
   img.className = 'avatar-photo';
   img.src = url;
   img.alt = 'Photo de profil';
-  img.style.cssText = 'width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,40,142,.15);';
+  img.style.cssText = 'width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,40,142,.15);';
   // Insert before the edit badge
   const badge = wrap.querySelector('.avatar-edit-badge');
   wrap.insertBefore(img, badge);
