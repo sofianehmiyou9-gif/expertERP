@@ -759,11 +759,13 @@ img{max-width:100%;height:auto;}
                   <input id="edit-langues-custom" class="inline-edit inline-subfield" type="text" placeholder="Ex: Hindi, Turc, Japonais..." style="display:none;margin-top:.4rem;">
                   <input id="edit-langues-input" class="inline-edit inline-subfield" type="hidden">
                 </div>
-                <!-- ═══ RÉSUMÉ PROFESSIONNEL — Template structuré intelligent ═══ -->
+                <!-- ═══ RÉSUMÉ PROFESSIONNEL — Template standardisé ═══ -->
                 <div class="info-card wide" id="resume-pro-card">
                   <div class="detail-label">R&#233;sum&#233; professionnel</div>
-                  <div class="inline-hint">Ce texte sera visible sur votre profil public. Remplissez chaque section entre crochets.</div>
-                  <textarea id="resume-pro-input" class="inline-textarea" rows="10" style="line-height:1.7;white-space:pre-wrap;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
+                  <div class="inline-hint" style="background:var(--brand-light);border:1px solid rgba(13,71,161,.1);border-radius:var(--r);padding:.6rem .85rem;margin-bottom:.5rem;color:var(--brand-dark);font-weight:600;font-size:.78rem;line-height:1.5;">
+                    <span style="margin-right:.3rem;">&#128161;</span> Utilisez ce mod&#232;le et remplacez les &#233;l&#233;ments entre crochets pour personnaliser votre profil. Ce texte sera visible sur votre profil public.
+                  </div>
+                  <textarea id="resume-pro-input" class="inline-textarea" rows="22" style="line-height:1.75;white-space:pre-wrap;font-size:.86rem;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
                 </div>
                 <!-- ═══ EXPÉRIENCES PROJETS — Structuré avec dates début/fin + poste actuel ═══ -->
                 <div class="info-card wide" id="project-exp-card">
@@ -1951,19 +1953,39 @@ function renderBasicInfo() {
       if (endGroup) { endGroup.style.opacity = '.4'; endGroup.style.pointerEvents = 'none'; }
     }
   }
-  /* ═══ Resume professionnel — Template intelligent structuré ═══ */
+  /* ═══ Resume professionnel — Template standardisé complet ═══ */
   var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
     if (notes.resume_pro) {
+      /* Le consultant a déjà un résumé sauvegardé — on le restaure */
       resumeInput.value = notes.resume_pro;
     } else {
-      /* Generer un template structuré pré-rempli avec les données existantes */
-      var titre = currentConsultant.titre || '[ERP / domaine]';
-      var erps = Array.isArray(currentConsultant.competences)
+      /* Première visite: générer le template standardisé pré-rempli */
+      var _titre = currentConsultant.titre || '[ERP / domaine]';
+      var _erps = Array.isArray(currentConsultant.competences)
         ? currentConsultant.competences.join(', ')
-        : String(currentConsultant.competences || '[SAP, S/4HANA, etc.]');
-      var annees = notes.annees_exp || 'X';
-      resumeInput.value = '\u{1F539} Profil\nConsultant sp\u00e9cialis\u00e9 en ' + titre + ', avec ' + annees + ' ann\u00e9es d\'exp\u00e9rience dans [secteur d\'activit\u00e9].\n\n\u{1F539} Expertise\n- [Comp\u00e9tence 1]\n- [Comp\u00e9tence 2]\n- [Comp\u00e9tence 3]\n\n\u{1F539} Exp\u00e9riences cl\u00e9s\n- [Projet / entreprise + r\u00e9sultat]\n- [Projet / entreprise + r\u00e9sultat]\n\n\u{1F539} Outils & technologies\n- ' + erps;
+        : String(currentConsultant.competences || '[ERP / outils]');
+      var _annees = notes.annees_exp || notes.experience_years || '[X]';
+      var _dispo = notes.disponibilite || '[date / d\u00e9lai]';
+      resumeInput.value = '\u{1F539} Pr\u00e9sentation\n' +
+        'Consultant en ' + _titre + ', avec ' + _annees + ' ann\u00e9es d\u2019exp\u00e9rience dans le secteur [industrie / domaine]. J\u2019accompagne les entreprises dans l\u2019optimisation de leurs processus et la mise en place de solutions adapt\u00e9es \u00e0 leurs besoins op\u00e9rationnels.\n\n' +
+        'Au cours de mes exp\u00e9riences, j\u2019ai contribu\u00e9 \u00e0 des projets d\u2019implantation, d\u2019\u00e9volution et d\u2019am\u00e9lioration de syst\u00e8mes ERP, en intervenant sur des enjeux li\u00e9s \u00e0 [logistique / finance / production / distribution / etc.]. Je poss\u00e8de une bonne compr\u00e9hension des processus m\u00e9tiers ainsi que des interactions entre les diff\u00e9rents modules.\n\n' +
+        '\u{1F539} Domaines d\u2019intervention\n' +
+        '- Analyse des besoins d\u2019affaires\n' +
+        '- Optimisation des processus\n' +
+        '- Configuration ERP\n' +
+        '- Support utilisateurs\n\n' +
+        '\u{1F539} Expertise fonctionnelle / technique\n' +
+        '- [Module 1]\n' +
+        '- [Module 2]\n\n' +
+        '\u{1F539} Exp\u00e9riences significatives\n' +
+        '- [Projet + contribution + r\u00e9sultat]\n\n' +
+        '\u{1F539} Outils & technologies\n' +
+        '- ' + _erps + '\n\n' +
+        '\u{1F539} Valeur ajout\u00e9e\n' +
+        'Approche orient\u00e9e r\u00e9sultats et solutions adapt\u00e9es au contexte client.\n\n' +
+        '\u{1F539} Disponibilit\u00e9\n' +
+        'Disponible \u00e0 partir de ' + _dispo + '.';
     }
   }
   renderCertifChecklist();
