@@ -865,7 +865,7 @@ function renderConsultant(consultant) {
   const verifiedLabel = document.getElementById('profile-verified-label');
   if (verifiedLabel) verifiedLabel.textContent = isB2BResource(consultant) ? 'Ressource partenaire validée' : 'Expert validé ERP';
 
-  const resumeText = notes.resume || notes.resume_pro || consultant.resume || notes.experiences_projets || notes.experiences_test || '';
+  const resumeText = notes.resume_pro || notes.resume || consultant.resume || notes.experiences_projets || notes.experiences_test || '';
   const resumeSection = document.getElementById('resume-section');
   const resumeEl = document.getElementById('profile-resume');
   if (resumeText) {

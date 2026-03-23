@@ -2085,6 +2085,7 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   notes.experiences_projets = projectExp;
   notes.experiences_test = projectExp;
   notes.resume_pro = resumePro; /* Resume professionnel */
+  notes.resume = resumePro; /* Synchroniser les deux champs pour consultant.html */
   /* ═══ Sauvegarder les dates d'expérience structurées ═══ */
   notes.exp_start_month = (document.getElementById('exp-start-month').value || '').trim();
   notes.exp_start_year = (document.getElementById('exp-start-year').value || '').trim();
