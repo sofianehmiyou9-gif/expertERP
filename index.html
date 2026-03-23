@@ -4622,8 +4622,8 @@ function getSingleResourceRow() {
 function validateOfferResources() {
   if (offerEntryMode === 'single') {
     const row = getSingleResourceRow();
-    if (!row.erp || !row.modules || !row.tjm || !row.ville || !row.role || !row.resume) {
-      alert('Pour une inscription manuelle, veuillez renseigner ERP, module, TJM, ville, rôle et résumé de la ressource.');
+    if (!row.erp || !row.role || !row.tjm) {
+      alert('Pour une inscription manuelle, veuillez renseigner au minimum l\'ERP, le rôle et le TJM de la ressource.');
       return false;
     }
     if (!Number.isFinite(parseInt(row.tjm, 10)) || parseInt(row.tjm, 10) <= 0) {
