@@ -193,10 +193,7 @@ body { font-family: 'Manrope', sans-serif; }
         <div class="profile-photo-frame">
           <div id="profile-avatar" style="background:#1e3a8a;">ER</div>
         </div>
-        <!-- Floating glass quote (populated by JS if resume available) -->
-        <div id="profile-hero-quote" class="hidden absolute -bottom-5 -right-5 p-5 lg:p-7 bg-white/75 backdrop-blur-xl rounded-2xl border border-outline-variant/15 shadow-2xl" style="max-width:72%;">
-          <p class="font-headline italic text-base text-primary leading-snug" id="profile-hero-quote-text"></p>
-        </div>
+        <!-- Glass quote bubble RETIRÉ -->
       </div>
 
       <!-- RIGHT: Profile content -->
@@ -513,7 +510,8 @@ function toggleTheme() {
 async function sbSelectById(table, id) {
   const url = `${SB_URL}/rest/v1/${table}?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
   const response = await fetch(url, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Cache-Control': 'no-cache' },
+    cache: 'no-store'
   });
   if (!response.ok) throw new Error('fetch_failed');
   return response.json();
@@ -650,7 +648,8 @@ async function sbSelectPublicConsultants(limit) {
     limit: String(limit || 20)
   });
   const response = await fetch(`${SB_URL}/rest/v1/consultants?${query.toString()}`, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Cache-Control': 'no-cache' },
+    cache: 'no-store'
   });
   if (!response.ok) throw new Error('fetch_list_failed');
   return response.json();
@@ -691,6 +690,18 @@ function getConsultantDisplayName(consultant, notes) {
   if (fullName) return fullName;
   if (consultant.full_name) return String(consultant.full_name).trim();
   return String(notes.resource_code || 'Consultant ERP').trim();
+}
+
+/* ═══ ANONYMISATION: Prénom + initiale pour les visiteurs non connectés ═══ */
+function anonymizeDisplayName(fullName) {
+  if (!fullName) return 'Consultant ERP';
+  var parts = fullName.trim().split(/\s+/);
+  if (parts.length < 2) return parts[0];
+  return parts[0] + ' ' + parts[parts.length - 1].charAt(0).toUpperCase() + '.';
+}
+function isEnterpriseSession() {
+  var s = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  return !!(s && s.role === 'entreprise' && s.email);
 }
 
 function collectSkills(consultant, notes) {
@@ -785,7 +796,10 @@ function renderConsultant(consultant) {
   const notes = parseNotes(consultant.notes_admin);
   currentConsultant = consultant;
 
-  const displayName = getConsultantDisplayName(consultant, notes);
+  const _fullName = getConsultantDisplayName(consultant, notes);
+  const _isB2B = (notes.source === 'import_b2b');
+  const _canSeeFullName = isEnterpriseSession() || _isB2B;
+  const displayName = _canSeeFullName ? _fullName : anonymizeDisplayName(_fullName);
   const initials = displayName.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase() || 'ER';
   // Le statut admin prime sur la disponibilite declaree
   const consultantStatut = String(consultant.statut || '').toLowerCase();
@@ -840,17 +854,7 @@ function renderConsultant(consultant) {
       yearsExpEl.textContent = '—';
     }
   }
-  /* Glass quote bubble — show first sentence of resume */
-  const resumeForQuote = notes.resume || notes.resume_pro || consultant.resume || '';
-  const quoteEl = document.getElementById('profile-hero-quote');
-  const quoteTextEl = document.getElementById('profile-hero-quote-text');
-  if (quoteEl && quoteTextEl && resumeForQuote) {
-    const firstSentence = resumeForQuote.split(/[.!?]/)[0].trim();
-    if (firstSentence && firstSentence.length > 20) {
-      quoteTextEl.textContent = '"' + firstSentence + '."';
-      quoteEl.classList.remove('hidden');
-    }
-  }
+  /* Glass quote bubble — RETIRÉ (décision utilisateur) */
   document.getElementById('profile-mode').textContent = mode;
   const availabilityLabel = document.getElementById('profile-availability-label');
   if (availabilityLabel) availabilityLabel.textContent = availability.label;

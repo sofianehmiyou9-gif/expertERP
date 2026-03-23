@@ -5031,15 +5031,29 @@ function buildConsultantSkills(c, notes) {
   return [...new Set(combined.filter(Boolean))];
 }
 
+/* ═══ ANONYMISATION: Prénom + initiale pour les visiteurs non connectés ═══ */
+function anonymizeDisplayName(fullName) {
+  if (!fullName) return 'Consultant ERP';
+  var parts = fullName.trim().split(/\s+/);
+  if (parts.length < 2) return parts[0];
+  return parts[0] + ' ' + parts[parts.length - 1].charAt(0).toUpperCase() + '.';
+}
+function isEnterpriseSession() {
+  var s = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  return !!(s && s.role === 'entreprise' && s.email);
+}
+
 function renderConsultants(list) {
   const grid = document.getElementById('consultants-grid');
   if (!list.length) { grid.innerHTML = '<div class="empty-state"><p>Aucun consultant disponible pour le moment.</p></div>'; return; }
+  var _canSeeFullName = isEnterpriseSession();
   grid.innerHTML = list.map(c => {
     const notes = (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
     const isB2BAnonymous = notes.source === 'import_b2b';
-    const displayName = isB2BAnonymous
+    const _rawName = isB2BAnonymous
       ? String(notes.resource_code || 'Ressource partenaire').trim()
       : `${c.prenom || ''} ${c.nom || ''}`.trim() || c.full_name || 'Consultant ERP';
+    const displayName = (_canSeeFullName || isB2BAnonymous) ? _rawName : anonymizeDisplayName(_rawName);
     const initials = isB2BAnonymous
       ? 'RP'
       : displayName.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase();
