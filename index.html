@@ -519,7 +519,9 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 
 @media(max-width:1300px){
   .nav-r .btn-outline:not(.portal-trigger),
-  .nav-r .btn-solid{display:none;}
+  .nav-r .btn-solid:not(.portal-trigger){display:none;}
+  #nav-logged{flex-wrap:wrap;gap:.4rem !important;}
+  #nav-user-label{font-size:.7rem !important;max-width:180px;overflow:hidden;text-overflow:ellipsis;}
 }
 @media(max-width:980px){
   nav{height:auto;padding:.85rem 1rem;flex-wrap:wrap;gap:.5rem;}
@@ -560,9 +562,12 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 
 @media(max-width:520px){
   .nav-r .btn-outline:not(.portal-trigger),
-  .nav-r .btn-solid{display:none;}
+  .nav-r .btn-solid:not(.portal-trigger){display:none;}
   .hero-h1{font-size:clamp(2rem,10vw,2.5rem);}
   .hero-sub{font-size:.86rem;margin-bottom:1.4rem;}
+  #nav-logged{gap:.3rem !important;}
+  #nav-user-label{display:none !important;}
+  #nav-search-btn{display:none !important;}
 }
 
 /* ── ENTREPRISES PAGE ── */
@@ -1368,9 +1373,19 @@ function toggleTheme() {
     <button class="nav-link" id="nl-comment" data-action="go-to-how" data-i18n="nav.comment">Fonctionnement</button>
   </div>
   <div class="nav-r">
-    <button class="btn-outline portal-trigger" id="portal-entry-btn" data-action="open-client-space">Connexion espace client</button>
-    <button class="btn-outline" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
-    <button class="btn-solid" data-action="open-entreprise-modal" data-i18n="nav.find">Rechercher un expert</button>
+    <!-- ═══ ÉTAT NON CONNECTÉ ═══ -->
+    <div id="nav-guest" style="display:flex;gap:.5rem;align-items:center;">
+      <button class="btn-solid portal-trigger" id="portal-entry-btn" data-action="open-client-space" style="background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;">Se connecter</button>
+      <button class="btn-outline" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
+      <button class="btn-outline" data-action="open-entreprise-modal" data-i18n="nav.find">Rechercher un expert</button>
+    </div>
+    <!-- ═══ ÉTAT CONNECTÉ (entreprise/consultant) ═══ -->
+    <div id="nav-logged" style="display:none;align-items:center;gap:.65rem;">
+      <span id="nav-user-label" style="font-size:.78rem;font-weight:600;color:var(--ink);background:var(--blue-light,rgba(0,40,142,.06));padding:.4rem .85rem;border-radius:999px;border:1px solid rgba(0,88,190,.15);white-space:nowrap;"></span>
+      <a id="nav-dashboard-link" href="dashboard-entreprise.html" style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#00288e,#0058be);padding:.55rem 1rem;border-radius:999px;text-decoration:none;white-space:nowrap;">Mon Dashboard</a>
+      <button id="nav-search-btn" data-action="show-page" data-page="consultants" style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#00288e;background:rgba(0,40,142,.06);border:1px solid rgba(0,88,190,.15);padding:.55rem 1rem;border-radius:999px;cursor:pointer;white-space:nowrap;">Rechercher un expert</button>
+      <button id="nav-logout-btn" data-action="nav-logout" style="font-size:.72rem;font-weight:600;color:#6b7280;background:none;border:1px solid rgba(196,197,213,.4);padding:.45rem .75rem;border-radius:999px;cursor:pointer;white-space:nowrap;">Déconnexion</button>
+    </div>
     <div class="lang-selector">
       <button class="lang-btn active" id="lang-fr" data-action="set-language" data-lang="fr" aria-label="Passer en français">FR</button>
       <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en" aria-label="Switch to English">EN</button>
@@ -3004,8 +3019,8 @@ async function sha256Hex(text) {
 
 const ACCESS_COPY = {
   fr: {
-    guest: 'Espace client',
-    session: 'Mon espace',
+    guest: 'Se connecter',
+    session: 'Mon Dashboard',
     continue: 'Continuer vers mon tableau de bord',
     disconnect: 'Se déconnecter',
     consultantNotFound: 'Aucun consultant associé à cet email.',
@@ -3028,8 +3043,8 @@ const ACCESS_COPY = {
     open: 'Accéder à mon tableau de bord →'
   },
   en: {
-    guest: 'Client area',
-    session: 'My space',
+    guest: 'Sign in',
+    session: 'My Dashboard',
     continue: 'Continue to my dashboard',
     disconnect: 'Sign out',
     consultantNotFound: 'No consultant profile was found for this email.',
@@ -3198,21 +3213,42 @@ function portalText(key) {
 }
 
 function refreshPortalEntryButton() {
-  const btn = document.getElementById('portal-entry-btn');
-  if (!btn) return;
-  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  var navGuest = document.getElementById('nav-guest');
+  var navLogged = document.getElementById('nav-logged');
+  var userLabel = document.getElementById('nav-user-label');
+  var dashLink = document.getElementById('nav-dashboard-link');
+
   if (session && session.role && (session.email || session.adminGranted)) {
-    /* ═══ Connecté: bouton visible "Mon Dashboard" avec style accentué ═══ */
-    var roleLabel = session.role === 'entreprise' ? '🏢 Mon Dashboard' : session.role === 'admin' ? '⚙️ Admin' : '👤 Mon Espace';
-    btn.textContent = roleLabel;
-    btn.style.background = 'linear-gradient(135deg,#00288e,#0058be)';
-    btn.style.color = '#fff';
-    btn.style.borderColor = 'transparent';
+    /* ═══ CONNECTÉ: Afficher la barre connectée ═══ */
+    if (navGuest) navGuest.style.display = 'none';
+    if (navLogged) navLogged.style.display = 'flex';
+
+    /* Déterminer le label et le lien dashboard selon le rôle */
+    var roleIcon = session.role === 'entreprise' ? '🏢' : session.role === 'admin' ? '⚙️' : '👤';
+    var roleText = session.role === 'entreprise' ? 'Entreprise' : session.role === 'admin' ? 'Admin' : 'Consultant';
+    if (userLabel) userLabel.textContent = roleIcon + ' ' + (session.email || roleText);
+    if (dashLink) dashLink.href = ExpertPortalAuth.getDashboardUrl(session.role, session.email || '');
+
+    /* Charger le nom de l'entreprise si c'est un compte entreprise */
+    if (session.role === 'entreprise' && session.email && userLabel) {
+      (async function() {
+        try {
+          var SB = window.ExpertConfig || {};
+          var resp = await fetch((SB.SB_URL || 'https://aqvkcbeezzbmoiykzfyo.supabase.co') + '/rest/v1/entreprises?select=nom&email=eq.' + encodeURIComponent(session.email) + '&type_demande=eq.offrir', {
+            headers: { 'apikey': SB.SB_KEY || '', 'Authorization': 'Bearer ' + (SB.SB_KEY || '') }
+          });
+          var data = await resp.json();
+          if (Array.isArray(data) && data.length > 0 && data[0].nom) {
+            userLabel.textContent = roleIcon + ' ' + data[0].nom;
+          }
+        } catch(e) { /* garder l'email comme fallback */ }
+      })();
+    }
   } else {
-    btn.textContent = portalText('guest');
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.style.borderColor = '';
+    /* ═══ NON CONNECTÉ: Afficher les boutons invité ═══ */
+    if (navGuest) navGuest.style.display = 'flex';
+    if (navLogged) navLogged.style.display = 'none';
   }
 }
 
@@ -3708,6 +3744,12 @@ function handleStaticAction(event) {
   if (action === 'toggle-module') return toggleModule(trigger.dataset.erp || '', trigger.dataset.module || '');
   if (action === 'remove-exp-row') return trigger.closest('.exp-row')?.remove();
   if (action === 'close-error') return closeError();
+  /* ═══ Déconnexion depuis la navbar principale ═══ */
+  if (action === 'nav-logout') {
+    if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
+    refreshPortalEntryButton();
+    return;
+  }
 }
 
 function handleStaticInput(event) {
@@ -4996,7 +5038,7 @@ function renderConsultants(list) {
           </div>
           <div class="consultant-card-btns">
             <button class="consultant-card-btn-p" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}">Voir le profil →</button>
-            <button class="consultant-card-btn-s" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">${(function(){var s=window.ExpertPortalAuth?ExpertPortalAuth.getSession():null;return(s&&s.role==='entreprise')?'Contacter':'🔒 Contacter';}())}</button>
+            <button class="consultant-card-btn-s" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">Contacter</button>
           </div>
         </div>
       </div>
@@ -5019,16 +5061,15 @@ function openConsultantProfile(id, event) {
 
 function openConsultantContact(id, event) {
   if (event) event.stopPropagation();
-  /* ═══ SPRINT 1: Vérifier la session avant de permettre le contact ═══ */
+  /* ═══ Vérifier la session avant de permettre le contact ═══ */
   var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-  if (!session || session.role !== 'entreprise') {
-    /* Non connecté → afficher un message et rediriger */
-    if (confirm('Connectez-vous à votre espace entreprise pour contacter ce consultant.\n\nRediriger vers la page de connexion ?')) {
-      window.location.href = 'dashboard-entreprise.html';
-    }
+  if (session && session.role === 'entreprise') {
+    /* Connecté → accès direct au profil + formulaire contact */
+    window.location.href = buildConsultantUrl(id, '#contact-section');
     return;
   }
-  window.location.href = buildConsultantUrl(id, '#contact-section');
+  /* Non connecté → ouvrir le modal de connexion directement sur la page */
+  openPortalModal('entreprise');
 }
 
 let filterConsultantsTimer = null;

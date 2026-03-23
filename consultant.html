@@ -161,7 +161,14 @@ body { font-family: 'Manrope', sans-serif; }
       <button class="nav-link font-manrope text-sm font-600 text-on-surface-variant hover:text-on-surface transition-colors" data-nav-href="index.html">Entreprises</button>
     </div>
     <!-- Right actions -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3">
+      <!-- ═══ Session indicator — visible uniquement si connecté ═══ -->
+      <div id="nav-session-bar" style="display:none;align-items:center;gap:.5rem;">
+        <span id="nav-session-label" style="font-size:.72rem;font-weight:600;color:#00288e;background:rgba(0,40,142,.06);padding:.35rem .7rem;border-radius:999px;border:1px solid rgba(0,88,190,.15);white-space:nowrap;"></span>
+        <a id="nav-session-dash" href="dashboard-entreprise.html" style="font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#00288e,#0058be);padding:.4rem .8rem;border-radius:999px;text-decoration:none;white-space:nowrap;">Dashboard</a>
+      </div>
+      <!-- Login button — visible si NON connecté -->
+      <a id="nav-login-btn" href="dashboard-entreprise.html" class="hidden sm:block px-5 py-2 text-xs font-bold uppercase tracking-wider text-white rounded-lg transition-all" style="background:linear-gradient(135deg,#00288e,#0058be);">Se connecter</a>
       <!-- Language switcher -->
       <div class="flex items-center gap-1 p-1 border border-outline-variant/30 rounded-full bg-white">
         <button class="lang-btn" id="lang-fr" data-lang="fr">FR</button>
@@ -1288,6 +1295,22 @@ document.addEventListener('DOMContentLoaded', () => {
     var gateLocked = document.getElementById('contact-gate-locked');
     var myConversations = document.getElementById('my-conversations');
     var sidebarBtn = document.getElementById('sidebar-contact-btn');
+
+    /* ═══ Navbar session indicator ═══ */
+    var navSessionBar = document.getElementById('nav-session-bar');
+    var navSessionLabel = document.getElementById('nav-session-label');
+    var navSessionDash = document.getElementById('nav-session-dash');
+    var navLoginBtn = document.getElementById('nav-login-btn');
+
+    if (session && session.role && session.email) {
+      if (navSessionBar) navSessionBar.style.display = 'flex';
+      if (navSessionLabel) navSessionLabel.textContent = (session.role === 'entreprise' ? '🏢 ' : '👤 ') + session.email;
+      if (navSessionDash) navSessionDash.href = window.ExpertPortalAuth ? ExpertPortalAuth.getDashboardUrl(session.role, session.email) : 'dashboard-entreprise.html';
+      if (navLoginBtn) navLoginBtn.style.display = 'none';
+    } else {
+      if (navSessionBar) navSessionBar.style.display = 'none';
+      if (navLoginBtn) navLoginBtn.style.display = '';
+    }
 
     if (isEnterprise) {
       /* ── CONNECTÉ: Afficher le formulaire, pré-remplir ── */
