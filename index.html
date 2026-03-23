@@ -2318,8 +2318,11 @@ function toggleTheme() {
       <div class="mi-step" id="cs-step-3">
         <div class="cs-step-section-label">Parcours professionnel</div>
         <div class="form-group">
-          <label class="form-label">Résumé professionnel <span>*</span></label>
-          <textarea class="form-textarea" id="cs-resume" placeholder="Décrivez votre expertise ERP, vos spécialisations et vos réalisations clés…" rows="4"></textarea>
+          <label class="form-label">R&#233;sum&#233; professionnel <span>*</span></label>
+          <div style="background:#eff6ff;border:1px solid rgba(37,99,235,.12);border-radius:6px;padding:.55rem .8rem;margin-bottom:.5rem;font-size:.78rem;line-height:1.5;color:#1e40af;font-weight:500;">
+            &#128161; Utilisez ce mod&#232;le et remplacez les &#233;l&#233;ments entre crochets pour personnaliser votre profil.
+          </div>
+          <textarea class="form-textarea" id="cs-resume" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..." rows="16" style="line-height:1.7;white-space:pre-wrap;font-size:.85rem;"></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Expérience récente</label>
@@ -4130,11 +4133,41 @@ function updateCSUI() {
   const bar = document.getElementById('cs-bar');
   if (bar) bar.style.width = (CS_STEP / CS_TOTAL * 100) + '%';
   const count = document.getElementById('cs-step-count');
-  if (count) count.textContent = 'Étape ' + CS_STEP + ' sur ' + CS_TOTAL;
+  if (count) count.textContent = '\u00c9tape ' + CS_STEP + ' sur ' + CS_TOTAL;
   const back = document.getElementById('cs-btn-back');
   const next = document.getElementById('cs-btn-next');
   if (back) back.style.display = CS_STEP > 1 ? '' : 'none';
-  if (next) next.textContent = CS_STEP === CS_TOTAL ? 'Envoyer ma candidature ✓' : 'Suivant →';
+  if (next) next.textContent = CS_STEP === CS_TOTAL ? 'Envoyer ma candidature \u2713' : 'Suivant \u2192';
+  /* ═══ Template résumé professionnel — pré-remplir à l'étape 3 si vide ═══ */
+  if (CS_STEP === 3) {
+    var _csResume = document.getElementById('cs-resume');
+    if (_csResume && !_csResume.value.trim()) {
+      var _csNom = (document.getElementById('cs-prenom') ? document.getElementById('cs-prenom').value : '') || '';
+      var _csErp = '';
+      var _csErpChips = document.querySelectorAll('#cs-erp-chips .choice-chip.active, #cs-step-2 .choice-chip.active');
+      if (_csErpChips.length) { var _arr = []; _csErpChips.forEach(function(c){ _arr.push(c.textContent.trim()); }); _csErp = _arr.join(', '); }
+      _csErp = _csErp || '[ERP / domaine]';
+      _csResume.value = '\u{1F539} Pr\u00e9sentation\n' +
+        'Consultant en ' + _csErp + ', avec [X] ann\u00e9es d\u2019exp\u00e9rience dans le secteur [industrie / domaine]. J\u2019accompagne les entreprises dans l\u2019optimisation de leurs processus et la mise en place de solutions adapt\u00e9es \u00e0 leurs besoins op\u00e9rationnels.\n\n' +
+        'Au cours de mes exp\u00e9riences, j\u2019ai contribu\u00e9 \u00e0 des projets d\u2019implantation, d\u2019\u00e9volution et d\u2019am\u00e9lioration de syst\u00e8mes ERP, en intervenant sur des enjeux li\u00e9s \u00e0 [logistique / finance / production / distribution / etc.]. Je poss\u00e8de une bonne compr\u00e9hension des processus m\u00e9tiers ainsi que des interactions entre les diff\u00e9rents modules.\n\n' +
+        '\u{1F539} Domaines d\u2019intervention\n' +
+        '- Analyse des besoins d\u2019affaires\n' +
+        '- Optimisation des processus\n' +
+        '- Configuration ERP\n' +
+        '- Support utilisateurs\n\n' +
+        '\u{1F539} Expertise fonctionnelle / technique\n' +
+        '- [Module 1]\n' +
+        '- [Module 2]\n\n' +
+        '\u{1F539} Exp\u00e9riences significatives\n' +
+        '- [Projet + contribution + r\u00e9sultat]\n\n' +
+        '\u{1F539} Outils & technologies\n' +
+        '- ' + _csErp + '\n\n' +
+        '\u{1F539} Valeur ajout\u00e9e\n' +
+        'Approche orient\u00e9e r\u00e9sultats et solutions adapt\u00e9es au contexte client.\n\n' +
+        '\u{1F539} Disponibilit\u00e9\n' +
+        'Disponible \u00e0 partir de [date / d\u00e9lai].';
+    }
+  }
 }
 
 function selectConsultantPlan(card) {
