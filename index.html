@@ -5307,6 +5307,17 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('portal-password')?.addEventListener('keypress', (event) => {
     if (event.key === 'Enter') submitPortalAccess();
   });
+
+  /* ── Hash routing : ouvrir automatiquement le modal entreprise ── */
+  (function handleHashRouting() {
+    var h = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+    if (h === 'inscription-entreprise') {
+      showPage('entreprises');
+      setTimeout(function() { openEntrepriseModal(''); }, 350);
+    } else if (h === 'page-entreprises') {
+      showPage('entreprises');
+    }
+  })();
 });
 </script>
 
