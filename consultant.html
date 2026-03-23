@@ -793,7 +793,7 @@ function renderConsultant(consultant) {
     ? { available: false, label: 'En mission' }
     : parseAvailabilityState(notes.disponibilite || notes.dispo || consultant.disponibilite);
   const location = normalizeCity(notes.ville || consultant.ville || 'Localisation non précisée');
-  const yearsInfo = parseExperienceYears(notes.annees_exp || consultant.annees_exp);
+  const yearsInfo = parseExperienceYears(notes.annees_exp || notes.experience_years || consultant.annees_exp);
   const rateText = formatRate(notes, consultant);
   const skills = collectSkills(consultant, notes);
   const memberSince = formatMemberSince(consultant.created_at || consultant.updated_at);
@@ -841,7 +841,7 @@ function renderConsultant(consultant) {
     }
   }
   /* Glass quote bubble — show first sentence of resume */
-  const resumeForQuote = notes.resume || consultant.resume || '';
+  const resumeForQuote = notes.resume || notes.resume_pro || consultant.resume || '';
   const quoteEl = document.getElementById('profile-hero-quote');
   const quoteTextEl = document.getElementById('profile-hero-quote-text');
   if (quoteEl && quoteTextEl && resumeForQuote) {
@@ -861,7 +861,7 @@ function renderConsultant(consultant) {
   const verifiedLabel = document.getElementById('profile-verified-label');
   if (verifiedLabel) verifiedLabel.textContent = isB2BResource(consultant) ? 'Ressource partenaire validée' : 'Expert validé ERP';
 
-  const resumeText = notes.resume || consultant.resume || notes.experiences_projets || notes.experiences_test || '';
+  const resumeText = notes.resume || notes.resume_pro || consultant.resume || notes.experiences_projets || notes.experiences_test || '';
   const resumeSection = document.getElementById('resume-section');
   const resumeEl = document.getElementById('profile-resume');
   if (resumeText) {
@@ -927,16 +927,17 @@ function renderConsultant(consultant) {
       expContainer.appendChild(item);
     });
   } else {
-    const projStr = notes.experiences_projets || notes.experiences_test || '';
+    /* Fallback: texte libre saisi par admin entreprise (experiences_text) OU ancien format projets */
+    const projStr = notes.experiences_text || notes.experiences_projets || notes.experiences_test || '';
     if (projStr) {
-      const projets = String(projStr).split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+      const projets = String(projStr).split(/\n/).map(s => s.trim()).filter(Boolean);
       projets.forEach(p => {
         const item = document.createElement('div');
         item.className = 'experience-item';
         item.innerHTML = `
           <div class="experience-icon">🏢</div>
           <div class="experience-body">
-            <div class="exp-title">Mission ERP</div>
+            <div class="exp-title">${notes.experiences_text ? 'Expérience professionnelle' : 'Mission ERP'}</div>
             <ul class="exp-bullets"><li>${escapeHtml(p)}</li></ul>
             <div class="exp-tags">${skills.slice(0, 3).map((tag) => `<span class="exp-tag">${escapeHtml(tag)}</span>`).join('')}</div>
           </div>
@@ -951,11 +952,11 @@ function renderConsultant(consultant) {
   // Expériences projets
   const projetsSection = document.getElementById('projets-section');
   const projetsContainer = document.getElementById('profile-projets');
-  const projStr = notes.experiences_projets || notes.experiences_test || '';
-  if (projStr && projetsContainer) {
+  const projStr2 = notes.experiences_text || notes.experiences_projets || notes.experiences_test || '';
+  if (projStr2 && projetsContainer) {
     if (projetsSection) projetsSection.style.display = '';
-    const projets = String(projStr).split(/\n/).map(s => s.trim()).filter(Boolean);
-    projetsContainer.innerHTML = projets.map(p =>
+    const projets2 = String(projStr2).split(/\n/).map(s => s.trim()).filter(Boolean);
+    projetsContainer.innerHTML = projets2.map(p =>
       '<div class="experience-item"><div class="experience-icon">📌</div><div class="experience-body"><ul class="exp-bullets"><li>' + escapeHtml(p).replace(/, /g, '</li><li>') + '</li></ul></div></div>'
     ).join('');
   } else if (projetsSection) {
