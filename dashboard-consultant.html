@@ -173,7 +173,8 @@ img{max-width:100%;height:auto;}
 .avatar-edit-badge{position:absolute;bottom:0px;right:0px;width:18px;height:18px;background:var(--brand);border-radius:50%;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;pointer-events:none;box-shadow:0 2px 6px rgba(37,99,235,.3);}
 
 /* — Main area — */
-.dashboard-main{display:flex;flex-direction:column;gap:1.25rem;position:relative;overflow:hidden;min-width:0;padding:.25rem 0;}
+/* MODIF: gap réduit pour dashboard plus compact */
+.dashboard-main{display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-width:0;padding:.25rem 0;}
 .cmd-grid{background-image:none;}
 
 /* Toolbar — hero header */
@@ -187,9 +188,9 @@ img{max-width:100%;height:auto;}
 .session-pill{display:inline-flex;align-items:center;padding:.4rem .8rem;border-radius:var(--r-full);background:var(--surface);border:1px solid var(--border);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle);font-weight:600;}
 .avatar-badge{width:36px;height:36px;font-size:.78rem;background:linear-gradient(135deg,var(--brand-light),var(--brand-mid));color:var(--brand);border:1px solid var(--brand-mid);}
 
-/* — KPI Stats (premium cards) — */
-.bento-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
-.bento-stat{background:var(--surface);border:1px solid var(--border-card);border-radius:var(--r-lg);padding:1.35rem 1.4rem 1.2rem;box-shadow:var(--shadow-card);transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+/* — KPI Stats (premium cards — compactées) — */
+.bento-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;}
+.bento-stat{background:var(--surface);border:1px solid var(--border-card);border-radius:var(--r-lg);padding:1.1rem 1.2rem 1rem;box-shadow:var(--shadow-card);transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
 .bento-stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--brand),var(--brand-mid));border-radius:0 3px 3px 0;}
 .bento-stat.accent-2::before{background:linear-gradient(180deg,var(--green),var(--green-border));}
 .bento-stat.accent-3::before{background:linear-gradient(180deg,var(--purple),var(--purple-border));}
@@ -199,7 +200,7 @@ img{max-width:100%;height:auto;}
 .bento-stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover);}
 .bento-stat:hover::after{opacity:1;}
 .bento-stat-label{font-size:.65rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:.5rem;}
-.bento-stat-num{font-family:var(--font-serif);font-size:2.5rem;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.04em;}
+.bento-stat-num{font-family:var(--font-serif);font-size:2rem;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.04em;}
 .bento-stat.accent-2 .bento-stat-num{color:var(--green);}
 .bento-stat.accent-3 .bento-stat-num{color:var(--purple);}
 .bento-stat-sub{font-size:.74rem;color:var(--text-muted);font-weight:500;margin-top:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -215,8 +216,8 @@ img{max-width:100%;height:auto;}
 .panel-title h3{font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .panel-sub{font-size:.8rem;color:var(--text-muted);font-weight:400;margin-top:.2rem;line-height:1.55;}
 
-/* Activity grid: 2 columns (plus compact, profil en full-width en bas) */
-.activity-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.15rem;align-items:start;}
+/* Activity grid: 2 columns — gap réduit pour compacité */
+.activity-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.85rem;align-items:start;}
 .grid-col{display:flex;flex-direction:column;gap:1.15rem;min-width:0;}
 .grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 .editorial-form{margin-top:.35rem;}
@@ -412,7 +413,7 @@ img{max-width:100%;height:auto;}
   .inline-actions .inline-select{min-width:200px;max-width:100%;}
 }
 @media(max-width:700px){
-  .bento-stats{grid-template-columns:1fr;}
+  .bento-stats{grid-template-columns:1fr !important;}
   .request-grid{grid-template-columns:1fr;}
   .grid-cards{grid-template-columns:1fr;}
   .guide-list-horizontal{grid-template-columns:1fr;}
@@ -488,6 +489,17 @@ img{max-width:100%;height:auto;}
           </div>
         </div>
 
+        <!-- ═══ COMPLÉTUDE PROFIL — Version compacte sidebar ═══ -->
+        <div class="aside-section" id="aside-completude">
+          <div class="aside-title">Compl&#233;tude du profil</div>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;">
+            <div style="flex:1;height:4px;border-radius:99px;background:rgba(37,99,235,.1);overflow:hidden;">
+              <div id="aside-completude-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--purple));border-radius:99px;transition:width .5s;"></div>
+            </div>
+            <span id="aside-completude-pct" style="font-size:.72rem;font-weight:700;color:var(--brand);min-width:32px;text-align:right;">0%</span>
+          </div>
+        </div>
+
         <!-- ERP & SOLUTIONS -->
         <div class="aside-section aside-section-soft">
           <div class="aside-title">ERP &amp; Solutions</div>
@@ -524,7 +536,10 @@ img{max-width:100%;height:auto;}
           </div>
         </div>
 
-        <!-- BENTO STATS ROW -->
+        <!-- ═══ KPI STATS — Simplifié: 3 cartes sans doublons ═══ -->
+        <!-- MODIF: Suppression "Indice de profil" (doublon avec "Complétude du profil" dans le guide)
+             MODIF: "Statut d'activité" remplacé par "Complétude" (statut déjà dans sidebar)
+             Résultat: Demandes | Complétude | Statut — 1 info = 1 endroit -->
         <div class="bento-stats">
           <div class="bento-stat">
             <div class="bento-stat-label">Demandes re&#231;ues</div>
@@ -533,13 +548,13 @@ img{max-width:100%;height:auto;}
             <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-requests" style="width:0%"></div></div>
           </div>
           <div class="bento-stat accent-2">
-            <div class="bento-stat-label">Indice de profil</div>
+            <div class="bento-stat-label">Compl&#233;tude du profil</div>
             <div class="bento-stat-num" id="bento-count-profile">&#8212;</div>
-            <div class="bento-stat-sub">Compl&#233;tude du profil</div>
+            <div class="bento-stat-sub">Remplissez votre profil</div>
             <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-profile" style="width:0%"></div></div>
           </div>
           <div class="bento-stat accent-3">
-            <div class="bento-stat-label">Statut d'activit&#233;</div>
+            <div class="bento-stat-label">Statut</div>
             <div class="bento-stat-num" id="bento-count-status">&#8212;</div>
             <div class="bento-stat-sub" id="bento-sub-status">Visibilit&#233; plateforme</div>
             <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-status" style="width:30%"></div></div>
@@ -548,19 +563,17 @@ img{max-width:100%;height:auto;}
 
         <!-- MAIN GRID: 3 columns -->
         <div class="activity-grid">
-          <!-- COL 1: Statut & Disponibilite -->
+          <!-- COL 1: Disponibilité (card Visibilité/Statut supprimée — doublon avec sidebar + KPI) -->
           <div class="grid-col">
-            <div class="panel status-summary-card">
-              <div class="status-summary-head">
-                <div>
-                  <div class="eyebrow">Visibilite</div>
-                  <h3 id="status-summary-heading">Profil approuve</h3>
-                </div>
-                <div class="status-summary-dot" id="status-summary-dot">&#8226;</div>
-              </div>
-              <div class="status-summary-row"><span>Statut</span><strong id="status-visibility">Actif</strong></div>
-              <div class="status-summary-row"><span>Derniere revue</span><strong id="status-review">Aujourd'hui</strong></div>
-            </div>
+            <!-- MODIF: Card "Profil approuvé/Visibilité" SUPPRIMÉE — infos déjà dans:
+                 - Sidebar > Statut (banner)
+                 - KPI > Statut (bento-stat)
+                 Règle UX: 1 info = 1 endroit unique -->
+            <!-- Éléments masqués conservés pour compatibilité JS -->
+            <span id="status-summary-heading" style="display:none;">Profil approuve</span>
+            <span id="status-summary-dot" style="display:none;">&#8226;</span>
+            <span id="status-visibility" style="display:none;">Actif</span>
+            <span id="status-review" style="display:none;">Aujourd'hui</span>
             <div class="panel availability-box">
               <h4>Disponibilite</h4>
               <p>Mettez a jour votre disponibilite pour rester visible sur les missions pertinentes.</p>
@@ -592,10 +605,10 @@ img{max-width:100%;height:auto;}
                 </div>
               </div>
 
-              <!-- Onglets de navigation -->
+              <!-- ═══ Onglets Centre de communication — clarifiés ═══ -->
               <div class="comm-tabs">
                 <button class="comm-tab active" data-comm-tab="all" onclick="switchCommTab('all')">
-                  Tout<span class="tab-count" id="tab-count-all">0</span>
+                  Demandes re&#231;ues<span class="tab-count" id="tab-count-all">0</span>
                 </button>
                 <button class="comm-tab" data-comm-tab="nouveau" onclick="switchCommTab('nouveau')">
                   Nouvelles<span class="tab-count" id="tab-count-new">0</span>
@@ -604,7 +617,7 @@ img{max-width:100%;height:auto;}
                   R&#233;pondues<span class="tab-count" id="tab-count-replied">0</span>
                 </button>
                 <button class="comm-tab" data-comm-tab="messages" onclick="switchCommTab('messages')">
-                  Aper&#231;u
+                  Messages
                 </button>
               </div>
 
@@ -630,26 +643,23 @@ img{max-width:100%;height:auto;}
             </div>
           </div>
 
-          <!-- COL 3: Indice de visibilite — full-width (span 2 colonnes) -->
+          <!-- ═══ GUIDE COMPLÉTUDE — Compact, full-width, sans doublon titre ═══ -->
+          <!-- MODIF: Supprimé "Indice de visibilité" (eyebrow doublon)
+               Réduit en barre inline + checklist horizontale -->
           <div class="grid-col" style="grid-column:1/-1;">
-            <div class="panel profile-guide">
-              <div class="guide-top">
-                <div>
-                  <div class="eyebrow" style="color:#8ea3d6;">Indice de visibilite</div>
-                  <h3>Compl&#233;tude du profil</h3>
-                </div>
+            <div class="panel profile-guide" style="padding:1rem 1.3rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.6rem;">
+                <h3 style="font-family:var(--font-serif);font-size:1.1rem;font-weight:600;color:var(--brand-dark);letter-spacing:-.01em;margin:0;">Compl&#233;tude du profil</h3>
                 <div class="guide-score" id="guide-score">0% complet</div>
               </div>
-              <div class="guide-track"><div class="guide-fill" id="guide-fill"></div></div>
-              <!-- Guide items en ligne horizontale (plus compact) -->
-              <div class="guide-list guide-list-horizontal">
-                <div class="guide-item" id="guide-exp"><span class="guide-dot"></span>Annees d'experience</div>
-                <div class="guide-item" id="guide-tjm"><span class="guide-dot"></span>Tarification</div>
-                <div class="guide-item" id="guide-mode"><span class="guide-dot"></span>Mode de travail</div>
-                <div class="guide-item" id="guide-ville"><span class="guide-dot"></span>Ville</div>
-                <div class="guide-item" id="guide-langues"><span class="guide-dot"></span>Langues</div>
+              <div class="guide-track" style="margin-bottom:.6rem;"><div class="guide-fill" id="guide-fill"></div></div>
+              <div class="guide-list guide-list-horizontal" style="gap:.5rem;">
+                <div class="guide-item" id="guide-exp" style="font-size:.75rem;"><span class="guide-dot"></span>Exp&#233;rience</div>
+                <div class="guide-item" id="guide-tjm" style="font-size:.75rem;"><span class="guide-dot"></span>Tarification</div>
+                <div class="guide-item" id="guide-mode" style="font-size:.75rem;"><span class="guide-dot"></span>Mode</div>
+                <div class="guide-item" id="guide-ville" style="font-size:.75rem;"><span class="guide-dot"></span>Ville</div>
+                <div class="guide-item" id="guide-langues" style="font-size:.75rem;"><span class="guide-dot"></span>Langues</div>
               </div>
-              <div class="guide-note">Un profil bien complete augmente sa lisibilite et aide l'equipe a vous positionner rapidement.</div>
             </div>
           </div>
         </div>
@@ -732,15 +742,52 @@ img{max-width:100%;height:auto;}
                   <input id="edit-langues-custom" class="inline-edit inline-subfield" type="text" placeholder="Ex: Hindi, Turc, Japonais..." style="display:none;margin-top:.4rem;">
                   <input id="edit-langues-input" class="inline-edit inline-subfield" type="hidden">
                 </div>
-                <div class="info-card wide">
+                <!-- ═══ RÉSUMÉ PROFESSIONNEL — Template structuré intelligent ═══ -->
+                <div class="info-card wide" id="resume-pro-card">
                   <div class="detail-label">R&#233;sum&#233; professionnel</div>
-                  <div class="inline-hint">Pr&#233;sentez-vous en quelques lignes. Ce texte sera visible sur votre profil public.</div>
-                  <textarea id="resume-pro-input" class="inline-textarea" rows="5" placeholder="Consultant sp&#233;cialis&#233; en [domaine], avec X ann&#233;es d'exp&#233;rience dans [secteur].&#10;&#10;Expertise en : [comp&#233;tences cl&#233;s]&#10;Exp&#233;rience notable : [projets ou r&#233;alisations]&#10;Outils ma&#238;tris&#233;s : [technologies]"></textarea>
+                  <div class="inline-hint">Ce texte sera visible sur votre profil public. Remplissez chaque section entre crochets.</div>
+                  <textarea id="resume-pro-input" class="inline-textarea" rows="10" style="line-height:1.7;white-space:pre-wrap;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
                 </div>
-                <div class="info-card wide">
-                  <div class="detail-label">Experiences projets</div>
-                  <div class="inline-hint">Optionnel — d&#233;taillez vos projets ERP marquants.</div>
-                  <textarea id="project-exp-input" class="inline-textarea" placeholder="Ex: SAP S/4 migration, rollout multi-pays, optimisations EWM..."></textarea>
+                <!-- ═══ EXPÉRIENCES PROJETS — Structuré avec dates début/fin + poste actuel ═══ -->
+                <div class="info-card wide" id="project-exp-card">
+                  <div class="detail-label">Exp&#233;rience r&#233;cente</div>
+                  <div class="inline-hint">D&#233;taillez votre exp&#233;rience ERP la plus r&#233;cente ou marquante.</div>
+                  <!-- Période structurée: date début / date fin -->
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
+                    <div>
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">D&#233;but</label>
+                      <div style="display:flex;gap:.35rem;">
+                        <select id="exp-start-month" class="inline-select" style="flex:1;font-size:.82rem;padding:.55rem .6rem;">
+                          <option value="">Mois</option>
+                          <option value="01">Janvier</option><option value="02">F&#233;vrier</option><option value="03">Mars</option>
+                          <option value="04">Avril</option><option value="05">Mai</option><option value="06">Juin</option>
+                          <option value="07">Juillet</option><option value="08">Ao&#251;t</option><option value="09">Septembre</option>
+                          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">D&#233;cembre</option>
+                        </select>
+                        <input id="exp-start-year" class="inline-edit" type="number" min="2000" max="2030" placeholder="Ann&#233;e" style="width:90px;font-size:.82rem;padding:.55rem .6rem;">
+                      </div>
+                    </div>
+                    <div id="exp-end-group">
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Fin</label>
+                      <div style="display:flex;gap:.35rem;">
+                        <select id="exp-end-month" class="inline-select" style="flex:1;font-size:.82rem;padding:.55rem .6rem;">
+                          <option value="">Mois</option>
+                          <option value="01">Janvier</option><option value="02">F&#233;vrier</option><option value="03">Mars</option>
+                          <option value="04">Avril</option><option value="05">Mai</option><option value="06">Juin</option>
+                          <option value="07">Juillet</option><option value="08">Ao&#251;t</option><option value="09">Septembre</option>
+                          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">D&#233;cembre</option>
+                        </select>
+                        <input id="exp-end-year" class="inline-edit" type="number" min="2000" max="2030" placeholder="Ann&#233;e" style="width:90px;font-size:.82rem;padding:.55rem .6rem;">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Checkbox poste actuel -->
+                  <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--text-muted);cursor:pointer;margin-bottom:.6rem;">
+                    <input type="checkbox" id="exp-current-job" style="accent-color:var(--brand);width:15px;height:15px;cursor:pointer;">
+                    Poste actuel (en cours)
+                  </label>
+                  <!-- Descriptif du projet -->
+                  <textarea id="project-exp-input" class="inline-textarea" placeholder="Ex: SAP S/4 migration chez [entreprise], rollout multi-pays, optimisations EWM..."></textarea>
                 </div>
                 <div class="info-card wide" id="certif-section-card">
                   <div class="detail-label">Certifications</div>
@@ -921,6 +968,11 @@ function renderProfileGuide() {
   const bentoBarProfile = document.getElementById('bento-bar-profile');
   if (bentoProfile) bentoProfile.textContent = pct + '%';
   if (bentoBarProfile) bentoBarProfile.style.width = pct + '%';
+  /* ═══ Sync sidebar complétude compacte ═══ */
+  var asideBar = document.getElementById('aside-completude-bar');
+  var asidePct = document.getElementById('aside-completude-pct');
+  if (asideBar) asideBar.style.width = pct + '%';
+  if (asidePct) asidePct.textContent = pct + '%';
 }
 
 function setupInlineChoices() {
@@ -977,6 +1029,21 @@ function setupInlineChoices() {
   }
 
   /* edit-langues-input est maintenant hidden — ancien listener supprime */
+
+  /* ═══ Expérience: checkbox "Poste actuel" masque les champs de fin ═══ */
+  var expCurrentJob = document.getElementById('exp-current-job');
+  var expEndGroup = document.getElementById('exp-end-group');
+  if (expCurrentJob && expEndGroup) {
+    expCurrentJob.addEventListener('change', function() {
+      var hide = expCurrentJob.checked;
+      expEndGroup.style.opacity = hide ? '.4' : '1';
+      expEndGroup.style.pointerEvents = hide ? 'none' : 'auto';
+      if (hide) {
+        document.getElementById('exp-end-month').value = '';
+        document.getElementById('exp-end-year').value = '';
+      }
+    });
+  }
 }
 
 function setLanguage(lang) {
@@ -1807,18 +1874,36 @@ function renderBasicInfo() {
 
   if (statusSelect) statusSelect.value = currentConsultant.statut === 'en_mission' ? 'en_mission' : 'actif';
   if (projectInput) projectInput.value = notes.experiences_projets || notes.experiences_test || '';
-  /* Resume professionnel — charger ou generer un template */
+  /* ═══ Charger les dates d'expérience structurées ═══ */
+  var expStartMonth = document.getElementById('exp-start-month');
+  var expStartYear = document.getElementById('exp-start-year');
+  var expEndMonth = document.getElementById('exp-end-month');
+  var expEndYear = document.getElementById('exp-end-year');
+  var expCurrentJob = document.getElementById('exp-current-job');
+  if (expStartMonth) expStartMonth.value = notes.exp_start_month || '';
+  if (expStartYear) expStartYear.value = notes.exp_start_year || '';
+  if (expEndMonth) expEndMonth.value = notes.exp_end_month || '';
+  if (expEndYear) expEndYear.value = notes.exp_end_year || '';
+  if (expCurrentJob) {
+    expCurrentJob.checked = !!notes.exp_current_job;
+    if (notes.exp_current_job) {
+      var endGroup = document.getElementById('exp-end-group');
+      if (endGroup) { endGroup.style.opacity = '.4'; endGroup.style.pointerEvents = 'none'; }
+    }
+  }
+  /* ═══ Resume professionnel — Template intelligent structuré ═══ */
   var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
     if (notes.resume_pro) {
       resumeInput.value = notes.resume_pro;
     } else {
-      /* Generer un template pre-rempli base sur les donnees existantes */
-      var titre = currentConsultant.titre || '[votre role]';
+      /* Generer un template structuré pré-rempli avec les données existantes */
+      var titre = currentConsultant.titre || '[ERP / domaine]';
       var erps = Array.isArray(currentConsultant.competences)
         ? currentConsultant.competences.join(', ')
-        : String(currentConsultant.competences || '[competences]');
-      resumeInput.value = 'Consultant specialise en ' + titre + '.\n\nExpertise en : ' + erps + '\nExperience notable : [vos projets marquants]\nOutils maitrises : [technologies et outils]';
+        : String(currentConsultant.competences || '[SAP, S/4HANA, etc.]');
+      var annees = notes.annees_exp || 'X';
+      resumeInput.value = '\u{1F539} Profil\nConsultant sp\u00e9cialis\u00e9 en ' + titre + ', avec ' + annees + ' ann\u00e9es d\'exp\u00e9rience dans [secteur d\'activit\u00e9].\n\n\u{1F539} Expertise\n- [Comp\u00e9tence 1]\n- [Comp\u00e9tence 2]\n- [Comp\u00e9tence 3]\n\n\u{1F539} Exp\u00e9riences cl\u00e9s\n- [Projet / entreprise + r\u00e9sultat]\n- [Projet / entreprise + r\u00e9sultat]\n\n\u{1F539} Outils & technologies\n- ' + erps;
     }
   }
   renderCertifChecklist();
@@ -1902,6 +1987,12 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   notes.experiences_projets = projectExp;
   notes.experiences_test = projectExp;
   notes.resume_pro = resumePro; /* Resume professionnel */
+  /* ═══ Sauvegarder les dates d'expérience structurées ═══ */
+  notes.exp_start_month = (document.getElementById('exp-start-month').value || '').trim();
+  notes.exp_start_year = (document.getElementById('exp-start-year').value || '').trim();
+  notes.exp_end_month = (document.getElementById('exp-end-month').value || '').trim();
+  notes.exp_end_year = (document.getElementById('exp-end-year').value || '').trim();
+  notes.exp_current_job = !!document.getElementById('exp-current-job').checked;
   notes.certifications = certifs;
   notes.certifications_v2 = getCertificationsForSave();
 
