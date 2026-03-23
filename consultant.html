@@ -387,16 +387,18 @@ body { font-family: 'Manrope', sans-serif; }
         </button>
       </form>
 
-      <!-- Section reponses du consultant -->
+      <!-- Section reponses du consultant — SECURISEE: email verrouille sur celui du formulaire de contact -->
       <div id="my-conversations" style="margin-top:32px;padding:28px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,40,142,.07);border:1px solid rgba(0,40,142,.06);">
         <h3 style="font-family:'Newsreader',serif;font-size:1.3rem;font-weight:600;color:#0f172a;margin:0 0 6px;">Suivre mes echanges</h3>
-        <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Entrez l'email utilise lors de votre demande pour consulter les reponses du consultant.</p>
-        <div style="display:flex;gap:8px;">
-          <input id="check-reply-email" type="email" placeholder="Votre email professionnel"
-            style="flex:1;padding:12px 16px;border-radius:12px;border:1px solid #d1d5db;font-size:.88rem;outline:none;font-family:'Manrope',sans-serif;"
-            onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#d1d5db'">
+        <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Vos echanges sont lies a l'email que vous avez utilise pour contacter ce consultant.</p>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <!-- SECURITE: champ pre-rempli et verrouille (readonly) — lie a company-email -->
+          <input id="check-reply-email" type="email" placeholder="Entrez d'abord votre email dans le formulaire ci-dessus" readonly
+            style="flex:1;padding:12px 16px;border-radius:12px;border:1px solid #d1d5db;font-size:.88rem;outline:none;font-family:'Manrope',sans-serif;background:#f3f4f6;color:#374151;cursor:not-allowed;">
           <button onclick="checkMyReplies()" style="padding:12px 22px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;">Voir mes echanges</button>
         </div>
+        <!-- Message d'erreur securite -->
+        <div id="reply-security-msg" style="display:none;margin-top:8px;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:.82rem;color:#991b1b;"></div>
         <div id="my-replies-list" style="margin-top:16px;"></div>
       </div>
     </div>
@@ -1057,19 +1059,64 @@ async function sendContactMessage() {
   alert(b2b
     ? 'Message envoyé à l\'administrateur de la ressource.'
     : ExpertI18n.t('consultant.messageSent'));
+  /* SECURITE: Conserver l'email dans le champ "Suivre mes echanges" apres envoi */
+  var sentEmail = document.getElementById('company-email').value.trim();
   document.getElementById('company-name').value = '';
   document.getElementById('company-email').value = '';
   document.getElementById('company-phone').value = '';
   document.getElementById('contact-message').value = '';
+  /* Pre-remplir le suivi avec l'email utilise pour l'envoi */
+  var replyField = document.getElementById('check-reply-email');
+  if (replyField && sentEmail) {
+    replyField.value = sentEmail;
+  }
 }
+
+/* ── SECURITE: Synchroniser le champ "Suivre mes echanges" avec l'email du formulaire contact ── */
+(function() {
+  var companyEmailEl = document.getElementById('company-email');
+  var replyEmailEl = document.getElementById('check-reply-email');
+  if (companyEmailEl && replyEmailEl) {
+    /* Sync en temps reel quand l'utilisateur tape son email dans le formulaire de contact */
+    companyEmailEl.addEventListener('input', function() {
+      replyEmailEl.value = companyEmailEl.value.trim();
+    });
+    /* Sync initiale si un email est deja present */
+    if (companyEmailEl.value.trim()) {
+      replyEmailEl.value = companyEmailEl.value.trim();
+    }
+  }
+})();
 
 async function checkMyReplies() {
   var emailInput = document.getElementById('check-reply-email');
+  var securityMsg = document.getElementById('reply-security-msg');
   var email = (emailInput.value || '').trim().toLowerCase();
+
+  /* SECURITE: Verifier que l'email correspond bien a celui du formulaire de contact */
+  var companyEmailField = document.getElementById('company-email');
+  var authorizedEmail = companyEmailField ? companyEmailField.value.trim().toLowerCase() : '';
+
   if (!email || !email.includes('@')) {
-    alert('Veuillez entrer un email valide.');
+    if (securityMsg) {
+      securityMsg.style.display = 'block';
+      securityMsg.textContent = 'Veuillez d\'abord entrer votre email professionnel dans le formulaire de contact ci-dessus.';
+    }
     return;
   }
+
+  /* Bloquer si l'email ne correspond pas (protection contre manipulation du DOM) */
+  if (authorizedEmail && email !== authorizedEmail) {
+    if (securityMsg) {
+      securityMsg.style.display = 'block';
+      securityMsg.textContent = 'Acces refuse. Vous ne pouvez consulter que les echanges lies a votre propre email.';
+    }
+    return;
+  }
+
+  /* Masquer le message d'erreur si tout est OK */
+  if (securityMsg) securityMsg.style.display = 'none';
+
   var container = document.getElementById('my-replies-list');
   container.innerHTML = '<div style="text-align:center;padding:16px;color:#6b7280;font-size:.85rem;">Chargement...</div>';
 

@@ -215,8 +215,8 @@ img{max-width:100%;height:auto;}
 .panel-title h3{font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .panel-sub{font-size:.8rem;color:var(--text-muted);font-weight:400;margin-top:.2rem;line-height:1.55;}
 
-/* Activity grid: 3 columns */
-.activity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem;align-items:start;}
+/* Activity grid: 2 columns (plus compact, profil en full-width en bas) */
+.activity-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.15rem;align-items:start;}
 .grid-col{display:flex;flex-direction:column;gap:1.15rem;min-width:0;}
 .grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
 .editorial-form{margin-top:.35rem;}
@@ -271,6 +271,16 @@ img{max-width:100%;height:auto;}
 .mini-message .title{font-size:.86rem;font-weight:600;color:var(--text);margin-bottom:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mini-message .meta{font-size:.7rem;color:var(--text-subtle);margin-bottom:.2rem;font-weight:500;}
 .mini-message .excerpt{font-size:.8rem;color:var(--text-muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+
+/* — Centre de communication: onglets — */
+.comm-tabs{display:flex;gap:.25rem;padding:.25rem;background:rgba(0,0,0,.03);border-radius:var(--r-md);margin-bottom:1rem;}
+.comm-tab{flex:1;padding:.6rem .5rem;border:none;background:transparent;border-radius:var(--r);font-family:var(--font-main);font-size:.76rem;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all var(--ease);text-align:center;white-space:nowrap;position:relative;}
+.comm-tab:hover{color:var(--text);}
+.comm-tab.active{background:var(--surface);color:var(--brand);box-shadow:var(--shadow-sm);}
+.comm-tab .tab-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:var(--r-full);font-size:.6rem;font-weight:700;margin-left:.3rem;background:rgba(0,0,0,.06);color:var(--text-subtle);}
+.comm-tab.active .tab-count{background:var(--brand-light);color:var(--brand);}
+.comm-tab-content{display:none;}
+.comm-tab-content.active{display:block;}
 
 /* Profile completion guide */
 .profile-guide{background:linear-gradient(145deg,#eff6ff 0%,#dbeafe 50%,#e0e7ff 100%);border:1px solid rgba(37,99,235,.1)!important;position:relative;overflow:hidden;}
@@ -387,8 +397,7 @@ img{max-width:100%;height:auto;}
 /* -- Responsive: Medium & small screens -- */
 @media(max-width:1280px){
   .activity-grid{grid-template-columns:repeat(2,1fr);}
-  .activity-grid .grid-col:nth-child(3){grid-column:1/-1;}
-  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:repeat(5,1fr);gap:.75rem;}
+  .guide-list-horizontal{grid-template-columns:repeat(5,1fr);gap:.75rem;}
   .inline-actions{width:100%;justify-content:flex-start;margin-left:0;}
   .inline-actions .inline-select{min-width:220px;max-width:320px;}
 }
@@ -397,7 +406,7 @@ img{max-width:100%;height:auto;}
   .dashboard-container{padding:1rem;}
   .dashboard-aside{position:static;height:auto;border-radius:var(--r-xl);backdrop-filter:none;}
   .activity-grid{grid-template-columns:1fr;}
-  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:repeat(3,1fr);}
+  .guide-list-horizontal{grid-template-columns:repeat(3,1fr);}
   .grid-cards{grid-template-columns:repeat(2,1fr);}
   .inline-actions{flex-wrap:wrap;}
   .inline-actions .inline-select{min-width:200px;max-width:100%;}
@@ -406,7 +415,7 @@ img{max-width:100%;height:auto;}
   .bento-stats{grid-template-columns:1fr;}
   .request-grid{grid-template-columns:1fr;}
   .grid-cards{grid-template-columns:1fr;}
-  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:1fr;}
+  .guide-list-horizontal{grid-template-columns:1fr;}
 }
 @media(max-width:640px){
   .dashboard-container{padding:.75rem;}
@@ -568,13 +577,13 @@ img{max-width:100%;height:auto;}
             </div>
           </div>
 
-          <!-- COL 2: Demandes & Messages -->
+          <!-- COL 2: Centre de communication (fusion Demandes + Messages) -->
           <div class="grid-col">
-            <div class="panel">
+            <div class="panel" id="comm-center-panel">
               <div class="panel-title">
                 <div>
-                  <h3 id="notif-title">Demandes re&#231;ues</h3>
-                  <div class="panel-sub">Int&#233;r&#234;ts r&#233;cents des entreprises et suivi de vos &#233;changes.</div>
+                  <h3 id="notif-title">Centre de communication</h3>
+                  <div class="panel-sub">G&#233;rez vos demandes, messages et &#233;changes au m&#234;me endroit.</div>
                 </div>
                 <div class="request-stats">
                   <span class="request-pill new" id="count-new">0 nouveau</span>
@@ -582,31 +591,58 @@ img{max-width:100%;height:auto;}
                   <span class="request-pill replied" id="count-replied">0 r&#233;pondu</span>
                 </div>
               </div>
-              <div class="notif-list" id="notif-list"></div>
-            </div>
-            <div class="panel recent-messages-panel">
-              <div class="panel-title">
-                <div>
-                  <h3>Messages recents</h3>
-                  <div class="panel-sub">Resume rapide des derniers contacts et relances.</div>
-                </div>
+
+              <!-- Onglets de navigation -->
+              <div class="comm-tabs">
+                <button class="comm-tab active" data-comm-tab="all" onclick="switchCommTab('all')">
+                  Tout<span class="tab-count" id="tab-count-all">0</span>
+                </button>
+                <button class="comm-tab" data-comm-tab="nouveau" onclick="switchCommTab('nouveau')">
+                  Nouvelles<span class="tab-count" id="tab-count-new">0</span>
+                </button>
+                <button class="comm-tab" data-comm-tab="repondu" onclick="switchCommTab('repondu')">
+                  R&#233;pondues<span class="tab-count" id="tab-count-replied">0</span>
+                </button>
+                <button class="comm-tab" data-comm-tab="messages" onclick="switchCommTab('messages')">
+                  Aper&#231;u
+                </button>
               </div>
-              <div class="mini-feed" id="messages-mini-list"></div>
+
+              <!-- Contenu: Toutes les demandes -->
+              <div class="comm-tab-content active" id="comm-content-all">
+                <div class="notif-list" id="notif-list"></div>
+              </div>
+
+              <!-- Contenu: Nouvelles demandes -->
+              <div class="comm-tab-content" id="comm-content-nouveau">
+                <div class="notif-list" id="notif-list-new"></div>
+              </div>
+
+              <!-- Contenu: Repondues -->
+              <div class="comm-tab-content" id="comm-content-repondu">
+                <div class="notif-list" id="notif-list-replied"></div>
+              </div>
+
+              <!-- Contenu: Apercu messages -->
+              <div class="comm-tab-content" id="comm-content-messages">
+                <div class="mini-feed" id="messages-mini-list"></div>
+              </div>
             </div>
           </div>
 
-          <!-- COL 3: Indice de visibilite -->
-          <div class="grid-col">
+          <!-- COL 3: Indice de visibilite — full-width (span 2 colonnes) -->
+          <div class="grid-col" style="grid-column:1/-1;">
             <div class="panel profile-guide">
               <div class="guide-top">
                 <div>
                   <div class="eyebrow" style="color:#8ea3d6;">Indice de visibilite</div>
-                  <h3>Profil</h3>
+                  <h3>Compl&#233;tude du profil</h3>
                 </div>
                 <div class="guide-score" id="guide-score">0% complet</div>
               </div>
               <div class="guide-track"><div class="guide-fill" id="guide-fill"></div></div>
-              <div class="guide-list">
+              <!-- Guide items en ligne horizontale (plus compact) -->
+              <div class="guide-list guide-list-horizontal">
                 <div class="guide-item" id="guide-exp"><span class="guide-dot"></span>Annees d'experience</div>
                 <div class="guide-item" id="guide-tjm"><span class="guide-dot"></span>Tarification</div>
                 <div class="guide-item" id="guide-mode"><span class="guide-dot"></span>Mode de travail</div>
@@ -641,22 +677,9 @@ img{max-width:100%;height:auto;}
                 </div>
                 <div class="info-card">
                   <div class="detail-label">Ann&#233;es d'exp&#233;rience</div>
-                  <select id="edit-exp-select" class="inline-select">
-                    <option value="">Selectionner</option>
-                    <option value="1">1 an</option>
-                    <option value="2">2 ans</option>
-                    <option value="3">3 ans</option>
-                    <option value="4">4 ans</option>
-                    <option value="5">5 ans</option>
-                    <option value="6">6 ans</option>
-                    <option value="7">7 ans</option>
-                    <option value="8">8 ans</option>
-                    <option value="9">9 ans</option>
-                    <option value="10">10 ans</option>
-                    <option value="12">12 ans</option>
-                    <option value="15">15 ans</option>
-                    <option value="20">20 ans+</option>
-                  </select>
+                  <div class="inline-hint">Nombre exact d'ann&#233;es dans le conseil ERP.</div>
+                  <!-- Champ numerique pour saisie exacte + validation min/max -->
+                  <input id="edit-exp-select" type="number" class="inline-edit" min="1" max="40" step="1" placeholder="Ex: 7" style="max-width:160px;">
                 </div>
                 <div class="info-card">
                   <div class="detail-label">TJM / Tarification</div>
@@ -699,12 +722,24 @@ img{max-width:100%;height:auto;}
                     <button type="button" class="choice-chip" data-lang="Anglais">Anglais</button>
                     <button type="button" class="choice-chip" data-lang="Espagnol">Espagnol</button>
                     <button type="button" class="choice-chip" data-lang="Arabe">Arabe</button>
+                    <button type="button" class="choice-chip" data-lang="Portugais">Portugais</button>
+                    <button type="button" class="choice-chip" data-lang="Mandarin">Mandarin</button>
+                    <button type="button" class="choice-chip" data-lang="Allemand">Allemand</button>
+                    <!-- Bouton "Autre" pour langue personnalisee -->
+                    <button type="button" class="choice-chip" id="lang-autre-chip" data-lang="__autre__" style="border-style:dashed;">+ Autre</button>
                   </div>
-                  <input id="edit-langues-input" class="inline-edit inline-subfield" type="text" placeholder="Autres langues (optionnel)">
+                  <!-- Champ pour langue personnalisee (visible quand "Autre" est active) -->
+                  <input id="edit-langues-custom" class="inline-edit inline-subfield" type="text" placeholder="Ex: Hindi, Turc, Japonais..." style="display:none;margin-top:.4rem;">
+                  <input id="edit-langues-input" class="inline-edit inline-subfield" type="hidden">
+                </div>
+                <div class="info-card wide">
+                  <div class="detail-label">R&#233;sum&#233; professionnel</div>
+                  <div class="inline-hint">Pr&#233;sentez-vous en quelques lignes. Ce texte sera visible sur votre profil public.</div>
+                  <textarea id="resume-pro-input" class="inline-textarea" rows="5" placeholder="Consultant sp&#233;cialis&#233; en [domaine], avec X ann&#233;es d'exp&#233;rience dans [secteur].&#10;&#10;Expertise en : [comp&#233;tences cl&#233;s]&#10;Exp&#233;rience notable : [projets ou r&#233;alisations]&#10;Outils ma&#238;tris&#233;s : [technologies]"></textarea>
                 </div>
                 <div class="info-card wide">
                   <div class="detail-label">Experiences projets</div>
-                  <div class="inline-hint">Optionnel</div>
+                  <div class="inline-hint">Optionnel — d&#233;taillez vos projets ERP marquants.</div>
                   <textarea id="project-exp-input" class="inline-textarea" placeholder="Ex: SAP S/4 migration, rollout multi-pays, optimisations EWM..."></textarea>
                 </div>
                 <div class="info-card wide" id="certif-section-card">
@@ -778,30 +813,45 @@ function parseLangues(value) {
 }
 
 function getSelectedLanguesFromChips() {
-  return Array.from(document.querySelectorAll('#langues-chips .choice-chip.active')).map(btn => btn.dataset.lang);
+  /* Retourne les langues selectionnees par chips (sauf __autre__) */
+  return Array.from(document.querySelectorAll('#langues-chips .choice-chip.active'))
+    .map(btn => btn.dataset.lang)
+    .filter(l => l !== '__autre__');
 }
 
 function refreshLanguesInputFromChips() {
   const selected = getSelectedLanguesFromChips();
-  const customInput = document.getElementById('edit-langues-input');
-  if (!customInput) return;
-  const custom = customInput.dataset.customLangues || '';
-  const merged = [...selected, ...parseLangues(custom)].join(', ');
-  customInput.value = merged;
+  const hiddenInput = document.getElementById('edit-langues-input');
+  const customInput = document.getElementById('edit-langues-custom');
+  if (!hiddenInput) return;
+  /* Ajouter les langues personnalisees du champ "Autre" */
+  const customText = customInput ? customInput.value.trim() : '';
+  const customLangs = parseLangues(customText);
+  const merged = [...selected, ...customLangs].filter(Boolean);
+  hiddenInput.value = merged.join(', ');
 }
 
 function setLanguesChoicesFromValue(value) {
   const values = parseLangues(value);
-  const known = new Set(['francais', 'anglais', 'espagnol', 'arabe']);
+  /* Toutes les langues connues dans les chips */
+  const known = new Set(['francais', 'anglais', 'espagnol', 'arabe', 'portugais', 'mandarin', 'allemand']);
   document.querySelectorAll('#langues-chips .choice-chip').forEach(btn => {
+    if (btn.dataset.lang === '__autre__') return; /* Ne pas auto-activer le chip Autre */
     const active = values.some(v => normalizeToken(v) === normalizeToken(btn.dataset.lang));
     btn.classList.toggle('active', active);
   });
-  const custom = values.filter(v => !known.has(normalizeToken(v)));
-  const customInput = document.getElementById('edit-langues-input');
-  if (customInput) {
-    customInput.dataset.customLangues = custom.join(', ');
-    customInput.value = values.join(', ');
+  /* Les langues non-connues vont dans le champ custom */
+  const customLangs = values.filter(v => !known.has(normalizeToken(v)));
+  const customInput = document.getElementById('edit-langues-custom');
+  const autreChip = document.getElementById('lang-autre-chip');
+  if (customLangs.length > 0 && customInput) {
+    customInput.value = customLangs.join(', ');
+    customInput.style.display = 'block';
+    if (autreChip) autreChip.classList.add('active');
+  }
+  const hiddenInput = document.getElementById('edit-langues-input');
+  if (hiddenInput) {
+    hiddenInput.value = values.join(', ');
   }
 }
 
@@ -900,22 +950,33 @@ function setupInlineChoices() {
     });
   }
 
+  /* ── Langues: gestion des chips + chip "Autre" ── */
   document.querySelectorAll('#langues-chips .choice-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('active');
+      /* Afficher/masquer le champ custom quand on clique sur "Autre" */
+      if (btn.dataset.lang === '__autre__') {
+        var customField = document.getElementById('edit-langues-custom');
+        if (customField) {
+          var show = btn.classList.contains('active');
+          customField.style.display = show ? 'block' : 'none';
+          if (!show) customField.value = '';
+          if (show) customField.focus();
+        }
+      }
       refreshLanguesInputFromChips();
     });
   });
 
-  const customLanguesInput = document.getElementById('edit-langues-input');
-  if (customLanguesInput) {
-    customLanguesInput.addEventListener('input', () => {
-      const selected = getSelectedLanguesFromChips();
-      const typed = parseLangues(customLanguesInput.value);
-      const customOnly = typed.filter(v => !selected.some(s => normalizeToken(s) === normalizeToken(v)));
-      customLanguesInput.dataset.customLangues = customOnly.join(', ');
+  /* Sync le champ custom "Autre langue" en temps reel */
+  var langueCustomInput = document.getElementById('edit-langues-custom');
+  if (langueCustomInput) {
+    langueCustomInput.addEventListener('input', function() {
+      refreshLanguesInputFromChips();
     });
   }
+
+  /* edit-langues-input est maintenant hidden — ancien listener supprime */
 }
 
 function setLanguage(lang) {
@@ -1112,19 +1173,46 @@ async function renderDashboard() {
   renderNotifications();
 }
 
+/* ── Centre de communication: onglets switchCommTab ── */
+function switchCommTab(tabName) {
+  /* Activer l'onglet visuellement */
+  document.querySelectorAll('.comm-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.commTab === tabName);
+  });
+  /* Afficher le contenu correspondant */
+  document.querySelectorAll('.comm-tab-content').forEach(function(c) {
+    c.classList.remove('active');
+  });
+  var target = document.getElementById('comm-content-' + tabName);
+  if (target) target.classList.add('active');
+}
+
+/* ── Generateur HTML d'un item de notification ── */
+function renderNotifItemHtml(n) {
+  const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+  const s = n.status || (n.read ? 'lu' : 'nouveau');
+  return '<div class="notif-item notif-clickable ' + (n.read ? '' : 'unread') + '" data-action="open-request-detail" data-request-id="' + n.id + '">' +
+    '<div class="notif-meta">' + safe(n.companyName || 'Entreprise') + ' \u00b7 ' + safe(when) + '<span class="status-badge ' + s + '">' + s + '</span></div>' +
+    '<div>' + safe((n.message || '').slice(0, 120)) + ((n.message || '').length > 120 ? '\u2026' : '') + '</div>' +
+  '</div>';
+}
+
 function renderNotifications() {
   const container = document.getElementById('notif-list');
   const miniContainer = document.getElementById('messages-mini-list');
+  const newContainer = document.getElementById('notif-list-new');
+  const repliedContainer = document.getElementById('notif-list-replied');
   if (!container || !currentConsultant) return;
   const list = ExpertNotifications.byConsultant(currentConsultant.id, currentConsultant.email);
   const counts = ExpertNotifications.countsByConsultant(currentConsultant.id, currentConsultant.email);
   const cNew = document.getElementById('count-new');
   const cRead = document.getElementById('count-read');
   const cReplied = document.getElementById('count-replied');
-  if (cNew) cNew.textContent = `${counts.nouveau} nouveau`;
-  if (cRead) cRead.textContent = `${counts.lu} lu`;
-  if (cReplied) cReplied.textContent = `${counts.repondu} r\u00e9pondu`;
-  /* sync bento request stat */
+  if (cNew) cNew.textContent = counts.nouveau + ' nouveau';
+  if (cRead) cRead.textContent = counts.lu + ' lu';
+  if (cReplied) cReplied.textContent = counts.repondu + ' r\u00e9pondu';
+
+  /* Sync bento request stat */
   const totalNotifs = (counts.nouveau || 0) + (counts.lu || 0) + (counts.repondu || 0);
   const bentoReq = document.getElementById('bento-count-requests');
   const bentoBarReq = document.getElementById('bento-bar-requests');
@@ -1133,28 +1221,52 @@ function renderNotifications() {
   if (bentoSubReq) bentoSubReq.textContent = counts.nouveau > 0 ? counts.nouveau + ' non lue(s)' : 'Aucune nouvelle demande';
   if (bentoBarReq) bentoBarReq.style.width = Math.min(100, totalNotifs * 10) + '%';
 
+  /* Sync tab counts */
+  var tabCountAll = document.getElementById('tab-count-all');
+  var tabCountNew = document.getElementById('tab-count-new');
+  var tabCountReplied = document.getElementById('tab-count-replied');
+  if (tabCountAll) tabCountAll.textContent = totalNotifs;
+  if (tabCountNew) tabCountNew.textContent = counts.nouveau || 0;
+  if (tabCountReplied) tabCountReplied.textContent = counts.repondu || 0;
+
+  const emptyHtml = '<div class="empty-state">Aucune demande pour le moment \u2014<br>les int\u00e9r\u00eats des entreprises appara\u00eetront ici.</div>';
+
   if (!list.length) {
-    container.innerHTML = `<div class="empty-state">Aucune demande pour le moment \u2014<br>les int\u00e9r\u00eats des entreprises appara\u00eetront ici.</div>`;
-    if (miniContainer) miniContainer.innerHTML = `<div class="empty-state">Aucun message recent pour le moment.</div>`;
+    container.innerHTML = emptyHtml;
+    if (newContainer) newContainer.innerHTML = emptyHtml;
+    if (repliedContainer) repliedContainer.innerHTML = emptyHtml;
+    if (miniContainer) miniContainer.innerHTML = '<div class="empty-state">Aucun message recent.</div>';
     return;
   }
-  container.innerHTML = list.slice(0, 10).map(n => {
-    const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
-    const s = n.status || (n.read ? 'lu' : 'nouveau');
-    return `<div class="notif-item notif-clickable ${n.read ? '' : 'unread'}" data-action="open-request-detail" data-request-id="${n.id}">
-      <div class="notif-meta">${safe(n.companyName || 'Entreprise')} \u00b7 ${safe(when)}<span class="status-badge ${s}">${s}</span></div>
-      <div>${safe((n.message || '').slice(0, 120))}${(n.message || '').length > 120 ? '\u2026' : ''}</div>
-    </div>`;
-  }).join('');
 
+  /* Onglet "Tout" — toutes les demandes (max 10) */
+  container.innerHTML = list.slice(0, 10).map(renderNotifItemHtml).join('');
+
+  /* Onglet "Nouvelles" — status nouveau ou non-lu */
+  if (newContainer) {
+    var newItems = list.filter(function(n) { var s = n.status || (n.read ? 'lu' : 'nouveau'); return s === 'nouveau'; });
+    newContainer.innerHTML = newItems.length
+      ? newItems.slice(0, 10).map(renderNotifItemHtml).join('')
+      : '<div class="empty-state">Aucune nouvelle demande.</div>';
+  }
+
+  /* Onglet "Repondues" */
+  if (repliedContainer) {
+    var repliedItems = list.filter(function(n) { return n.status === 'repondu' || (n.reply && n.reply.trim()); });
+    repliedContainer.innerHTML = repliedItems.length
+      ? repliedItems.slice(0, 10).map(renderNotifItemHtml).join('')
+      : '<div class="empty-state">Aucune demande r\u00e9pondue.</div>';
+  }
+
+  /* Onglet "Apercu" — mini-messages */
   if (miniContainer) {
-    miniContainer.innerHTML = list.slice(0, 3).map(n => {
-      const when = new Date(n.createdAt).toLocaleDateString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
-      return `<div class="mini-message">
-        <div class="title">${safe(n.companyName || 'Entreprise')}</div>
-        <div class="meta">${safe(when)}</div>
-        <div class="excerpt">${safe((n.message || '').slice(0, 90))}${(n.message || '').length > 90 ? '\u2026' : ''}</div>
-      </div>`;
+    miniContainer.innerHTML = list.slice(0, 5).map(function(n) {
+      var when = new Date(n.createdAt).toLocaleDateString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+      return '<div class="mini-message">' +
+        '<div class="title">' + safe(n.companyName || 'Entreprise') + '</div>' +
+        '<div class="meta">' + safe(when) + '</div>' +
+        '<div class="excerpt">' + safe((n.message || '').slice(0, 90)) + ((n.message || '').length > 90 ? '\u2026' : '') + '</div>' +
+      '</div>';
     }).join('');
   }
 }
@@ -1695,6 +1807,20 @@ function renderBasicInfo() {
 
   if (statusSelect) statusSelect.value = currentConsultant.statut === 'en_mission' ? 'en_mission' : 'actif';
   if (projectInput) projectInput.value = notes.experiences_projets || notes.experiences_test || '';
+  /* Resume professionnel — charger ou generer un template */
+  var resumeInput = document.getElementById('resume-pro-input');
+  if (resumeInput) {
+    if (notes.resume_pro) {
+      resumeInput.value = notes.resume_pro;
+    } else {
+      /* Generer un template pre-rempli base sur les donnees existantes */
+      var titre = currentConsultant.titre || '[votre role]';
+      var erps = Array.isArray(currentConsultant.competences)
+        ? currentConsultant.competences.join(', ')
+        : String(currentConsultant.competences || '[competences]');
+      resumeInput.value = 'Consultant specialise en ' + titre + '.\n\nExpertise en : ' + erps + '\nExperience notable : [vos projets marquants]\nOutils maitrises : [technologies et outils]';
+    }
+  }
   renderCertifChecklist();
   renderSidebarCertifs();
   setLanguesChoicesFromValue(notes.langues || '');
@@ -1746,6 +1872,7 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   const langues = (document.getElementById('edit-langues-input').value || '').trim();
   const statusChoice = (document.getElementById('profile-status-select').value || 'actif').trim();
   const projectExp = document.getElementById('project-exp-input').value.trim();
+  const resumePro = (document.getElementById('resume-pro-input') ? document.getElementById('resume-pro-input').value : '').trim();
   const certifs = getSelectedCertifications();
 
   const expValue = expRaw ? Number(expRaw) : null;
@@ -1774,6 +1901,7 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   notes.langues = langues;
   notes.experiences_projets = projectExp;
   notes.experiences_test = projectExp;
+  notes.resume_pro = resumePro; /* Resume professionnel */
   notes.certifications = certifs;
   notes.certifications_v2 = getCertificationsForSave();
 
