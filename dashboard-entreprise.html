@@ -826,6 +826,7 @@ function normalizeStatus(value) {
   if (basic === 'approuve') return 'approuve';
   if (basic === 'refuse') return 'refuse';
   if (basic === 'en_attente') return 'en_attente';
+  if (basic === 'en_mission') return 'en_mission';
   return basic;
 }
 
@@ -908,18 +909,11 @@ function getUrlParam(name) {
 async function loadResources() {
   const resources = await sbFetch('consultants', { select: '*' });
   const ownerEmail = getCompanyOwnerEmail();
-  // Photos de test (liens libres ou assets locaux)
-  const testPhotos = [
-    'https://randomuser.me/api/portraits/men/32.jpg',
-    'https://randomuser.me/api/portraits/women/44.jpg',
-    'https://randomuser.me/api/portraits/men/85.jpg',
-    'https://randomuser.me/api/portraits/women/65.jpg',
-    'https://randomuser.me/api/portraits/men/12.jpg'
-  ];
+  // Photos reelles depuis Supabase (notes_admin.photo_url)
   const filtered = resources.filter((r, i) => {
     const notes = parseNotes(r.notes_admin);
-    // Injection photo de test pour les 5 premiers
-    if (i < testPhotos.length) r.photo = testPhotos[i];
+    // Utiliser la photo Supabase (notes_admin.photo_url) au lieu de photos de test
+    if (notes.photo_url) r.photo = notes.photo_url;
     return String(notes.entreprise_email || '').toLowerCase() === ownerEmail;
   });
 
@@ -940,6 +934,7 @@ async function loadResources() {
     const statusMap = {
       'en_attente': '<span class="badge badge-pending">En revision</span>',
       'approuve': '<span class="badge badge-approved">Publie</span>',
+      'en_mission': '<span class="badge badge-approved" style="background:#dbeafe;color:#1e40af;">En mission</span>',
       'refuse': '<span class="badge badge-rejected">Refuse</span>'
     };
     const statusKey = normalizeStatus(r.statut);

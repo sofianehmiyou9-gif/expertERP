@@ -596,7 +596,7 @@ function readUrlId() {
 async function sbSelectPublicConsultants(limit) {
   const query = new URLSearchParams({
     select: '*',
-    statut: 'in.(approuve,en_mission,en_attente)',
+    statut: 'in.(approuve,en_mission)',
     order: 'created_at.desc',
     limit: String(limit || 20)
   });
@@ -738,7 +738,11 @@ function renderConsultant(consultant) {
 
   const displayName = getConsultantDisplayName(consultant, notes);
   const initials = displayName.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase() || 'ER';
-  const availability = parseAvailabilityState(notes.disponibilite || notes.dispo || consultant.disponibilite);
+  // Le statut admin prime sur la disponibilite declaree
+  const consultantStatut = String(consultant.statut || '').toLowerCase();
+  const availability = consultantStatut === 'en_mission'
+    ? { available: false, label: 'En mission' }
+    : parseAvailabilityState(notes.disponibilite || notes.dispo || consultant.disponibilite);
   const location = normalizeCity(notes.ville || consultant.ville || 'Localisation non précisée');
   const yearsInfo = parseExperienceYears(notes.annees_exp || consultant.annees_exp);
   const rateText = formatRate(notes, consultant);
