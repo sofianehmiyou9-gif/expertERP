@@ -489,6 +489,7 @@ img{max-width:100%;height:auto;}
         <nav class="aside-nav">
           <div class="nav-link active" data-tab-target="tab-dashboard" onclick="switchMainTab('tab-dashboard',this)"><span class="nav-icon material-symbols-outlined">dashboard</span>Dashboard</div>
           <div class="nav-link" data-tab-target="tab-profil" onclick="switchMainTab('tab-profil',this)"><span class="nav-icon material-symbols-outlined">person</span>Profil</div>
+          <div class="nav-link" id="voir-carte-link" onclick="openMyPublicProfile()" style="margin-top:.25rem;border-top:1px solid rgba(13,71,161,.08);padding-top:.6rem;"><span class="nav-icon material-symbols-outlined">visibility</span>Voir ma carte</div>
         </nav>
 
         <!-- STATUS — masqué (info déjà dans KPI Dashboard, gardé pour JS) -->
@@ -1290,6 +1291,14 @@ function switchMainTab(tabId, clickedLink) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function openMyPublicProfile() {
+  if (!currentConsultant || !currentConsultant.id) {
+    alert('Profil non chargé. Veuillez patienter.');
+    return;
+  }
+  window.open('/consultant.html?id=' + encodeURIComponent(currentConsultant.id), '_blank');
+}
+
 function switchCommTab(tabName) {
   /* Activer l'onglet visuellement */
   document.querySelectorAll('.comm-tab').forEach(function(t) {
@@ -2088,12 +2097,16 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   });
   notes.erp_modules = (document.getElementById('erp-modules-input').value || '').trim();
 
+  /* ═══ Synchroniser aussi les champs racine pour consultant.html ═══ */
   const payload = {
     notes_admin: JSON.stringify(notes),
     tjm_min: Number.isFinite(tjmValue) ? tjmValue : null,
     tjm_max: Number.isFinite(tjmValue) ? tjmValue : null,
     /* ═══ Mettre à jour les compétences ERP ═══ */
-    competences: selectedErps.length > 0 ? selectedErps : (currentConsultant.competences || [])
+    competences: selectedErps.length > 0 ? selectedErps : (currentConsultant.competences || []),
+    ville: ville || null,
+    langues: langues || null,
+    disponibilite: notes.disponibilite || null
   };
 
   const canChangeVisibility = ['approuve', 'en_mission'].includes(currentConsultant.statut);
@@ -2110,6 +2123,9 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   currentConsultant.notes_admin = payload.notes_admin;
   currentConsultant.tjm_min = payload.tjm_min;
   currentConsultant.tjm_max = payload.tjm_max;
+  currentConsultant.ville = payload.ville;
+  currentConsultant.langues = payload.langues;
+  currentConsultant.disponibilite = payload.disponibilite;
   if (payload.statut) currentConsultant.statut = payload.statut;
   if (payload.competences) currentConsultant.competences = payload.competences;
 
