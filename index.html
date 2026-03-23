@@ -5064,7 +5064,7 @@ function renderConsultants(list) {
     const skills = buildConsultantSkills(c, notes);
     const visibleSkills = skills.slice(0, 5);
     const remainingSkills = Math.max(skills.length - visibleSkills.length, 0);
-    const resume = String(notes.resume || c.resume || '').trim();
+    const resume = String(notes.resume_pro || notes.resume || c.resume || '').trim();
     const mode = String(notes.mode_travail || c.mode_travail || 'Flexible').trim();
     const _rawExp = String(notes.annees_exp || c.annees_exp || notes.experience || '').trim();
     const _expMatch = _rawExp.match(/\d+/);
@@ -5117,7 +5117,7 @@ function renderConsultants(list) {
             </div>
             <!-- ═══ NOUVEAU: TJM + Disponibilité sur la carte ═══ -->
             <div class="consultant-card-stat-item">
-              <span class="consultant-card-stat-num">${rate || '—'}</span>
+              <span class="consultant-card-stat-num">${escapeHtml(rate || '—')}</span>
               <span class="consultant-card-stat-lbl">TJM</span>
             </div>
             <div class="consultant-card-stat-item">
@@ -5199,7 +5199,7 @@ function runConsultantsFilter() {
 
     if (search && !fullName.includes(search) && !skills.includes(search)) return false;
     if (erp && !skills.includes(erp)) return false;
-    if (role && !(c.titre || '').toLowerCase().includes(role)) return false;
+    if (role && !String(c.role || c.titre || notes.role || '').toLowerCase().includes(role)) return false;
     if (mode && !(notes.mode_travail || '').toLowerCase().includes(mode)) return false;
     /* ═══ Filtre Ville ═══ */
     if (ville && !(notes.ville || '').toLowerCase().includes(ville)) return false;

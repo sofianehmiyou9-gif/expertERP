@@ -407,24 +407,7 @@ body { font-family: 'Manrope', sans-serif; }
         </button>
       </form>
 
-      <!-- ═══ SECTION SUIVRE MES ÉCHANGES — RETIRÉE (déplacée dans dashboard entreprise)
-           La section reste dans le DOM avec display:none pour compatibilité JS.
-           L'historique des échanges est maintenant dans l'onglet "Messages" du dashboard entreprise. ═══ -->
-      <div id="my-conversations" style="display:none !important;margin-top:32px;padding:28px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,40,142,.07);border:1px solid rgba(0,40,142,.06);">
-        <h3 style="font-family:'Newsreader',serif;font-size:1.3rem;font-weight:600;color:#0f172a;margin:0 0 6px;">Suivre mes echanges</h3>
-        <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Acc&#232;s s&#233;curis&#233; — uniquement disponible apr&#232;s avoir envoy&#233; un message via le formulaire ci-dessus.</p>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <!-- SECURITE: champ readonly, pré-rempli automatiquement par le token de session -->
-          <input id="check-reply-email" type="email" placeholder="Envoyez d'abord un message pour d&#233;bloquer le suivi" readonly
-            style="flex:1;padding:12px 16px;border-radius:12px;border:1px solid #d1d5db;font-size:.88rem;outline:none;font-family:'Manrope',sans-serif;background:#f3f4f6;color:#374151;cursor:not-allowed;">
-          <button onclick="checkMyReplies()" id="btn-check-replies" style="padding:12px 22px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;">Voir mes echanges</button>
-        </div>
-        <!-- Indicateur de statut sécurité -->
-        <div id="reply-auth-status" style="margin-top:8px;font-size:.78rem;color:#6b7280;display:flex;align-items:center;gap:6px;"></div>
-        <!-- Message d'erreur securite -->
-        <div id="reply-security-msg" style="display:none;margin-top:8px;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:.82rem;color:#991b1b;"></div>
-        <div id="my-replies-list" style="margin-top:16px;"></div>
-      </div>
+      <!-- Section "Suivre mes échanges" retirée — gérée dans dashboard entreprise -->
     </div>
   </section>
 
@@ -1125,7 +1108,7 @@ async function sendContactMessage() {
 var ACCESS_TOKEN_SECRET = 'erphub_secure_2026';
 
 async function generateAccessTokenHash(email) {
-  var raw = email.toLowerCase().trim() + ':' + (consultantId || '') + ':' + ACCESS_TOKEN_SECRET;
+  var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + ACCESS_TOKEN_SECRET;
   var bytes = new TextEncoder().encode(raw);
   var hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
@@ -1141,7 +1124,7 @@ function getStoredTokens() {
 function storeToken(email, token) {
   try {
     var tokens = getStoredTokens();
-    var key = email.toLowerCase().trim() + ':' + (consultantId || '');
+    var key = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '');
     tokens[key] = { token: token, email: email.toLowerCase().trim(), ts: Date.now() };
     localStorage.setItem('erphub_access_tokens', JSON.stringify(tokens));
   } catch(e) { console.error('[Security] Token store error:', e); }
@@ -1156,7 +1139,7 @@ async function generateAndStoreAccessToken(email) {
 async function hasValidAccessToken(email) {
   if (!email) return false;
   var tokens = getStoredTokens();
-  var key = email.toLowerCase().trim() + ':' + (consultantId || '');
+  var key = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '');
   var stored = tokens[key];
   if (!stored) return false;
   var expected = await generateAccessTokenHash(email);
@@ -1165,7 +1148,7 @@ async function hasValidAccessToken(email) {
 
 function getAuthorizedEmail() {
   var tokens = getStoredTokens();
-  var suffix = ':' + (consultantId || '');
+  var suffix = ':' + ((currentConsultant && currentConsultant.id) || '');
   for (var k in tokens) {
     if (k.endsWith(suffix) && tokens[k].email) {
       return tokens[k].email;
