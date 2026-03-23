@@ -373,17 +373,88 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
-      <div id="contact-gate-locked" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm text-center" style="display:none;">
-        <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
-        <h3 class="font-headline text-2xl font-bold text-on-surface mb-3">Accès réservé aux entreprises</h3>
-        <p class="text-on-surface-variant text-sm mb-6 max-w-md mx-auto" style="line-height:1.7;">
-          Connectez-vous à votre espace entreprise pour contacter ce consultant, envoyer une demande et suivre vos échanges.
-        </p>
-        <a href="dashboard-entreprise.html"
-           class="inline-block px-8 py-4 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all">
-          Se connecter / Créer un compte →
-        </a>
-        <p class="text-on-surface-variant text-xs mt-4">Vous êtes consultant ? <a href="dashboard-consultant.html" class="text-secondary underline">Accédez à votre espace</a></p>
+      <div id="contact-gate-locked" class="bg-surface-container-lowest rounded-xl shadow-sm" style="display:none;padding:2.5rem;">
+
+        <!-- Onglets Entreprise / Visiteur -->
+        <div style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #e5e7eb;">
+          <button id="gate-tab-entreprise" onclick="switchGateTab('entreprise')" style="flex:1;padding:.75rem 1rem;font-size:.85rem;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:3px solid #00288e;color:#00288e;transition:all .2s;">🏢 Entreprise</button>
+          <button id="gate-tab-visiteur" onclick="switchGateTab('visiteur')" style="flex:1;padding:.75rem 1rem;font-size:.85rem;font-weight:700;border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;color:#6b7280;transition:all .2s;">👤 Visiteur Pro</button>
+        </div>
+
+        <!-- ═══ TAB ENTREPRISE ═══ -->
+        <div id="gate-panel-entreprise">
+          <div style="text-align:center;">
+            <h3 style="font-family:var(--font-headline,'Manrope',sans-serif);font-size:1.25rem;font-weight:700;color:#0f172a;margin:0 0 .5rem;">Accès Entreprise</h3>
+            <p style="font-size:.85rem;color:#6b7280;line-height:1.7;margin:0 0 1.25rem;max-width:420px;margin-left:auto;margin-right:auto;">
+              Connectez-vous à votre espace entreprise pour contacter ce consultant, publier des demandes et gérer vos ressources.
+            </p>
+            <a href="dashboard-entreprise.html" style="display:inline-block;padding:.85rem 2rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border-radius:12px;font-weight:700;font-size:.85rem;text-decoration:none;transition:all .2s;">
+              Se connecter / Créer un compte →
+            </a>
+          </div>
+        </div>
+
+        <!-- ═══ TAB VISITEUR PRO ═══ -->
+        <div id="gate-panel-visiteur" style="display:none;">
+
+          <!-- Connexion visiteur existant -->
+          <div id="visiteur-login-section">
+            <h3 style="font-family:var(--font-headline,'Manrope',sans-serif);font-size:1.15rem;font-weight:700;color:#0f172a;margin:0 0 .35rem;text-align:center;">Contactez les consultants directement</h3>
+            <p style="font-size:.82rem;color:#6b7280;line-height:1.6;margin:0 0 1.25rem;text-align:center;">Choisissez votre forfait et envoyez des messages aux freelances ERP.</p>
+
+            <!-- Plans visiteur -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem;">
+              <div class="vp-plan-card" data-vp-plan="basic" data-vp-price="10" data-vp-msgs="2" onclick="selectVisiteurPlan(this)" style="border:2px solid #e5e7eb;border-radius:12px;padding:1rem .75rem;text-align:center;cursor:pointer;transition:all .2s;background:#fff;">
+                <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.25rem;">Découverte</div>
+                <div style="font-size:1.5rem;font-weight:800;color:#0f172a;">10 $</div>
+                <div style="font-size:.72rem;color:#6b7280;">/mois</div>
+                <div style="margin-top:.5rem;font-size:.75rem;font-weight:600;color:#00288e;">2 messages / mois</div>
+              </div>
+              <div class="vp-plan-card" data-vp-plan="standard" data-vp-price="18" data-vp-msgs="4" onclick="selectVisiteurPlan(this)" style="border:2px solid #00288e;border-radius:12px;padding:1rem .75rem;text-align:center;cursor:pointer;transition:all .2s;background:#f0f4ff;position:relative;">
+                <div style="position:absolute;top:-.5rem;left:50%;transform:translateX(-50%);background:#00288e;color:#fff;font-size:.6rem;font-weight:700;padding:.15rem .6rem;border-radius:99px;text-transform:uppercase;letter-spacing:.06em;">Populaire</div>
+                <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.25rem;">Standard</div>
+                <div style="font-size:1.5rem;font-weight:800;color:#0f172a;">18 $</div>
+                <div style="font-size:.72rem;color:#6b7280;">/mois</div>
+                <div style="margin-top:.5rem;font-size:.75rem;font-weight:600;color:#00288e;">4 messages / mois</div>
+              </div>
+              <div class="vp-plan-card" data-vp-plan="premium" data-vp-price="25" data-vp-msgs="5" onclick="selectVisiteurPlan(this)" style="border:2px solid #e5e7eb;border-radius:12px;padding:1rem .75rem;text-align:center;cursor:pointer;transition:all .2s;background:#fff;">
+                <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.25rem;">Premium</div>
+                <div style="font-size:1.5rem;font-weight:800;color:#0f172a;">25 $</div>
+                <div style="font-size:.72rem;color:#6b7280;">/mois</div>
+                <div style="margin-top:.5rem;font-size:.75rem;font-weight:600;color:#00288e;">5 messages / mois</div>
+              </div>
+            </div>
+            <input type="hidden" id="vp-selected-plan" value="">
+            <input type="hidden" id="vp-selected-msgs" value="">
+
+            <!-- Formulaire inscription visiteur -->
+            <div style="display:flex;flex-direction:column;gap:.65rem;">
+              <input id="vp-email" type="email" placeholder="Votre email professionnel" style="width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid #d1d5db;font-size:.85rem;font-family:inherit;outline:none;">
+              <input id="vp-password" type="password" placeholder="Choisissez un mot de passe" style="width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid #d1d5db;font-size:.85rem;font-family:inherit;outline:none;">
+              <div id="vp-error" style="font-size:.78rem;color:#dc2626;display:none;"></div>
+              <button id="vp-submit-btn" onclick="registerVisiteurPro()" style="width:100%;padding:.85rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;">
+                Créer mon compte Visiteur Pro
+              </button>
+            </div>
+            <p style="font-size:.72rem;color:#9ca3af;text-align:center;margin-top:.75rem;line-height:1.5;">Déjà inscrit ? <a href="#" onclick="toggleVisiteurLogin(true);return false;" style="color:#00288e;font-weight:600;text-decoration:underline;">Se connecter</a></p>
+          </div>
+
+          <!-- Connexion visiteur existant (masqué par défaut) -->
+          <div id="visiteur-connect-section" style="display:none;">
+            <h3 style="font-family:var(--font-headline,'Manrope',sans-serif);font-size:1.15rem;font-weight:700;color:#0f172a;margin:0 0 .75rem;text-align:center;">Connexion Visiteur Pro</h3>
+            <div style="display:flex;flex-direction:column;gap:.65rem;">
+              <input id="vp-login-email" type="email" placeholder="Votre email" style="width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid #d1d5db;font-size:.85rem;font-family:inherit;outline:none;">
+              <input id="vp-login-password" type="password" placeholder="Mot de passe" style="width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid #d1d5db;font-size:.85rem;font-family:inherit;outline:none;">
+              <div id="vp-login-error" style="font-size:.78rem;color:#dc2626;display:none;"></div>
+              <button onclick="loginVisiteurPro()" style="width:100%;padding:.85rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;">
+                Se connecter
+              </button>
+            </div>
+            <p style="font-size:.72rem;color:#9ca3af;text-align:center;margin-top:.75rem;">Pas encore de compte ? <a href="#" onclick="toggleVisiteurLogin(false);return false;" style="color:#00288e;font-weight:600;text-decoration:underline;">Créer un compte</a></p>
+          </div>
+        </div>
+
+        <p style="font-size:.72rem;color:#9ca3af;text-align:center;margin-top:1.25rem;">Vous êtes consultant ? <a href="dashboard-consultant.html" style="color:#00288e;text-decoration:underline;">Accédez à votre espace</a></p>
       </div>
 
       <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
@@ -1036,6 +1107,16 @@ async function sendContactMessage() {
     return;
   }
 
+  /* ═══ Vérification quota visiteur pro ═══ */
+  var _vpSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (_vpSession && _vpSession.role === 'visiteur_pro' && _vpSession.email) {
+    var _vpQuota = await getVisiteurMessageQuota(_vpSession.email);
+    if (!_vpQuota.canSend) {
+      alert('Vous avez atteint votre limite de ' + _vpQuota.limit + ' messages ce mois-ci. Passez à un forfait supérieur pour envoyer plus de messages.');
+      return;
+    }
+  }
+
   const notes = parseNotes(currentConsultant.notes_admin);
   const b2b = notes.source === 'import_b2b';
   const recipientEmail = b2b
@@ -1075,6 +1156,11 @@ async function sendContactMessage() {
 
   // Sauvegarder via le module notifications (Supabase + localStorage)
   await ExpertNotifications.push(notif);
+
+  /* ═══ Incrémenter le compteur visiteur pro après envoi réussi ═══ */
+  if (_vpSession && _vpSession.role === 'visiteur_pro' && _vpSession.email) {
+    await incrementVisiteurMessageCount(_vpSession.email);
+  }
 
   alert(b2b
     ? 'Message envoyé à l\'administrateur de la ressource.'
@@ -1274,9 +1360,185 @@ document.addEventListener('DOMContentLoaded', () => {
      - Le bouton CTA "Contacter ce consultant" dans le hero s'adapte
        aussi : scroll vers le form si connecté, redirect si non.
      ═══════════════════════════════════════════════════════════════ */
+  /* ═══ VISITEUR PRO — Fonctions UI et logique ═══ */
+  function switchGateTab(tab) {
+    var tabEnt = document.getElementById('gate-tab-entreprise');
+    var tabVis = document.getElementById('gate-tab-visiteur');
+    var panelEnt = document.getElementById('gate-panel-entreprise');
+    var panelVis = document.getElementById('gate-panel-visiteur');
+    if (tab === 'visiteur') {
+      if (tabEnt) { tabEnt.style.borderBottomColor = 'transparent'; tabEnt.style.color = '#6b7280'; }
+      if (tabVis) { tabVis.style.borderBottomColor = '#00288e'; tabVis.style.color = '#00288e'; }
+      if (panelEnt) panelEnt.style.display = 'none';
+      if (panelVis) panelVis.style.display = 'block';
+    } else {
+      if (tabEnt) { tabEnt.style.borderBottomColor = '#00288e'; tabEnt.style.color = '#00288e'; }
+      if (tabVis) { tabVis.style.borderBottomColor = 'transparent'; tabVis.style.color = '#6b7280'; }
+      if (panelEnt) panelEnt.style.display = 'block';
+      if (panelVis) panelVis.style.display = 'none';
+    }
+  }
+  function toggleVisiteurLogin(showLogin) {
+    var regSection = document.getElementById('visiteur-login-section');
+    var conSection = document.getElementById('visiteur-connect-section');
+    if (showLogin) {
+      if (regSection) regSection.style.display = 'none';
+      if (conSection) conSection.style.display = 'block';
+    } else {
+      if (regSection) regSection.style.display = 'block';
+      if (conSection) conSection.style.display = 'none';
+    }
+  }
+  var _selectedVpPlan = null;
+  function selectVisiteurPlan(card) {
+    document.querySelectorAll('.vp-plan-card').forEach(function(c) {
+      c.style.borderColor = '#e5e7eb'; c.style.background = '#fff';
+    });
+    card.style.borderColor = '#00288e'; card.style.background = '#f0f4ff';
+    _selectedVpPlan = {
+      plan: card.dataset.vpPlan,
+      price: card.dataset.vpPrice,
+      msgs: parseInt(card.dataset.vpMsgs) || 2
+    };
+    var hiddenPlan = document.getElementById('vp-selected-plan');
+    var hiddenMsgs = document.getElementById('vp-selected-msgs');
+    if (hiddenPlan) hiddenPlan.value = _selectedVpPlan.plan;
+    if (hiddenMsgs) hiddenMsgs.value = _selectedVpPlan.msgs;
+  }
+
+  async function registerVisiteurPro() {
+    var email = (document.getElementById('vp-email').value || '').trim();
+    var password = (document.getElementById('vp-password').value || '').trim();
+    var errEl = document.getElementById('vp-error');
+    if (errEl) errEl.style.display = 'none';
+
+    if (!_selectedVpPlan) { showVpError(errEl, 'Veuillez sélectionner un forfait.'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showVpError(errEl, 'Veuillez saisir un email valide.'); return; }
+    if (!password || password.length < 6) { showVpError(errEl, 'Le mot de passe doit contenir au moins 6 caractères.'); return; }
+
+    var btn = document.getElementById('vp-submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Création en cours...'; }
+
+    try {
+      /* Vérifier si l'email existe déjà */
+      var checkResp = await fetch(SB_URL + '/rest/v1/entreprises?select=id&email=eq.' + encodeURIComponent(email) + '&type_demande=eq.visiteur_pro', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+      });
+      var existing = await checkResp.json();
+      if (Array.isArray(existing) && existing.length > 0) {
+        showVpError(errEl, 'Cet email est déjà inscrit. Connectez-vous.');
+        if (btn) { btn.disabled = false; btn.textContent = 'Créer mon compte Visiteur Pro'; }
+        return;
+      }
+
+      /* Hash du mot de passe */
+      var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
+      var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+
+      /* Créer le compte visiteur dans la table entreprises */
+      var payload = {
+        email: email.toLowerCase(),
+        nom: 'Visiteur Pro',
+        password_hash: hashHex,
+        type_demande: 'visiteur_pro',
+        notes_admin: JSON.stringify({
+          plan: _selectedVpPlan.plan,
+          plan_price: _selectedVpPlan.price,
+          msgs_limit: _selectedVpPlan.msgs,
+          msgs_used: 0,
+          msgs_reset_date: new Date().toISOString().slice(0, 7),
+          created_at: new Date().toISOString()
+        }),
+        statut: 'actif'
+      };
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises', {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(payload)
+      });
+      if (!resp.ok) throw new Error('insert_failed');
+
+      /* Créer la session et recharger */
+      ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
+      window.location.reload();
+    } catch (e) {
+      console.error('[VisiteurPro] Registration error:', e);
+      showVpError(errEl, 'Erreur lors de la création du compte. Réessayez.');
+      if (btn) { btn.disabled = false; btn.textContent = 'Créer mon compte Visiteur Pro'; }
+    }
+  }
+
+  async function loginVisiteurPro() {
+    var email = (document.getElementById('vp-login-email').value || '').trim();
+    var password = (document.getElementById('vp-login-password').value || '').trim();
+    var errEl = document.getElementById('vp-login-error');
+    if (errEl) errEl.style.display = 'none';
+
+    if (!email || !password) { showVpError(errEl, 'Veuillez remplir tous les champs.'); return; }
+
+    try {
+      var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
+      var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,email,password_hash,notes_admin&email=eq.' + encodeURIComponent(email.toLowerCase()) + '&type_demande=eq.visiteur_pro', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+      });
+      var data = await resp.json();
+      if (!Array.isArray(data) || !data.length) { showVpError(errEl, 'Compte introuvable. Vérifiez votre email.'); return; }
+      if (data[0].password_hash !== hashHex) { showVpError(errEl, 'Mot de passe incorrect.'); return; }
+
+      ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
+      window.location.reload();
+    } catch (e) {
+      showVpError(errEl, 'Erreur de connexion. Réessayez.');
+    }
+  }
+
+  function showVpError(el, msg) {
+    if (el) { el.textContent = msg; el.style.display = 'block'; }
+  }
+
+  /* ═══ Compteur messages visiteur pro ═══ */
+  async function getVisiteurMessageQuota(email) {
+    try {
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=notes_admin&email=eq.' + encodeURIComponent(email) + '&type_demande=eq.visiteur_pro', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Cache-Control': 'no-cache' },
+        cache: 'no-store'
+      });
+      var data = await resp.json();
+      if (!Array.isArray(data) || !data.length) return { limit: 0, used: 0, canSend: false };
+      var notes = typeof data[0].notes_admin === 'string' ? JSON.parse(data[0].notes_admin) : (data[0].notes_admin || {});
+      var currentMonth = new Date().toISOString().slice(0, 7);
+      /* Reset mensuel automatique */
+      if (notes.msgs_reset_date !== currentMonth) {
+        notes.msgs_used = 0;
+        notes.msgs_reset_date = currentMonth;
+      }
+      var limit = parseInt(notes.msgs_limit) || 2;
+      var used = parseInt(notes.msgs_used) || 0;
+      return { limit: limit, used: used, canSend: used < limit, remaining: limit - used, notes: notes, id: data[0].id || null };
+    } catch (e) { return { limit: 0, used: 0, canSend: false }; }
+  }
+
+  async function incrementVisiteurMessageCount(email) {
+    var quota = await getVisiteurMessageQuota(email);
+    if (!quota.canSend || !quota.id) return false;
+    quota.notes.msgs_used = (parseInt(quota.notes.msgs_used) || 0) + 1;
+    quota.notes.msgs_reset_date = new Date().toISOString().slice(0, 7);
+    try {
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?id=eq.' + quota.id, {
+        method: 'PATCH',
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ notes_admin: JSON.stringify(quota.notes) })
+      });
+      return resp.ok;
+    } catch (e) { return false; }
+  }
+
   (function initContactGate() {
     var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
     var isEnterprise = session && session.role === 'entreprise' && session.email;
+    var isVisiteurPro = session && session.role === 'visiteur_pro' && session.email;
 
     var contactForm = document.getElementById('contact-form');
     var gateLocked = document.getElementById('contact-gate-locked');
@@ -1291,7 +1553,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (session && session.role && session.email) {
       if (navSessionBar) navSessionBar.style.display = 'flex';
-      if (navSessionLabel) navSessionLabel.textContent = (session.role === 'entreprise' ? '🏢 ' : '👤 ') + session.email;
+      var _roleIcon = session.role === 'entreprise' ? '🏢 ' : (session.role === 'visiteur_pro' ? '🎫 ' : '👤 ');
+      if (navSessionLabel) navSessionLabel.textContent = _roleIcon + session.email;
       if (navSessionDash) navSessionDash.href = window.ExpertPortalAuth ? ExpertPortalAuth.getDashboardUrl(session.role, session.email) : 'dashboard-entreprise.html';
       if (navLoginBtn) navLoginBtn.style.display = 'none';
     } else {
@@ -1340,18 +1603,52 @@ document.addEventListener('DOMContentLoaded', () => {
         replyField.readOnly = true;
       }
 
+    } else if (isVisiteurPro) {
+      /* ── VISITEUR PRO CONNECTÉ: Afficher le formulaire avec quota ── */
+      if (contactForm) contactForm.style.display = 'flex';
+      if (gateLocked) gateLocked.style.display = 'none';
+
+      /* Pré-remplir email visiteur */
+      var vpEmailField = document.getElementById('company-email');
+      var vpNameField = document.getElementById('company-name');
+      if (vpEmailField) {
+        vpEmailField.value = session.email;
+        vpEmailField.readOnly = true;
+        vpEmailField.style.background = '#f0f4ff';
+        vpEmailField.style.cursor = 'not-allowed';
+      }
+      if (vpNameField) vpNameField.placeholder = 'Votre nom ou entreprise';
+
+      /* Afficher le quota de messages restant */
+      (async function showVisiteurQuota() {
+        var quota = await getVisiteurMessageQuota(session.email);
+        var quotaHtml = document.createElement('div');
+        quotaHtml.style.cssText = 'padding:.65rem 1rem;background:#f0f4ff;border:1px solid rgba(0,40,142,.1);border-radius:10px;margin-bottom:.75rem;font-size:.82rem;color:#00288e;font-weight:600;text-align:center;';
+        if (quota.canSend) {
+          quotaHtml.innerHTML = '📨 ' + quota.remaining + ' message' + (quota.remaining > 1 ? 's' : '') + ' restant' + (quota.remaining > 1 ? 's' : '') + ' ce mois-ci (forfait : ' + quota.limit + '/mois)';
+        } else {
+          quotaHtml.innerHTML = '⚠️ Vous avez atteint votre limite de ' + quota.limit + ' messages ce mois-ci. <a href="#" onclick="switchGateTab(\'visiteur\');return false;" style="color:#00288e;text-decoration:underline;">Changer de forfait</a>';
+          quotaHtml.style.background = '#fef2f2';
+          quotaHtml.style.borderColor = '#fecaca';
+          quotaHtml.style.color = '#991b1b';
+          /* Désactiver le bouton d'envoi */
+          var sendBtn = contactForm.querySelector('button[type="submit"], button[onclick*="send"]');
+          if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '.5'; sendBtn.style.cursor = 'not-allowed'; }
+        }
+        contactForm.insertBefore(quotaHtml, contactForm.firstChild);
+      })();
+
     } else {
       /* ── NON CONNECTÉ: Masquer le formulaire, afficher le gate ── */
       if (contactForm) contactForm.style.display = 'none';
       if (gateLocked) gateLocked.style.display = 'block';
-      if (myConversations) myConversations.style.display = 'none';
 
       /* Adapter le bouton CTA du hero */
       if (sidebarBtn) {
         sidebarBtn.textContent = 'Se connecter pour contacter';
         sidebarBtn.addEventListener('click', function(e) {
           e.stopImmediatePropagation();
-          window.location.href = 'dashboard-entreprise.html';
+          document.getElementById('contact-gate-locked').scrollIntoView({ behavior: 'smooth' });
         }, true);
       }
     }

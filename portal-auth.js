@@ -47,6 +47,7 @@
     if (normalizedRole === 'consultant') return 'dashboard-consultant.html' + (email ? ('?email=' + encodeURIComponent(email)) : '');
     if (normalizedRole === 'entreprise') return 'dashboard-entreprise.html' + (email ? ('?email=' + encodeURIComponent(email)) : '');
     if (normalizedRole === 'admin') return 'dashboard-admin.html';
+    if (normalizedRole === 'visiteur_pro') return 'index.html'; /* Pas de dashboard visiteur — retour au site */
     return 'index.html';
   }
 
