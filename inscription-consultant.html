@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Consultant - ERP Talent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0e0e0e;
+            --paper: #f5f2ed;
+            --accent: #c8a96e;
+            --accent-dark: #9a7d4a;
+            --accent-light: #fdf6ec;
+            --blue: #1e3a5f;
+            --blue-mid: #2d5282;
+            --blue-light: #ebf2fb;
+            --muted: #8a8580;
+            --border: #e0dbd4;
+            --card: #fff;
+            --green: #065f46;
+            --green-bg: #ecfdf5;
+            --red: #7f1d1d;
+            --red-bg: #fef2f2;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: rgba(245, 242, 237, .95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(224, 219, 212, .5);
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .inscription-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2.5rem;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--ink);
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 0.85rem 0.95rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background: #fff;
+            transition: all .3s ease;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="tel"]::placeholder,
+        textarea::placeholder {
+            color: #64748b;
+            opacity: 1;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .experience-block {
+            background: var(--accent-light);
+            border: 1px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .experience-block h3 {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all .3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: var(--card);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-mid);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--card);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-remove {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid var(--red);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .btn-remove:hover {
+            background: var(--red);
+            color: var(--card);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .message.success {
+            display: block;
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .message.error {
+            display: block;
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        footer {
+            background: var(--ink);
+            color: var(--paper);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<!-- saas-overrides.css removed -->
+</head>
+<body>
+    <nav>
+        <div class="logo">Expert<span style="color: var(--accent);">ERP</span>Hub</div>
+        <div class="nav-links">
+            <a class="nav-link" href="consultant">Consultants</a>
+            <a class="nav-link active" href="inscription-consultant.html">Inscription</a>
+        </div>
+    </nav>
+
+    <div class="inscription-container">
+        <h1>Formulaire d'Inscription</h1>
+        <div id="messageInscription" class="message"></div>
+
+        <form id="inscriptionForm">
+            <h2>Informations Personnelles</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom">Nom *</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom *</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Téléphone *</label>
+                    <input type="tel" id="telephone" name="telephone" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="titre">Titre Professionnel *</label>
+                <input type="text" id="titre" name="titre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="resume">Résumé Professionnel *</label>
+                <textarea id="resume" name="resume" required></textarea>
+            </div>
+
+            <h2>Expériences Professionnelles</h2>
+            <div id="experiencesContainer"></div>
+            <button type="button" class="btn btn-secondary" onclick="ajouterExperience()">+ Ajouter une expérience</button>
+
+            <h2>Compétences</h2>
+            <div class="form-group">
+                <label for="competences">Compétences (séparées par des virgules)</label>
+                <textarea id="competences" name="competences" placeholder="Ex: ERP, SAP, Développement Web..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Valider l'Inscription</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ExpertERPHub. Tous droits réservés.</p>
+    </footer>
+
+    <script src="inscription-consultant.js"></script>
+</body>
+</html>

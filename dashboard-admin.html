@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Administration - ExpertERPHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --brand: #2563eb;
+  --brand-soft: #eff6ff;
+  --success: #16a34a;
+  --warning: #ea580c;
+  --danger: #dc2626;
+  --shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 10% 10%, rgba(37,99,235,.1) 0%, transparent 30%), radial-gradient(circle at 85% 15%, rgba(0,74,198,.1) 0%, transparent 34%), var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+}
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(248,250,252,0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.auth-box {
+  width: min(420px, 92vw);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.1), 0 4px 16px rgba(0,0,0,.06);
+  padding: 2.5rem;
+}
+.brand {
+  font-family: 'Newsreader', serif;
+  font-size: 30px;
+  margin: 0 0 8px;
+  text-align: center;
+}
+.brand span { color: var(--brand); }
+.sub { color: var(--muted); margin: 0 0 16px; font-size: 14px; text-align: center; }
+.auth-label { display:block; font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.4rem; }
+.input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.btn {
+  border: none;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:disabled { opacity: 0.7; cursor: wait; }
+.auth-back { text-align:center; margin-top:1rem; }
+.auth-back a { font-size:.8rem; color:var(--muted); text-decoration:none; }
+.auth-back a:hover { color:var(--ink); }
+:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 4px; }
+.err { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 8px; }
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: #0f172a;
+  color: #dbeafe;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.side-brand {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  color: #fff;
+  line-height: 1.1;
+}
+.side-brand span { color: #93c5fd; }
+.side-note {
+  color: #93a4c5;
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.menu button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #c7d2fe;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.menu button.active, .menu button:hover {
+  background: #1e293b;
+  border-color: #334155;
+  color: #fff;
+}
+.logout {
+  margin-top: auto;
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.main { padding: 24px; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.title {
+  margin: 0;
+  font-family: 'Fraunces', serif;
+  font-size: 30px;
+}
+.pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 12px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.pill.ok { background: #e8f7ef; color: #0f766e; }
+.pill.err { background: #fef2f2; color: #b91c1c; }
+.pill.busy { background: #eef3ff; color: #003ea8; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.k-label { color: var(--muted); font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+.k-val { font-size: 30px; font-family: 'Fraunces', serif; margin-top: 4px; }
+.k-meta { color: var(--muted); font-size: 12px; }
+.panels {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 12px;
+}
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.panel h3 {
+  margin: 0;
+  padding: 14px 14px 0;
+  font-size: 16px;
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+.search {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  width: min(300px, 100%);
+  font-size: 13px;
+}
+.table-wrap { max-height: 420px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.b-pending { background: #fff7ed; color: var(--warning); }
+.b-approved { background: #ecfdf5; color: var(--success); }
+.b-rejected { background: #fef2f2; color: var(--danger); }
+.b-mission { background: #ffedd5; color: #c2410c; }
+.b-other { background: #eef2ff; color: #4338ca; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.mini-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.mini-btn.ok { border-color: #99f6e4; color: var(--success); background: #f0fdfa; }
+.mini-btn.wait { border-color: #fed7aa; color: var(--warning); background: #fffbeb; }
+.mini-btn.stop { border-color: #fecaca; color: var(--danger); background: #fef2f2; }
+.mini-btn.off { border-color: #d1d5db; color: #4b5563; background: #f9fafb; }
+.action-select {
+  min-width: 170px;
+  border: none;
+  background: #f2f4f6;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.action-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,74,198,.2);
+}
+.muted-note { color: var(--muted); font-size: 11px; }
+.stats-list { padding: 8px 14px 14px; }
+.stat-row { margin-bottom: 12px; }
+.stat-row .line {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.stat-row .line > span { display: block; height: 100%; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+.empty { padding: 18px 14px; color: var(--muted); font-size: 13px; }
+.hidden { display: none !important; }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+  .panels { grid-template-columns: 1fr; }
+}
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.42);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+}
+.modal-overlay.modal-hidden { display: none !important; }
+.modal-box {
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.16);
+  width: min(500px, 94vw); max-height: 80vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 18px; border-bottom: 1px solid var(--line);
+}
+.modal-head h3 { margin: 0; font-size: 16px; }
+.modal-close {
+  border: none; background: transparent; font-size: 18px;
+  cursor: pointer; color: var(--muted); padding: 2px 6px; line-height: 1;
+}
+.certif-modal-list {
+  flex: 1; overflow-y: auto; padding: 12px 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.certif-admin-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 9px 10px; border-radius: 8px;
+  border: 1px solid var(--line); font-size: 13px;
+}
+.certif-name { flex: 1; line-height: 1.4; }
+.certif-validate-btn {
+  border: 1px solid var(--line); background: #f9fafb;
+  border-radius: 999px; padding: 4px 12px; font-size: 12px;
+  cursor: pointer; white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace; color: var(--muted);
+  transition: background .15s;
+}
+.certif-validate-btn.valid {
+  background: #ecfdf5; border-color: #99f6e4; color: var(--success);
+}
+.certif-empty-modal { color: var(--muted); font-size: 13px; padding: 12px 0; font-style: italic; }
+.modal-foot {
+  padding: 12px 18px; border-top: 1px solid var(--line);
+  display: flex; justify-content: flex-end;
+}
+.mini-btn.certif { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
+
+/* Executive Archive consistency */
+.auth-box,
+.card,
+.panel,
+.modal-box {
+  border: none;
+  border-radius: 32px;
+  box-shadow: var(--shadow);
+}
+.auth-box {
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(20px);
+}
+.brand,
+.title,
+.panel h3,
+.side-brand {
+  font-family: 'Newsreader', serif;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.sub,
+.k-label,
+.pill,
+.side-note,
+th,
+.mini-btn,
+.menu button {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: .68rem;
+}
+.layout { grid-template-columns: 280px 1fr; }
+.sidebar {
+  background: linear-gradient(180deg, #17203a 0%, #12192d 100%);
+  border-radius: 0 36px 36px 0;
+}
+.menu button { border-radius: 999px; color: #cfd8ec; }
+.menu button.active,
+.menu button:hover {
+  background: linear-gradient(135deg, #004ac6, #2563eb);
+  border-color: transparent;
+}
+.logout {
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,.1);
+}
+.pill {
+  border-radius: 999px;
+  color: #003ea8;
+  background: #dbe1ff;
+}
+.grid { gap: 14px; }
+.card { background: #fff; }
+.k-val { font-family: 'Newsreader', serif; font-weight: 600; }
+.panel-head { padding: 14px 18px; }
+.table-wrap table tbody tr:hover { background: #f5f8ff; }
+.search,
+.input {
+  border: none;
+  background: #f2f4f6;
+  border-radius: 14px;
+}
+.search:focus,
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,74,198,.2);
+}
+.btn,
+.mini-btn,
+.certif-validate-btn {
+  border-radius: 999px;
+}
+.btn {
+  background: linear-gradient(135deg, #004ac6, #2563eb);
+}
+/* ── Premium admin overrides ── */
+body {
+  background: radial-gradient(circle at 8% 6%,rgba(37,99,235,.09) 0%,transparent 28%),
+              radial-gradient(circle at 88% 6%,rgba(0,74,198,.08) 0%,transparent 28%),
+              var(--bg);
+}
+.auth-overlay { backdrop-filter:blur(12px); }
+.auth-box {
+  background: rgba(255,255,255,.96);
+  border-radius: 32px;
+  box-shadow: 0 28px 70px rgba(15,23,42,.12), 0 0 0 1px rgba(191,219,254,.5);
+  padding: 2.5rem;
+}
+.auth-box .brand { font-family:'Newsreader',serif; font-size:2rem; font-weight:500; letter-spacing:-.03em; }
+.auth-box .brand span { color:var(--brand); }
+.auth-box .sub { font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; }
+.auth-box .input { border-radius:14px; padding:12px 15px; background:#f8faff; border:1px solid #e2e8f0; }
+.auth-box .input:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+.auth-box .btn { border-radius:14px; }
+.layout { grid-template-columns: 280px 1fr; }
+.sidebar {
+  background: linear-gradient(180deg, #17203a 0%, #12192d 100%);
+  border-radius: 0 36px 36px 0;
+  padding: 1.4rem 1.2rem;
+}
+.side-brand { font-family:'Newsreader',serif; font-size:2rem; font-weight:500; color:#f8fbff; letter-spacing:-.03em; }
+.side-brand span { color:#93c5fd; }
+.side-note { font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:#6b80a4; margin-top:.15rem; }
+.menu button {
+  font-family:'Manrope','Inter',sans-serif;
+  font-size:.8rem; font-weight:600; letter-spacing:.04em;
+  padding:11px 15px; border-radius:999px; margin-bottom:4px;
+  color:#a8bbd4;
+}
+.menu button.active,
+.menu button:hover {
+  background: linear-gradient(135deg,#004ac6,#2563eb);
+  color:#fff; border-color:transparent;
+  box-shadow:0 10px 20px rgba(0,74,198,.22);
+}
+.logout {
+  font-family:'Manrope','Inter',sans-serif;
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  border-radius:999px; padding:11px 15px;
+  background:rgba(255,255,255,.08);
+}
+.logout:hover { background:rgba(255,255,255,.14); }
+.main { padding:2rem; }
+.topbar { margin-bottom:1.5rem; }
+.title { font-family:'Newsreader',serif; font-size:2rem; font-weight:500; letter-spacing:-.03em; color:#111827; }
+.pill {
+  font-family:'Manrope','Inter',sans-serif; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  padding:5px 13px; border-radius:999px;
+}
+.grid { gap:14px; }
+.card {
+  border-radius:24px;
+  padding:18px 20px;
+  border:1px solid rgba(37,99,235,.07);
+  box-shadow:0 0 0 1px rgba(25,28,30,.03), 0 8px 28px rgba(15,23,42,.06);
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,#2563eb,#60a5fa);
+  border-radius:24px 24px 0 0;
+}
+.k-label { font-family:'Manrope','Inter',sans-serif; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:#9ca3af; }
+.k-val { font-family:'Newsreader',serif; font-size:2.5rem; font-weight:600; color:#111827; margin-top:2px; line-height:1; }
+.k-meta { font-size:.74rem; color:#9ca3af; margin-top:4px; }
+.panels { gap:14px; }
+.panel {
+  border-radius:24px;
+  border:1px solid rgba(37,99,235,.07);
+  box-shadow:0 0 0 1px rgba(25,28,30,.03), 0 8px 28px rgba(15,23,42,.06);
+  background:#fff;
+}
+.panel h3 { font-family:'Newsreader',serif; font-size:1.35rem; font-weight:500; letter-spacing:-.02em; padding:16px 18px 4px; }
+.panel-head { padding:14px 18px; }
+.search { background:#f8faff; border:1px solid #e2e8f0; border-radius:14px; }
+.search:focus { outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.12); border-color:#2563eb; }
+.table-wrap th { background:linear-gradient(135deg,#f8faff,#eef4ff); font-size:.65rem; letter-spacing:.1em; font-weight:700; color:#6b7280; }
+.table-wrap td { font-size:.84rem; }
+.table-wrap tbody tr:hover td { background:#f8faff; }
+.modal-overlay { backdrop-filter: blur(20px); }
+.modal-box { background: rgba(255,255,255,.88); border-radius:28px; }
+
+/* ── Admin action buttons ── */
+.adm-btns { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.adm-btn {
+  border:none; border-radius:999px; padding:5px 13px;
+  font-size:11.5px; font-weight:700; cursor:pointer; white-space:nowrap;
+  font-family:'Inter',sans-serif; letter-spacing:.04em; transition:filter .15s,transform .1s;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.adm-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+.adm-btn:active { transform:translateY(0); }
+.adm-btn-approve { background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; }
+.adm-btn-refuse  { background:linear-gradient(135deg,#dc2626,#f87171); color:#fff; }
+.adm-btn-wait    { background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; }
+.adm-btn-disable { background:#f3f4f6; color:#6b7280; border:1px solid #e5e7eb; }
+.adm-btn-certif  { background:#eef2ff; color:#4338ca; border:1px solid #c7d2fe; }
+/* Consultant cell layout */
+.cons-cell { display:flex; flex-direction:column; gap:2px; }
+.cons-name  { font-weight:600; font-size:13px; color:#111827; }
+.cons-email { font-size:11px; color:#6b7280; }
+.cons-date  { font-size:11px; color:#9ca3af; }
+.erp-tags   { display:flex; flex-wrap:wrap; gap:4px; max-width:180px; }
+.erp-tag {
+  display:inline-block; padding:2px 7px; border-radius:999px;
+  background:#eff6ff; color:#1d4ed8; font-size:10.5px; font-weight:600; border:1px solid #bfdbfe;
+}
+.role-cell  { display:flex; flex-direction:column; gap:2px; }
+.role-main  { font-size:12.5px; font-weight:600; color:#111827; }
+.role-sub   { font-size:11px; color:#6b7280; }
+</style>
+<!-- saas-overrides.css removed -->
+</head>
+<body>
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-box">
+    <h1 class="brand">Expert<span>ERP</span>Hub</h1>
+    <p class="sub">Espace administration</p>
+    <label class="auth-label" for="pwd">Mot de passe</label>
+    <input class="input" id="pwd" type="password" placeholder="Mot de passe administrateur">
+    <button class="btn" id="login-btn">Accéder au tableau de bord</button>
+    <div class="err" id="auth-err"></div>
+    <div class="auth-back"><a href="/">← Retour à l'accueil</a></div>
+  </div>
+</div>
+
+<div class="layout hidden" id="app">
+  <aside class="sidebar">
+    <div>
+      <div class="side-brand">Expert<span>ERP</span>Hub</div>
+      <div class="side-note">Pilotage plateforme</div>
+    </div>
+    <nav class="menu">
+      <button class="active" data-view="overview">Vue d'ensemble</button>
+      <button data-view="consultants">Consultants</button>
+      <button data-view="entreprises">Entreprises</button>
+    </nav>
+    <button class="logout" id="logout-btn">Déconnexion</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h2 class="title" id="view-title">Overview</h2>
+      <span class="pill" id="sync-pill">synchronisation...</span>
+    </div>
+
+    <section id="overview-view">
+      <div class="grid">
+        <div class="card"><div class="k-label">CONSULTANTS</div><div class="k-val" id="k-consultants">0</div><div class="k-meta" id="k-consultants-meta">Total</div></div>
+        <div class="card"><div class="k-label">EN ATTENTE</div><div class="k-val" id="k-pending">0</div><div class="k-meta">À relire</div></div>
+        <div class="card"><div class="k-label">APPROUVÉS</div><div class="k-val" id="k-approved">0</div><div class="k-meta">Profils visibles</div></div>
+        <div class="card"><div class="k-label">ENTREPRISES</div><div class="k-val" id="k-entreprises">0</div><div class="k-meta">Total</div></div>
+      </div>
+
+      <div class="panels">
+        <div class="panel">
+          <h3>Derniers consultants</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nom</th><th>Email</th><th>Statut</th></tr></thead>
+              <tbody id="latest-consultants"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Répartition des statuts</h3>
+          <div class="stats-list" id="status-bars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="consultants-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Consultants</h3>
+          <input id="search-consultants" class="search" placeholder="Rechercher nom, email, rôle">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Consultant</th><th>ERP / Compétences</th><th>Rôle · Exp · Ville</th><th>Inscrit le</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="consultants-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="entreprises-view" class="hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Entreprises</h3>
+          <input id="search-entreprises" class="search" placeholder="Rechercher entreprise, contact, email">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="entreprises-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="certif-modal" class="modal-overlay modal-hidden">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="certif-modal-title">Certifications</h3>
+      <button class="modal-close" id="certif-modal-close">✕</button>
+    </div>
+    <div id="certif-modal-list" class="certif-modal-list"></div>
+    <div class="modal-foot">
+      <button class="btn" id="certif-modal-save">Enregistrer les validations</button>
+    </div>
+  </div>
+</div>
+
+<script src="portal-auth.js"></script>
+<script>
+const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const ADMIN_PWD = 'erphub2026!';
+const ADMIN_AUTH_KEY = 'admin-auth-v2';
+const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse', 'en_mission'];
+
+const state = { consultants: [], entreprises: [], view: 'overview' };
+
+function statusClass(status) {
+  const s = String(status || '').toLowerCase();
+  if (s === 'en_attente') return 'b-pending';
+  if (s === 'approuve' || s === 'approuvé') return 'b-approved';
+  if (s === 'en_mission' || s === 'mission') return 'b-mission';
+  if (s === 'desactive' || s === 'expire') return 'b-other';
+  if (s === 'refuse') return 'b-rejected';
+  return 'b-other';
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch(e) { return {}; }
+}
+
+function toDbStatut(raw) {
+  const s = String(raw || '').toLowerCase();
+  if (s === 'approuvé') return 'approuve';
+  if (s === 'refusé') return 'refuse';
+  if (s === 'en mission' || s === 'mission') return 'en_mission';
+  if (s === 'desactive' || s === 'expire') return 'refuse';
+  if (DB_ALLOWED_STATUTS.includes(s)) return s;
+  return 'en_attente';
+}
+
+function normalizeConsultantStatus(c) {
+  const notes = parseNotes(c && c.notes_admin);
+  if (notes.admin_state === 'deleted') return 'deleted';
+  if (notes.admin_state === 'expire') return 'expire';
+  if (notes.admin_state === 'desactive') return 'desactive';
+  if (notes.admin_state === 'refuse') return 'refuse';
+  if (c && c.statut === 'approuvé') return 'approuve';
+  if (c && c.statut === 'refusé') return 'refuse';
+  if (c && c.statut === 'en mission') return 'en_mission';
+  return (c && c.statut) || 'en_attente';
+}
+
+function normalizeEntrepriseStatus(e) {
+  const description = parseNotes(e && e.description);
+  if (description.admin_state === 'desactive') return 'desactive';
+  if (e && e.statut === 'approuvé') return 'approuve';
+  if (e && e.statut === 'refusé') return 'refuse';
+  return (e && e.statut) || 'en_attente';
+}
+
+function safe(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+async function sbSelect(table, params) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + params, {
+    headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function sbUpdate(table, id, data) {
+  const payload = Object.assign({}, data);
+  if (Object.prototype.hasOwnProperty.call(payload, 'statut')) {
+    payload.statut = toDbStatut(payload.statut);
+  }
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(id), {
+    method: 'PATCH',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    console.error('sbUpdate failed:', table, id, payload, await res.text());
+  }
+  return res.ok;
+}
+
+let syncPillTimer = null;
+function setSyncPill(text, tone, ms) {
+  const pill = document.getElementById('sync-pill');
+  if (!pill) return;
+  pill.textContent = text;
+  pill.classList.remove('ok', 'err', 'busy');
+  if (tone) pill.classList.add(tone);
+  if (syncPillTimer) clearTimeout(syncPillTimer);
+  if (ms && ms > 0) {
+    syncPillTimer = setTimeout(() => {
+      pill.textContent = 'live';
+      pill.classList.remove('ok', 'err', 'busy');
+    }, ms);
+  }
+}
+
+async function loadData() {
+  setSyncPill('syncing...', 'busy');
+  const [consultants, entreprises] = await Promise.all([
+    sbSelect('consultants', 'select=*&order=created_at.desc'),
+    sbSelect('entreprises', 'select=*&order=created_at.desc')
+  ]);
+  state.consultants = Array.isArray(consultants) ? consultants : [];
+  state.entreprises = Array.isArray(entreprises) ? entreprises : [];
+  renderAll();
+  setSyncPill('live');
+}
+
+function renderOverview() {
+  const total = state.consultants.length;
+  const pending = state.consultants.filter(c => String(normalizeConsultantStatus(c)).toLowerCase() === 'en_attente').length;
+  const approved = state.consultants.filter(c => {
+    const s = String(normalizeConsultantStatus(c) || '').toLowerCase();
+    return s === 'approuve' || s === 'approuvé';
+  }).length;
+  document.getElementById('k-consultants').textContent = String(total);
+  document.getElementById('k-pending').textContent = String(pending);
+  document.getElementById('k-approved').textContent = String(approved);
+  document.getElementById('k-entreprises').textContent = String(state.entreprises.length);
+  document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approuvés' : 'Total';
+
+  const latest = state.consultants.slice(0, 8).map(c => {
+    const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
+    const st = normalizeConsultantStatus(c) || 'n/a';
+    return '<tr>' +
+      '<td>' + safe(name) + '</td>' +
+      '<td>' + safe(c.email || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('latest-consultants').innerHTML = latest || '<tr><td colspan="3" class="empty">Aucune donnée consultant</td></tr>';
+
+  const buckets = {};
+  state.consultants.forEach(c => {
+    const key = String(normalizeConsultantStatus(c) || 'unknown').toLowerCase();
+    buckets[key] = (buckets[key] || 0) + 1;
+  });
+  const max = Math.max(1, ...Object.values(buckets));
+  const bars = Object.keys(buckets).sort().map(key => {
+    const count = buckets[key];
+    const pct = Math.round((count / max) * 100);
+    return '<div class="stat-row">' +
+      '<div>' + safe(key) + ' (' + count + ')</div>' +
+      '<div class="line"><span style="width:' + pct + '%"></span></div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('status-bars').innerHTML = bars || '<div class="empty">Aucune donnée de statut</div>';
+}
+
+function renderConsultants() {
+  const q = document.getElementById('search-consultants').value.trim().toLowerCase();
+  const rows = state.consultants.filter(c => {
+    const notes = parseNotes(c.notes_admin);
+    const hay = [c.prenom, c.nom, c.email, c.titre, notes.ville, notes.annees_exp,
+      Array.isArray(c.competences) ? c.competences.join(' ') : String(c.competences || '')
+    ].join(' ').toLowerCase();
+    return !q || hay.includes(q);
+  }).map(c => {
+    const notes   = parseNotes(c.notes_admin);
+    const name    = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || '-';
+    const st      = normalizeConsultantStatus(c) || 'n/a';
+    const reason  = notes.motif_refus ? '<div class="muted-note" style="margin-top:3px">' + safe(notes.motif_refus) + '</div>' : '';
+    const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'}) : '-';
+
+    /* ERP chips */
+    let erps = [];
+    if (Array.isArray(c.competences)) erps = c.competences;
+    else if (c.competences) erps = String(c.competences).split(',').map(s=>s.trim()).filter(Boolean);
+    const erpHtml = erps.length
+      ? '<div class="erp-tags">' + erps.slice(0,4).map(e=>'<span class="erp-tag">'+safe(e)+'</span>').join('') + (erps.length>4?'<span class="erp-tag">+'+( erps.length-4)+'</span>':'') + '</div>'
+      : '<span style="color:#9ca3af;font-size:11px">—</span>';
+
+    /* Role + exp + ville */
+    const expLabel = notes.annees_exp ? notes.annees_exp + ' ans exp.' : '';
+    const villeLabel = notes.ville || '';
+    const roleSub = [expLabel, villeLabel].filter(Boolean).join(' · ');
+
+    /* Status label map */
+    const stLabels = { en_attente:'En attente', approuve:'Approuvé', refuse:'Refusé', en_mission:'En mission', desactive:'Désactivé', expire:'Expiré' };
+    const stLabel  = stLabels[st] || st;
+
+    /* Action buttons: Approuver + Refuser always visible, others in select */
+    const idStr = safe(c.id);
+    const approuveBtn = '<button class="adm-btn adm-btn-approve" data-action="set-consultant-status" data-id="'+idStr+'" data-status="approuve">✓ Approuver</button>';
+    const refuseBtn   = '<button class="adm-btn adm-btn-refuse"  data-action="set-consultant-status" data-id="'+idStr+'" data-status="refuse">✕ Refuser</button>';
+    const moreSelect  = '<select class="action-select" style="min-width:0;width:auto;padding:4px 10px" data-action-select="consultant" data-id="'+idStr+'">' +
+      '<option value="">• • •</option>' +
+      '<option value="en_attente">↺ En attente</option>' +
+      '<option value="desactive">⊘ Désactiver</option>' +
+      '<option value="certif">★ Certifications</option>' +
+      '</select>';
+
+    return '<tr>' +
+      '<td><div class="cons-cell"><span class="cons-name">'+safe(name)+'</span><span class="cons-email">'+safe(c.email||'')+'</span></div></td>' +
+      '<td>'+erpHtml+'</td>' +
+      '<td><div class="role-cell"><span class="role-main">'+safe(c.titre||'—')+'</span>'+(roleSub?'<span class="role-sub">'+safe(roleSub)+'</span>':'')+'</div></td>' +
+      '<td><span class="cons-date">'+safe(dateStr)+'</span></td>' +
+      '<td><span class="badge '+statusClass(st)+'">'+safe(stLabel)+'</span>'+reason+'</td>' +
+      '<td><div class="adm-btns">'+approuveBtn+refuseBtn+moreSelect+'</div></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun consultant inscrit pour le moment.</td></tr>';
+}
+
+function renderEntreprises() {
+  const q = document.getElementById('search-entreprises').value.trim().toLowerCase();
+  const rows = state.entreprises.filter(e => {
+    const hay = [e.nom, e.contact, e.email, e.type_demande].join(' ').toLowerCase();
+    return !q || hay.includes(q);
+  }).map(e => {
+    const st = normalizeEntrepriseStatus(e) || 'n/a';
+    return '<tr>' +
+      '<td>' + safe(e.nom || '-') + '</td>' +
+      '<td>' + safe(e.contact || '-') + '</td>' +
+      '<td>' + safe(e.email || '-') + '</td>' +
+      '<td>' + safe(e.type_demande || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
+      '<td><div class="actions">' +
+      '<select class="action-select" data-action-select="entreprise" data-id="' + safe(e.id) + '">' +
+      '<option value="">Actions</option>' +
+      '<option value="approuve">Approuver</option>' +
+      '<option value="en_attente">En attente</option>' +
+      '<option value="refuse">Refuser</option>' +
+      '<option value="desactive">Désactiver</option>' +
+      '</select>' +
+      '</div></td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun résultat</td></tr>';
+}
+
+function parseCertificationsAdmin(val) {
+  if (Array.isArray(val)) return val.map(s => String(s).trim()).filter(Boolean);
+  return String(val || '').split(',').map(s => s.trim()).filter(Boolean);
+}
+
+let certifModalConsultant = null;
+let certifModalValidated = [];
+
+function closeCertifModal() {
+  document.getElementById('certif-modal').classList.add('modal-hidden');
+}
+
+function openCertifModal(id) {
+  const c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return;
+  certifModalConsultant = c;
+  const notes = parseNotes(c.notes_admin);
+  const certs = parseCertificationsAdmin(notes.certifications);
+  certifModalValidated = [...parseCertificationsAdmin(notes.certifications_validees)];
+  const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || 'Consultant';
+  document.getElementById('certif-modal-title').textContent = 'Certifications — ' + name;
+  const container = document.getElementById('certif-modal-list');
+  if (!certs.length) {
+    container.innerHTML = '<div class="certif-empty-modal">Aucune certification déclarée par ce consultant.<br><span style="font-size:12px;color:#9ca3af;margin-top:6px;display:block;">Le consultant doit d’abord remplir ses certifications depuis son tableau de bord.</span></div>';
+  } else {
+    container.innerHTML = '';
+    certs.forEach(cert => {
+      const row = document.createElement('div');
+      row.className = 'certif-admin-row';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'certif-name';
+      nameSpan.textContent = cert;
+      const btn = document.createElement('button');
+      const isValid = certifModalValidated.includes(cert);
+      btn.className = 'certif-validate-btn' + (isValid ? ' valid' : '');
+      btn.textContent = isValid ? '★ Validé' : '☆ Valider';
+      btn.addEventListener('click', () => {
+        const idx = certifModalValidated.indexOf(cert);
+        if (idx >= 0) certifModalValidated.splice(idx, 1);
+        else certifModalValidated.push(cert);
+        btn.classList.toggle('valid', certifModalValidated.includes(cert));
+        btn.textContent = certifModalValidated.includes(cert) ? '★ Validé' : '☆ Valider';
+      });
+      row.appendChild(nameSpan);
+      row.appendChild(btn);
+      container.appendChild(row);
+    });
+  }
+  document.getElementById('certif-modal').classList.remove('modal-hidden');
+}
+
+async function setConsultantStatus(id, status) {
+  const consultant = state.consultants.find(c => String(c.id) === String(id));
+  if (!consultant) return alert('Consultant introuvable');
+  const notes = parseNotes(consultant.notes_admin);
+  notes.admin_decision_date = new Date().toISOString().split('T')[0];
+
+  let payload = { statut: toDbStatut(status), notes_admin: JSON.stringify(notes) };
+  if (status === 'desactive') {
+    notes.admin_state = 'desactive';
+    payload = { notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'approuve') {
+    delete notes.admin_state;
+    delete notes.motif_refus;
+    payload = { statut: toDbStatut('approuve'), notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'en_attente') {
+    delete notes.admin_state;
+    payload = { statut: toDbStatut('en_attente'), notes_admin: JSON.stringify(notes) };
+  }
+  if (status === 'refuse') {
+    const reason = prompt('Motif du refus (optionnel):', notes.motif_refus || '');
+    if (reason !== null && reason.trim()) notes.motif_refus = reason.trim();
+    payload = { statut: toDbStatut('refuse'), notes_admin: JSON.stringify(notes) };
+  }
+
+  const ok = await sbUpdate('consultants', id, payload);
+  if (!ok) return alert('Erreur mise a jour consultant');
+  await loadData();
+}
+
+async function setEntrepriseStatus(id, status) {
+  const entreprise = state.entreprises.find(e => String(e.id) === String(id));
+  if (!entreprise) return alert('Entreprise introuvable');
+  const description = parseNotes(entreprise.description);
+  description.admin_decision_date = new Date().toISOString().split('T')[0];
+
+  let payload = {};
+  if (status === 'desactive') {
+    description.admin_state = 'desactive';
+    payload = { statut: 'refuse', description: JSON.stringify(description) };
+  } else if (status === 'approuve') {
+    delete description.admin_state;
+    delete description.motif_refus;
+    payload = { statut: 'approuve', description: JSON.stringify(description) };
+  } else if (status === 'en_attente') {
+    delete description.admin_state;
+    payload = { statut: 'en_attente', description: JSON.stringify(description) };
+  } else {
+    const reason = prompt('Motif du refus (optionnel):', description.motif_refus || '');
+    if (reason !== null && reason.trim()) description.motif_refus = reason.trim();
+    payload = { statut: toDbStatut(status), description: JSON.stringify(description) };
+  }
+
+  const ok = await sbUpdate('entreprises', id, payload);
+  if (!ok) return alert('Erreur mise a jour entreprise');
+  await loadData();
+}
+
+function setView(view) {
+  closeCertifModal();
+  state.view = view;
+  document.querySelectorAll('.menu button').forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+  document.getElementById('overview-view').classList.toggle('hidden', view !== 'overview');
+  document.getElementById('consultants-view').classList.toggle('hidden', view !== 'consultants');
+  document.getElementById('entreprises-view').classList.toggle('hidden', view !== 'entreprises');
+  const titleMap = { overview: 'Vue d\'ensemble', consultants: 'Consultants', entreprises: 'Entreprises' };
+  document.getElementById('view-title').textContent = titleMap[view] || view;
+}
+
+function renderAll() {
+  renderOverview();
+  renderConsultants();
+  renderEntreprises();
+}
+
+function openApp() {
+  document.getElementById('auth-overlay').style.display = 'none';
+  document.getElementById('app').classList.remove('hidden');
+  loadData().catch(err => {
+    document.getElementById('sync-pill').textContent = 'erreur sync';
+    alert('Erreur de chargement Supabase : ' + err.message);
+  });
+}
+
+document.getElementById('login-btn').addEventListener('click', () => {
+  const pwd = document.getElementById('pwd').value;
+  if (pwd === ADMIN_PWD) {
+    sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+    localStorage.setItem(ADMIN_AUTH_KEY, 'true');
+    if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
+    openApp();
+  } else {
+    document.getElementById('auth-err').textContent = 'Mot de passe incorrect';
+  }
+});
+
+document.getElementById('certif-modal-close').addEventListener('click', closeCertifModal);
+
+document.getElementById('certif-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('certif-modal')) closeCertifModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeCertifModal();
+});
+
+document.getElementById('certif-modal-save').addEventListener('click', async () => {
+  if (!certifModalConsultant) return;
+  const notes = parseNotes(certifModalConsultant.notes_admin);
+  notes.certifications_validees = certifModalValidated;
+  const ok = await sbUpdate('consultants', certifModalConsultant.id, { notes_admin: JSON.stringify(notes) });
+  if (!ok) { alert('Erreur lors de la sauvegarde'); return; }
+  closeCertifModal();
+  await loadData();
+});
+
+document.getElementById('pwd').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
+
+const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+const hasPortalAdmin = !!(portalSession && portalSession.role === 'admin' && portalSession.adminGranted);
+if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || localStorage.getItem(ADMIN_AUTH_KEY) === 'true' || hasPortalAdmin) {
+  sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+  localStorage.setItem(ADMIN_AUTH_KEY, 'true');
+  openApp();
+}
+
+document.querySelectorAll('.menu button').forEach(btn => {
+  btn.addEventListener('click', () => setView(btn.dataset.view));
+});
+
+document.getElementById('search-consultants').addEventListener('input', renderConsultants);
+document.getElementById('search-entreprises').addEventListener('input', renderEntreprises);
+
+document.addEventListener('click', async (event) => {
+  const el = event.target.closest('[data-action]');
+  if (!el) return;
+  const action = el.dataset.action;
+  if (action === 'set-consultant-status') {
+    await setConsultantStatus(el.dataset.id, el.dataset.status);
+  }
+  if (action === 'set-entreprise-status') {
+    await setEntrepriseStatus(el.dataset.id, el.dataset.status);
+  }
+  if (action === 'open-certif-modal') {
+    openCertifModal(el.dataset.id);
+  }
+});
+
+document.addEventListener('change', async (event) => {
+  const select = event.target.closest('[data-action-select]');
+  if (!select) return;
+  const targetType = select.dataset.actionSelect;
+  const id = select.dataset.id;
+  const selected = select.value;
+  if (!selected) return;
+
+  try {
+    if (targetType === 'consultant') {
+      if (selected === 'certif') {
+        openCertifModal(id);
+        setSyncPill('Ouverture certifications', 'ok', 1200);
+      } else {
+        await setConsultantStatus(id, selected);
+        setSyncPill('Action consultant appliquee', 'ok', 1800);
+      }
+      select.value = '';
+      return;
+    }
+
+    if (targetType === 'entreprise') {
+      await setEntrepriseStatus(id, selected);
+      setSyncPill('Action entreprise appliquee', 'ok', 1800);
+      select.value = '';
+    }
+  } catch (err) {
+    console.error(err);
+    setSyncPill('Erreur action', 'err', 2200);
+    select.value = '';
+  }
+});
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  sessionStorage.removeItem(ADMIN_AUTH_KEY);
+  localStorage.removeItem(ADMIN_AUTH_KEY);
+  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
+  window.location.href = 'index.html';
+});
+</script>
+</body>
+</html>

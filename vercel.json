@@ -1,0 +1,56 @@
+{
+  "rewrites": [
+    {
+      "source": "/consultant",
+      "destination": "/consultant.html"
+    },
+    {
+      "source": "/dashboard-consultant",
+      "destination": "/dashboard-consultant.html"
+    },
+    {
+      "source": "/dashboard-entreprise",
+      "destination": "/dashboard-entreprise.html"
+    },
+    {
+      "source": "/dashboard-admin",
+      "destination": "/dashboard-admin.html"
+    },
+    {
+      "source": "/inscription-consultant",
+      "destination": "/inscription-consultant.html"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/reset-password.html"
+    },
+    {
+      "source": "/recovery",
+      "destination": "/recovery.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors https:; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://fonts.googleapis.com; connect-src 'self' https://aqvkcbeezzbmoiykzfyo.supabase.co wss://aqvkcbeezzbmoiykzfyo.supabase.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; media-src 'self'; manifest-src 'self'; frame-src 'self' https:; upgrade-insecure-requests"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ],
+  "trailingSlash": false
+}

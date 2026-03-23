@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant Dashboard &#8212; ExpertERPHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<style>
+/* ===================================================
+   EXPERTERPHUB &#8212; Dashboard Consultant
+   Design System v2: SaaS Professionnel (Notion / Stripe / Linear)
+   =================================================== */
+:root{
+  /* &#9472;&#9472; Brand &#9472;&#9472; */
+  --brand:#2563eb;
+  --brand-dark:#1d4ed8;
+  --brand-light:#eff6ff;
+  --brand-mid:#dbeafe;
+  /* &#9472;&#9472; Accents &#9472;&#9472; */
+  --green:#10b981;
+  --green-bg:#ecfdf5;
+  --green-border:#a7f3d0;
+  --purple:#7c3aed;
+  --purple-bg:#f5f3ff;
+  --purple-border:#ddd6fe;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  /* &#9472;&#9472; Neutrals &#9472;&#9472; */
+  --bg:#f1f5f9;
+  --surface:#ffffff;
+  --surface-2:#f8fafc;
+  --surface-hover:#f1f5f9;
+  --border:rgba(0,0,0,.06);
+  --border-strong:rgba(0,0,0,.1);
+  /* &#9472;&#9472; Text &#9472;&#9472; */
+  --text:#0f172a;
+  --text-muted:#64748b;
+  --text-subtle:#94a3b8;
+  /* &#9472;&#9472; Sidebar &#9472;&#9472; */
+  --sidebar-bg:#ffffff;
+  --sidebar-w:256px;
+  /* &#9472;&#9472; Shadows &#9472;&#9472; */
+  --shadow-xs:0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow:0 2px 4px rgba(0,0,0,.04),0 8px 20px rgba(0,0,0,.06);
+  --shadow-md:0 4px 8px rgba(0,0,0,.06),0 12px 28px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 16px rgba(0,0,0,.08),0 20px 40px rgba(0,0,0,.06);
+  --shadow-xl:0 16px 32px rgba(0,0,0,.1),0 24px 56px rgba(0,0,0,.06);
+  /* &#9472;&#9472; Radius &#9472;&#9472; */
+  --r-xs:4px;
+  --r-sm:6px;
+  --r:8px;
+  --r-md:12px;
+  --r-lg:16px;
+  --r-xl:20px;
+  --r-2xl:28px;
+  --r-full:9999px;
+  /* &#9472;&#9472; Transitions &#9472;&#9472; */
+  --ease:.18s cubic-bezier(.4,0,.2,1);
+  /* &#9472;&#9472; Fonts &#9472;&#9472; */
+  --font-main:'Manrope',system-ui,-apple-system,sans-serif;
+  --font-serif:'Newsreader',Georgia,serif;
+  /* &#9472;&#9472; Legacy aliases (keep for JS compat) &#9472;&#9472; */
+  --primary:#b8c4ff;
+  --primary-container:#4a6ff5;
+  --cyan:#2563eb;
+  --violet:#7c3aed;
+  --outline:var(--border);
+  --ink:var(--text);
+  --muted:var(--text-muted);
+  --card:var(--surface);
+  --radius-lg:var(--r-2xl);
+}
+
+/* &#9472;&#9472; Reset & base &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-main);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;height:auto;}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 20;vertical-align:middle;font-size:1.15em;line-height:1;}
+
+/* &#9472;&#9472; Language toggle &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.top-controls{position:fixed;top:1rem;right:1rem;display:flex;gap:.35rem;z-index:200;}
+.lang-btn{background:var(--surface);border:1px solid var(--border);padding:.38rem .72rem;border-radius:var(--r-full);cursor:pointer;font-size:.72rem;font-family:var(--font-main);font-weight:600;letter-spacing:.04em;transition:all var(--ease);color:var(--text-muted);}
+.lang-btn.active,.lang-btn:hover{color:var(--brand);border-color:var(--brand-mid);background:var(--brand-light);}
+
+/* &#9472;&#9472; Focus &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:var(--r-xs);}
+
+/* &#9472;&#9472; Auth card &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.auth-container{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:linear-gradient(135deg,#f0f4ff 0%,#f8fafc 60%,#f0fdf4 100%);}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);padding:2.5rem;max-width:420px;width:100%;box-shadow:var(--shadow-xl);}
+.logo{font-family:var(--font-serif);font-size:1.9rem;font-weight:500;text-align:center;letter-spacing:-.02em;color:var(--text);margin-bottom:.25rem;}
+.logo span{color:var(--brand);}
+.auth-card h2{font-family:var(--font-serif);font-size:1.6rem;margin:1.2rem 0 1.1rem;text-align:center;color:var(--text);font-weight:500;}
+.auth-card input{width:100%;padding:.82rem 1rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.75rem;font-size:.9rem;font-family:var(--font-main);background:#F9FAFB;transition:all var(--ease);color:var(--text);}
+.auth-card input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.1);background:#fff;}
+.auth-card input::placeholder{color:var(--text-subtle);}
+.auth-card button{width:100%;padding:.9rem 1rem;background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;border:none;border-radius:var(--r-full);cursor:pointer;font-weight:700;font-family:var(--font-main);font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;transition:all var(--ease);box-shadow:0 4px 12px rgba(37,99,235,.3);}
+.auth-card button:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.4);}
+.auth-error{color:var(--red);font-size:.8rem;margin-top:.7rem;min-height:1rem;text-align:center;}
+.auth-link{margin-top:.85rem;text-align:right;}
+.auth-link button{width:auto;padding:0;background:none;border:none;color:var(--brand);cursor:pointer;font-size:.82rem;text-decoration:underline;box-shadow:none;font-family:var(--font-main);}
+
+/* &#9472;&#9472; Dashboard wrapper &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.dashboard-container{display:flex;justify-content:center;min-height:100vh;padding:1rem 1.5rem;background:var(--bg);}
+.dashboard-card{width:100%;max-width:1920px;margin:0 auto;background:transparent;display:flex;flex-direction:column;}
+.dashboard-shell{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:calc(100vh - 2rem);align-items:stretch;gap:1.5rem;}
+
+/* &#9472;&#9472; Sidebar &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.dashboard-aside{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.35rem 1.1rem 1.1rem;display:flex;flex-direction:column;gap:.9rem;position:sticky;top:1rem;height:calc(100vh - 2rem);overflow-y:auto;box-shadow:var(--shadow-md);}
+.dashboard-aside::-webkit-scrollbar{width:4px;}
+.dashboard-aside::-webkit-scrollbar-track{background:transparent;}
+.dashboard-aside::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px;}
+.archive-mark{font-family:var(--font-serif);font-size:1.35rem;font-style:italic;letter-spacing:-.02em;color:var(--brand);padding:.15rem .5rem .5rem;font-weight:500;}
+
+/* Consultant identity */
+.consultant-mini{display:flex;align-items:center;gap:.75rem;padding:.65rem .5rem .75rem;border-bottom:1px solid var(--border);}
+.consultant-avatar,.avatar-badge{display:inline-flex;align-items:center;justify-content:center;border-radius:var(--r-full);background:linear-gradient(135deg,var(--brand-light),var(--brand-mid));color:var(--brand);font-weight:700;font-family:var(--font-main);}
+.consultant-avatar{width:42px;height:42px;font-size:.85rem;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.15);}
+.consultant-identity{display:flex;flex-direction:column;gap:.1rem;min-width:0;flex:1;}
+.consultant-identity strong{font-size:.88rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.consultant-identity span{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Nav */
+.aside-nav{display:flex;flex-direction:column;gap:.25rem;padding:.25rem 0;}
+.nav-link{display:flex;align-items:center;gap:.7rem;border:none;background:transparent;color:var(--text-muted);padding:.7rem .85rem;border-radius:var(--r-md);text-align:left;font-family:var(--font-main);font-size:.85rem;font-weight:500;cursor:default;transition:all .2s cubic-bezier(.4,0,.2,1);white-space:nowrap;position:relative;}
+.nav-link:hover{background:var(--surface-hover);color:var(--text);transform:translateX(2px);}
+.nav-link.active{background:var(--brand-light);color:var(--brand);font-weight:700;box-shadow:inset 3px 0 0 var(--brand);}
+.nav-link .nav-icon{font-size:1.15rem;flex-shrink:0;opacity:.85;}
+.nav-link::before{display:none;}
+
+/* Aside sections */
+.aside-section{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:1rem;overflow:hidden;box-shadow:var(--shadow-sm);transition:all .2s ease;}
+.aside-section:hover{box-shadow:var(--shadow);}
+.aside-section-soft{background:transparent;border:1px solid var(--border);}
+.aside-title{font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--text-subtle);margin-bottom:.6rem;}
+
+/* Status banner */
+.status-banner{padding:.85rem 1rem;border-radius:var(--r-md);font-size:.82rem;line-height:1.6;background:var(--surface-2);border:1px solid var(--border);color:var(--text);display:flex;align-items:flex-start;gap:.6rem;}
+.status-banner.pending{background:#fffbeb;border-color:#fde68a;color:#92400e;}
+.status-banner.approved{background:var(--green-bg);border-color:var(--green-border);color:#065f46;}
+.status-banner.rejected{background:#fef2f2;border-color:#fecaca;color:#991b1b;}
+.status-banner.mission{background:#fff7ed;border-color:#fed7aa;color:#9a3412;}
+.status-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ERP chips */
+.aside-erp-list{display:flex;flex-wrap:wrap;gap:.4rem;}
+.chip{display:inline-flex;align-items:center;padding:.3rem .65rem;border-radius:var(--r-full);background:var(--brand-light);border:1px solid var(--brand-mid);color:var(--brand);font-size:.7rem;letter-spacing:.03em;font-weight:600;text-transform:uppercase;white-space:nowrap;}
+
+/* Logout & footer */
+.aside-logout{width:100%;padding:.78rem 1rem;background:transparent;border:1px solid var(--border);border-radius:var(--r-full);color:var(--text-muted);font-family:var(--font-main);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:all var(--ease);margin-top:auto;}
+.aside-logout:hover{background:var(--brand-light);color:var(--brand);border-color:var(--brand-mid);}
+.aside-footer-note{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-subtle);text-align:center;padding-top:.4rem;}
+
+/* Avatar photo upload */
+.consultant-avatar-wrap{position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.consultant-avatar-wrap img{width:40px;height:40px;border-radius:var(--r-full);object-fit:cover;border:2px solid var(--brand-mid);}
+.avatar-edit-badge{position:absolute;bottom:-1px;right:-1px;width:16px;height:16px;background:var(--brand);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;pointer-events:none;}
+
+/* &#9472;&#9472; Main area &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.dashboard-main{display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-width:0;padding:.25rem 0;}
+.cmd-grid{background-image:none;}
+
+/* Toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding-bottom:1rem;border-bottom:2px solid var(--border);}
+.toolbar::after{display:none;}
+.eyebrow{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:700;margin-bottom:.5rem;display:inline-flex;align-items:center;gap:.4rem;}
+.eyebrow::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--brand);opacity:.3;}
+.toolbar-title h1{font-family:var(--font-serif);font-size:2.4rem;letter-spacing:-.03em;line-height:1.1;color:var(--text);font-weight:600;}
+.toolbar-title p{font-size:.9rem;color:var(--text-muted);max-width:550px;line-height:1.65;margin-top:.4rem;font-weight:400;}
+.toolbar-meta{display:flex;align-items:center;gap:.65rem;}
+.session-pill{display:inline-flex;align-items:center;padding:.45rem .85rem;border-radius:var(--r-full);background:var(--surface-2);border:1px solid var(--border);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);font-weight:600;}
+.avatar-badge{width:36px;height:36px;font-size:.78rem;background:linear-gradient(135deg,var(--brand-light),var(--brand-mid));color:var(--brand);border:1px solid var(--brand-mid);}
+
+/* &#9472;&#9472; KPI Stats &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.bento-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+.bento-stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:var(--shadow);transition:all .22s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+.bento-stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand-mid);border-radius:0 4px 4px 0;}
+.bento-stat.accent-2::before{background:var(--green);}
+.bento-stat.accent-3::before{background:var(--purple);}
+.bento-stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.bento-stat-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:.55rem;}
+.bento-stat-num{font-family:var(--font-serif);font-size:2.6rem;font-weight:700;color:var(--text);line-height:1;letter-spacing:-.04em;}
+.bento-stat.accent-2 .bento-stat-num{color:var(--green);}
+.bento-stat.accent-3 .bento-stat-num{color:var(--purple);}
+.bento-stat-sub{font-size:.76rem;color:var(--text-muted);font-weight:500;margin-top:.45rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bento-stat-bar{margin-top:1rem;height:4px;background:var(--surface-2);border-radius:var(--r-full);overflow:hidden;}
+.bento-stat-bar-fill{height:100%;background:linear-gradient(90deg,var(--brand-mid),var(--brand));border-radius:var(--r-full);transition:width .5s cubic-bezier(.4,0,.2,1);}
+.bento-stat.accent-2 .bento-stat-bar-fill{background:linear-gradient(90deg,var(--green-border),var(--green));}
+.bento-stat.accent-3 .bento-stat-bar-fill{background:linear-gradient(90deg,var(--purple-border),var(--purple));}
+
+/* &#9472;&#9472; Panels / Cards &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.25rem;box-shadow:var(--shadow);transition:all .22s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+.panel:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--border-strong);}
+.panel-title{display:flex;justify-content:space-between;align-items:center;gap:.85rem;flex-wrap:nowrap;margin-bottom:.85rem;}
+.panel-title h3{font-family:var(--font-serif);font-size:1.45rem;font-weight:600;color:var(--text);letter-spacing:-.02em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.panel-sub{font-size:.82rem;color:var(--text-muted);font-weight:400;margin-top:.2rem;line-height:1.55;}
+
+/* Activity grid: 3 columns */
+.activity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start;}
+.grid-col{display:flex;flex-direction:column;gap:1rem;min-width:0;}
+.grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.editorial-form{margin-top:.25rem;}
+.editorial-form>.panel{background:linear-gradient(180deg,var(--surface) 0%,#f8fafc 100%);border:1px solid var(--border-strong);}
+
+/* Status summary card */
+.status-summary-card{padding:1.25rem;}
+.status-summary-head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem;}
+.status-summary-head h3{font-family:var(--font-serif);font-size:1.4rem;font-weight:600;letter-spacing:-.01em;color:var(--text);}
+.status-summary-dot{width:28px;height:28px;border-radius:var(--r-full);background:var(--green-bg);border:1px solid var(--green-border);display:inline-flex;align-items:center;justify-content:center;color:var(--green);font-size:.85rem;flex-shrink:0;line-height:1;}
+.status-summary-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:.5rem .85rem;margin-top:.4rem;font-size:.82rem;color:var(--text-muted);}
+.status-summary-row strong{color:var(--text);font-weight:600;}
+
+/* Availability */
+.availability-box{padding:1.25rem;}
+.availability-box h4{font-family:var(--font-serif);font-size:1.4rem;margin-bottom:.4rem;color:var(--text);font-weight:600;}
+.availability-box p{font-size:.82rem;color:var(--text-muted);margin-bottom:.85rem;line-height:1.55;}
+.availability-controls{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap;}
+.availability-controls select{padding:.75rem .9rem;border:1px solid var(--border);border-radius:var(--r-md);font-size:.84rem;flex:1;background:var(--surface);color:var(--text);font-family:var(--font-main);min-width:0;transition:all var(--ease);}
+.availability-controls select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+
+/* Buttons */
+.btn{padding:.78rem 1.25rem;border:none;border-radius:var(--r-full);cursor:pointer;font-family:var(--font-main);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;transition:all .2s cubic-bezier(.4,0,.2,1);font-weight:700;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.25),0 1px 3px rgba(37,99,235,.1);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.35),0 2px 6px rgba(37,99,235,.15);}
+.btn-secondary{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border);}
+.btn-secondary:hover{background:var(--brand-light);color:var(--brand);border-color:var(--brand-mid);}
+
+/* Notifications list */
+.request-stats{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;}
+.request-stats{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
+.request-pill{font-size:.65rem;padding:.3rem .7rem;border-radius:var(--r-full);font-weight:700;letter-spacing:.04em;text-transform:none;display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap;}
+.request-pill.new{background:var(--brand-light);color:var(--brand);border:1px solid var(--brand-mid);}
+.request-pill.read{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border);}
+.request-pill.replied{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.notif-list{display:flex;flex-direction:column;gap:.6rem;}
+.notif-item{padding:.9rem 1rem;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--border);transition:all var(--ease);overflow:hidden;}
+.notif-item.unread{background:var(--brand-light);border-color:var(--brand-mid);}
+.notif-item:hover{transform:translateY(-1px);box-shadow:var(--shadow);border-color:var(--border-strong);}
+.notif-clickable{cursor:pointer;}
+.notif-meta{font-size:.76rem;color:var(--text-muted);margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-weight:600;}
+.empty-state{padding:2rem 1.25rem;border-radius:var(--r-md);background:linear-gradient(135deg,var(--surface-2) 0%,#f0f4ff 100%);border:1px dashed rgba(37,99,235,.15);color:var(--text-muted);text-align:center;line-height:1.6;font-weight:500;font-size:.85rem;}
+.status-badge{display:inline-flex;align-items:center;padding:.15rem .55rem;border-radius:var(--r-full);font-size:.62rem;font-weight:700;letter-spacing:.03em;text-transform:capitalize;white-space:nowrap;}
+.status-badge.nouveau{background:var(--brand-light);color:var(--brand);}
+.status-badge.lu{background:var(--surface-2);color:var(--text-muted);}
+.status-badge.repondu{background:var(--green-bg);color:var(--green);}
+
+/* Messages mini feed */
+.mini-feed{display:flex;flex-direction:column;gap:.6rem;}
+.mini-message{padding:.9rem 1rem;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--border);overflow:hidden;transition:all var(--ease);}
+.mini-message:hover{border-color:var(--border-strong);box-shadow:var(--shadow-xs);}
+.mini-message .title{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mini-message .meta{font-size:.72rem;color:var(--text-subtle);margin-bottom:.25rem;}
+.mini-message .excerpt{font-size:.8rem;color:var(--text-muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+
+/* Profile completion guide */
+.profile-guide{background:linear-gradient(160deg,var(--brand-light) 0%,var(--brand-mid) 100%);border:1px solid var(--brand-mid)!important;}
+.guide-top{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.guide-top h3{font-family:var(--font-serif);font-size:1.45rem;font-weight:600;color:var(--brand-dark);}
+.guide-score{font-size:.68rem;color:var(--brand-dark);background:rgba(255,255,255,.8);border-radius:var(--r-full);padding:.28rem .7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.guide-track{height:6px;border-radius:var(--r-full);background:rgba(37,99,235,.15);overflow:hidden;margin-bottom:.85rem;}
+.guide-fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--purple));transition:width .35s ease;}
+.guide-list{display:grid;grid-template-columns:1fr;gap:.4rem;}
+.guide-list-horizontal{grid-template-columns:repeat(5,1fr);gap:.75rem;}
+.guide-item{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--text);}
+.guide-dot{width:8px;height:8px;border-radius:50%;background:rgba(37,99,235,.2);display:inline-block;flex-shrink:0;}
+.guide-item.done .guide-dot{background:var(--brand);box-shadow:0 0 0 2px rgba(37,99,235,.2);}
+.guide-item.done{color:var(--brand-dark);}
+.guide-note{margin-top:.85rem;padding:.75rem;border-radius:var(--r-md);background:rgba(255,255,255,.6);border:1px solid rgba(37,99,235,.15);font-size:.78rem;color:var(--text-muted);line-height:1.55;}
+
+/* Professional info form */
+.inline-actions{display:flex;gap:.65rem;align-items:center;flex-wrap:nowrap;margin-left:auto;}
+.inline-actions .inline-select{width:auto;min-width:260px;max-width:360px;flex-shrink:1;}
+.inline-edit,.inline-select,.inline-textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:.7rem .85rem;font:inherit;font-size:.88rem;background:#F9FAFB;color:var(--text);transition:all var(--ease);}
+.inline-select{padding-right:2rem;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right .6rem center;background-size:1.1em;}
+.inline-textarea{resize:vertical;min-height:80px;}
+.inline-edit::placeholder,.inline-textarea::placeholder{color:var(--text-subtle);}
+.inline-edit:focus,.inline-select:focus,.inline-textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.inline-pair{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.inline-hint{font-size:.73rem;color:var(--text-muted);font-weight:500;margin-bottom:.4rem;}
+.inline-subfield{margin-top:.4rem;}
+.info-card{padding:1.1rem 1.2rem;border-radius:14px;background:var(--surface);border:1px solid var(--border);min-height:100px;display:flex;flex-direction:column;justify-content:flex-start;gap:.4rem;overflow:hidden;transition:all .22s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-sm);}
+.info-card:hover{border-color:var(--brand-mid);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.info-card.wide{grid-column:1/-1;min-height:auto;}
+.detail-label{font-size:.67rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--text-subtle);margin-bottom:.35rem;}
+.detail-value{font-size:1rem;color:var(--text);font-weight:600;line-height:1.45;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.detail-value.muted{color:var(--text-muted);font-weight:500;}
+.detail-value.multiline{white-space:pre-line;text-transform:none;font-size:.9rem;line-height:1.55;}
+
+/* Language chips */
+.choice-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.35rem;}
+.choice-chip{border:1px solid var(--border);background:var(--surface);color:var(--text-muted);border-radius:var(--r-full);padding:.32rem .7rem;font-size:.74rem;font-family:var(--font-main);letter-spacing:.02em;cursor:pointer;transition:all var(--ease);font-weight:500;}
+.choice-chip:hover{background:var(--surface-2);border-color:var(--border-strong);}
+.choice-chip.active{background:var(--brand-light);color:var(--brand);border-color:var(--brand-mid);font-weight:600;}
+
+/* Certifications */
+/* ── Certifications v2 ── */
+.certif-badges-list{display:flex;flex-wrap:wrap;gap:.55rem;margin:.45rem 0 .85rem;min-height:24px;}
+.certif-badge-item{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem .75rem .45rem .85rem;border-radius:var(--r-full);font-size:.78rem;font-weight:600;font-family:var(--font-main);border:1px solid var(--border);background:var(--surface-2);color:var(--text);transition:all .2s;line-height:1.3;}
+.certif-badge-item:hover{border-color:var(--brand-mid);box-shadow:var(--shadow-sm);}
+.certif-badge-item .certif-erp{color:var(--brand);font-weight:700;}
+.certif-badge-item .certif-sep{color:var(--text-subtle);margin:0 .1rem;}
+.certif-badge-item .certif-level{font-size:.68rem;padding:.15rem .45rem;border-radius:var(--r-full);font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+.certif-badge-item .certif-level.level-associate{background:#dbeafe;color:#1d4ed8;}
+.certif-badge-item .certif-level.level-professional{background:#ecfdf5;color:#059669;}
+.certif-badge-item .certif-level.level-expert{background:#f5f3ff;color:#7c3aed;}
+.certif-badge-item .certif-del{background:none;border:none;cursor:pointer;color:var(--text-subtle);font-size:14px;padding:0 0 0 .2rem;line-height:1;transition:color .15s;display:flex;align-items:center;}
+.certif-badge-item .certif-del:hover{color:var(--red);}
+.certif-badge-item .certif-validated{color:var(--amber);font-size:.85rem;margin-left:.1rem;}
+.certif-form{display:flex;flex-direction:column;gap:.55rem;padding-top:.55rem;border-top:1px solid var(--border);}
+.certif-form-row{display:flex;gap:.45rem;flex-wrap:wrap;}
+.certif-select{flex:1;min-width:120px;}
+.certif-custom-input{margin-top:-.2rem;}
+.certif-add-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;padding:.5rem 1rem;}
+.certif-empty{color:var(--text-muted);font-size:.82rem;font-style:italic;padding:.35rem 0;}
+.aside-certif-badges{display:flex;flex-direction:column;gap:.35rem;}
+.aside-certif-chip{display:flex;align-items:center;gap:.35rem;padding:.3rem .55rem;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--border);font-size:.72rem;font-weight:500;color:var(--text);line-height:1.3;}
+.aside-certif-chip .aside-certif-erp{font-weight:700;color:var(--brand);}
+.aside-certif-chip .aside-certif-lvl{font-size:.62rem;padding:.1rem .3rem;border-radius:var(--r-full);font-weight:700;text-transform:uppercase;letter-spacing:.02em;}
+.aside-certif-chip .aside-certif-lvl.level-associate{background:#dbeafe;color:#1d4ed8;}
+.aside-certif-chip .aside-certif-lvl.level-professional{background:#ecfdf5;color:#059669;}
+.aside-certif-chip .aside-certif-lvl.level-expert{background:#f5f3ff;color:#7c3aed;}
+
+/* Contact link */
+.contact-link{color:var(--brand);text-decoration:underline;font-weight:600;}
+.contact-section{padding-top:.75rem;font-size:.82rem;color:var(--text-muted);}
+
+/* Request detail modal */
+.request-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:1200;backdrop-filter:blur(8px);}
+.request-modal-overlay.open{display:flex;}
+.request-modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);max-width:580px;width:100%;padding:1.75rem;box-shadow:var(--shadow-xl);}
+.request-modal h4{font-family:var(--font-serif);font-size:1.6rem;margin-bottom:.9rem;font-weight:500;color:var(--text);}
+.request-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.9rem;}
+.request-field{font-size:.82rem;color:var(--text-muted);padding:.7rem .85rem;background:var(--surface-2);border-radius:var(--r-md);border:1px solid var(--border);}
+.request-field strong{color:var(--text);display:block;margin-bottom:.15rem;font-weight:600;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;}
+.request-message{border-radius:var(--r-md);padding:.95rem;background:var(--surface-2);border:1px solid var(--border);font-size:.86rem;line-height:1.65;margin-bottom:.95rem;color:var(--text);}
+.request-actions{display:flex;gap:.6rem;flex-wrap:wrap;}
+
+/* Profile enhance */
+.profile-enhance-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.9rem;}
+.profile-enhance-grid{display:grid;gap:.65rem;}
+.profile-field label{display:block;margin-bottom:.3rem;color:var(--text-muted);font-size:.78rem;font-weight:500;}
+.profile-field input,.profile-field textarea,.profile-field select{width:100%;border:1px solid var(--border);border-radius:10px;padding:.7rem .85rem;font:inherit;font-size:.88rem;background:#F9FAFB;color:var(--text);}
+.profile-field textarea{resize:vertical;min-height:82px;}
+.profile-field input::placeholder,.profile-field textarea::placeholder{color:var(--text-subtle);}
+.profile-field input:focus,.profile-field textarea:focus,.profile-field select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+
+/* -- Responsive: Large screens -- */
+@media(min-width:1600px){
+  .dashboard-container{padding:1.25rem 2rem;}
+  .dashboard-shell{grid-template-columns:270px minmax(0,1fr);gap:1.75rem;}
+  .dashboard-main{gap:1.5rem;}
+  .activity-grid{gap:1.5rem;}
+  .grid-col{gap:1.5rem;}
+  .panel{padding:1.4rem;}
+}
+@media(min-width:1920px){
+  .dashboard-container{padding:1.5rem 2.5rem;}
+  .dashboard-shell{grid-template-columns:280px minmax(0,1fr);gap:2rem;}
+  .dashboard-main{gap:1.75rem;}
+  .activity-grid{gap:1.75rem;}
+  .bento-stat{padding:1.4rem 1.5rem;}
+  .bento-stat-num{font-size:2.8rem;}
+  .panel{padding:1.5rem;}
+}
+
+/* -- Responsive: Medium & small screens -- */
+@media(max-width:1280px){
+  .activity-grid{grid-template-columns:repeat(2,1fr);}
+  .activity-grid .grid-col:nth-child(3){grid-column:1/-1;}
+  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:repeat(5,1fr);gap:.75rem;}
+  .inline-actions{width:100%;justify-content:flex-start;margin-left:0;}
+  .inline-actions .inline-select{min-width:220px;max-width:320px;}
+}
+@media(max-width:980px){
+  .dashboard-shell{grid-template-columns:1fr;gap:1rem;}
+  .dashboard-aside{position:static;height:auto;border-radius:var(--r-xl);}
+  .activity-grid{grid-template-columns:1fr;}
+  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:repeat(3,1fr);}
+  .grid-cards{grid-template-columns:repeat(2,1fr);}
+  .inline-actions{flex-wrap:wrap;}
+  .inline-actions .inline-select{min-width:200px;max-width:100%;}
+}
+@media(max-width:700px){
+  .bento-stats{grid-template-columns:1fr;}
+  .request-grid{grid-template-columns:1fr;}
+  .grid-cards{grid-template-columns:1fr;}
+  .activity-grid .grid-col:nth-child(3) .profile-guide .guide-list{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .dashboard-container{padding:.75rem;}
+  .toolbar{gap:.5rem;}
+  .toolbar-title h1{font-size:1.75rem;}
+  .panel-title{flex-wrap:wrap;}
+  .inline-actions{flex-wrap:wrap;width:100%;margin-left:0;}
+  .inline-actions .inline-select{min-width:0;max-width:100%;width:100%;}
+  .inline-pair{grid-template-columns:1fr;}
+  .availability-controls{flex-direction:column;align-items:stretch;}
+  .availability-controls select,.availability-controls .btn{width:100%;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="top-controls">
+  <button class="lang-btn active" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
+  <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
+</div>
+
+<!-- Auth Form -->
+<div id="auth-container" class="auth-container" style="display:flex;">
+  <div class="auth-card">
+    <div class="logo">Expert<span>ERP</span>Hub</div>
+    <h2>Espace Consultant</h2>
+    <input type="email" id="email-input" placeholder="Adresse email">
+    <input type="password" id="password-input" placeholder="Mot de passe">
+    <button id="auth-btn">Se connecter</button>
+    <div class="auth-link"><button type="button" data-action="open-reset-page">Mot de passe oublie ?</button></div>
+    <div class="auth-link" style="text-align:center;margin-top:.75rem;"><a href="/" style="font-size:.8rem;color:#6b7280;text-decoration:none;">&#8592; Retour &#224; l'accueil</a></div>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard-container" class="dashboard-container" style="display:none;">
+  <div class="dashboard-card">
+    <div class="dashboard-shell">
+      <aside class="dashboard-aside">
+        <div class="archive-mark">ExpertERPHub</div>
+
+        <!-- CONSULTANT IDENTITY + PHOTO -->
+        <div class="consultant-mini">
+          <div class="consultant-avatar-wrap" onclick="document.getElementById('avatar-file-input').click()" title="Modifier la photo de profil">
+            <div class="consultant-avatar" id="consultant-avatar-initials">ER</div>
+            <span class="avatar-edit-badge">&#9998;</span>
+          </div>
+          <input type="file" id="avatar-file-input" accept="image/*" style="display:none;">
+          <div class="consultant-identity">
+            <strong id="welcome-msg">Consultant</strong>
+            <span id="welcome-role">&#8212;</span>
+          </div>
+        </div>
+
+        <!-- NAV -->
+        <nav class="aside-nav">
+          <div class="nav-link active"><span class="nav-icon material-symbols-outlined">dashboard</span>Vue d'ensemble</div>
+          <div class="nav-link"><span class="nav-icon material-symbols-outlined">inbox</span>Demandes</div>
+          <div class="nav-link"><span class="nav-icon material-symbols-outlined">person</span>Profil</div>
+        </nav>
+
+        <!-- STATUS -->
+        <div class="aside-section">
+          <div class="aside-title">Statut</div>
+          <div class="status-banner pending" id="status-banner">
+            <span class="status-icon">&#9203;</span>
+            <span>Chargement...</span>
+          </div>
+        </div>
+
+        <!-- ERP & SOLUTIONS -->
+        <div class="aside-section aside-section-soft">
+          <div class="aside-title">ERP &amp; Solutions</div>
+          <div class="aside-erp-list" id="erps-chips">&#8212;</div>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="aside-section aside-section-soft" id="aside-certif-section" style="display:none;">
+          <div class="aside-title">Certifications</div>
+          <div id="aside-certif-list" class="aside-certif-badges"></div>
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="aside-section aside-section-soft">
+          <div class="aside-title">Support</div>
+          <p style="font-size:.82rem;color:#444653;line-height:1.6;margin:0 0 .5rem;">Besoin d'aide ou d'un suivi ?</p>
+          <a class="contact-link" href="mailto:contact@experterphub.com" style="font-size:.82rem;">contact@experterphub.com</a>
+        </div>
+
+        <button class="aside-logout" data-action="logout">Retour au site</button>
+        <div class="aside-footer-note">Executive archive local preview</div>
+      </aside>
+
+      <main class="dashboard-main cmd-grid">
+        <div class="toolbar">
+          <div class="toolbar-title">
+            <div class="eyebrow">Tableau de bord executif</div>
+            <h1>Mon Espace</h1>
+            <p>Suivez vos demandes, votre visibilite et vos disponibilites.</p>
+          </div>
+          <div class="toolbar-meta" style="display:none;">
+            <span class="session-pill" id="session-badge">Session locale</span>
+            <div class="avatar-badge" id="toolbar-avatar">ER</div>
+          </div>
+        </div>
+
+        <!-- BENTO STATS ROW -->
+        <div class="bento-stats">
+          <div class="bento-stat">
+            <div class="bento-stat-label">Demandes re&#231;ues</div>
+            <div class="bento-stat-num" id="bento-count-requests">&#8212;</div>
+            <div class="bento-stat-sub" id="bento-sub-requests">Ce mois-ci</div>
+            <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-requests" style="width:0%"></div></div>
+          </div>
+          <div class="bento-stat accent-2">
+            <div class="bento-stat-label">Indice de profil</div>
+            <div class="bento-stat-num" id="bento-count-profile">&#8212;</div>
+            <div class="bento-stat-sub">Compl&#233;tude du profil</div>
+            <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-profile" style="width:0%"></div></div>
+          </div>
+          <div class="bento-stat accent-3">
+            <div class="bento-stat-label">Statut d'activit&#233;</div>
+            <div class="bento-stat-num" id="bento-count-status">&#8212;</div>
+            <div class="bento-stat-sub" id="bento-sub-status">Visibilit&#233; plateforme</div>
+            <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-status" style="width:30%"></div></div>
+          </div>
+        </div>
+
+        <!-- MAIN GRID: 3 columns -->
+        <div class="activity-grid">
+          <!-- COL 1: Statut & Disponibilite -->
+          <div class="grid-col">
+            <div class="panel status-summary-card">
+              <div class="status-summary-head">
+                <div>
+                  <div class="eyebrow">Visibilite</div>
+                  <h3 id="status-summary-heading">Profil approuve</h3>
+                </div>
+                <div class="status-summary-dot" id="status-summary-dot">&#8226;</div>
+              </div>
+              <div class="status-summary-row"><span>Statut</span><strong id="status-visibility">Actif</strong></div>
+              <div class="status-summary-row"><span>Derniere revue</span><strong id="status-review">Aujourd'hui</strong></div>
+            </div>
+            <div class="panel availability-box">
+              <h4>Disponibilite</h4>
+              <p>Mettez a jour votre disponibilite pour rester visible sur les missions pertinentes.</p>
+              <div class="availability-controls">
+                <select id="availability-select">
+                  <option value="">Selectionner</option>
+                  <option value="Imm&#233;diate">Imm&#233;diate</option>
+                  <option value="Sous 15 jours">Sous 15 jours</option>
+                  <option value="Sous 30 jours">Sous 30 jours</option>
+                  <option value="Sous 60 jours">Sous 60 jours</option>
+                </select>
+                <button class="btn btn-primary" id="update-btn">Mettre a jour</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- COL 2: Demandes & Messages -->
+          <div class="grid-col">
+            <div class="panel">
+              <div class="panel-title">
+                <div>
+                  <h3 id="notif-title">Demandes re&#231;ues</h3>
+                  <div class="panel-sub">Int&#233;r&#234;ts r&#233;cents des entreprises et suivi de vos &#233;changes.</div>
+                </div>
+                <div class="request-stats">
+                  <span class="request-pill new" id="count-new">0 nouveau</span>
+                  <span class="request-pill read" id="count-read">0 lu</span>
+                  <span class="request-pill replied" id="count-replied">0 r&#233;pondu</span>
+                </div>
+              </div>
+              <div class="notif-list" id="notif-list"></div>
+            </div>
+            <div class="panel recent-messages-panel">
+              <div class="panel-title">
+                <div>
+                  <h3>Messages recents</h3>
+                  <div class="panel-sub">Resume rapide des derniers contacts et relances.</div>
+                </div>
+              </div>
+              <div class="mini-feed" id="messages-mini-list"></div>
+            </div>
+          </div>
+
+          <!-- COL 3: Indice de visibilite -->
+          <div class="grid-col">
+            <div class="panel profile-guide">
+              <div class="guide-top">
+                <div>
+                  <div class="eyebrow" style="color:#8ea3d6;">Indice de visibilite</div>
+                  <h3>Profil</h3>
+                </div>
+                <div class="guide-score" id="guide-score">0% complet</div>
+              </div>
+              <div class="guide-track"><div class="guide-fill" id="guide-fill"></div></div>
+              <div class="guide-list">
+                <div class="guide-item" id="guide-exp"><span class="guide-dot"></span>Annees d'experience</div>
+                <div class="guide-item" id="guide-tjm"><span class="guide-dot"></span>Tarification</div>
+                <div class="guide-item" id="guide-mode"><span class="guide-dot"></span>Mode de travail</div>
+                <div class="guide-item" id="guide-ville"><span class="guide-dot"></span>Ville</div>
+                <div class="guide-item" id="guide-langues"><span class="guide-dot"></span>Langues</div>
+              </div>
+              <div class="guide-note">Un profil bien complete augmente sa lisibilite et aide l'equipe a vous positionner rapidement.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM: Full width -->
+        <section class="editorial-form">
+            <div class="panel">
+              <div class="panel-title">
+                <div>
+                  <h3>Informations professionnelles</h3>
+                  <div class="panel-sub">Synth&#232;se de votre profil publi&#233; sur la plateforme.</div>
+                </div>
+                <div class="inline-actions">
+                  <select id="profile-status-select" class="inline-select">
+                    <option value="actif">Actif &#8211; carte visible sur le site</option>
+                    <option value="en_mission">En mission &#8211; carte non affich&#233;e</option>
+                  </select>
+                  <button class="btn btn-primary" id="profile-save-btn">Enregistrer</button>
+                </div>
+              </div>
+              <div class="grid-cards">
+                <div class="info-card">
+                  <div class="detail-label">R&#244;le</div>
+                  <div class="detail-value" id="role-value">&#8211;</div>
+                </div>
+                <div class="info-card">
+                  <div class="detail-label">Ann&#233;es d'exp&#233;rience</div>
+                  <select id="edit-exp-select" class="inline-select">
+                    <option value="">Selectionner</option>
+                    <option value="1">1 an</option>
+                    <option value="2">2 ans</option>
+                    <option value="3">3 ans</option>
+                    <option value="4">4 ans</option>
+                    <option value="5">5 ans</option>
+                    <option value="6">6 ans</option>
+                    <option value="7">7 ans</option>
+                    <option value="8">8 ans</option>
+                    <option value="9">9 ans</option>
+                    <option value="10">10 ans</option>
+                    <option value="12">12 ans</option>
+                    <option value="15">15 ans</option>
+                    <option value="20">20 ans+</option>
+                  </select>
+                </div>
+                <div class="info-card">
+                  <div class="detail-label">TJM / Tarification</div>
+                  <div class="inline-hint">Choisissez un taux par jour ou par heure. Option "Autre" disponible.</div>
+                  <div class="inline-pair">
+                    <select id="edit-tjm-type" class="inline-select">
+                      <option value="jour">Taux par jour</option>
+                      <option value="heure">Taux par heure</option>
+                    </select>
+                    <select id="edit-tjm-preset" class="inline-select"></select>
+                  </div>
+                  <input id="edit-tjm-custom" class="inline-edit inline-subfield" type="number" min="0" step="1" placeholder="Entrer votre taux" style="display:none;">
+                </div>
+                <div class="info-card">
+                  <div class="detail-label">Mode de travail</div>
+                  <select id="edit-mode-select" class="inline-select">
+                    <option value="">Selectionner</option>
+                    <option value="Presentiel">Presentiel</option>
+                    <option value="Hybride">Hybride</option>
+                    <option value="Remote">Remote</option>
+                  </select>
+                </div>
+                <div class="info-card">
+                  <div class="detail-label">Ville</div>
+                  <select id="edit-ville-select" class="inline-select">
+                    <option value="">Selectionner</option>
+                    <option value="Montreal">Montreal</option>
+                    <option value="Quebec">Quebec</option>
+                    <option value="Toronto">Toronto</option>
+                    <option value="Ottawa">Ottawa</option>
+                    <option value="Laval">Laval</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                  <input id="edit-ville-custom" class="inline-edit inline-subfield" type="text" placeholder="Preciser la ville" style="display:none;">
+                </div>
+                <div class="info-card">
+                  <div class="detail-label">Langues</div>
+                  <div class="choice-chips" id="langues-chips">
+                    <button type="button" class="choice-chip" data-lang="Francais">Francais</button>
+                    <button type="button" class="choice-chip" data-lang="Anglais">Anglais</button>
+                    <button type="button" class="choice-chip" data-lang="Espagnol">Espagnol</button>
+                    <button type="button" class="choice-chip" data-lang="Arabe">Arabe</button>
+                  </div>
+                  <input id="edit-langues-input" class="inline-edit inline-subfield" type="text" placeholder="Autres langues (optionnel)">
+                </div>
+                <div class="info-card wide">
+                  <div class="detail-label">Experiences projets</div>
+                  <div class="inline-hint">Optionnel</div>
+                  <textarea id="project-exp-input" class="inline-textarea" placeholder="Ex: SAP S/4 migration, rollout multi-pays, optimisations EWM..."></textarea>
+                </div>
+                <div class="info-card wide" id="certif-section-card">
+                  <div class="detail-label">Certifications</div>
+                  <div class="inline-hint">Ajoutez vos certifications ERP. Choisissez l'ERP, le module et le niveau.</div>
+                  <!-- Liste des certifications ajoutées -->
+                  <div id="certif-badges-list" class="certif-badges-list"></div>
+                  <!-- Formulaire d'ajout -->
+                  <div id="certif-form" class="certif-form">
+                    <div class="certif-form-row">
+                      <select id="certif-erp-select" class="inline-select certif-select">
+                        <option value="">ERP</option>
+                        <option value="SAP">SAP</option>
+                        <option value="Microsoft Dynamics">Microsoft Dynamics</option>
+                        <option value="Oracle">Oracle</option>
+                        <option value="Odoo">Odoo</option>
+                        <option value="Sage">Sage</option>
+                        <option value="Infor">Infor</option>
+                        <option value="Workday">Workday</option>
+                        <option value="Salesforce">Salesforce</option>
+                        <option value="NetSuite">NetSuite</option>
+                        <option value="ServiceNow">ServiceNow</option>
+                        <option value="Autre">Autre</option>
+                      </select>
+                      <select id="certif-module-select" class="inline-select certif-select" disabled>
+                        <option value="">Module</option>
+                      </select>
+                      <select id="certif-level-select" class="inline-select certif-select">
+                        <option value="">Niveau</option>
+                        <option value="Associate">Associate</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Expert">Expert</option>
+                      </select>
+                    </div>
+                    <input id="certif-custom-module" class="inline-edit certif-custom-input" type="text" placeholder="Nom du module" style="display:none;">
+                    <button type="button" id="certif-add-btn" class="btn btn-primary certif-add-btn">
+                      <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+                      Ajouter une certification
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="notifications.js"></script>
+<script src="portal-auth.js"></script>
+<script>
+const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+
+let currentEmail = null;
+let currentConsultant = null;
+
+function normalizeToken(v) {
+  return String(v || '').trim().toLowerCase();
+}
+
+function parseLangues(value) {
+  return String(value || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function getSelectedLanguesFromChips() {
+  return Array.from(document.querySelectorAll('#langues-chips .choice-chip.active')).map(btn => btn.dataset.lang);
+}
+
+function refreshLanguesInputFromChips() {
+  const selected = getSelectedLanguesFromChips();
+  const customInput = document.getElementById('edit-langues-input');
+  if (!customInput) return;
+  const custom = customInput.dataset.customLangues || '';
+  const merged = [...selected, ...parseLangues(custom)].join(', ');
+  customInput.value = merged;
+}
+
+function setLanguesChoicesFromValue(value) {
+  const values = parseLangues(value);
+  const known = new Set(['francais', 'anglais', 'espagnol', 'arabe']);
+  document.querySelectorAll('#langues-chips .choice-chip').forEach(btn => {
+    const active = values.some(v => normalizeToken(v) === normalizeToken(btn.dataset.lang));
+    btn.classList.toggle('active', active);
+  });
+  const custom = values.filter(v => !known.has(normalizeToken(v)));
+  const customInput = document.getElementById('edit-langues-input');
+  if (customInput) {
+    customInput.dataset.customLangues = custom.join(', ');
+    customInput.value = values.join(', ');
+  }
+}
+
+function getTjmPresetValues(type) {
+  if (type === 'heure') return ['70', '80', '90', '100', '120', '150', '200'];
+  return ['500', '600', '700', '800', '900', '1000', '1200', '1500'];
+}
+
+function syncTjmPresetOptions(type, selected) {
+  const preset = document.getElementById('edit-tjm-preset');
+  const custom = document.getElementById('edit-tjm-custom');
+  if (!preset || !custom) return;
+
+  const values = getTjmPresetValues(type);
+  preset.innerHTML = '<option value="">Choisir un taux</option>' + values.map(v => `<option value="${v}">${v}</option>`).join('') + '<option value="autre">Autre (manuel)</option>';
+
+  const selectedStr = String(selected || '');
+  if (selectedStr && values.includes(selectedStr)) {
+    preset.value = selectedStr;
+    custom.style.display = 'none';
+    custom.value = '';
+  } else if (selectedStr) {
+    preset.value = 'autre';
+    custom.style.display = 'block';
+    custom.value = selectedStr;
+  } else {
+    preset.value = '';
+    custom.style.display = 'none';
+    custom.value = '';
+  }
+}
+
+function setGuideItem(id, done) {
+  const item = document.getElementById(id);
+  if (!item) return;
+  item.classList.toggle('done', !!done);
+}
+
+function renderProfileGuide() {
+  if (!currentConsultant) return;
+  const notes = parseNotes(currentConsultant.notes_admin);
+  const tjmValue = Number(notes.tjm_value || currentConsultant.tjm_min || '');
+
+  const checks = {
+    exp: Number.isFinite(Number(notes.annees_exp)) && Number(notes.annees_exp) > 0,
+    tjm: Number.isFinite(tjmValue) && tjmValue > 0,
+    mode: !!notes.mode_travail,
+    ville: !!notes.ville,
+    langues: !!notes.langues
+  };
+
+  setGuideItem('guide-exp', checks.exp);
+  setGuideItem('guide-tjm', checks.tjm);
+  setGuideItem('guide-mode', checks.mode);
+  setGuideItem('guide-ville', checks.ville);
+  setGuideItem('guide-langues', checks.langues);
+
+  const doneCount = Object.values(checks).filter(Boolean).length;
+  const total = Object.keys(checks).length;
+  const pct = Math.round((doneCount / total) * 100);
+  const score = document.getElementById('guide-score');
+  const fill = document.getElementById('guide-fill');
+  if (score) score.textContent = `${pct}% complet`;
+  if (fill) fill.style.width = `${pct}%`;
+  /* sync bento profile stat */
+  const bentoProfile = document.getElementById('bento-count-profile');
+  const bentoBarProfile = document.getElementById('bento-bar-profile');
+  if (bentoProfile) bentoProfile.textContent = pct + '%';
+  if (bentoBarProfile) bentoBarProfile.style.width = pct + '%';
+}
+
+function setupInlineChoices() {
+  const citySelect = document.getElementById('edit-ville-select');
+  const cityCustom = document.getElementById('edit-ville-custom');
+  if (citySelect && cityCustom) {
+    citySelect.addEventListener('change', () => {
+      const show = citySelect.value === 'Autre';
+      cityCustom.style.display = show ? 'block' : 'none';
+      if (!show) cityCustom.value = '';
+    });
+  }
+
+  const tjmType = document.getElementById('edit-tjm-type');
+  const tjmPreset = document.getElementById('edit-tjm-preset');
+  const tjmCustom = document.getElementById('edit-tjm-custom');
+  if (tjmType) {
+    tjmType.addEventListener('change', () => {
+      syncTjmPresetOptions(tjmType.value || 'jour', '');
+    });
+  }
+  if (tjmPreset && tjmCustom) {
+    tjmPreset.addEventListener('change', () => {
+      const show = tjmPreset.value === 'autre';
+      tjmCustom.style.display = show ? 'block' : 'none';
+      if (!show) tjmCustom.value = '';
+    });
+  }
+
+  document.querySelectorAll('#langues-chips .choice-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      refreshLanguesInputFromChips();
+    });
+  });
+
+  const customLanguesInput = document.getElementById('edit-langues-input');
+  if (customLanguesInput) {
+    customLanguesInput.addEventListener('input', () => {
+      const selected = getSelectedLanguesFromChips();
+      const typed = parseLangues(customLanguesInput.value);
+      const customOnly = typed.filter(v => !selected.some(s => normalizeToken(s) === normalizeToken(v)));
+      customLanguesInput.dataset.customLangues = customOnly.join(', ');
+    });
+  }
+}
+
+function setLanguage(lang) {
+  ExpertI18n.setLang(lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('lang-' + lang);
+  if (target) target.classList.add('active');
+  applyI18n();
+  if (currentConsultant) renderNotifications();
+}
+
+function applyI18n() {
+  const t = (k) => ExpertI18n.t(k);
+  const authTitle = document.getElementById('auth-title');
+  if (authTitle) authTitle.textContent = t('dashboardConsultant.dashboardAccess');
+  const authBtn = document.getElementById('auth-btn');
+  if (authBtn) authBtn.textContent = t('common.login');
+  const notifTitle = document.getElementById('notif-title');
+  if (notifTitle) notifTitle.textContent = 'Demandes re\u00e7ues';
+}
+
+function parseNotes(raw) {
+  if (!raw) return {};
+  if (typeof raw === 'object') return raw;
+  try { return JSON.parse(raw); } catch(e) { return {}; }
+}
+
+async function sbFetch(table, query = {}) {
+  const params = new URLSearchParams(query);
+  const response = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+  return response.json();
+}
+
+async function sbUpdate(table, id, data) {
+  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: SB_KEY,
+      Authorization: `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.ok;
+}
+
+function getUrlParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+function getPortalEmail() {
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (session && session.role === 'consultant' && session.email) return session.email;
+  return null;
+}
+
+async function sha256Hex(text) {
+  const bytes = new TextEncoder().encode(String(text || ''));
+  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function persistPortalSession(email) {
+  if (window.ExpertPortalAuth && email) {
+    ExpertPortalAuth.setSession({ role: 'consultant', email: email });
+  }
+}
+
+async function initAuth() {
+  const emailParam = getUrlParam('email');
+  const portalEmail = getPortalEmail();
+  const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (portalEmail) {
+    document.getElementById('email-input').value = portalEmail.trim();
+  }
+  if (emailParam) {
+    document.getElementById('email-input').value = emailParam;
+  }
+
+  if (session && session.role === 'consultant' && session.email) {
+    try {
+      const consultants = await sbFetch('consultants', { select: '*', email: `eq.${session.email}` });
+      if (consultants.length > 0) {
+        currentEmail = session.email;
+        currentConsultant = consultants[0];
+        showDashboard();
+        return;
+      }
+    } catch (e) {
+      // Fallback to manual auth form if session refresh fails.
+    }
+  }
+
+  showAuthForm();
+}
+
+async function authenticate() {
+  const email = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  if (!email) {
+    showAuthError(ExpertI18n.t('common.emailRequired'));
+    return;
+  }
+  if (!password) {
+    showAuthError('Mot de passe requis');
+    return;
+  }
+
+  const consultants = await sbFetch('consultants', { select: '*', email: `eq.${email}` });
+  if (consultants.length === 0) {
+    showAuthError(ExpertI18n.t('common.emailNotFound'));
+    return;
+  }
+
+  const notes = parseNotes(consultants[0].notes_admin);
+  const hash = await sha256Hex(password);
+  if (!notes.auth_password_sha256) {
+    showAuthError('Compte non securise. Utilisez "Mot de passe oublie" pour initialiser l acces.');
+    return;
+  }
+  if (notes.auth_password_sha256 !== hash) {
+    showAuthError('Email ou mot de passe invalide');
+    return;
+  }
+
+  currentEmail = email;
+  currentConsultant = consultants[0];
+  persistPortalSession(email);
+  showDashboard();
+}
+
+function showAuthForm() {
+  document.getElementById('auth-container').style.display = 'flex';
+  document.getElementById('dashboard-container').style.display = 'none';
+}
+
+function showDashboard() {
+  document.getElementById('auth-container').style.display = 'none';
+  document.getElementById('dashboard-container').style.display = 'flex';
+  renderDashboard();
+}
+
+function logout() {
+  currentEmail = null;
+  currentConsultant = null;
+  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
+  window.location.href = 'index.html';
+}
+
+function getConsultantInitials() {
+  if (!currentConsultant) return 'ER';
+  const parts = [currentConsultant.prenom, currentConsultant.nom]
+    .map(v => String(v || '').trim())
+    .filter(Boolean);
+  if (!parts.length) return 'ER';
+  return parts.slice(0, 2).map(part => part.charAt(0).toUpperCase()).join('');
+}
+
+function renderExecutiveMeta() {
+  if (!currentConsultant) return;
+  const fullName = [currentConsultant.prenom, currentConsultant.nom].filter(Boolean).join(' ') || 'Consultant';
+  const role = currentConsultant.titre || 'Senior ERP Consultant';
+  const initials = getConsultantInitials();
+  const welcomeEl = document.getElementById('welcome-msg');
+  const roleEl = document.getElementById('welcome-role');
+  const avatarEl = document.getElementById('consultant-avatar-initials');
+  const toolbarAvatarEl = document.getElementById('toolbar-avatar');
+  const sessionEl = document.getElementById('session-badge');
+  const sessionStamp = new Date().toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
+
+  if (welcomeEl) welcomeEl.textContent = fullName;
+  if (roleEl) roleEl.textContent = role;
+  if (avatarEl) avatarEl.textContent = initials;
+  if (toolbarAvatarEl) toolbarAvatarEl.textContent = initials;
+  if (sessionEl) sessionEl.textContent = 'Session: ' + sessionStamp;
+}
+
+function renderDashboard() {
+  renderExecutiveMeta();
+  loadSavedAvatar();
+  renderStatusBanner();
+  renderERPChips();
+  renderBasicInfo();
+  renderAvailability();
+  renderProfileGuide();
+  renderNotifications();
+}
+
+function renderNotifications() {
+  const container = document.getElementById('notif-list');
+  const miniContainer = document.getElementById('messages-mini-list');
+  if (!container || !currentConsultant) return;
+  const list = ExpertNotifications.byConsultant(currentConsultant.id, currentConsultant.email);
+  const counts = ExpertNotifications.countsByConsultant(currentConsultant.id, currentConsultant.email);
+  const cNew = document.getElementById('count-new');
+  const cRead = document.getElementById('count-read');
+  const cReplied = document.getElementById('count-replied');
+  if (cNew) cNew.textContent = `${counts.nouveau} nouveau`;
+  if (cRead) cRead.textContent = `${counts.lu} lu`;
+  if (cReplied) cReplied.textContent = `${counts.repondu} r\u00e9pondu`;
+  /* sync bento request stat */
+  const totalNotifs = (counts.nouveau || 0) + (counts.lu || 0) + (counts.repondu || 0);
+  const bentoReq = document.getElementById('bento-count-requests');
+  const bentoBarReq = document.getElementById('bento-bar-requests');
+  const bentoSubReq = document.getElementById('bento-sub-requests');
+  if (bentoReq) bentoReq.textContent = totalNotifs;
+  if (bentoSubReq) bentoSubReq.textContent = counts.nouveau > 0 ? counts.nouveau + ' non lue(s)' : 'Aucune nouvelle demande';
+  if (bentoBarReq) bentoBarReq.style.width = Math.min(100, totalNotifs * 10) + '%';
+
+  if (!list.length) {
+    container.innerHTML = `<div class="empty-state">Aucune demande pour le moment \u2014<br>les int\u00e9r\u00eats des entreprises appara\u00eetront ici.</div>`;
+    if (miniContainer) miniContainer.innerHTML = `<div class="empty-state">Aucun message recent pour le moment.</div>`;
+    return;
+  }
+  container.innerHTML = list.slice(0, 10).map(n => {
+    const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+    const s = n.status || (n.read ? 'lu' : 'nouveau');
+    return `<div class="notif-item notif-clickable ${n.read ? '' : 'unread'}" data-action="open-request-detail" data-request-id="${n.id}">
+      <div class="notif-meta">${n.companyName || 'Entreprise'} \u00b7 ${when}<span class="status-badge ${s}">${s}</span></div>
+      <div>${(n.message || '').slice(0, 120)}${(n.message || '').length > 120 ? '\u2026' : ''}</div>
+    </div>`;
+  }).join('');
+
+  if (miniContainer) {
+    miniContainer.innerHTML = list.slice(0, 3).map(n => {
+      const when = new Date(n.createdAt).toLocaleDateString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+      return `<div class="mini-message">
+        <div class="title">${safe(n.companyName || 'Entreprise')}</div>
+        <div class="meta">${safe(when)}</div>
+        <div class="excerpt">${safe((n.message || '').slice(0, 90))}${(n.message || '').length > 90 ? '\u2026' : ''}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function openRequestDetail(id) {
+  const n = ExpertNotifications.getById(id);
+  if (!n) return;
+  if (n.status === 'nouveau') {
+    ExpertNotifications.setStatus(id, 'lu');
+  }
+  document.getElementById('rq-company').textContent = n.companyName || 'Entreprise';
+  document.getElementById('rq-email').textContent = n.companyEmail || '\u2014';
+  document.getElementById('rq-phone').textContent = n.companyPhone || '\u2014';
+  document.getElementById('rq-date').textContent = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
+  document.getElementById('rq-message').textContent = n.message || '';
+  const emailBtn = document.getElementById('rq-email-btn');
+  emailBtn.href = `mailto:${encodeURIComponent(n.companyEmail || '')}?subject=${encodeURIComponent('Re: Votre demande ExpertERPHub')}`;
+  emailBtn.onclick = function() {
+    ExpertNotifications.setStatus(id, 'repondu');
+    renderNotifications();
+  };
+  const callBtn = document.getElementById('rq-call-btn');
+  if (n.companyPhone) {
+    callBtn.style.display = 'inline-block';
+    callBtn.href = `tel:${n.companyPhone}`;
+  } else {
+    callBtn.style.display = 'none';
+  }
+  document.getElementById('request-modal').classList.add('open');
+  renderNotifications();
+}
+
+function closeRequestDetail() {
+  document.getElementById('request-modal').classList.remove('open');
+}
+
+function renderStatusBanner() {
+  const c = currentConsultant;
+  const bannerEl = document.getElementById('status-banner');
+  const summaryTitleEl = document.getElementById('status-summary-heading');
+  const summaryVisibilityEl = document.getElementById('status-visibility');
+  const summaryReviewEl = document.getElementById('status-review');
+  const summaryDotEl = document.getElementById('status-summary-dot');
+
+  const notes = parseNotes(c.notes_admin);
+
+  const banners = {
+    'en_attente': {
+      cls: 'pending',
+      icon: '\u23F3',
+      text: 'Profil en cours de r\u00e9vision \u2014 Notre \u00e9quipe examine votre candidature sous 24\u201348h.',
+      label: 'Profil en r\u00e9vision',
+      visibility: 'En attente',
+      dot: '\u25CB'
+    },
+    'approuve': {
+      cls: 'approved',
+      icon: '\u2705',
+      text: 'Profil approuv\u00e9 et publi\u00e9 \u2014 Vous \u00eates visible sur ExpertERPHub.',
+      label: 'Profil approuv\u00e9',
+      visibility: 'Actif',
+      dot: '\u2022'
+    },
+    'en_mission': {
+      cls: 'mission',
+      icon: '\uD83D\uDE80',
+      text: 'Consultant en mission \u2014 Vous \u00eates actuellement positionn\u00e9 sur un projet.',
+      label: 'En mission',
+      visibility: 'Masqu\u00e9',
+      dot: '\u2197'
+    },
+    'refuse': {
+      cls: 'rejected',
+      icon: '\u274C',
+      text: 'Profil non retenu par notre \u00e9quipe.',
+      label: 'Profil non retenu',
+      visibility: 'Suspendu',
+      dot: '\u00D7'
+    }
+  };
+
+  const config = banners[c.statut] || banners['en_attente'];
+  bannerEl.className = 'status-banner ' + config.cls;
+
+  let motifHtml = '';
+  if (c.statut === 'refuse' && notes.motif_refus) {
+    motifHtml = `<div style="margin-top:.65rem;padding:.6rem .85rem;background:rgba(0,0,0,.06);border-radius:4px;font-size:.82rem;"><strong>Raison :</strong> ${notes.motif_refus}</div>`;
+  }
+  bannerEl.innerHTML = `<div class="status-icon">${config.icon}</div><div>${config.text}${motifHtml}</div>`;
+
+  if (summaryTitleEl) summaryTitleEl.textContent = config.label;
+  if (summaryVisibilityEl) summaryVisibilityEl.textContent = config.visibility;
+  if (summaryReviewEl) summaryReviewEl.textContent = notes.disponibilite ? notes.disponibilite : 'Aujourd\'hui';
+  if (summaryDotEl) summaryDotEl.textContent = config.dot;
+  /* sync bento status stat */
+  const bentoStatus = document.getElementById('bento-count-status');
+  const bentoSubStatus = document.getElementById('bento-sub-status');
+  const bentoBarStatus = document.getElementById('bento-bar-status');
+  const statusMap = { approuve: { label: 'Actif', pct: 100 }, en_attente: { label: 'En attente', pct: 30 }, en_mission: { label: 'En mission', pct: 80 }, refuse: { label: 'Suspendu', pct: 0 } };
+  const sm = statusMap[c.statut] || statusMap['en_attente'];
+  if (bentoStatus) bentoStatus.textContent = sm.label;
+  if (bentoSubStatus) bentoSubStatus.textContent = config.visibility + ' sur la plateforme';
+  if (bentoBarStatus) bentoBarStatus.style.width = sm.pct + '%';
+}
+
+function safe(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* ══════════════════════════════════════════
+   CERTIFICATIONS v2 — ERP / Module / Niveau
+   ══════════════════════════════════════════ */
+const ERP_MODULE_MAP = {
+  'SAP': ['S/4HANA', 'FI/CO', 'MM', 'SD', 'PP', 'EWM', 'HCM/SuccessFactors', 'ABAP', 'Basis', 'BW/BI', 'TM', 'QM', 'PM', 'PS', 'Ariba', 'IBP', 'Autre'],
+  'Microsoft Dynamics': ['Finance', 'Supply Chain', 'Sales', 'Business Central', 'Customer Service', 'Field Service', 'Power Platform', 'Commerce', 'Human Resources', 'Autre'],
+  'Oracle': ['ERP Cloud Financials', 'ERP Cloud Procurement', 'ERP Cloud Project', 'SCM Cloud', 'HCM Cloud', 'E-Business Suite', 'Database/SQL', 'NetSuite', 'Autre'],
+  'Odoo': ['Comptabilit\u00e9', 'Inventaire', 'Fabrication', 'CRM', 'Ventes', 'Achats', 'Site Web', 'RH', 'Autre'],
+  'Sage': ['Sage 100', 'Sage 300', 'Sage X3', 'Sage Intacct', 'Sage 50', 'Autre'],
+  'Infor': ['CloudSuite Industrial', 'M3', 'LN', 'CloudSuite Financials', 'Birst', 'Autre'],
+  'Workday': ['HCM', 'Financials', 'Payroll', 'Recruiting', 'Adaptive Planning', 'Integration', 'Autre'],
+  'Salesforce': ['Sales Cloud', 'Service Cloud', 'Marketing Cloud', 'Platform/Dev', 'CPQ', 'Pardot', 'Tableau/Analytics', 'Autre'],
+  'NetSuite': ['ERP', 'SuiteFoundation', 'Financial User', 'Administrator', 'SuiteCommerce', 'Autre'],
+  'ServiceNow': ['ITSM', 'ITOM', 'CSM', 'HR Service Delivery', 'Platform/Dev', 'Autre'],
+  'Autre': []
+};
+
+let certifList = []; /* [{erp, module, level, validated?}] */
+
+function renderCertifBadges() {
+  const container = document.getElementById('certif-badges-list');
+  if (!container) return;
+  if (!certifList.length) {
+    container.innerHTML = '<div class="certif-empty">Aucune certification ajout\u00e9e.</div>';
+    return;
+  }
+  container.innerHTML = certifList.map((c, i) => {
+    const levelCls = 'level-' + (c.level || '').toLowerCase();
+    const validated = c.validated ? '<span class="certif-validated" title="Valid\u00e9e par admin">\u2605</span>' : '';
+    return '<div class="certif-badge-item">' +
+      '<span class="certif-erp">' + safe(c.erp) + '</span>' +
+      '<span class="certif-sep">\u2013</span>' +
+      '<span>' + safe(c.module) + '</span>' +
+      '<span class="certif-level ' + levelCls + '">' + safe(c.level) + '</span>' +
+      validated +
+      '<button type="button" class="certif-del" data-idx="' + i + '" title="Supprimer">' +
+      '<span class="material-symbols-outlined" style="font-size:15px;">close</span></button>' +
+      '</div>';
+  }).join('');
+
+  container.querySelectorAll('.certif-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      certifList.splice(idx, 1);
+      renderCertifBadges();
+      renderSidebarCertifs();
+    });
+  });
+}
+
+function renderSidebarCertifs() {
+  const section = document.getElementById('aside-certif-section');
+  const container = document.getElementById('aside-certif-list');
+  if (!container || !section) return;
+  if (!certifList.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  container.innerHTML = certifList.map(c => {
+    const levelCls = 'level-' + (c.level || '').toLowerCase();
+    return '<div class="aside-certif-chip">' +
+      '<span class="aside-certif-erp">' + safe(c.erp) + '</span>' +
+      '<span>\u2013 ' + safe(c.module) + '</span>' +
+      (c.level ? '<span class="aside-certif-lvl ' + levelCls + '">' + safe(c.level) + '</span>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function initCertifForm() {
+  const erpSelect = document.getElementById('certif-erp-select');
+  const moduleSelect = document.getElementById('certif-module-select');
+  const levelSelect = document.getElementById('certif-level-select');
+  const customModule = document.getElementById('certif-custom-module');
+  const addBtn = document.getElementById('certif-add-btn');
+  if (!erpSelect) return;
+
+  erpSelect.addEventListener('change', () => {
+    const erp = erpSelect.value;
+    const modules = ERP_MODULE_MAP[erp] || [];
+    moduleSelect.innerHTML = '<option value="">Module</option>';
+    if (erp === 'Autre' || !modules.length) {
+      moduleSelect.disabled = true;
+      customModule.style.display = '';
+      customModule.placeholder = 'Nom du module / certification';
+    } else {
+      moduleSelect.disabled = false;
+      customModule.style.display = 'none';
+      modules.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m; opt.textContent = m;
+        moduleSelect.appendChild(opt);
+      });
+    }
+  });
+
+  moduleSelect.addEventListener('change', () => {
+    if (moduleSelect.value === 'Autre') {
+      customModule.style.display = '';
+      customModule.placeholder = 'Pr\u00e9cisez le module';
+    } else {
+      customModule.style.display = 'none';
+    }
+  });
+
+  addBtn.addEventListener('click', () => {
+    const erp = erpSelect.value;
+    let mod = moduleSelect.value;
+    const level = levelSelect.value;
+    const custom = customModule.value.trim();
+
+    if (mod === 'Autre' || (erp === 'Autre' && !mod)) mod = custom;
+    if (!erp) { alert('S\u00e9lectionnez un ERP.'); return; }
+    if (!mod) { alert('S\u00e9lectionnez ou saisissez un module.'); return; }
+    if (!level) { alert('S\u00e9lectionnez un niveau.'); return; }
+
+    const exists = certifList.some(c => c.erp === erp && c.module === mod && c.level === level);
+    if (exists) { alert('Cette certification est d\u00e9j\u00e0 ajout\u00e9e.'); return; }
+
+    certifList.push({ erp: erp, module: mod, level: level, validated: false });
+    renderCertifBadges();
+    renderSidebarCertifs();
+
+    /* Reset form */
+    erpSelect.value = '';
+    moduleSelect.innerHTML = '<option value="">Module</option>';
+    moduleSelect.disabled = true;
+    levelSelect.value = '';
+    customModule.value = '';
+    customModule.style.display = 'none';
+  });
+}
+
+function loadCertificationsFromNotes(notes) {
+  /* Support old format (string) and new format (array of objects) */
+  const raw = notes.certifications_v2 || notes.certifications;
+  if (Array.isArray(raw) && raw.length && typeof raw[0] === 'object') {
+    certifList = raw.map(c => ({
+      erp: c.erp || '',
+      module: c.module || '',
+      level: c.level || '',
+      validated: !!c.validated
+    }));
+  } else if (typeof raw === 'string' && raw.trim()) {
+    /* Migrate old comma-separated format */
+    certifList = raw.split(',').map(s => s.trim()).filter(Boolean).map(name => ({
+      erp: '', module: name, level: '', validated: false
+    }));
+  } else if (Array.isArray(raw)) {
+    certifList = raw.filter(Boolean).map(name => ({
+      erp: '', module: String(name), level: '', validated: false
+    }));
+  } else {
+    certifList = [];
+  }
+  /* Mark validated ones */
+  const validatedList = parseCertifications(notes.certifications_validees);
+  certifList.forEach(c => {
+    if (validatedList.some(v => v === c.module || v === (c.erp + ' \u2013 ' + c.module))) {
+      c.validated = true;
+    }
+  });
+  renderCertifBadges();
+}
+
+function getCertificationsForSave() {
+  return certifList.map(c => ({ erp: c.erp, module: c.module, level: c.level }));
+}
+
+function getCertificationsString() {
+  return certifList.map(c => [c.erp, c.module, c.level].filter(Boolean).join(' \u2013 ')).join(', ');
+}
+
+/* Legacy support */
+const ERP_CERTIF_MAP = [
+  {
+    keywords: ['sap'],
+    certs: [
+      'SAP Certified Associate \u2013 SAP S/4HANA Business Process Integration',
+      'SAP Certified Application Associate \u2013 Financial Accounting (SAP FI/CO)',
+      'SAP Certified Application Associate \u2013 Materials Management (SAP MM)',
+      'SAP Certified Application Associate \u2013 Sales & Distribution (SAP SD)',
+      'SAP Certified Application Associate \u2013 Production Planning (SAP PP)',
+      'SAP Certified Application Associate \u2013 Warehouse Management (SAP EWM)',
+      'SAP Certified Application Associate \u2013 SuccessFactors (SAP HCM)',
+      'SAP Certified Development Associate \u2013 ABAP',
+      'SAP Certified Technology Associate \u2013 SAP Basis Administration',
+      'SAP Activate Project Manager Certified',
+    ]
+  },
+  {
+    keywords: ['oracle'],
+    certs: [
+      'Oracle ERP Cloud: Financials Certified Implementation Professional',
+      'Oracle ERP Cloud: Project Management Certified Implementation Professional',
+      'Oracle ERP Cloud: Order Management Certified Specialist',
+      'Oracle E-Business Suite R12: Financial Management Certified',
+      'Oracle Database SQL Certified Associate',
+    ]
+  },
+  {
+    keywords: ['dynamics', 'microsoft dynamics', 'd365'],
+    certs: [
+      'Microsoft Certified: Dynamics 365 Finance Functional Consultant Associate',
+      'Microsoft Certified: Dynamics 365 Supply Chain Management Functional Consultant Associate',
+      'Microsoft Certified: Dynamics 365 Business Central Functional Consultant Associate',
+      'Microsoft Certified: Dynamics 365 Sales Functional Consultant Associate',
+      'Microsoft Certified: Power Platform Functional Consultant Associate',
+    ]
+  },
+  {
+    keywords: ['salesforce'],
+    certs: [
+      'Salesforce Certified Administrator',
+      'Salesforce Certified Advanced Administrator',
+      'Salesforce Certified Platform Developer I',
+      'Salesforce Certified Platform Developer II',
+      'Salesforce Certified Sales Cloud Consultant',
+      'Salesforce Certified Service Cloud Consultant',
+    ]
+  },
+  {
+    keywords: ['workday'],
+    certs: [
+      'Workday HCM Pro Certified',
+      'Workday Financials Pro Certified',
+      'Workday Payroll Pro Certified',
+      'Workday Recruiting Pro Certified',
+      'Workday Integration Pro Certified',
+    ]
+  },
+  {
+    keywords: ['netsuite'],
+    certs: [
+      'NetSuite ERP Consultant Certified',
+      'NetSuite SuiteFoundation Certified',
+      'NetSuite Financial User Certified',
+      'NetSuite Administrator Certified',
+    ]
+  },
+  {
+    keywords: ['odoo'],
+    certs: [
+      'Odoo Certified Functional Consultant',
+      'Odoo Certified Technical Consultant',
+      'Odoo Business Advisor Certified',
+    ]
+  },
+  {
+    keywords: ['infor'],
+    certs: [
+      'Infor CloudSuite Industrial Certified',
+      'Infor M3 Certified Consultant',
+      'Infor LN Certified Consultant',
+    ]
+  },
+  {
+    keywords: ['sage'],
+    certs: [
+      'Sage Certified Consultant \u2013 Sage 300',
+      'Sage Certified Consultant \u2013 Sage X3',
+      'Sage Certified Consultant \u2013 Sage 100',
+    ]
+  },
+];
+const GENERIC_CERTIFS = [
+  'PMP \u2013 Project Management Professional',
+  'CSM \u2013 Certified Scrum Master',
+  'ISTQB Foundation Level',
+  'ITIL 4 Foundation',
+  'AWS Certified Cloud Practitioner',
+  'Microsoft Azure Fundamentals (AZ-900)',
+];
+
+function parseCertifications(val) {
+  if (Array.isArray(val)) return val.map(s => String(s).trim()).filter(Boolean);
+  return String(val || '').split(',').map(s => s.trim()).filter(Boolean);
+}
+
+function getConsultantERPs() {
+  const source = currentConsultant && currentConsultant.competences;
+  const list = Array.isArray(source)
+    ? source.map(e => String(e).trim().toLowerCase())
+    : String(source || '').split(',').map(e => e.trim().toLowerCase());
+  return list.filter(Boolean);
+}
+
+function getCertifListForConsultant() {
+  const erps = getConsultantERPs();
+  const seen = new Set();
+  const result = [];
+  ERP_CERTIF_MAP.forEach(({ keywords, certs }) => {
+    if (erps.some(e => keywords.some(k => e.includes(k)))) {
+      certs.forEach(c => { if (!seen.has(c)) { seen.add(c); result.push(c); } });
+    }
+  });
+  return result.length ? result : GENERIC_CERTIFS;
+}
+
+function renderCertifChecklist() {
+  /* v2: load from notes and render badges */
+  const notes = parseNotes(currentConsultant.notes_admin);
+  loadCertificationsFromNotes(notes);
+  initCertifForm();
+}
+
+function getSelectedCertifications() {
+  /* v2: return string for backward compat + structured data */
+  return getCertificationsString();
+}
+
+function renderERPChips() {
+  const source = currentConsultant.competences;
+  const erps = Array.isArray(source)
+    ? source.map(e => String(e).trim()).filter(Boolean)
+    : String(source || '').split(',').map(e => e.trim()).filter(Boolean);
+  const container = document.getElementById('erps-chips');
+  if (!erps.length) {
+    container.innerHTML = '<div class="chip" style="opacity:.6;font-style:italic;text-transform:none;font-family:DM Sans,sans-serif;font-size:.8rem;">Non renseign\u00e9</div>';
+    return;
+  }
+  container.innerHTML = erps.map(erp => `<div class="chip">${erp}</div>`).join('');
+}
+
+function setTextValue(id, value) {
+  const target = document.getElementById(id);
+  if (!target) return;
+  const finalValue = value || '\u2013';
+  target.textContent = finalValue;
+  target.classList.toggle('muted', finalValue === '\u2013');
+}
+
+function renderBasicInfo() {
+  const c = currentConsultant;
+  const notes = parseNotes(c.notes_admin);
+
+  setTextValue('role-value', c.titre || '\u2013');
+
+  const editExp = document.getElementById('edit-exp-select');
+  const editTjmType = document.getElementById('edit-tjm-type');
+  const editMode = document.getElementById('edit-mode-select');
+  const editVille = document.getElementById('edit-ville-select');
+  const editVilleCustom = document.getElementById('edit-ville-custom');
+  const statusSelect = document.getElementById('profile-status-select');
+  const projectInput = document.getElementById('project-exp-input');
+
+  if (editExp) editExp.value = notes.annees_exp ?? '';
+  const tjmType = notes.tjm_type === 'heure' ? 'heure' : 'jour';
+  const tjmValue = notes.tjm_value || currentConsultant.tjm_min || '';
+  if (editTjmType) {
+    editTjmType.value = tjmType;
+    syncTjmPresetOptions(tjmType, tjmValue);
+  }
+  if (editMode) editMode.value = notes.mode_travail || '';
+  if (editVille) {
+    const knownCities = ['Montreal', 'Quebec', 'Toronto', 'Ottawa', 'Laval'];
+    if (knownCities.includes(notes.ville || '')) {
+      editVille.value = notes.ville;
+      if (editVilleCustom) { editVilleCustom.style.display = 'none'; editVilleCustom.value = ''; }
+    } else if (notes.ville) {
+      editVille.value = 'Autre';
+      if (editVilleCustom) { editVilleCustom.style.display = 'block'; editVilleCustom.value = notes.ville; }
+    } else {
+      editVille.value = '';
+      if (editVilleCustom) { editVilleCustom.style.display = 'none'; editVilleCustom.value = ''; }
+    }
+  }
+
+  if (statusSelect) statusSelect.value = currentConsultant.statut === 'en_mission' ? 'en_mission' : 'actif';
+  if (projectInput) projectInput.value = notes.experiences_projets || notes.experiences_test || '';
+  renderCertifChecklist();
+  renderSidebarCertifs();
+  setLanguesChoicesFromValue(notes.langues || '');
+}
+
+function renderAvailability() {
+  const c = currentConsultant;
+  const notes = parseNotes(c.notes_admin);
+  const select = document.getElementById('availability-select');
+  select.value = notes.disponibilite || '';
+}
+
+document.getElementById('update-btn').addEventListener('click', async () => {
+  const newAvail = document.getElementById('availability-select').value;
+  if (!newAvail) {
+    alert(ExpertI18n.t('dashboardConsultant.selectAvailability'));
+    return;
+  }
+
+  const notes = parseNotes(currentConsultant.notes_admin);
+
+  notes.disponibilite = newAvail;
+  const serializedNotes = JSON.stringify(notes);
+
+  const success = await sbUpdate('consultants', currentConsultant.id, {
+    notes_admin: serializedNotes
+  });
+
+  if (success) {
+    alert(ExpertI18n.t('dashboardConsultant.editAvailability') + ' OK');
+    currentConsultant.notes_admin = serializedNotes;
+    renderAvailability();
+  } else {
+    alert('Update failed');
+  }
+});
+
+document.getElementById('profile-save-btn').addEventListener('click', async () => {
+  if (!currentConsultant) return;
+
+  const expRaw = (document.getElementById('edit-exp-select').value || '').trim();
+  const tjmType = (document.getElementById('edit-tjm-type').value || 'jour').trim();
+  const tjmPreset = (document.getElementById('edit-tjm-preset').value || '').trim();
+  const tjmCustomRaw = (document.getElementById('edit-tjm-custom').value || '').trim();
+  const modeTravail = (document.getElementById('edit-mode-select').value || '').trim();
+  const villeSelect = (document.getElementById('edit-ville-select').value || '').trim();
+  const villeCustom = (document.getElementById('edit-ville-custom').value || '').trim();
+  const ville = villeSelect === 'Autre' ? villeCustom : villeSelect;
+  const langues = (document.getElementById('edit-langues-input').value || '').trim();
+  const statusChoice = (document.getElementById('profile-status-select').value || 'actif').trim();
+  const projectExp = document.getElementById('project-exp-input').value.trim();
+  const certifs = getSelectedCertifications();
+
+  const expValue = expRaw ? Number(expRaw) : null;
+  const tjmChosenRaw = tjmPreset === 'autre' ? tjmCustomRaw : tjmPreset;
+  const tjmValue = tjmChosenRaw ? Number(tjmChosenRaw) : null;
+
+  if (expRaw && (!Number.isFinite(expValue) || expValue < 0 || expValue > 60)) {
+    alert('Annees d experience invalides. Saisissez une valeur entre 0 et 60.');
+    return;
+  }
+  if (tjmChosenRaw && (!Number.isFinite(tjmValue) || tjmValue <= 0)) {
+    alert('Valeur de tarification invalide.');
+    return;
+  }
+  if (tjmPreset === 'autre' && !tjmCustomRaw) {
+    alert('Veuillez saisir votre taux manuel.');
+    return;
+  }
+
+  const notes = parseNotes(currentConsultant.notes_admin);
+  notes.annees_exp = expRaw ? expValue : null;
+  notes.tjm_type = tjmType;
+  notes.tjm_value = Number.isFinite(tjmValue) ? tjmValue : null;
+  notes.mode_travail = modeTravail;
+  notes.ville = ville;
+  notes.langues = langues;
+  notes.experiences_projets = projectExp;
+  notes.experiences_test = projectExp;
+  notes.certifications = certifs;
+  notes.certifications_v2 = getCertificationsForSave();
+
+  const payload = {
+    notes_admin: JSON.stringify(notes),
+    tjm_min: Number.isFinite(tjmValue) ? tjmValue : null,
+    tjm_max: Number.isFinite(tjmValue) ? tjmValue : null
+  };
+
+  const canChangeVisibility = ['approuve', 'en_mission'].includes(currentConsultant.statut);
+  if (canChangeVisibility) {
+    payload.statut = statusChoice === 'en_mission' ? 'en_mission' : 'approuve';
+  }
+
+  const success = await sbUpdate('consultants', currentConsultant.id, payload);
+  if (!success) {
+    alert('Impossible de sauvegarder ces modifications pour le moment.');
+    return;
+  }
+
+  currentConsultant.notes_admin = payload.notes_admin;
+  currentConsultant.tjm_min = payload.tjm_min;
+  currentConsultant.tjm_max = payload.tjm_max;
+  if (payload.statut) currentConsultant.statut = payload.statut;
+
+  renderStatusBanner();
+  renderBasicInfo();
+  renderProfileGuide();
+  alert('Profil mis a jour avec succes.');
+});
+
+document.getElementById('auth-btn').addEventListener('click', authenticate);
+document.getElementById('email-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') authenticate();
+});
+document.getElementById('password-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') authenticate();
+});
+
+function showAuthError(msg) {
+  document.getElementById('auth-error').textContent = msg;
+}
+
+function openResetPage() {
+  const email = document.getElementById('email-input').value.trim();
+  const target = '/reset-password' + (email ? ('?email=' + encodeURIComponent(email)) : '');
+  window.location.href = target;
+}
+
+function bindDashboardActions() {
+  if (document.body.dataset.actionsBound === 'true') return;
+  document.body.dataset.actionsBound = 'true';
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-action]');
+    if (trigger) {
+      const action = trigger.dataset.action;
+      if (action === 'set-language') return setLanguage(trigger.dataset.lang || 'fr');
+      if (action === 'open-reset-page') return openResetPage();
+      if (action === 'logout') return logout();
+      if (action === 'open-request-detail') return openRequestDetail(trigger.dataset.requestId || '');
+      if (action === 'close-request-detail') return closeRequestDetail();
+    }
+
+    const overlay = event.target.closest('#request-modal');
+    if (overlay && event.target === overlay) {
+      closeRequestDetail();
+    }
+  });
+}
+
+initAuth();
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindDashboardActions();
+  setupInlineChoices();
+  const lang = ExpertI18n.getLang();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lang-' + lang);
+  if (btn) btn.classList.add('active');
+  applyI18n();
+  setInterval(() => {
+    if (currentConsultant) renderNotifications();
+  }, 8000);
+});
+
+// &#9472;&#9472; PROFILE PHOTO UPLOAD &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+document.getElementById('avatar-file-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const url = ev.target.result;
+    // Store in localStorage for persistence
+    try { localStorage.setItem('consultant_avatar_' + (currentEmail||''), url); } catch(err) {}
+    applyAvatarImage(url);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+function applyAvatarImage(url) {
+  const wrap = document.querySelector('.consultant-avatar-wrap');
+  if (!wrap) return;
+  const initials = document.getElementById('consultant-avatar-initials');
+  if (initials) initials.style.display = 'none';
+  // Remove existing img if any
+  const existing = wrap.querySelector('img.avatar-photo');
+  if (existing) existing.remove();
+  const img = document.createElement('img');
+  img.className = 'avatar-photo';
+  img.src = url;
+  img.alt = 'Photo de profil';
+  img.style.cssText = 'width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,40,142,.15);';
+  // Insert before the edit badge
+  const badge = wrap.querySelector('.avatar-edit-badge');
+  wrap.insertBefore(img, badge);
+}
+
+function loadSavedAvatar() {
+  if (!currentEmail) return;
+  try {
+    const url = localStorage.getItem('consultant_avatar_' + currentEmail);
+    if (url) applyAvatarImage(url);
+  } catch(err) {}
+}
+
+</script>
+
+<div class="request-modal-overlay" id="request-modal">
+  <div class="request-modal">
+    <h4>Detail de la demande</h4>
+    <div class="request-grid">
+      <div class="request-field"><strong>Entreprise</strong><span id="rq-company"></span></div>
+      <div class="request-field"><strong>Email</strong><span id="rq-email"></span></div>
+      <div class="request-field"><strong>Telephone</strong><span id="rq-phone"></span></div>
+      <div class="request-field"><strong>Date</strong><span id="rq-date"></span></div>
+    </div>
+    <div class="request-message" id="rq-message"></div>
+    <div class="request-actions">
+      <a class="btn btn-primary" id="rq-email-btn" href="#">Repondre par email</a>
+      <a class="btn btn-secondary" id="rq-call-btn" href="#">Appeler</a>
+      <button class="btn btn-secondary" data-action="close-request-detail">Fermer</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
