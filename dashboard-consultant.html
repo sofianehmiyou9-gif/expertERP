@@ -1082,7 +1082,7 @@ function renderExecutiveMeta() {
   if (sessionEl) sessionEl.textContent = 'Session: ' + sessionStamp;
 }
 
-function renderDashboard() {
+async function renderDashboard() {
   renderExecutiveMeta();
   loadSavedAvatar();
   renderStatusBanner();
@@ -1090,6 +1090,10 @@ function renderDashboard() {
   renderBasicInfo();
   renderAvailability();
   renderProfileGuide();
+  // Charger les notifications depuis Supabase puis afficher
+  if (currentConsultant && window.ExpertNotifications && ExpertNotifications.loadFromSupabase) {
+    await ExpertNotifications.loadFromSupabase(currentConsultant.id, currentConsultant.email);
+  }
   renderNotifications();
 }
 
@@ -1140,27 +1144,54 @@ function renderNotifications() {
   }
 }
 
+var _currentRequestId = null;
+
 function openRequestDetail(id) {
-  const n = ExpertNotifications.getById(id);
+  var n = ExpertNotifications.getById(id);
   if (!n) return;
+  _currentRequestId = id;
+
   if (n.status === 'nouveau') {
     ExpertNotifications.setStatus(id, 'lu');
   }
+
   document.getElementById('rq-company').textContent = n.companyName || 'Entreprise';
   document.getElementById('rq-email').textContent = n.companyEmail || '\u2014';
   document.getElementById('rq-phone').textContent = n.companyPhone || '\u2014';
   document.getElementById('rq-date').textContent = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
   document.getElementById('rq-message').textContent = n.message || '';
-  const emailBtn = document.getElementById('rq-email-btn');
-  emailBtn.href = `mailto:${encodeURIComponent(n.companyEmail || '')}?subject=${encodeURIComponent('Re: Votre demande ExpertERPHub')}`;
+
+  // Afficher la reponse si elle existe
+  var replyDisplay = document.getElementById('rq-reply-display');
+  var replyForm = document.getElementById('rq-reply-form');
+  var replyInput = document.getElementById('rq-reply-input');
+  var replyStatus = document.getElementById('rq-reply-status');
+  replyStatus.style.display = 'none';
+
+  if (n.reply && n.reply.trim()) {
+    document.getElementById('rq-reply-text').textContent = n.reply;
+    document.getElementById('rq-reply-date').textContent = n.reply_at ? 'Repondu le ' + new Date(n.reply_at).toLocaleString('fr-CA') : '';
+    replyDisplay.style.display = '';
+    // Permettre de modifier la reponse
+    replyInput.value = n.reply;
+    replyInput.placeholder = 'Modifier votre reponse...';
+  } else {
+    replyDisplay.style.display = 'none';
+    replyInput.value = '';
+    replyInput.placeholder = 'Ecrivez votre reponse ici...';
+  }
+  replyForm.style.display = '';
+
+  var emailBtn = document.getElementById('rq-email-btn');
+  emailBtn.href = 'mailto:' + encodeURIComponent(n.companyEmail || '') + '?subject=' + encodeURIComponent('Re: Votre demande ExpertERPHub');
   emailBtn.onclick = function() {
     ExpertNotifications.setStatus(id, 'repondu');
     renderNotifications();
   };
-  const callBtn = document.getElementById('rq-call-btn');
+  var callBtn = document.getElementById('rq-call-btn');
   if (n.companyPhone) {
     callBtn.style.display = 'inline-block';
-    callBtn.href = `tel:${n.companyPhone}`;
+    callBtn.href = 'tel:' + n.companyPhone;
   } else {
     callBtn.style.display = 'none';
   }
@@ -1168,7 +1199,42 @@ function openRequestDetail(id) {
   renderNotifications();
 }
 
+async function sendReplyFromModal() {
+  if (!_currentRequestId) return;
+  var input = document.getElementById('rq-reply-input');
+  var text = (input.value || '').trim();
+  if (!text) {
+    alert('Veuillez ecrire une reponse avant d\'envoyer.');
+    return;
+  }
+  var btn = document.getElementById('rq-send-reply-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi...';
+
+  try {
+    await ExpertNotifications.reply(_currentRequestId, text);
+
+    // Mettre a jour l'affichage
+    document.getElementById('rq-reply-text').textContent = text;
+    document.getElementById('rq-reply-date').textContent = 'Repondu le ' + new Date().toLocaleString('fr-CA');
+    document.getElementById('rq-reply-display').style.display = '';
+
+    var statusEl = document.getElementById('rq-reply-status');
+    statusEl.style.display = '';
+    statusEl.textContent = 'Reponse envoyee !';
+    setTimeout(function() { statusEl.style.display = 'none'; }, 3000);
+
+    renderNotifications();
+  } catch(err) {
+    console.error('[Reply] Error:', err);
+    alert('Erreur lors de l\'envoi de la reponse.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Envoyer la reponse';
+}
+
 function closeRequestDetail() {
+  _currentRequestId = null;
   document.getElementById('request-modal').classList.remove('open');
 }
 
@@ -1917,19 +1983,38 @@ function loadSavedAvatar() {
 </script>
 
 <div class="request-modal-overlay" id="request-modal">
-  <div class="request-modal">
-    <h4>Detail de la demande</h4>
+  <div class="request-modal" style="max-width:540px;">
+    <h4 style="margin:0 0 16px;font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--text);">Detail de la demande</h4>
     <div class="request-grid">
       <div class="request-field"><strong>Entreprise</strong><span id="rq-company"></span></div>
       <div class="request-field"><strong>Email</strong><span id="rq-email"></span></div>
       <div class="request-field"><strong>Telephone</strong><span id="rq-phone"></span></div>
       <div class="request-field"><strong>Date</strong><span id="rq-date"></span></div>
     </div>
-    <div class="request-message" id="rq-message"></div>
-    <div class="request-actions">
-      <a class="btn btn-primary" id="rq-email-btn" href="#">Repondre par email</a>
-      <a class="btn btn-secondary" id="rq-call-btn" href="#">Appeler</a>
-      <button class="btn btn-secondary" data-action="close-request-detail">Fermer</button>
+    <div style="margin:12px 0 4px;font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Message recu</div>
+    <div class="request-message" id="rq-message" style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;font-size:.9rem;line-height:1.55;color:#1e293b;white-space:pre-wrap;max-height:180px;overflow-y:auto;"></div>
+
+    <!-- Reponse precedente (si existe) -->
+    <div id="rq-reply-display" style="display:none;margin-top:12px;">
+      <div style="font-size:.75rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Votre reponse</div>
+      <div id="rq-reply-text" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 16px;font-size:.9rem;line-height:1.55;color:#14532d;white-space:pre-wrap;max-height:140px;overflow-y:auto;"></div>
+      <div id="rq-reply-date" style="font-size:.72rem;color:#6b7280;margin-top:4px;"></div>
+    </div>
+
+    <!-- Formulaire de reponse -->
+    <div id="rq-reply-form" style="margin-top:16px;">
+      <div style="font-size:.75rem;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Repondre directement</div>
+      <textarea id="rq-reply-input" placeholder="Ecrivez votre reponse ici..." style="width:100%;min-height:90px;border:1px solid #d1d5db;border-radius:12px;padding:12px 14px;font-size:.88rem;font-family:var(--font-main);resize:vertical;outline:none;transition:border-color .2s;line-height:1.5;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#d1d5db'"></textarea>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+        <button class="btn btn-primary" id="rq-send-reply-btn" style="padding:10px 22px;font-size:.85rem;border-radius:999px;" onclick="sendReplyFromModal()">Envoyer la reponse</button>
+        <span id="rq-reply-status" style="font-size:.78rem;color:#16a34a;display:none;">Reponse envoyee</span>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid #e5e7eb;">
+      <a class="btn btn-secondary" id="rq-email-btn" href="#" style="font-size:.82rem;padding:8px 16px;border-radius:999px;">Email externe</a>
+      <a class="btn btn-secondary" id="rq-call-btn" href="#" style="font-size:.82rem;padding:8px 16px;border-radius:999px;">Appeler</a>
+      <button class="btn btn-secondary" data-action="close-request-detail" style="font-size:.82rem;padding:8px 16px;border-radius:999px;margin-left:auto;">Fermer</button>
     </div>
   </div>
 </div>
