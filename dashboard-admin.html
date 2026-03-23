@@ -600,8 +600,21 @@ body {
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Statut</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Entreprise</th><th>Contact</th><th>Email</th><th>Type</th><th>Consultants</th><th>Statut</th><th>Actions</th></tr></thead>
             <tbody id="entreprises-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Expandable consultants per enterprise -->
+      <div id="enterprise-consultants-panel" class="panel" style="display:none;margin-top:16px;">
+        <div class="panel-head">
+          <h3 id="ec-panel-title">Consultants de l'entreprise</h3>
+          <button class="adm-btn" onclick="document.getElementById('enterprise-consultants-panel').style.display='none'" style="padding:4px 12px;font-size:12px;">Fermer</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Consultant</th><th>ERP</th><th>Role</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="ec-consultants-body"></tbody>
           </table>
         </div>
       </div>
@@ -842,18 +855,72 @@ function renderConsultants() {
   document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun consultant inscrit pour le moment.</td></tr>';
 }
 
+function getConsultantsForEntreprise(entrepriseEmail) {
+  if (!entrepriseEmail) return [];
+  var email = String(entrepriseEmail).trim().toLowerCase();
+  return state.consultants.filter(function(c) {
+    var notes = parseNotes(c.notes_admin);
+    return String(notes.entreprise_email || '').trim().toLowerCase() === email;
+  });
+}
+
+function showEnterpriseConsultants(entrepriseId) {
+  var e = state.entreprises.find(function(x) { return String(x.id) === String(entrepriseId); });
+  if (!e) return;
+  var consultants = getConsultantsForEntreprise(e.email);
+  var panel = document.getElementById('enterprise-consultants-panel');
+  document.getElementById('ec-panel-title').textContent = 'Consultants de ' + (e.nom || e.email || 'l\'entreprise') + ' (' + consultants.length + ')';
+
+  var rows = consultants.map(function(c) {
+    var notes = parseNotes(c.notes_admin);
+    var name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || '-';
+    var st = normalizeConsultantStatus(c) || 'n/a';
+    var stLabels = { en_attente:'En attente', approuve:'Approuve', refuse:'Refuse', en_mission:'En mission', desactive:'Desactive' };
+    var stLabel = stLabels[st] || st;
+    var erps = Array.isArray(c.competences) ? c.competences.join(', ') : String(c.competences || '-');
+    var idStr = safe(c.id);
+    var expVille = [notes.annees_exp ? notes.annees_exp + ' ans' : '', notes.ville || ''].filter(Boolean).join(' - ');
+
+    return '<tr>' +
+      '<td><div class="cons-cell"><span class="cons-name">' + safe(name) + '</span><span class="cons-email">' + safe(c.email || '') + '</span>' +
+      (expVille ? '<span class="cons-email">' + safe(expVille) + '</span>' : '') + '</div></td>' +
+      '<td>' + safe(erps) + '</td>' +
+      '<td>' + safe(c.titre || '-') + '</td>' +
+      '<td><span class="badge ' + statusClass(st) + '">' + safe(stLabel) + '</span></td>' +
+      '<td><div class="adm-btns">' +
+        '<button class="adm-btn adm-btn-approve" data-action="set-consultant-status" data-id="' + idStr + '" data-status="approuve">&#10003; Approuver</button>' +
+        '<button class="adm-btn adm-btn-refuse" data-action="set-consultant-status" data-id="' + idStr + '" data-status="refuse">&#10005; Refuser</button>' +
+      '</div></td>' +
+      '</tr>';
+  }).join('');
+
+  document.getElementById('ec-consultants-body').innerHTML = rows || '<tr><td colspan="5" class="empty">Aucun consultant lie a cette entreprise.</td></tr>';
+  panel.style.display = '';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function renderEntreprises() {
-  const q = document.getElementById('search-entreprises').value.trim().toLowerCase();
-  const rows = state.entreprises.filter(e => {
-    const hay = [e.nom, e.contact, e.email, e.type_demande].join(' ').toLowerCase();
+  var q = document.getElementById('search-entreprises').value.trim().toLowerCase();
+  var rows = state.entreprises.filter(function(e) {
+    var hay = [e.nom, e.contact, e.email, e.type_demande].join(' ').toLowerCase();
     return !q || hay.includes(q);
-  }).map(e => {
-    const st = normalizeEntrepriseStatus(e) || 'n/a';
+  }).map(function(e) {
+    var st = normalizeEntrepriseStatus(e) || 'n/a';
+    var linkedConsultants = getConsultantsForEntreprise(e.email);
+    var consultantCount = linkedConsultants.length;
+    var pendingCount = linkedConsultants.filter(function(c) { return normalizeConsultantStatus(c) === 'en_attente'; }).length;
+    var countLabel = consultantCount + ' consultant' + (consultantCount !== 1 ? 's' : '');
+    if (pendingCount > 0) countLabel += ' <span style="color:var(--warning);font-weight:600;">(' + pendingCount + ' en attente)</span>';
+    var viewBtn = consultantCount > 0
+      ? '<button class="adm-btn" style="padding:4px 10px;font-size:11px;background:var(--brand-soft);color:var(--brand);border:1px solid rgba(37,99,235,.15);border-radius:6px;cursor:pointer;" onclick="showEnterpriseConsultants(\'' + safe(e.id) + '\')">Voir</button>'
+      : '';
+
     return '<tr>' +
       '<td>' + safe(e.nom || '-') + '</td>' +
       '<td>' + safe(e.contact || '-') + '</td>' +
       '<td>' + safe(e.email || '-') + '</td>' +
       '<td>' + safe(e.type_demande || '-') + '</td>' +
+      '<td><div style="display:flex;align-items:center;gap:8px;">' + countLabel + ' ' + viewBtn + '</div></td>' +
       '<td><span class="badge ' + statusClass(st) + '">' + safe(st) + '</span></td>' +
       '<td><div class="actions">' +
       '<select class="action-select" data-action-select="entreprise" data-id="' + safe(e.id) + '">' +
@@ -861,12 +928,12 @@ function renderEntreprises() {
       '<option value="approuve">Approuver</option>' +
       '<option value="en_attente">En attente</option>' +
       '<option value="refuse">Refuser</option>' +
-      '<option value="desactive">Désactiver</option>' +
+      '<option value="desactive">Desactiver</option>' +
       '</select>' +
       '</div></td>' +
       '</tr>';
   }).join('');
-  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun résultat</td></tr>';
+  document.getElementById('entreprises-body').innerHTML = rows || '<tr><td colspan="7" class="empty">Aucun resultat</td></tr>';
 }
 
 function parseCertificationsAdmin(val) {

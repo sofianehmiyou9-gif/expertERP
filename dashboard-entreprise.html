@@ -959,13 +959,13 @@ async function loadResources() {
     }
 
     return `<tr>
-      <td style="text-align:center;">${safe(photoHtml)}</td>
+      <td style="text-align:center;">${photoHtml}</td>
       <td>${sanitizeHtml(resourceCode)}</td>
       <td>${sanitizeHtml(erps)}</td>
       <td>${sanitizeHtml(role)}</td>
       <td>${sanitizeHtml(tjmLabel)}</td>
       <td>${statusMap[statusKey] || safe(r.statut)}</td>
-      <td><a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir la carte</a>${safe(mapLine)}</td>
+      <td><a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
       <td>${safe(formatDate(r.created_at))}</td>
     </tr>`;
   }).join('');
