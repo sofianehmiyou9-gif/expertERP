@@ -195,6 +195,11 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .nav-link:hover:after,.nav-link.active:after{width:100%;}
 .nav-link.active{color:var(--ink);}
 .nav-r{display:flex;gap:.65rem;align-items:center;flex-wrap:nowrap;flex-shrink:0;}
+/* ── Account dropdown ── */
+#nav-dropdown.open{display:block !important;}
+#nav-account-btn:hover{border-color:rgba(0,88,190,.3);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+@media(max-width:768px){#nav-user-label{display:none !important;}#nav-dropdown{min-width:200px !important;}}
+
 .lang-selector{display:flex;align-items:center;gap:.3rem;padding:.2rem;border:1px solid rgba(37,99,235,.15);border-radius:999px;background:var(--surface);box-shadow:inset 0 1px 0 rgba(37,99,235,.06);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);}
 .lang-btn{min-width:38px;height:34px;border:none;border-radius:999px;background:transparent;color:var(--muted);font-family:var(--font-main);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .22s ease;}
 .lang-btn:hover{background:rgba(37,99,235,.08);color:var(--primary);}
@@ -1375,16 +1380,36 @@ function toggleTheme() {
   <div class="nav-r">
     <!-- ═══ ÉTAT NON CONNECTÉ ═══ -->
     <div id="nav-guest" style="display:flex;gap:.5rem;align-items:center;">
-      <button class="btn-solid portal-trigger" id="portal-entry-btn" data-action="open-client-space" style="background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;">Se connecter</button>
+      <button class="btn-outline portal-trigger" id="portal-entry-btn" data-action="open-client-space">Se connecter</button>
       <button class="btn-outline" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
-      <button class="btn-outline" data-action="open-entreprise-modal" data-i18n="nav.find">Rechercher un expert</button>
     </div>
-    <!-- ═══ ÉTAT CONNECTÉ (entreprise/consultant) ═══ -->
-    <div id="nav-logged" style="display:none;align-items:center;gap:.65rem;">
-      <span id="nav-user-label" style="font-size:.78rem;font-weight:600;color:var(--ink);background:var(--blue-light,rgba(0,40,142,.06));padding:.4rem .85rem;border-radius:999px;border:1px solid rgba(0,88,190,.15);white-space:nowrap;"></span>
-      <a id="nav-dashboard-link" href="dashboard-entreprise.html" style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#00288e,#0058be);padding:.55rem 1rem;border-radius:999px;text-decoration:none;white-space:nowrap;">Mon Dashboard</a>
-      <button id="nav-search-btn" data-action="show-page" data-page="consultants" style="font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#00288e;background:rgba(0,40,142,.06);border:1px solid rgba(0,88,190,.15);padding:.55rem 1rem;border-radius:999px;cursor:pointer;white-space:nowrap;">Rechercher un expert</button>
-      <button id="nav-logout-btn" data-action="nav-logout" style="font-size:.72rem;font-weight:600;color:#6b7280;background:none;border:1px solid rgba(196,197,213,.4);padding:.45rem .75rem;border-radius:999px;cursor:pointer;white-space:nowrap;">Déconnexion</button>
+    <!-- ═══ ÉTAT CONNECTÉ — Dropdown compte unique (style pro) ═══ -->
+    <div id="nav-logged" style="display:none;position:relative;">
+      <button id="nav-account-btn" onclick="document.getElementById('nav-dropdown').classList.toggle('open')" style="display:flex;align-items:center;gap:.5rem;padding:.4rem .5rem .4rem .4rem;border-radius:999px;border:1px solid rgba(196,197,213,.4);background:#fff;cursor:pointer;transition:all .2s;">
+        <span id="nav-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;letter-spacing:.02em;flex-shrink:0;">EP</span>
+        <span id="nav-user-label" style="font-size:.78rem;font-weight:600;color:var(--ink);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;"><path d="M3 4.5L6 7.5L9 4.5" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div id="nav-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;min-width:220px;background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.12);padding:.5rem 0;z-index:200;">
+        <div id="nav-dropdown-info" style="padding:.75rem 1rem;border-bottom:1px solid rgba(196,197,213,.3);">
+          <div id="nav-dropdown-name" style="font-size:.85rem;font-weight:700;color:var(--ink);"></div>
+          <div id="nav-dropdown-email" style="font-size:.72rem;color:#6b7280;margin-top:.15rem;"></div>
+        </div>
+        <a id="nav-dashboard-link" href="dashboard-entreprise.html" style="display:flex;align-items:center;gap:.6rem;padding:.65rem 1rem;font-size:.82rem;font-weight:500;color:var(--ink);text-decoration:none;transition:background .15s;" onmouseenter="this.style.background='rgba(0,40,142,.04)'" onmouseleave="this.style.background='transparent'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00288e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Mon Dashboard
+        </a>
+        <button data-action="show-page" data-page="consultants" onclick="document.getElementById('nav-dropdown').classList.remove('open')" style="display:flex;align-items:center;gap:.6rem;width:100%;padding:.65rem 1rem;font-size:.82rem;font-weight:500;color:var(--ink);background:none;border:none;cursor:pointer;text-align:left;transition:background .15s;" onmouseenter="this.style.background='rgba(0,40,142,.04)'" onmouseleave="this.style.background='transparent'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00288e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Rechercher un expert
+        </button>
+        <div style="border-top:1px solid rgba(196,197,213,.3);margin:.25rem 0;"></div>
+        <button data-action="nav-logout" style="display:flex;align-items:center;gap:.6rem;width:100%;padding:.65rem 1rem;font-size:.82rem;font-weight:500;color:#ba1a1a;background:none;border:none;cursor:pointer;text-align:left;transition:background .15s;" onmouseenter="this.style.background='rgba(186,26,26,.04)'" onmouseleave="this.style.background='transparent'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ba1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Déconnexion
+        </button>
+      </div>
     </div>
     <div class="lang-selector">
       <button class="lang-btn active" id="lang-fr" data-action="set-language" data-lang="fr" aria-label="Passer en français">FR</button>
@@ -3218,20 +3243,25 @@ function refreshPortalEntryButton() {
   var navLogged = document.getElementById('nav-logged');
   var userLabel = document.getElementById('nav-user-label');
   var dashLink = document.getElementById('nav-dashboard-link');
+  var avatar = document.getElementById('nav-avatar');
+  var dropdownName = document.getElementById('nav-dropdown-name');
+  var dropdownEmail = document.getElementById('nav-dropdown-email');
 
   if (session && session.role && (session.email || session.adminGranted)) {
-    /* ═══ CONNECTÉ: Afficher la barre connectée ═══ */
+    /* ═══ CONNECTÉ: Afficher le dropdown compte ═══ */
     if (navGuest) navGuest.style.display = 'none';
-    if (navLogged) navLogged.style.display = 'flex';
+    if (navLogged) navLogged.style.display = 'block';
 
-    /* Déterminer le label et le lien dashboard selon le rôle */
-    var roleIcon = session.role === 'entreprise' ? '🏢' : session.role === 'admin' ? '⚙️' : '👤';
+    /* Remplir les infos basiques */
     var roleText = session.role === 'entreprise' ? 'Entreprise' : session.role === 'admin' ? 'Admin' : 'Consultant';
-    if (userLabel) userLabel.textContent = roleIcon + ' ' + (session.email || roleText);
+    if (userLabel) userLabel.textContent = session.email || roleText;
+    if (dropdownEmail) dropdownEmail.textContent = session.email || '';
+    if (dropdownName) dropdownName.textContent = roleText;
+    if (avatar) avatar.textContent = (session.email || 'U').substring(0, 2).toUpperCase();
     if (dashLink) dashLink.href = ExpertPortalAuth.getDashboardUrl(session.role, session.email || '');
 
-    /* Charger le nom de l'entreprise si c'est un compte entreprise */
-    if (session.role === 'entreprise' && session.email && userLabel) {
+    /* Charger le nom de l'entreprise depuis Supabase */
+    if (session.role === 'entreprise' && session.email) {
       (async function() {
         try {
           var SB = window.ExpertConfig || {};
@@ -3240,7 +3270,10 @@ function refreshPortalEntryButton() {
           });
           var data = await resp.json();
           if (Array.isArray(data) && data.length > 0 && data[0].nom) {
-            userLabel.textContent = roleIcon + ' ' + data[0].nom;
+            var nom = data[0].nom;
+            if (userLabel) userLabel.textContent = nom;
+            if (dropdownName) dropdownName.textContent = nom;
+            if (avatar) avatar.textContent = nom.substring(0, 2).toUpperCase();
           }
         } catch(e) { /* garder l'email comme fallback */ }
       })();
@@ -3251,6 +3284,15 @@ function refreshPortalEntryButton() {
     if (navLogged) navLogged.style.display = 'none';
   }
 }
+
+/* Fermer le dropdown quand on clique ailleurs */
+document.addEventListener('click', function(e) {
+  var dropdown = document.getElementById('nav-dropdown');
+  var accountBtn = document.getElementById('nav-account-btn');
+  if (dropdown && accountBtn && !accountBtn.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.remove('open');
+  }
+});
 
 function isAdminPortalVisible() {
   const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
@@ -5087,6 +5129,10 @@ function runConsultantsFilter() {
   const dispo = dispoEl ? dispoEl.value.toLowerCase() : '';
   const tjmMax = tjmEl ? parseFloat(tjmEl.value) : NaN;
 
+  /* ═══ CONTRÔLE ACCÈS: Déterminer si l'utilisateur est une entreprise connectée ═══ */
+  var _session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  var _isEnterprise = _session && _session.role === 'entreprise' && _session.email;
+
   const filtered = allConsultants.filter(c => {
     const fullName = c._fullNameLower || (((c.prenom || '') + ' ' + (c.nom || '')).toLowerCase());
     const skills = c._skillsLower || ((Array.isArray(c.competences)
@@ -5094,6 +5140,16 @@ function runConsultantsFilter() {
       : String(c.competences || '').split(',').map(s => s.trim()).filter(Boolean)
     ).join(' ').toLowerCase());
     const notes = c._parsedNotes || (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
+
+    /* ═══ VISIBILITÉ B2B: Les ressources B2B privées ne sont visibles que par les entreprises connectées ═══
+       - source = 'import_b2b' → c'est une ressource d'entreprise (bench)
+       - visibility = 'public' → l'admin a rendu cette ressource visible pour tous
+       - visibility = 'b2b' ou absent → visible uniquement pour les entreprises connectées
+       - source != 'import_b2b' → c'est un freelance → visible par tous */
+    var isB2B = notes.source === 'import_b2b';
+    var isPublicB2B = notes.visibility === 'public';
+    if (isB2B && !isPublicB2B && !_isEnterprise) return false;
+
     if (search && !fullName.includes(search) && !skills.includes(search)) return false;
     if (erp && !skills.includes(erp)) return false;
     if (role && !(c.titre || '').toLowerCase().includes(role)) return false;
