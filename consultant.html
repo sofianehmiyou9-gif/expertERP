@@ -387,16 +387,21 @@ body { font-family: 'Manrope', sans-serif; }
         </button>
       </form>
 
-      <!-- Section reponses du consultant — SECURISEE: email verrouille sur celui du formulaire de contact -->
+      <!-- ═══ SECTION SUIVRE MES ÉCHANGES — SÉCURISÉE PAR TOKEN DE SESSION ═══
+           SÉCURITÉ: L'accès aux échanges nécessite un token généré lors de l'envoi du message.
+           Sans token (= sans avoir envoyé de message depuis ce navigateur), pas d'accès.
+           Cela empêche quiconque de voir les échanges d'un autre email. -->
       <div id="my-conversations" style="margin-top:32px;padding:28px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,40,142,.07);border:1px solid rgba(0,40,142,.06);">
         <h3 style="font-family:'Newsreader',serif;font-size:1.3rem;font-weight:600;color:#0f172a;margin:0 0 6px;">Suivre mes echanges</h3>
-        <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Vos echanges sont lies a l'email que vous avez utilise pour contacter ce consultant.</p>
+        <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Acc&#232;s s&#233;curis&#233; — uniquement disponible apr&#232;s avoir envoy&#233; un message via le formulaire ci-dessus.</p>
         <div style="display:flex;gap:8px;align-items:center;">
-          <!-- SECURITE: champ pre-rempli et verrouille (readonly) — lie a company-email -->
-          <input id="check-reply-email" type="email" placeholder="Entrez d'abord votre email dans le formulaire ci-dessus" readonly
+          <!-- SECURITE: champ readonly, pré-rempli automatiquement par le token de session -->
+          <input id="check-reply-email" type="email" placeholder="Envoyez d'abord un message pour d&#233;bloquer le suivi" readonly
             style="flex:1;padding:12px 16px;border-radius:12px;border:1px solid #d1d5db;font-size:.88rem;outline:none;font-family:'Manrope',sans-serif;background:#f3f4f6;color:#374151;cursor:not-allowed;">
-          <button onclick="checkMyReplies()" style="padding:12px 22px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;">Voir mes echanges</button>
+          <button onclick="checkMyReplies()" id="btn-check-replies" style="padding:12px 22px;background:#2563eb;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;">Voir mes echanges</button>
         </div>
+        <!-- Indicateur de statut sécurité -->
+        <div id="reply-auth-status" style="margin-top:8px;font-size:.78rem;color:#6b7280;display:flex;align-items:center;gap:6px;"></div>
         <!-- Message d'erreur securite -->
         <div id="reply-security-msg" style="display:none;margin-top:8px;padding:10px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:.82rem;color:#991b1b;"></div>
         <div id="my-replies-list" style="margin-top:16px;"></div>
@@ -1059,33 +1064,102 @@ async function sendContactMessage() {
   alert(b2b
     ? 'Message envoyé à l\'administrateur de la ressource.'
     : ExpertI18n.t('consultant.messageSent'));
-  /* SECURITE: Conserver l'email dans le champ "Suivre mes echanges" apres envoi */
+  /* ═══ SECURITE: Générer et stocker un token de session après envoi ═══ */
   var sentEmail = document.getElementById('company-email').value.trim();
   document.getElementById('company-name').value = '';
   document.getElementById('company-email').value = '';
   document.getElementById('company-phone').value = '';
   document.getElementById('contact-message').value = '';
-  /* Pre-remplir le suivi avec l'email utilise pour l'envoi */
-  var replyField = document.getElementById('check-reply-email');
-  if (replyField && sentEmail) {
-    replyField.value = sentEmail;
+  /* Générer le token d'accès et le stocker dans localStorage */
+  if (sentEmail) {
+    generateAndStoreAccessToken(sentEmail);
+    var replyField = document.getElementById('check-reply-email');
+    if (replyField) replyField.value = sentEmail;
+    updateAuthStatus();
   }
 }
 
-/* ── SECURITE: Synchroniser le champ "Suivre mes echanges" avec l'email du formulaire contact ── */
-(function() {
-  var companyEmailEl = document.getElementById('company-email');
-  var replyEmailEl = document.getElementById('check-reply-email');
-  if (companyEmailEl && replyEmailEl) {
-    /* Sync en temps reel quand l'utilisateur tape son email dans le formulaire de contact */
-    companyEmailEl.addEventListener('input', function() {
-      replyEmailEl.value = companyEmailEl.value.trim();
-    });
-    /* Sync initiale si un email est deja present */
-    if (companyEmailEl.value.trim()) {
-      replyEmailEl.value = companyEmailEl.value.trim();
+/* ═══════════════════════════════════════════════════════════════
+   SECURITE v2: Système de token pour "Suivre mes échanges"
+
+   PRINCIPE: Quand un utilisateur envoie un message, on génère un
+   token unique (SHA-256 de email + consultantId + secret) stocké
+   dans localStorage. Pour voir ses échanges, ce token doit exister.
+
+   RÉSULTAT: Impossible de voir les échanges d'un email sans avoir
+   envoyé un message depuis CE navigateur.
+   ═══════════════════════════════════════════════════════════════ */
+
+var ACCESS_TOKEN_SECRET = 'erphub_secure_2026';
+
+async function generateAccessTokenHash(email) {
+  var raw = email.toLowerCase().trim() + ':' + (consultantId || '') + ':' + ACCESS_TOKEN_SECRET;
+  var bytes = new TextEncoder().encode(raw);
+  var hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+}
+
+function getStoredTokens() {
+  try {
+    var data = localStorage.getItem('erphub_access_tokens');
+    return data ? JSON.parse(data) : {};
+  } catch(e) { return {}; }
+}
+
+function storeToken(email, token) {
+  try {
+    var tokens = getStoredTokens();
+    var key = email.toLowerCase().trim() + ':' + (consultantId || '');
+    tokens[key] = { token: token, email: email.toLowerCase().trim(), ts: Date.now() };
+    localStorage.setItem('erphub_access_tokens', JSON.stringify(tokens));
+  } catch(e) { console.error('[Security] Token store error:', e); }
+}
+
+async function generateAndStoreAccessToken(email) {
+  var token = await generateAccessTokenHash(email);
+  storeToken(email, token);
+  return token;
+}
+
+async function hasValidAccessToken(email) {
+  if (!email) return false;
+  var tokens = getStoredTokens();
+  var key = email.toLowerCase().trim() + ':' + (consultantId || '');
+  var stored = tokens[key];
+  if (!stored) return false;
+  var expected = await generateAccessTokenHash(email);
+  return stored.token === expected;
+}
+
+function getAuthorizedEmail() {
+  var tokens = getStoredTokens();
+  var suffix = ':' + (consultantId || '');
+  for (var k in tokens) {
+    if (k.endsWith(suffix) && tokens[k].email) {
+      return tokens[k].email;
     }
   }
+  return '';
+}
+
+function updateAuthStatus() {
+  var statusEl = document.getElementById('reply-auth-status');
+  var emailField = document.getElementById('check-reply-email');
+  var authorizedEmail = getAuthorizedEmail();
+  if (authorizedEmail && statusEl) {
+    emailField.value = authorizedEmail;
+    statusEl.innerHTML = '<span style="color:#16a34a;font-weight:600;">\u25CF</span> Acc\u00e8s autoris\u00e9 pour ' + escapeHtml(authorizedEmail);
+    statusEl.style.color = '#16a34a';
+  } else if (statusEl) {
+    emailField.value = '';
+    statusEl.innerHTML = '<span style="color:#dc2626;font-weight:600;">\u25CF</span> Envoyez un message pour d\u00e9bloquer le suivi de vos \u00e9changes';
+    statusEl.style.color = '#6b7280';
+  }
+}
+
+/* Initialiser le statut au chargement */
+(function() {
+  setTimeout(updateAuthStatus, 500);
 })();
 
 async function checkMyReplies() {
@@ -1093,28 +1167,25 @@ async function checkMyReplies() {
   var securityMsg = document.getElementById('reply-security-msg');
   var email = (emailInput.value || '').trim().toLowerCase();
 
-  /* SECURITE: Verifier que l'email correspond bien a celui du formulaire de contact */
-  var companyEmailField = document.getElementById('company-email');
-  var authorizedEmail = companyEmailField ? companyEmailField.value.trim().toLowerCase() : '';
-
+  /* ═══ SECURITE: Vérifier le token d'accès ═══ */
   if (!email || !email.includes('@')) {
     if (securityMsg) {
       securityMsg.style.display = 'block';
-      securityMsg.textContent = 'Veuillez d\'abord entrer votre email professionnel dans le formulaire de contact ci-dessus.';
+      securityMsg.textContent = 'Envoyez d\'abord un message via le formulaire de contact ci-dessus pour d\u00e9bloquer le suivi.';
     }
     return;
   }
 
-  /* Bloquer si l'email ne correspond pas (protection contre manipulation du DOM) */
-  if (authorizedEmail && email !== authorizedEmail) {
+  var hasToken = await hasValidAccessToken(email);
+  if (!hasToken) {
     if (securityMsg) {
       securityMsg.style.display = 'block';
-      securityMsg.textContent = 'Acces refuse. Vous ne pouvez consulter que les echanges lies a votre propre email.';
+      securityMsg.textContent = 'Acc\u00e8s refus\u00e9. Vous devez avoir envoy\u00e9 un message depuis ce navigateur pour consulter vos \u00e9changes. Si vous avez chang\u00e9 de navigateur, renvoyez un message.';
     }
     return;
   }
 
-  /* Masquer le message d'erreur si tout est OK */
+  /* Token valide — accès autorisé */
   if (securityMsg) securityMsg.style.display = 'none';
 
   var container = document.getElementById('my-replies-list');
