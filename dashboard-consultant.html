@@ -253,12 +253,14 @@ img{max-width:100%;height:auto;}
 .request-pill.new{background:var(--brand-light);color:var(--brand);border:1px solid var(--brand-mid);}
 .request-pill.read{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border);}
 .request-pill.replied{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
-.notif-list{display:flex;flex-direction:column;gap:.5rem;}
-.notif-item{padding:.85rem 1rem;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--border);transition:all var(--ease);overflow:hidden;font-size:.84rem;line-height:1.5;color:var(--text-muted);}
-.notif-item.unread{background:linear-gradient(135deg,var(--brand-light),rgba(239,246,255,.5));border-color:rgba(37,99,235,.12);}
-.notif-item:hover{box-shadow:var(--shadow-sm);border-color:var(--border-strong);}
+/* ═══ INBOX STYLE — Liste continue sans cartes séparées ═══ */
+.notif-list{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
+.notif-item{padding:.75rem 1rem;border-bottom:1px solid var(--border);transition:background var(--ease);font-size:.84rem;line-height:1.5;color:var(--text-muted);background:transparent;}
+.notif-item:last-child{border-bottom:none;}
+.notif-item.unread{background:linear-gradient(135deg,var(--brand-light),rgba(239,246,255,.3));}
+.notif-item:hover{background:rgba(37,99,235,.03);}
 .notif-clickable{cursor:pointer;}
-.notif-meta{font-size:.74rem;color:var(--text-muted);margin-bottom:.25rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-weight:600;}
+.notif-meta{font-size:.72rem;color:var(--text-muted);margin-bottom:.2rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-weight:600;}
 .empty-state{padding:2.5rem 1.5rem;border-radius:var(--r-md);background:linear-gradient(135deg,rgba(248,250,252,.8) 0%,rgba(239,246,255,.5) 100%);border:1px dashed rgba(37,99,235,.12);color:var(--text-muted);text-align:center;line-height:1.6;font-weight:500;font-size:.84rem;}
 .status-badge{display:inline-flex;align-items:center;padding:.15rem .5rem;border-radius:var(--r-full);font-size:.6rem;font-weight:700;letter-spacing:.03em;text-transform:capitalize;white-space:nowrap;}
 .status-badge.nouveau{background:var(--brand-light);color:var(--brand);}

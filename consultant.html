@@ -410,11 +410,10 @@ body { font-family: 'Manrope', sans-serif; }
         </button>
       </form>
 
-      <!-- ═══ SECTION SUIVRE MES ÉCHANGES — SÉCURISÉE PAR TOKEN DE SESSION ═══
-           SÉCURITÉ: L'accès aux échanges nécessite un token généré lors de l'envoi du message.
-           Sans token (= sans avoir envoyé de message depuis ce navigateur), pas d'accès.
-           Cela empêche quiconque de voir les échanges d'un autre email. -->
-      <div id="my-conversations" style="margin-top:32px;padding:28px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,40,142,.07);border:1px solid rgba(0,40,142,.06);">
+      <!-- ═══ SECTION SUIVRE MES ÉCHANGES — RETIRÉE (déplacée dans dashboard entreprise)
+           La section reste dans le DOM avec display:none pour compatibilité JS.
+           L'historique des échanges est maintenant dans l'onglet "Messages" du dashboard entreprise. ═══ -->
+      <div id="my-conversations" style="display:none !important;margin-top:32px;padding:28px;background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,40,142,.07);border:1px solid rgba(0,40,142,.06);">
         <h3 style="font-family:'Newsreader',serif;font-size:1.3rem;font-weight:600;color:#0f172a;margin:0 0 6px;">Suivre mes echanges</h3>
         <p style="font-size:.85rem;color:#6b7280;margin:0 0 16px;">Acc&#232;s s&#233;curis&#233; — uniquement disponible apr&#232;s avoir envoy&#233; un message via le formulaire ci-dessus.</p>
         <div style="display:flex;gap:8px;align-items:center;">

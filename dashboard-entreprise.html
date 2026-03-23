@@ -737,6 +737,74 @@ body{background:#f7f9fb;}
   </div>
 </div>
 
+<!-- ═══ MODAL ÉDITION RESSOURCE — Permet à l'admin de modifier taux, résumé, expériences ═══ -->
+<div id="resource-edit-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);overflow-y:auto;padding:2rem;">
+  <div style="max-width:640px;margin:0 auto;background:#fff;border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,.15);padding:0;overflow:hidden;">
+    <!-- Header -->
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(196,197,213,.3);display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <h3 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:600;color:#191c1e;margin:0;">Modifier la ressource</h3>
+        <p id="edit-resource-name" style="font-size:.78rem;color:#6b7280;margin:.2rem 0 0;"></p>
+      </div>
+      <button onclick="closeResourceEdit()" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(196,197,213,.4);background:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <!-- Formulaire -->
+    <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
+      <input type="hidden" id="edit-resource-id">
+
+      <!-- TJM -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Taux journalier (TJM)</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+          <input id="edit-tjm-min" type="number" placeholder="Min ($/jour)" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);">
+          <input id="edit-tjm-max" type="number" placeholder="Max ($/jour)" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);">
+        </div>
+      </div>
+
+      <!-- Disponibilité -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Disponibilité</label>
+        <select id="edit-disponibilite" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);background:#fff;">
+          <option value="">Non renseignée</option>
+          <option value="Immédiate">Immédiate</option>
+          <option value="Sous 15 jours">Sous 15 jours</option>
+          <option value="Sous 30 jours">Sous 30 jours</option>
+          <option value="Non disponible">Non disponible</option>
+        </select>
+      </div>
+
+      <!-- Titre / Rôle -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Titre / Rôle</label>
+        <input id="edit-titre" type="text" placeholder="Ex: Consultant fonctionnel SAP FI/CO" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);">
+      </div>
+
+      <!-- Résumé professionnel -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Résumé professionnel</label>
+        <textarea id="edit-resume" rows="4" placeholder="Résumé visible sur le profil public..." style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.85rem;font-family:var(--font-main);resize:vertical;line-height:1.6;"></textarea>
+      </div>
+
+      <!-- Expériences professionnelles -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Expériences professionnelles</label>
+        <textarea id="edit-experiences" rows="5" placeholder="Décrivez les expériences clés de cette ressource..." style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.85rem;font-family:var(--font-main);resize:vertical;line-height:1.6;"></textarea>
+      </div>
+
+      <!-- Années d'expérience -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Années d'expérience</label>
+        <input id="edit-experience-years" type="number" min="0" max="40" placeholder="Ex: 8" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);">
+      </div>
+    </div>
+    <!-- Footer actions -->
+    <div style="padding:1rem 1.5rem;border-top:1px solid rgba(196,197,213,.3);display:flex;justify-content:flex-end;gap:.75rem;">
+      <button onclick="closeResourceEdit()" class="btn btn-secondary">Annuler</button>
+      <button onclick="saveResourceEdit()" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="i18n.js"></script>
@@ -942,6 +1010,9 @@ async function loadResources() {
     return String(notes.entreprise_email || '').toLowerCase() === ownerEmail;
   });
 
+  /* Stocker pour l'édition */
+  _allLoadedResources = filtered;
+
   function getInitials(nom, prenom) {
     const n = (nom||'').trim().charAt(0).toUpperCase();
     const p = (prenom||'').trim().charAt(0).toUpperCase();
@@ -1004,7 +1075,10 @@ async function loadResources() {
       <td>${sanitizeHtml(tjmLabel)}</td>
       <td>${statusMap[statusKey] || safe(r.statut)}</td>
       <td>${visToggle}</td>
-      <td><a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
+      <td style="white-space:nowrap;">
+        <a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir</a>
+        <button onclick="openResourceEdit('${safe(String(r.id))}')" style="margin-left:6px;font-size:.7rem;font-weight:700;color:#00288e;background:rgba(0,40,142,.06);border:1px solid rgba(0,88,190,.15);padding:4px 10px;border-radius:999px;cursor:pointer;">Modifier</button>
+      </td>
       <td>${safe(formatDate(r.created_at))}</td>
     </tr>`;
   }).join('');
@@ -1608,6 +1682,82 @@ function renderCompanyMessages() {
       replyHtml +
     '</div>';
   }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ÉDITION RESSOURCE — Ouvrir, remplir, sauvegarder
+   L'admin peut modifier: taux, dispo, titre, résumé, expériences, années
+   ═══════════════════════════════════════════════════════════════ */
+let _allLoadedResources = [];
+
+function openResourceEdit(resourceId) {
+  var r = _allLoadedResources.find(function(x) { return String(x.id) === String(resourceId); });
+  if (!r) { alert('Ressource introuvable.'); return; }
+
+  var notes = parseNotes(r.notes_admin);
+  document.getElementById('edit-resource-id').value = r.id;
+  document.getElementById('edit-resource-name').textContent = (r.prenom || '') + ' ' + (r.nom || '') + ' — ' + (r.titre || 'Sans titre');
+  document.getElementById('edit-tjm-min').value = r.tjm_min || '';
+  document.getElementById('edit-tjm-max').value = r.tjm_max || '';
+  document.getElementById('edit-disponibilite').value = notes.disponibilite || '';
+  document.getElementById('edit-titre').value = r.titre || '';
+  document.getElementById('edit-resume').value = notes.resume_pro || '';
+  document.getElementById('edit-experiences').value = notes.experiences_text || '';
+  document.getElementById('edit-experience-years').value = notes.experience_years || '';
+
+  document.getElementById('resource-edit-overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeResourceEdit() {
+  document.getElementById('resource-edit-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function saveResourceEdit() {
+  var resourceId = document.getElementById('edit-resource-id').value;
+  if (!resourceId) return;
+
+  var tjmMin = document.getElementById('edit-tjm-min').value.trim();
+  var tjmMax = document.getElementById('edit-tjm-max').value.trim();
+  var dispo = document.getElementById('edit-disponibilite').value;
+  var titre = document.getElementById('edit-titre').value.trim();
+  var resume = document.getElementById('edit-resume').value.trim();
+  var experiences = document.getElementById('edit-experiences').value.trim();
+  var expYears = document.getElementById('edit-experience-years').value.trim();
+
+  try {
+    /* Lire les notes actuelles pour ne pas écraser les autres champs */
+    var resp = await fetch(SB_URL + '/rest/v1/consultants?select=notes_admin&id=eq.' + encodeURIComponent(resourceId), {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    var data = await resp.json();
+    var notes = parseNotes(data && data[0] ? data[0].notes_admin : '{}');
+
+    /* Mettre à jour les champs dans notes_admin */
+    notes.disponibilite = dispo;
+    notes.resume_pro = resume;
+    notes.experiences_text = experiences;
+    notes.experience_years = expYears;
+
+    /* Sauvegarder dans Supabase */
+    var payload = {
+      titre: titre || undefined,
+      tjm_min: tjmMin ? Number(tjmMin) : null,
+      tjm_max: tjmMax ? Number(tjmMax) : null,
+      notes_admin: JSON.stringify(notes)
+    };
+
+    var ok = await sbUpdate('consultants', resourceId, payload);
+    if (ok) {
+      closeResourceEdit();
+      loadResources(); /* Recharger le tableau */
+    } else {
+      alert('Erreur lors de la sauvegarde.');
+    }
+  } catch(err) {
+    alert('Erreur: ' + (err.message || 'Sauvegarde impossible.'));
+  }
 }
 
 function showTab(tabName, event) {
