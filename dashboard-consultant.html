@@ -685,6 +685,26 @@ img{max-width:100%;height:auto;}
                   <div class="detail-label">R&#244;le</div>
                   <div class="detail-value" id="role-value">&#8211;</div>
                 </div>
+                <!-- ═══ NOUVEAU: Section ERP & Modules — éditable ═══ -->
+                <div class="info-card wide" id="erp-edit-card">
+                  <div class="detail-label">ERP &amp; Modules</div>
+                  <div class="inline-hint">S&#233;lectionnez vos ERP et ajoutez des modules sp&#233;cifiques. Ces informations apparaissent sur votre profil public.</div>
+                  <!-- ERP chips sélectionnables -->
+                  <div class="choice-chips" id="erp-edit-chips" style="margin-bottom:.5rem;">
+                    <button type="button" class="choice-chip" data-erp="SAP">SAP</button>
+                    <button type="button" class="choice-chip" data-erp="Oracle">Oracle</button>
+                    <button type="button" class="choice-chip" data-erp="Microsoft Dynamics">Microsoft Dynamics</button>
+                    <button type="button" class="choice-chip" data-erp="Workday">Workday</button>
+                    <button type="button" class="choice-chip" data-erp="Salesforce">Salesforce</button>
+                    <button type="button" class="choice-chip" data-erp="ServiceNow">ServiceNow</button>
+                    <button type="button" class="choice-chip" data-erp="NetSuite">NetSuite</button>
+                    <button type="button" class="choice-chip" data-erp="Odoo">Odoo</button>
+                    <button type="button" class="choice-chip" data-erp="Sage">Sage</button>
+                    <button type="button" class="choice-chip" data-erp="Infor">Infor</button>
+                  </div>
+                  <!-- Modules spécifiques (texte libre) -->
+                  <input id="erp-modules-input" class="inline-edit" type="text" placeholder="Modules : ex. FI/CO, MM, SD, S/4HANA, HCM..." style="margin-top:.35rem;">
+                </div>
                 <div class="info-card">
                   <div class="detail-label">Ann&#233;es d'exp&#233;rience</div>
                   <div class="inline-hint">Nombre exact d'ann&#233;es dans le conseil ERP.</div>
@@ -1029,6 +1049,13 @@ function setupInlineChoices() {
   }
 
   /* edit-langues-input est maintenant hidden — ancien listener supprime */
+
+  /* ═══ ERP chips: toggle sélection ═══ */
+  document.querySelectorAll('#erp-edit-chips .choice-chip').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btn.classList.toggle('active');
+    });
+  });
 
   /* ═══ Expérience: checkbox "Poste actuel" masque les champs de fin ═══ */
   var expCurrentJob = document.getElementById('exp-current-job');
@@ -1842,6 +1869,19 @@ function renderBasicInfo() {
 
   setTextValue('role-value', c.titre || '\u2013');
 
+  /* ═══ Charger les ERP sélectionnés dans les chips éditables ═══ */
+  var currentErps = Array.isArray(c.competences)
+    ? c.competences.map(function(e) { return String(e).trim().toLowerCase(); })
+    : String(c.competences || '').split(',').map(function(e) { return e.trim().toLowerCase(); });
+  currentErps = currentErps.filter(Boolean);
+  document.querySelectorAll('#erp-edit-chips .choice-chip').forEach(function(btn) {
+    var erpName = (btn.dataset.erp || '').toLowerCase();
+    btn.classList.toggle('active', currentErps.some(function(e) { return e.includes(erpName) || erpName.includes(e); }));
+  });
+  /* Charger les modules */
+  var modulesInput = document.getElementById('erp-modules-input');
+  if (modulesInput) modulesInput.value = notes.erp_modules || '';
+
   const editExp = document.getElementById('edit-exp-select');
   const editTjmType = document.getElementById('edit-tjm-type');
   const editMode = document.getElementById('edit-mode-select');
@@ -1995,11 +2035,19 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   notes.exp_current_job = !!document.getElementById('exp-current-job').checked;
   notes.certifications = certifs;
   notes.certifications_v2 = getCertificationsForSave();
+  /* ═══ Sauvegarder les ERP sélectionnés + modules ═══ */
+  var selectedErps = [];
+  document.querySelectorAll('#erp-edit-chips .choice-chip.active').forEach(function(btn) {
+    selectedErps.push(btn.dataset.erp);
+  });
+  notes.erp_modules = (document.getElementById('erp-modules-input').value || '').trim();
 
   const payload = {
     notes_admin: JSON.stringify(notes),
     tjm_min: Number.isFinite(tjmValue) ? tjmValue : null,
-    tjm_max: Number.isFinite(tjmValue) ? tjmValue : null
+    tjm_max: Number.isFinite(tjmValue) ? tjmValue : null,
+    /* ═══ Mettre à jour les compétences ERP ═══ */
+    competences: selectedErps.length > 0 ? selectedErps : (currentConsultant.competences || [])
   };
 
   const canChangeVisibility = ['approuve', 'en_mission'].includes(currentConsultant.statut);
@@ -2017,9 +2065,11 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   currentConsultant.tjm_min = payload.tjm_min;
   currentConsultant.tjm_max = payload.tjm_max;
   if (payload.statut) currentConsultant.statut = payload.statut;
+  if (payload.competences) currentConsultant.competences = payload.competences;
 
   renderStatusBanner();
   renderBasicInfo();
+  renderERPChips(); /* Rafraîchir les chips sidebar */
   renderProfileGuide();
   alert('Profil mis a jour avec succes.');
 });

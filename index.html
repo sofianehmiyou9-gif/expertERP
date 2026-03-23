@@ -977,7 +977,7 @@ const translations = {
   'nav.find': 'Rechercher un expert',
 
   'hero.badge': 'Plateforme B2B · Staff Augmentation ERP · Enterprise-grade',
-  'hero.title': 'Vos consultants ERP sur le banc ? Rentabilisez-les. Vous cherchez un expert ? Trouvez-le ici.',
+  'hero.title': 'Rentabilisez vos consultants ERP. Trouvez les experts qu\'il vous faut.',
   'hero.subtitle': 'La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co\u00fbteux que les grandes firmes.',
   'kpi.active': 'Consultants sur la plateforme',
   'kpi.response': 'Délai moyen de première réponse',
@@ -1127,7 +1127,7 @@ const translations = {
   'nav.find': 'Search an expert',
 
   'hero.badge': 'B2B Platform · ERP Staff Augmentation · Enterprise-grade',
-  'hero.title': 'ERP consultants on the bench? Monetize them. Need an expert? Find one here.',
+  'hero.title': 'Monetize your ERP consultants. Find the experts you need.',
   'hero.subtitle': 'The B2B platform connecting companies with available ERP resources to those who need them. Faster and more cost-effective than large consulting firms.',
   'kpi.active': 'Consultants on the platform',
   'kpi.response': 'Average first response time',
@@ -1401,11 +1401,11 @@ function toggleTheme() {
           <span class="font-manrope text-xs font-bold tracking-[0.2em] uppercase" style="color:var(--primary);" data-i18n="hero.badge">Plateforme professionnelle · ERP · Enterprise-grade</span>
         </div>
         <!-- Gradient title -->
-        <!-- ═══ HERO B2B — Message direct pour les deux cibles ═══ -->
-        <h1 class="font-newsreader text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8" data-i18n="hero.title" style="color:var(--ink);">
-          Consultants ERP sur le banc ?<br><span style="background:linear-gradient(135deg,#00f4fe,#cedcff,#d8b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Rentabilisez-les.</span><br>Besoin d'un expert ?<br><span style="background:linear-gradient(135deg,#d8b9ff,#cedcff,#00f4fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Trouvez-le ici.</span>
+        <!-- ═══ HERO B2B — Titre pro sans '?' + sous-titre bien visible ═══ -->
+        <h1 class="font-newsreader text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-6" data-i18n="hero.title" style="color:var(--ink);">
+          Rentabilisez vos<br>consultants ERP.<br><span style="background:linear-gradient(135deg,#00f4fe,#cedcff,#d8b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Trouvez les experts</span><br>qu'il vous faut.
         </h1>
-        <p class="font-manrope text-lg max-w-2xl mb-10 leading-relaxed" style="color:rgba(225,226,235,.8);" data-i18n="hero.subtitle">
+        <p class="font-manrope text-xl max-w-2xl mb-10 leading-relaxed" style="color:var(--ink);opacity:.85;" data-i18n="hero.subtitle">
           La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co&#251;teux que les grandes firmes.
         </p>
         <!-- Search bar cluster — Stitch glass style -->
@@ -1540,9 +1540,8 @@ function toggleTheme() {
     </div>
   </section>
 
-  <!-- SERVICE DESCRIPTION -->
-  <!-- ── SERVICE DESCRIPTION ── -->
-  <div class="service-desc-section reveal-up">
+  <!-- ═══ MASQUÉ: Service Description — redondant avec "Pourquoi ExpertERPHub" ═══ -->
+  <div class="service-desc-section reveal-up" style="display:none !important;">
     <div class="sd-inner">
       <div class="sd-badge" data-i18n="service.badge">Notre service</div>
       <div class="h-0.5 w-16 mt-3 mb-2 rounded-full" style="background:linear-gradient(to right,#00f4fe,transparent);"></div>
@@ -1574,8 +1573,8 @@ function toggleTheme() {
   </div>
 
 
-  <!-- OPS SECTION -->
-  <div class="ops-section reveal-up">
+  <!-- ═══ MASQUÉ: OPS Section — redondant, info déjà dans hero + pourquoi ═══ -->
+  <div class="ops-section reveal-up" style="display:none !important;">
     <div class="ops-inner">
       <div class="ops-badge" data-i18n="ops.badge">Dashboard unique</div>
       <div class="h-0.5 w-16 mt-2 mb-3 rounded-full" style="background:linear-gradient(to right,#00f4fe,transparent);"></div>
@@ -1607,9 +1606,8 @@ function toggleTheme() {
   </div>
 
 
-  <!-- PROFIL CARDS — Pour qui -->
-  <!-- 4 profils -->
-  <div class="profil-section reveal-up">
+  <!-- ═══ MASQUÉ: Pour qui — trop de scroll, info dans hero + CTA ═══ -->
+  <div class="profil-section reveal-up" style="display:none !important;">
     <h2>Pour qui ?</h2>
     <p class="sub">Quatre parcours distincts, une seule plateforme.</p>
     <div class="profil-grid">
@@ -1661,9 +1659,8 @@ function toggleTheme() {
   </div>
 
 
-  <!-- HOW IT WORKS (original tabs) -->
-  <!-- Comment ça marche preview -->
-  <div class="how-section" id="home-how-section">
+  <!-- ═══ MASQUÉ: How it works tabs — déplacé vers page dédiée ═══ -->
+  <div class="how-section" id="home-how-section" style="display:none !important;">
     <h2>Comment ça marche</h2>
     <p class="sub">Un processus simple selon votre profil.</p>
     <div class="how-tabs">
@@ -1703,8 +1700,8 @@ function toggleTheme() {
   </div>
 
 
-  <!-- HOW IT WORKS — Stitch dark bg section -->
-  <section class="py-24 bg-primary text-on-primary reveal-up">
+  <!-- ═══ MASQUÉ: Methodology dark section — trop long ═══ -->
+  <section class="py-24 bg-primary text-on-primary reveal-up" style="display:none !important;">
     <div class="px-8 md:px-12 max-w-screen-2xl mx-auto">
       <div class="grid md:grid-cols-2 gap-24 items-center">
         <div>
