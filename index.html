@@ -7,7 +7,18 @@
 <link rel="preconnect" href="https://cdn.tailwindcss.com">
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ExpertERPHub — Plateforme de collaboration professionnelle pour Experts ERP</title>
+<!-- ═══ SEO: Meta description + Open Graph ═══ -->
+<meta name="description" content="ExpertERPHub — Plateforme B2B de staff augmentation ERP. Rentabilisez vos consultants sur le banc ou trouvez des experts SAP, Oracle, Dynamics qualifi&#233;s issus d'organisations structur&#233;es. Plus rapide, moins co&#251;teux.">
+<meta name="keywords" content="ERP, consultant ERP, SAP, Oracle, Dynamics, staff augmentation, B2B, ressources ERP, freelance ERP, ExpertERPHub">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ExpertERPHub — Staff Augmentation ERP B2B">
+<meta property="og:description" content="Vos consultants ERP sur le banc ? Rentabilisez-les. Besoin d'un expert ? Trouvez des profils qualifi&#233;s issus de vraies organisations.">
+<meta property="og:url" content="https://expert-erp.vercel.app/">
+<meta property="og:site_name" content="ExpertERPHub">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ExpertERPHub — Staff Augmentation ERP B2B">
+<meta name="twitter:description" content="La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent.">
+<title>ExpertERPHub — Plateforme B2B de Staff Augmentation ERP | Consultants SAP, Oracle, Dynamics</title>
 <script>
 (function () {
   var path = String(window.location.pathname || '').toLowerCase();
@@ -965,9 +976,9 @@ const translations = {
   'nav.register': 'Devenir consultant',
   'nav.find': 'Rechercher un expert',
 
-  'hero.badge': 'Plateforme professionnelle · ERP · Enterprise-grade',
-  'hero.title': 'Trouvez les meilleurs consultants ERP en quelques clics',
-  'hero.subtitle': 'Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.',
+  'hero.badge': 'Plateforme B2B · Staff Augmentation ERP · Enterprise-grade',
+  'hero.title': 'Vos consultants ERP sur le banc ? Rentabilisez-les. Vous cherchez un expert ? Trouvez-le ici.',
+  'hero.subtitle': 'La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co\u00fbteux que les grandes firmes.',
   'kpi.active': 'Consultants sur la plateforme',
   'kpi.response': 'Délai moyen de première réponse',
   'kpi.traceability': 'Des profils validés manuellement',
@@ -1115,9 +1126,9 @@ const translations = {
   'nav.register': 'Join as consultant',
   'nav.find': 'Search an expert',
 
-  'hero.badge': 'ERP Staff Augmentation · Professional Collaboration · Enterprise-grade',
-  'hero.title': 'Find the best ERP consultants in just a few clicks',
-  'hero.subtitle': 'Accelerate SAP, Oracle, Dynamics, and Workday initiatives with a premium SaaS platform: targeted sourcing, fast validation, and real-time operational visibility.',
+  'hero.badge': 'B2B Platform · ERP Staff Augmentation · Enterprise-grade',
+  'hero.title': 'ERP consultants on the bench? Monetize them. Need an expert? Find one here.',
+  'hero.subtitle': 'The B2B platform connecting companies with available ERP resources to those who need them. Faster and more cost-effective than large consulting firms.',
   'kpi.active': 'Consultants on the platform',
   'kpi.response': 'Average first response time',
   'kpi.traceability': 'Profiles manually validated',
@@ -1390,11 +1401,12 @@ function toggleTheme() {
           <span class="font-manrope text-xs font-bold tracking-[0.2em] uppercase" style="color:var(--primary);" data-i18n="hero.badge">Plateforme professionnelle · ERP · Enterprise-grade</span>
         </div>
         <!-- Gradient title -->
-        <h1 class="font-newsreader text-6xl md:text-8xl font-extrabold leading-[1.05] tracking-tight mb-8" data-i18n="hero.title" style="color:var(--ink);">
-          La référence souveraine<br>en <span style="background:linear-gradient(135deg,#00f4fe,#cedcff,#d8b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">consulting ERP.</span>
+        <!-- ═══ HERO B2B — Message direct pour les deux cibles ═══ -->
+        <h1 class="font-newsreader text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-8" data-i18n="hero.title" style="color:var(--ink);">
+          Consultants ERP sur le banc ?<br><span style="background:linear-gradient(135deg,#00f4fe,#cedcff,#d8b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Rentabilisez-les.</span><br>Besoin d'un expert ?<br><span style="background:linear-gradient(135deg,#d8b9ff,#cedcff,#00f4fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Trouvez-le ici.</span>
         </h1>
         <p class="font-manrope text-lg max-w-2xl mb-10 leading-relaxed" style="color:rgba(225,226,235,.8);" data-i18n="hero.subtitle">
-          Accélérez vos projets SAP, Oracle, Dynamics et Workday avec une plateforme SaaS premium: sourcing ciblé, validation rapide et visibilité opérationnelle en temps réel.
+          La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co&#251;teux que les grandes firmes.
         </p>
         <!-- Search bar cluster — Stitch glass style -->
         <div class="flex flex-col md:flex-row p-2 rounded-xl max-w-3xl mb-8 gap-2 md:gap-0 glass" style="border:1px solid rgba(37,99,235,.1);box-shadow:0 0 30px rgba(37,99,235,.04);">
@@ -1888,6 +1900,33 @@ function toggleTheme() {
                 <option value="" data-i18n="filter.mode">Tous les modes</option>
                 <option>Remote</option><option>Hybride</option><option>Sur site</option>
               </select>
+            </section>
+            <!-- ═══ NOUVEAU: Filtre Ville ═══ -->
+            <section>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Ville</h3>
+              <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-ville" data-filter-consultants="true">
+                <option value="">Toutes les villes</option>
+                <option>Montreal</option>
+                <option>Quebec</option>
+                <option>Toronto</option>
+                <option>Ottawa</option>
+                <option>Laval</option>
+              </select>
+            </section>
+            <!-- ═══ NOUVEAU: Filtre Disponibilité ═══ -->
+            <section>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Disponibilit&#233;</h3>
+              <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-dispo" data-filter-consultants="true">
+                <option value="">Toutes</option>
+                <option value="Immédiate">Imm&#233;diate</option>
+                <option value="Sous 15 jours">Sous 15 jours</option>
+                <option value="Sous 30 jours">Sous 30 jours</option>
+              </select>
+            </section>
+            <!-- ═══ NOUVEAU: Filtre TJM (budget max) ═══ -->
+            <section>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">TJM max ($/jour)</h3>
+              <input type="number" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container" id="f-tjm" placeholder="Ex: 1000" min="0" step="50" data-filter-consultants="true">
             </section>
           </div>
           <!-- CTA to become consultant -->
@@ -4930,6 +4969,15 @@ function renderConsultants(list) {
               <span class="consultant-card-stat-num">${escapeHtml(mode)}</span>
               <span class="consultant-card-stat-lbl">Mode</span>
             </div>
+            <!-- ═══ NOUVEAU: TJM + Disponibilité sur la carte ═══ -->
+            <div class="consultant-card-stat-item">
+              <span class="consultant-card-stat-num">${rate || '—'}</span>
+              <span class="consultant-card-stat-lbl">TJM</span>
+            </div>
+            <div class="consultant-card-stat-item">
+              <span class="consultant-card-stat-num">${escapeHtml(availability.label || '—')}</span>
+              <span class="consultant-card-stat-lbl">Disponibilit\u00e9</span>
+            </div>
           </div>
           <div class="consultant-card-btns">
             <button class="consultant-card-btn-p" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}">Voir le profil →</button>
@@ -4966,6 +5014,14 @@ function runConsultantsFilter() {
   const erp = document.getElementById('f-erp').value.toLowerCase();
   const role = document.getElementById('f-role').value.toLowerCase();
   const mode = document.getElementById('f-mode').value.toLowerCase();
+  /* ═══ NOUVEAUX FILTRES: ville, disponibilité, TJM ═══ */
+  const villeEl = document.getElementById('f-ville');
+  const dispoEl = document.getElementById('f-dispo');
+  const tjmEl = document.getElementById('f-tjm');
+  const ville = villeEl ? villeEl.value.toLowerCase() : '';
+  const dispo = dispoEl ? dispoEl.value.toLowerCase() : '';
+  const tjmMax = tjmEl ? parseFloat(tjmEl.value) : NaN;
+
   const filtered = allConsultants.filter(c => {
     const fullName = c._fullNameLower || (((c.prenom || '') + ' ' + (c.nom || '')).toLowerCase());
     const skills = c._skillsLower || ((Array.isArray(c.competences)
@@ -4977,6 +5033,15 @@ function runConsultantsFilter() {
     if (erp && !skills.includes(erp)) return false;
     if (role && !(c.titre || '').toLowerCase().includes(role)) return false;
     if (mode && !(notes.mode_travail || '').toLowerCase().includes(mode)) return false;
+    /* ═══ Filtre Ville ═══ */
+    if (ville && !(notes.ville || '').toLowerCase().includes(ville)) return false;
+    /* ═══ Filtre Disponibilité ═══ */
+    if (dispo && !(notes.disponibilite || '').toLowerCase().includes(dispo)) return false;
+    /* ═══ Filtre TJM max ═══ */
+    if (!isNaN(tjmMax) && tjmMax > 0) {
+      var consultantTjm = Number(notes.tjm_value || c.tjm_min || 0);
+      if (consultantTjm > 0 && consultantTjm > tjmMax) return false;
+    }
     return true;
   });
   renderConsultants(filtered);
