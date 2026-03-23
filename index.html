@@ -2836,12 +2836,14 @@ function acceptCguAndClose() {
 <!-- ══════════════════════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════════════════════ -->
+<script src="config.js"></script>
+<script src="utils.js"></script>
 <script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
 <script>
-// ── Supabase ──
-const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+// ── Supabase (centralis\u00e9 dans config.js) ──
+const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 const SB_HDR = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
 async function sbInsert(table, data) {
   const r = await fetch(SB_URL + '/rest/v1/' + table, { method:'POST', headers:SB_HDR, body:JSON.stringify(data) });
@@ -3281,7 +3283,7 @@ function selectPortalRole(role) {
   const passwordGroup = document.getElementById('portal-password-group');
   const pwdLabel = document.getElementById('portal-password-label');
   const pwdInput = document.getElementById('portal-password');
-  if (emailGroup) emailGroup.style.display = isAdmin ? 'none' : 'block';
+  if (emailGroup) emailGroup.style.display = 'block';
   if (passwordGroup) passwordGroup.style.display = 'block';
   if (pwdLabel) pwdLabel.innerHTML = isAdmin ? 'Mot de passe admin <span>*</span>' : 'Mot de passe <span>*</span>';
   if (pwdInput) pwdInput.placeholder = isAdmin ? 'Mot de passe admin' : 'Mot de passe compte';
@@ -3374,7 +3376,15 @@ async function submitPortalAccess() {
         setPortalFeedback(portalText('adminPassword'), 'error');
         return;
       }
-      ExpertPortalAuth.goToDashboard('admin', '', { adminGranted: true });
+      // Verify email-based admin access as additional security layer
+      const adminEmail = normalizeEmailAddress(document.getElementById('portal-email').value);
+      if (window.ExpertUtils && window.ExpertUtils.isAdminEmail) {
+        if (!adminEmail || !window.ExpertUtils.isAdminEmail(adminEmail)) {
+          setPortalFeedback('Accès admin non autorisé pour cet email', 'error');
+          return;
+        }
+      }
+      ExpertPortalAuth.goToDashboard('admin', adminEmail || '', { adminGranted: true });
       return;
     }
 
@@ -3712,7 +3722,7 @@ function applyPromo(inputId, feedbackId) {
   if (promo) {
     appliedPromo = { code, ...promo };
     fb.className = 'promo-feedback valid';
-    fb.innerHTML = `✓ ${promo.desc_fr} <span class="promo-badge">${promo.label}</span>`;
+    fb.innerHTML = `✓ ${safe(promo.desc_fr)} <span class="promo-badge">${safe(promo.label)}</span>`;
     input.style.borderColor = 'var(--green)';
   } else {
     appliedPromo = null;
@@ -4248,14 +4258,14 @@ function handleFileSelect(input) {
     reader.onload = e => {
       const rows = parseCSV(e.target.result);
       importedFileData = rows;
-      preview.innerHTML = '✅ <strong>' + rows.length + ' ressource(s) détectée(s)</strong> — Elles seront soumises à validation avant publication.';
+      preview.innerHTML = '✅ <strong>' + safe(String(rows.length)) + ' ressource(s) détectée(s)</strong> — Elles seront soumises à validation avant publication.';
       preview.style.display = 'block';
     };
     reader.readAsText(file, 'UTF-8');
   } else {
     // For xlsx, we just note the file is selected — will parse server-side or on dashboard
     importedFileData = [{ _filename: file.name, _raw: true }];
-    preview.innerHTML = '✅ Fichier Excel sélectionné — <strong>' + file.name + '</strong>. Vos ressources seront importées après inscription.';
+    preview.innerHTML = '✅ Fichier Excel sélectionné — <strong>' + safe(file.name) + '</strong>. Vos ressources seront importées après inscription.';
     preview.style.display = 'block';
   }
 }
@@ -5162,7 +5172,7 @@ function showError(errorCode, customMessage = null) {
   }
   
   titleEl.textContent = errorConfig.title;
-  contentEl.innerHTML = `<p>${finalMessage}</p>`;
+  contentEl.innerHTML = `<p>${safe(finalMessage)}</p>`;
 
   overlay.classList.add('open');
 }

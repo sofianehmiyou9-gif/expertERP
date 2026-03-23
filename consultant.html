@@ -404,11 +404,13 @@ body { font-family: 'Manrope', sans-serif; }
 <!-- ══════════════════════════════════════════════════════════
      SCRIPTS — NE PAS MODIFIER (logique ExpertERPHub intacte)
      ══════════════════════════════════════════════════════════ -->
+<script src="config.js"></script>
+<script src="utils.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
 <script>
-const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 
 let currentConsultant = null;
 

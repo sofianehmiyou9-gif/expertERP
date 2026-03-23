@@ -1,0 +1,8 @@
+# Fichiers a exclure du deploiement Vercel
+.backup_pre_optimization/
+index.html.bak
+*.bak
+PROMPT_MAINTENANCE.md
+supabase-billing-schema.sql
+supabase-rls-policies.sql
+Audit-ExpertERPHub.docx

@@ -30,7 +30,7 @@
 body{font-family:var(--font-main);background:#f7f9fb;color:var(--ink);}
 a{color:inherit;text-decoration:none;}
 
-/* â”€â”€ AUTH FORM â”€â”€ */
+/* -- AUTH FORM -- */
 .auth-container{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
 .auth-card{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:32px;padding:2.5rem;max-width:400px;width:100%;box-shadow:0 28px 70px rgba(0,0,0,.5);backdrop-filter:blur(24px);}
 .logo{font-family:var(--font-serif);font-size:1.4rem;font-weight:600;margin-bottom:2rem;text-align:center;color:#191c1e;}
@@ -49,7 +49,7 @@ a{color:inherit;text-decoration:none;}
 .reset-actions{display:flex;gap:.5rem;}
 .reset-actions .btn-secondary{background:#fff;border:1px solid var(--border);}
 
-/* â”€â”€ LAYOUT â”€â”€ */
+/* -- LAYOUT -- */
 .dashboard{display:flex;flex-direction:column;min-height:100vh;}
 .navbar{background:rgba(255,255,255,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(196,197,213,.3);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .nav-left{display:flex;align-items:center;gap:2rem;}
@@ -58,18 +58,18 @@ a{color:inherit;text-decoration:none;}
 .company-name{font-size:1rem;color:#444653;font-weight:500;}
 .nav-right{display:flex;gap:1rem;}
 
-/* â”€â”€ TABS â”€â”€ */
+/* -- TABS -- */
 .tab-buttons{display:flex;gap:0;border-bottom:1px solid rgba(196,197,213,.3);background:rgba(255,255,255,.95);backdrop-filter:blur(16px);}
 .tab-button{flex:1;padding:1rem;border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:500;color:#444653;border-bottom:2px solid transparent;transition:all .2s;font-family:var(--font-main);}
 .tab-button:hover{color:#00288e;background:rgba(0,40,142,.04);}
 .tab-button.active{color:#00288e;border-bottom-color:#00288e;}
 
-/* â”€â”€ CONTENT â”€â”€ */
+/* -- CONTENT -- */
 .content{flex:1;padding:2rem;overflow-y:auto;background:transparent;}
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
 
-/* â”€â”€ PLAN SECTION â”€â”€ */
+/* -- PLAN SECTION -- */
 .plan-box{background:rgba(0,40,142,.03);border:1px solid rgba(0,88,190,.15);border-radius:22px;padding:1.5rem;margin-bottom:2rem;}
 .plan-title{font-family:var(--font-serif);font-size:1.3rem;margin-bottom:.5rem;color:#00288e;}
 .plan-subtitle{font-size:.85rem;color:#444653;margin-bottom:1rem;}
@@ -77,7 +77,7 @@ a{color:inherit;text-decoration:none;}
 .progress-fill{background:linear-gradient(90deg,#00288e,#0058be);height:100%;transition:width .3s;border-radius:999px;}
 .progress-label{font-size:.75rem;color:#444653;margin-top:.5rem;}
 
-/* â”€â”€ TABLE â”€â”€ */
+/* -- TABLE -- */
 .table-container{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;overflow:hidden;margin-bottom:2rem;box-shadow:0 0 0 1px rgba(196,197,213,.3);}
 table{width:100%;border-collapse:collapse;}
 thead{background:#f2f4f6;}
@@ -85,13 +85,13 @@ th{padding:1rem;text-align:left;font-size:.8rem;font-weight:600;color:#444653;fo
 td{padding:1rem;border-top:1px solid rgba(196,197,213,.3);font-size:.85rem;color:#191c1e;}
 tr:hover{background:#f7f9fb;}
 
-/* â”€â”€ BADGES â”€â”€ */
+/* -- BADGES -- */
 .badge{display:inline-block;padding:.3rem .6rem;border-radius:12px;font-size:.7rem;font-weight:500;font-family:var(--font-main);}
 .badge-pending{background:rgba(194,65,12,.08);color:#c2410c;border:1px solid rgba(194,65,12,.2);}
 .badge-approved{background:rgba(5,150,105,.08);color:#059669;border:1px solid rgba(5,150,105,.2);}
 .badge-rejected{background:rgba(186,26,26,.08);color:#ba1a1a;border:1px solid rgba(186,26,26,.2);}
 
-/* â”€â”€ IMPORT SECTION â”€â”€ */
+/* -- IMPORT SECTION -- */
 .import-section{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:2rem;margin-top:2rem;}
 .import-section h3{font-family:var(--font-serif);font-size:1.1rem;margin-bottom:1.5rem;color:#191c1e;}
 .drop-zone{border:2px dashed rgba(196,197,213,.4);border-radius:16px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:rgba(196,197,213,.4);}
@@ -121,13 +121,13 @@ tr:hover{background:#f7f9fb;}
 .lang-btn{background:#f2f4f6;border:1px solid rgba(196,197,213,.5);padding:.35rem .6rem;border-radius:999px;cursor:pointer;font-size:.74rem;color:#444653;}
 .lang-btn.active{border-color:rgba(0,88,190,.4);color:#00288e;background:rgba(0,40,142,.08);}
 
-/* â”€â”€ PROFILE SECTION â”€â”€ */
+/* -- PROFILE SECTION -- */
 .profile-info{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:2rem;}
 .profile-field{margin-bottom:1.5rem;}
 .profile-label{font-size:.8rem;color:#444653;font-weight:600;margin-bottom:.5rem;font-family:var(--font-main);letter-spacing:.05em;}
 .profile-value{font-size:.95rem;color:#191c1e;}
 
-/* â”€â”€ TEAM SECTION â”€â”€ */
+/* -- TEAM SECTION -- */
 .team-panel{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem;margin-bottom:1.1rem;}
 .team-title{font-family:var(--font-serif);font-size:1.15rem;margin-bottom:.8rem;color:#191c1e;}
 .team-panel.hidden{display:none;}
@@ -142,7 +142,7 @@ tr:hover{background:#f7f9fb;}
 .team-badge.disabled{background:rgba(186,26,26,.08);color:#ba1a1a;border-color:rgba(186,26,26,.2);}
 .team-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
 
-/* â”€â”€ RESPONSIVE â”€â”€ */
+/* -- RESPONSIVE -- */
 @media(max-width:768px){
   .navbar{flex-direction:column;gap:1rem;align-items:flex-start;}
   .tab-buttons{flex-direction:column;}
@@ -153,7 +153,7 @@ tr:hover{background:#f7f9fb;}
   .team-form{grid-template-columns:1fr;}
 }
 
-  /* â”€â”€ KPI SECTION â”€â”€ */
+  /* -- KPI SECTION -- */
   .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
   .kpi-card{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:.4rem;position:relative;overflow:hidden;transition:box-shadow .3s,border-color .3s;}
   .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0;}
@@ -174,7 +174,7 @@ tr:hover{background:#f7f9fb;}
   @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:600px){.kpi-grid{grid-template-columns:1fr;}.kpi-chart-row{flex-direction:column;gap:1rem;}}
 
-/* ── OVERRIDES: new premium design ── */
+/* -- OVERRIDES: new premium design -- */
 .auth-card{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:32px;padding:2rem;max-width:430px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08);}
 .logo{font-family:var(--font-serif);font-size:2rem;font-weight:600;text-align:center;letter-spacing:-.02em;margin-bottom:0;color:#191c1e;}
 .auth-card h2{font-family:var(--font-serif);font-size:1.55rem;margin:1.35rem 0 1rem;text-align:center;color:#191c1e;}
@@ -293,6 +293,7 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
   border-radius:14px;
 }
 .quick-add-grid select:focus,.quick-add-grid input[type=text]:focus,.quick-add-grid input[type=number]:focus,.quick-add-search:focus,.team-form select:focus,.team-form input:focus,.auth-card input:focus{outline:none;box-shadow:0 0 0 2px rgba(0,244,254,.2);border-color:rgba(0,244,254,.3);}
+/* TODO: unused - empty ruleset, can be removed */
 .badge-pending,.badge-approved,.badge-rejected{}
 
 /* formulaire: contraste et lisibilite */
@@ -424,7 +425,7 @@ td{
   .quick-add-grid{grid-template-columns:1fr;}
 }
 
-/* ── Final premium consistency pass ── */
+/* -- Final premium consistency pass -- */
 .kpi-value { font-family:var(--font-serif); letter-spacing:-.03em; font-size:2.2rem; color:#191c1e; }
 .plan-title,.section-title,.quick-add-title,.import-section h3,.team-title { font-family:var(--font-serif); }
 /* Left-accent border pattern (Editorial Enterprise reference) */
@@ -447,7 +448,7 @@ th { font-size:.72rem; letter-spacing:.1em; font-weight:700; font-family:var(--f
 /* Section title upgrade */
 .section-title { font-size:2.25rem; }
 
-/* ── Obsidian dashboard extras ── */
+/* -- Obsidian dashboard extras -- */
 body{background:#f7f9fb;}
 .dashboard{position:relative;}
 .kpi-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);}
@@ -711,11 +712,13 @@ body{background:#f7f9fb;}
   </div>
 </div>
 
+<script src="config.js"></script>
+<script src="utils.js"></script>
 <script src="i18n.js"></script>
 <script src="portal-auth.js"></script>
 <script>
-const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 
 let currentEmail = null;
 let currentCompany = null;
@@ -953,22 +956,22 @@ async function loadResources() {
     // Affichage photo ou avatar fallback
     let photoHtml = '';
     if (r.photo) {
-      photoHtml = `<img src="${r.photo}" alt="Photo consultant" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 2px 8px rgba(37,99,235,.08);background:#fff;">`;
+      photoHtml = `<img src="${safe(r.photo)}" alt="Photo consultant" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 2px 8px rgba(37,99,235,.08);background:#fff;">`;
     } else {
       const initials = getInitials(r.nom, r.prenom);
       const color = avatarColor(r.nom + r.prenom);
-      photoHtml = `<div style="width:44px;height:44px;border-radius:50%;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;box-shadow:0 2px 8px rgba(37,99,235,.08);">${initials}</div>`;
+      photoHtml = `<div style="width:44px;height:44px;border-radius:50%;background:${safe(color)};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;box-shadow:0 2px 8px rgba(37,99,235,.08);">${safe(initials)}</div>`;
     }
 
     return `<tr>
-      <td style="text-align:center;">${photoHtml}</td>
+      <td style="text-align:center;">${safe(photoHtml)}</td>
       <td>${sanitizeHtml(resourceCode)}</td>
       <td>${sanitizeHtml(erps)}</td>
       <td>${sanitizeHtml(role)}</td>
       <td>${sanitizeHtml(tjmLabel)}</td>
-      <td>${statusMap[statusKey] || r.statut}</td>
-      <td><a class="resource-card-link" href="${cardUrl}" target="_blank" rel="noopener">Voir la carte</a>${mapLine}</td>
-      <td>${formatDate(r.created_at)}</td>
+      <td>${statusMap[statusKey] || safe(r.statut)}</td>
+      <td><a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir la carte</a>${safe(mapLine)}</td>
+      <td>${safe(formatDate(r.created_at))}</td>
     </tr>`;
   }).join('');
 
@@ -1148,13 +1151,13 @@ function renderTeam() {
         ? '<span style="color:var(--muted);font-size:.78rem;">Owner principal</span>'
         : `${toggleBtn}<button class="btn btn-secondary" data-action="remove-team-member" data-member-id="${member.id}">Retirer</button>`);
     return `<tr>
-      <td>${member.email || ''}</td>
-      <td><span class="team-badge ${roleClass}">${teamRoleLabel(member.role)}</span></td>
+      <td>${safe(member.email || '')}</td>
+      <td><span class="team-badge ${roleClass}">${safe(teamRoleLabel(member.role))}</span></td>
       <td><span class="team-badge ${statusClass}">${member.status === 'disabled' ? 'Desactive' : 'Actif'}</span></td>
-      <td>${invited}</td>
+      <td>${safe(invited)}</td>
       <td>
         <div class="team-actions">
-          ${actionsHtml}
+          ${safe(actionsHtml)}
         </div>
       </td>
     </tr>`;
@@ -1193,7 +1196,7 @@ function applyAccessPermissions() {
   const roleLabel = teamRoleLabel(currentAccessRole);
   const companyNameEl = document.getElementById('company-name');
   if (companyNameEl && currentCompany) {
-    companyNameEl.textContent = `${currentCompany.nom} Â· ${roleLabel}`;
+    companyNameEl.textContent = `${currentCompany.nom} \u00b7 ${roleLabel}`;
   }
 }
 
@@ -1459,25 +1462,25 @@ function updatePlanDisplay(usedSlots) {
 function loadProfile() {
   const planQty = currentPlanQty || getCompanyPlanQty();
   const html = `
-    <div class="profile-field">
-      <div class="profile-label">Nom de l'entreprise</div>
-      <div class="profile-value">${currentCompany.nom || 'â€“'}</div>
+    <div class=”profile-field”>
+      <div class=”profile-label”>Nom de l'entreprise</div>
+      <div class=”profile-value”>${safe(currentCompany.nom || '\u2014')}</div>
     </div>
-    <div class="profile-field">
-      <div class="profile-label">Secteur</div>
-      <div class="profile-value">${currentCompany.secteur || 'â€“'}</div>
+    <div class=”profile-field”>
+      <div class=”profile-label”>Secteur</div>
+      <div class=”profile-value”>${safe(currentCompany.secteur || '\u2014')}</div>
     </div>
-    <div class="profile-field">
-      <div class="profile-label">Contact</div>
-      <div class="profile-value">${currentCompany.contact || 'â€“'}</div>
+    <div class=”profile-field”>
+      <div class=”profile-label”>Contact</div>
+      <div class=”profile-value”>${safe(currentCompany.contact || '\u2014')}</div>
     </div>
-    <div class="profile-field">
-      <div class="profile-label">Email</div>
-      <div class="profile-value">${currentCompany.email || 'â€“'}</div>
+    <div class=”profile-field”>
+      <div class=”profile-label”>Email</div>
+      <div class=”profile-value”>${safe(currentCompany.email || '\u2014')}</div>
     </div>
-    <div class="profile-field">
-      <div class="profile-label">Plan</div>
-      <div class="profile-value">${getPlanLabel(planQty)} (${planQty} slots)</div>
+    <div class=”profile-field”>
+      <div class=”profile-label”>Plan</div>
+      <div class=”profile-value”>${safe(getPlanLabel(planQty))} (${planQty} slots)</div>
     </div>
   `;
   document.getElementById('profile-info').innerHTML = html;

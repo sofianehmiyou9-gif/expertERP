@@ -164,6 +164,7 @@ img{max-width:100%;height:auto;}
 
 /* &#9472;&#9472; Main area &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
 .dashboard-main{display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-width:0;padding:.25rem 0;}
+/* TODO: unused - .cmd-grid not referenced in HTML */
 .cmd-grid{background-image:none;}
 
 /* Toolbar */
@@ -738,12 +739,14 @@ img{max-width:100%;height:auto;}
   </div>
 </div>
 
+<script src="config.js"></script>
+<script src="utils.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
 <script>
-const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 
 let currentEmail = null;
 let currentConsultant = null;
@@ -1120,8 +1123,8 @@ function renderNotifications() {
     const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
     const s = n.status || (n.read ? 'lu' : 'nouveau');
     return `<div class="notif-item notif-clickable ${n.read ? '' : 'unread'}" data-action="open-request-detail" data-request-id="${n.id}">
-      <div class="notif-meta">${n.companyName || 'Entreprise'} \u00b7 ${when}<span class="status-badge ${s}">${s}</span></div>
-      <div>${(n.message || '').slice(0, 120)}${(n.message || '').length > 120 ? '\u2026' : ''}</div>
+      <div class="notif-meta">${safe(n.companyName || 'Entreprise')} \u00b7 ${safe(when)}<span class="status-badge ${s}">${s}</span></div>
+      <div>${safe((n.message || '').slice(0, 120))}${(n.message || '').length > 120 ? '\u2026' : ''}</div>
     </div>`;
   }).join('');
 
@@ -1219,7 +1222,7 @@ function renderStatusBanner() {
 
   let motifHtml = '';
   if (c.statut === 'refuse' && notes.motif_refus) {
-    motifHtml = `<div style="margin-top:.65rem;padding:.6rem .85rem;background:rgba(0,0,0,.06);border-radius:4px;font-size:.82rem;"><strong>Raison :</strong> ${notes.motif_refus}</div>`;
+    motifHtml = `<div style="margin-top:.65rem;padding:.6rem .85rem;background:rgba(0,0,0,.06);border-radius:4px;font-size:.82rem;"><strong>Raison :</strong> ${safe(notes.motif_refus)}</div>`;
   }
   bannerEl.innerHTML = `<div class="status-icon">${config.icon}</div><div>${config.text}${motifHtml}</div>`;
 
@@ -1562,7 +1565,7 @@ function renderERPChips() {
     container.innerHTML = '<div class="chip" style="opacity:.6;font-style:italic;text-transform:none;font-family:DM Sans,sans-serif;font-size:.8rem;">Non renseign\u00e9</div>';
     return;
   }
-  container.innerHTML = erps.map(erp => `<div class="chip">${erp}</div>`).join('');
+  container.innerHTML = erps.map(erp => `<div class="chip">${safe(erp)}</div>`).join('');
 }
 
 function setTextValue(id, value) {
