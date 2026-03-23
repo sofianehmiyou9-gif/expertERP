@@ -1778,20 +1778,93 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 8000);
 });
 
-// &#9472;&#9472; PROFILE PHOTO UPLOAD &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
-document.getElementById('avatar-file-input').addEventListener('change', function(e) {
-  const file = e.target.files[0];
+// -- PROFILE PHOTO UPLOAD (avec compression Canvas) --
+function compressImage(file, maxSize, quality) {
+  return new Promise(function(resolve, reject) {
+    var img = new Image();
+    img.onload = function() {
+      var w = img.width, h = img.height;
+      // Redimensionner si trop grand (max 200x200 pour avatar)
+      var max = maxSize || 200;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      // JPEG compresse pour reduire la taille (quality 0.6 ~ 10-30 KB)
+      var dataUrl = canvas.toDataURL('image/jpeg', quality || 0.6);
+      resolve(dataUrl);
+    };
+    img.onerror = function() { reject(new Error('Image load failed')); };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+document.getElementById('avatar-file-input').addEventListener('change', async function(e) {
+  var file = e.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const url = ev.target.result;
-    // Store in localStorage for persistence
-    try { localStorage.setItem('consultant_avatar_' + (currentEmail||''), url); } catch(err) {}
-    applyAvatarImage(url);
-  };
-  reader.readAsDataURL(file);
+  // Limiter la taille originale (2MB max)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image trop volumineuse (max 2 MB).');
+    e.target.value = '';
+    return;
+  }
+  try {
+    // Compresser l'image via Canvas (200x200, JPEG quality 0.6)
+    var compressedUrl = await compressImage(file, 200, 0.6);
+    console.log('[Photo] Compressed size:', Math.round(compressedUrl.length / 1024), 'KB');
+    // Appliquer visuellement
+    applyAvatarImage(compressedUrl);
+    // Cache local
+    try { localStorage.setItem('consultant_avatar_' + (currentEmail||''), compressedUrl); } catch(err) {}
+    // Sync to Supabase
+    await savePhotoToSupabase(compressedUrl);
+  } catch(err) {
+    console.error('[Photo] Compression error:', err);
+    alert('Erreur lors du traitement de l\'image.');
+  }
   e.target.value = '';
 });
+
+async function savePhotoToSupabase(photoUrl) {
+  if (!currentConsultant || !currentConsultant.id) {
+    console.warn('[Photo] No currentConsultant or id, cannot save');
+    return;
+  }
+  try {
+    var notes = parseNotes(currentConsultant.notes_admin);
+    notes.photo_url = photoUrl;
+    var notesStr = JSON.stringify(notes);
+    console.log('[Photo] Saving to Supabase, notes_admin size:', Math.round(notesStr.length / 1024), 'KB');
+    var response = await fetch(SB_URL + '/rest/v1/consultants?id=eq.' + currentConsultant.id, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify({ notes_admin: notesStr })
+    });
+    if (response.ok) {
+      var result = await response.json();
+      if (result && result[0]) {
+        currentConsultant.notes_admin = result[0].notes_admin;
+        console.log('[Photo] Saved to Supabase successfully');
+      }
+    } else {
+      var errText = await response.text();
+      console.error('[Photo] Supabase save failed:', response.status, errText);
+      alert('La photo n\'a pas pu etre sauvegardee (' + response.status + '). Verifiez la console.');
+    }
+  } catch(err) {
+    console.error('[Photo] Sync error:', err);
+    alert('Erreur de synchronisation de la photo.');
+  }
+}
 
 function applyAvatarImage(url) {
   const wrap = document.querySelector('.consultant-avatar-wrap');
@@ -1813,9 +1886,23 @@ function applyAvatarImage(url) {
 
 function loadSavedAvatar() {
   if (!currentEmail) return;
+  // Priority 1: photo_url from Supabase (shared across devices)
+  if (currentConsultant) {
+    var notes = parseNotes(currentConsultant.notes_admin);
+    console.log('[Photo] loadSavedAvatar - photo_url in Supabase:', notes.photo_url ? 'YES (' + Math.round(notes.photo_url.length/1024) + 'KB)' : 'NO');
+    if (notes.photo_url) {
+      applyAvatarImage(notes.photo_url);
+      try { localStorage.setItem('consultant_avatar_' + currentEmail, notes.photo_url); } catch(err) {}
+      return;
+    }
+  }
+  // Priority 2: localStorage fallback (local cache only)
   try {
-    const url = localStorage.getItem('consultant_avatar_' + currentEmail);
-    if (url) applyAvatarImage(url);
+    var url = localStorage.getItem('consultant_avatar_' + currentEmail);
+    if (url) {
+      console.log('[Photo] loadSavedAvatar - using localStorage fallback');
+      applyAvatarImage(url);
+    }
   } catch(err) {}
 }
 
