@@ -367,7 +367,23 @@ body { font-family: 'Manrope', sans-serif; }
         <span class="font-manrope text-sm font-bold tracking-[0.2em] uppercase text-secondary block mb-4">Prise de contact</span>
         <h2 id="contact-title" class="text-5xl font-headline font-bold text-primary">Contacter ce consultant</h2>
       </div>
-      <form id="contact-form" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm flex flex-col gap-5">
+
+      <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
+      <div id="contact-gate-locked" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm text-center" style="display:none;">
+        <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+        <h3 class="font-headline text-2xl font-bold text-on-surface mb-3">Accès réservé aux entreprises</h3>
+        <p class="text-on-surface-variant text-sm mb-6 max-w-md mx-auto" style="line-height:1.7;">
+          Connectez-vous à votre espace entreprise pour contacter ce consultant, envoyer une demande et suivre vos échanges.
+        </p>
+        <a href="dashboard-entreprise.html"
+           class="inline-block px-8 py-4 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all">
+          Se connecter / Créer un compte →
+        </a>
+        <p class="text-on-surface-variant text-xs mt-4">Vous êtes consultant ? <a href="dashboard-consultant.html" class="text-secondary underline">Accédez à votre espace</a></p>
+      </div>
+
+      <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
+      <form id="contact-form" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm flex flex-col gap-5" style="display:none;">
         <input id="company-name" type="text" placeholder="Votre entreprise"
           class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant"/>
         <input id="company-email" type="email" placeholder="Email professionnel"
@@ -431,6 +447,7 @@ body { font-family: 'Manrope', sans-serif; }
      SCRIPTS — NE PAS MODIFIER (logique ExpertERPHub intacte)
      ══════════════════════════════════════════════════════════ -->
 <script src="config.js"></script>
+<script src="portal-auth.js"></script>
 <script src="utils.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
@@ -1041,16 +1058,20 @@ async function sendContactMessage() {
     return;
   }
 
+  /* Sprint 2: Récupérer l'ID entreprise connectée si disponible */
+  const entrepriseId = window._connectedEntrepriseId || null;
+  const entrepriseName = window._connectedEntrepriseName || companyName;
+
   const notif = {
     id: Date.now(),
     consultantId: recipientId,
     consultantEmail: recipientEmail,
     recipientType: recipientType,
     recipientEmail: recipientEmail,
-    companyName: companyName,
+    companyName: entrepriseName,
     companyEmail: companyEmail,
     companyPhone: companyPhone || null,
-    companyId: companyEmail,
+    companyId: entrepriseId || companyEmail,
     message: message,
     createdAt: new Date().toISOString(),
     read: false,
@@ -1246,6 +1267,85 @@ document.addEventListener('DOMContentLoaded', () => {
   applyI18n();
   loadConsultant();
   bindErpLogoFallbacks();
+
+  /* ═══════════════════════════════════════════════════════════════
+     SPRINT 1+2: ACCÈS CONDITIONNEL + LIAISON SESSION ENTREPRISE
+
+     LOGIQUE:
+     - Si une session entreprise active existe (via portal-auth.js),
+       on affiche le formulaire de contact pré-rempli avec les infos
+       de l'entreprise connectée (email, nom). Champs en readonly.
+     - Si aucune session ou rôle != entreprise, on affiche le bloc
+       "Connectez-vous pour contacter ce consultant".
+     - Le bouton CTA "Contacter ce consultant" dans le hero s'adapte
+       aussi : scroll vers le form si connecté, redirect si non.
+     ═══════════════════════════════════════════════════════════════ */
+  (function initContactGate() {
+    var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+    var isEnterprise = session && session.role === 'entreprise' && session.email;
+
+    var contactForm = document.getElementById('contact-form');
+    var gateLocked = document.getElementById('contact-gate-locked');
+    var myConversations = document.getElementById('my-conversations');
+    var sidebarBtn = document.getElementById('sidebar-contact-btn');
+
+    if (isEnterprise) {
+      /* ── CONNECTÉ: Afficher le formulaire, pré-remplir ── */
+      if (contactForm) contactForm.style.display = 'flex';
+      if (gateLocked) gateLocked.style.display = 'none';
+      if (myConversations) myConversations.style.display = 'block';
+
+      /* Sprint 2: Pré-remplir et verrouiller les champs entreprise */
+      var emailField = document.getElementById('company-email');
+      var nameField = document.getElementById('company-name');
+      if (emailField) {
+        emailField.value = session.email;
+        emailField.readOnly = true;
+        emailField.style.background = '#f0f4ff';
+        emailField.style.cursor = 'not-allowed';
+      }
+      /* Charger le nom de l'entreprise depuis Supabase */
+      (async function prefillCompanyName() {
+        try {
+          var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=nom,email&email=eq.' + encodeURIComponent(session.email) + '&type_demande=eq.offrir', {
+            headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+          });
+          var data = await resp.json();
+          if (Array.isArray(data) && data.length > 0 && data[0].nom && nameField) {
+            nameField.value = data[0].nom;
+            nameField.readOnly = true;
+            nameField.style.background = '#f0f4ff';
+            nameField.style.cursor = 'not-allowed';
+            /* Stocker l'ID entreprise pour l'associer au message */
+            window._connectedEntrepriseId = data[0].id || null;
+            window._connectedEntrepriseName = data[0].nom || '';
+          }
+        } catch (e) { /* silencieux — champs restent éditables */ }
+      })();
+
+      /* Pré-remplir le champ "Suivre mes échanges" */
+      var replyField = document.getElementById('check-reply-email');
+      if (replyField) {
+        replyField.value = session.email;
+        replyField.readOnly = true;
+      }
+
+    } else {
+      /* ── NON CONNECTÉ: Masquer le formulaire, afficher le gate ── */
+      if (contactForm) contactForm.style.display = 'none';
+      if (gateLocked) gateLocked.style.display = 'block';
+      if (myConversations) myConversations.style.display = 'none';
+
+      /* Adapter le bouton CTA du hero */
+      if (sidebarBtn) {
+        sidebarBtn.textContent = 'Se connecter pour contacter';
+        sidebarBtn.addEventListener('click', function(e) {
+          e.stopImmediatePropagation();
+          window.location.href = 'dashboard-entreprise.html';
+        }, true);
+      }
+    }
+  })();
 });
 </script>
 <script src="cookie-consent.js"></script>

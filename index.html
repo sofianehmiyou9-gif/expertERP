@@ -4978,7 +4978,7 @@ function renderConsultants(list) {
           </div>
           <div class="consultant-card-btns">
             <button class="consultant-card-btn-p" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}">Voir le profil →</button>
-            <button class="consultant-card-btn-s" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">Contacter</button>
+            <button class="consultant-card-btn-s" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">${(function(){var s=window.ExpertPortalAuth?ExpertPortalAuth.getSession():null;return(s&&s.role==='entreprise')?'Contacter':'🔒 Contacter';}())}</button>
           </div>
         </div>
       </div>
@@ -5001,7 +5001,16 @@ function openConsultantProfile(id, event) {
 
 function openConsultantContact(id, event) {
   if (event) event.stopPropagation();
-  window.location.href = buildConsultantUrl(id, '#contact');
+  /* ═══ SPRINT 1: Vérifier la session avant de permettre le contact ═══ */
+  var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (!session || session.role !== 'entreprise') {
+    /* Non connecté → afficher un message et rediriger */
+    if (confirm('Connectez-vous à votre espace entreprise pour contacter ce consultant.\n\nRediriger vers la page de connexion ?')) {
+      window.location.href = 'dashboard-entreprise.html';
+    }
+    return;
+  }
+  window.location.href = buildConsultantUrl(id, '#contact-section');
 }
 
 let filterConsultantsTimer = null;

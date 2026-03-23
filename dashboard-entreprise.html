@@ -493,6 +493,7 @@ body{background:#f7f9fb;}
       <div class="company-name" id="company-name"></div>
     </div>
     <div class="nav-right">
+      <a href="index.html#page-consultants" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;font-size:.74rem;">🔍 Rechercher un consultant</a>
       <button class="btn btn-cta" data-action="show-tab" data-tab-name="resources" id="nav-cta-btn" style="cursor:pointer;">+ Nouvelle ressource</button>
       <button class="btn btn-secondary" id="logout-btn" data-action="logout">Deconnexion</button>
       <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
@@ -502,6 +503,7 @@ body{background:#f7f9fb;}
 
   <div class="tab-buttons">
     <button class="tab-button active" data-action="show-tab" data-tab-name="resources" id="tab-resources">Mes Ressources</button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="messages" id="tab-messages">Messages <span id="messages-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
     <button class="tab-button" data-action="show-tab" data-tab-name="team" id="tab-team">Equipe</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile">Mon Profil</button>
   </div>
@@ -699,6 +701,28 @@ body{background:#f7f9fb;}
           </thead>
           <tbody id="team-tbody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ═══ SPRINT 3: Messages Tab — Historique des messages envoyés ═══ -->
+    <div class="tab-pane" id="messages-tab">
+      <div class="section-title">Messages</div>
+      <div class="section-sub">Suivez vos échanges avec les consultants de la plateforme.</div>
+
+      <!-- Filtres messages -->
+      <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+        <select id="msg-filter-status" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;">
+          <option value="">Tous les statuts</option>
+          <option value="nouveau">Nouveau</option>
+          <option value="lu">Lu</option>
+          <option value="repondu">Répondu</option>
+        </select>
+        <input id="msg-search" type="text" placeholder="Rechercher un consultant..." style="flex:1;min-width:180px;padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;">
+      </div>
+
+      <!-- Liste des messages -->
+      <div id="messages-list" style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Chargement des messages...</div>
       </div>
     </div>
 
@@ -1391,6 +1415,8 @@ function showDashboard() {
   document.getElementById('dashboard').style.display = 'flex';
   document.getElementById('company-name').textContent = currentCompany.nom;
   applyAccessPermissions();
+  /* Sprint 3: Charger le badge de messages dès la connexion */
+  loadCompanyMessages();
 }
 
 function renderKPIs(filtered) {
@@ -1481,6 +1507,94 @@ function loadProfile() {
   document.getElementById('profile-info').innerHTML = html;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   SPRINT 3: Système de messagerie entreprise
+   - Charge les notifications envoyées par l'entreprise connectée
+   - Affiche l'historique avec statut (nouveau/lu/répondu)
+   - Filtre par statut et recherche texte
+   ═══════════════════════════════════════════════════════════════ */
+let companyMessages = [];
+
+async function loadCompanyMessages() {
+  if (!currentEmail) return;
+  try {
+    const resp = await fetch(SB_URL + '/rest/v1/notifications?select=*&company_email=eq.' + encodeURIComponent(currentEmail) + '&order=created_at.desc', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    const data = await resp.json();
+    companyMessages = Array.isArray(data) ? data : [];
+    renderCompanyMessages();
+    updateMessagesBadge();
+  } catch (e) {
+    document.getElementById('messages-list').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;font-size:.85rem;">Erreur lors du chargement des messages.</div>';
+  }
+}
+
+function updateMessagesBadge() {
+  var badge = document.getElementById('messages-badge');
+  if (!badge) return;
+  var unread = companyMessages.filter(function(m) { return m.status === 'repondu'; }).length;
+  if (unread > 0) {
+    badge.textContent = String(unread);
+    badge.style.display = 'inline';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function renderCompanyMessages() {
+  var container = document.getElementById('messages-list');
+  if (!container) return;
+
+  var statusFilter = (document.getElementById('msg-filter-status') || {}).value || '';
+  var searchFilter = (document.getElementById('msg-search') || {}).value.toLowerCase().trim();
+
+  var filtered = companyMessages.filter(function(m) {
+    if (statusFilter && m.status !== statusFilter) return false;
+    if (searchFilter) {
+      var haystack = ((m.consultant_email || '') + ' ' + (m.message || '') + ' ' + (m.reply || '')).toLowerCase();
+      if (haystack.indexOf(searchFilter) === -1) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Aucun message ' + (statusFilter ? 'avec ce statut' : 'pour le moment') + '.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(function(m) {
+    var date = m.created_at ? new Date(m.created_at).toLocaleDateString('fr-CA', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+    var statusLabel = m.status === 'repondu' ? 'Répondu' : m.status === 'lu' ? 'Lu' : 'Nouveau';
+    var statusClass = m.status === 'repondu' ? 'badge-approved' : m.status === 'lu' ? 'badge-pending' : 'badge-rejected';
+    var consultantName = safe(m.consultant_email || 'Consultant');
+    var msgPreview = safe((m.message || '').substring(0, 120)) + ((m.message || '').length > 120 ? '...' : '');
+    var replyHtml = '';
+    if (m.reply) {
+      var replyDate = m.reply_at ? new Date(m.reply_at).toLocaleDateString('fr-CA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+      replyHtml = '<div style="margin-top:.75rem;padding:.75rem 1rem;background:rgba(5,150,105,.06);border-radius:12px;border:1px solid rgba(5,150,105,.15);">' +
+        '<div style="font-size:.7rem;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Réponse du consultant' + (replyDate ? ' — ' + replyDate : '') + '</div>' +
+        '<div style="font-size:.85rem;color:#191c1e;line-height:1.6;">' + safe(m.reply) + '</div>' +
+      '</div>';
+    }
+
+    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem 1.5rem;transition:box-shadow .2s;" onmouseenter="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.08)\'" onmouseleave="this.style.boxShadow=\'none\'">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">' +
+        '<div style="display:flex;align-items:center;gap:.75rem;">' +
+          '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;">' + (consultantName.charAt(0) || 'C').toUpperCase() + '</div>' +
+          '<div>' +
+            '<div style="font-size:.92rem;font-weight:600;color:#191c1e;">' + consultantName + '</div>' +
+            '<div style="font-size:.72rem;color:#6b7280;">' + date + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<span class="badge ' + statusClass + '">' + statusLabel + '</span>' +
+      '</div>' +
+      '<div style="font-size:.88rem;color:#374151;line-height:1.7;margin-bottom:.25rem;">' + msgPreview + '</div>' +
+      replyHtml +
+    '</div>';
+  }).join('');
+}
+
 function showTab(tabName, event) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.getElementById(tabName + '-tab').classList.add('active');
@@ -1488,6 +1602,11 @@ function showTab(tabName, event) {
   document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
   const targetBtn = event && event.currentTarget ? event.currentTarget : document.getElementById('tab-' + tabName);
   if (targetBtn) targetBtn.classList.add('active');
+
+  /* Sprint 3: Charger les messages quand on clique sur l'onglet */
+  if (tabName === 'messages' && companyMessages.length === 0) {
+    loadCompanyMessages();
+  }
 }
 
 function logout() {
@@ -1730,6 +1849,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btn = document.getElementById('lang-' + lang);
   if (btn) btn.classList.add('active');
   applyI18n();
+
+  /* Sprint 3: Bind filtres messages */
+  var msgStatus = document.getElementById('msg-filter-status');
+  var msgSearch = document.getElementById('msg-search');
+  if (msgStatus) msgStatus.addEventListener('change', renderCompanyMessages);
+  if (msgSearch) msgSearch.addEventListener('input', renderCompanyMessages);
 });
 </script>
 
