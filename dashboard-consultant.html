@@ -1909,9 +1909,12 @@ function renderBasicInfo() {
     var erpName = (btn.dataset.erp || '').toLowerCase();
     btn.classList.toggle('active', currentErps.some(function(e) { return e.includes(erpName) || erpName.includes(e); }));
   });
-  /* Charger les modules */
+  /* Charger les modules — protection contre [object Object] */
   var modulesInput = document.getElementById('erp-modules-input');
-  if (modulesInput) modulesInput.value = notes.erp_modules || '';
+  if (modulesInput) {
+    var _rawModules = notes.erp_modules || '';
+    modulesInput.value = (typeof _rawModules === 'string') ? _rawModules : '';
+  }
 
   const editExp = document.getElementById('edit-exp-select');
   const editTjmType = document.getElementById('edit-tjm-type');
@@ -2095,18 +2098,15 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   document.querySelectorAll('#erp-edit-chips .choice-chip.active').forEach(function(btn) {
     selectedErps.push(btn.dataset.erp);
   });
-  notes.erp_modules = (document.getElementById('erp-modules-input').value || '').trim();
+  var _modVal = (document.getElementById('erp-modules-input').value || '').trim();
+  notes.erp_modules = (typeof _modVal === 'string') ? _modVal : '';
 
-  /* ═══ Synchroniser aussi les champs racine pour consultant.html ═══ */
   const payload = {
     notes_admin: JSON.stringify(notes),
     tjm_min: Number.isFinite(tjmValue) ? tjmValue : null,
     tjm_max: Number.isFinite(tjmValue) ? tjmValue : null,
     /* ═══ Mettre à jour les compétences ERP ═══ */
-    competences: selectedErps.length > 0 ? selectedErps : (currentConsultant.competences || []),
-    ville: ville || null,
-    langues: langues || null,
-    disponibilite: notes.disponibilite || null
+    competences: selectedErps.length > 0 ? selectedErps : (currentConsultant.competences || [])
   };
 
   const canChangeVisibility = ['approuve', 'en_mission'].includes(currentConsultant.statut);
@@ -2123,9 +2123,6 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   currentConsultant.notes_admin = payload.notes_admin;
   currentConsultant.tjm_min = payload.tjm_min;
   currentConsultant.tjm_max = payload.tjm_max;
-  currentConsultant.ville = payload.ville;
-  currentConsultant.langues = payload.langues;
-  currentConsultant.disponibilite = payload.disponibilite;
   if (payload.statut) currentConsultant.statut = payload.statut;
   if (payload.competences) currentConsultant.competences = payload.competences;
 
