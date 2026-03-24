@@ -1440,13 +1440,14 @@ document.addEventListener('DOMContentLoaded', () => {
       var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
       var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
 
-      /* Créer le compte visiteur dans la table entreprises */
+      /* Créer le compte visiteur dans la table entreprises
+         Le hash du mot de passe est stocké dans notes_admin (comme les entreprises dans description) */
       var payload = {
         email: email.toLowerCase(),
         nom: 'Visiteur Pro',
-        password_hash: hashHex,
         type_demande: 'visiteur_pro',
         notes_admin: JSON.stringify({
+          auth_password_sha256: hashHex,
           plan: _selectedVpPlan.plan,
           plan_price: _selectedVpPlan.price,
           msgs_limit: _selectedVpPlan.msgs,
@@ -1485,12 +1486,13 @@ document.addEventListener('DOMContentLoaded', () => {
       var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
       var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
 
-      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,email,password_hash,notes_admin&email=eq.' + encodeURIComponent(email.toLowerCase()) + '&type_demande=eq.visiteur_pro', {
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,email,notes_admin&email=eq.' + encodeURIComponent(email.toLowerCase()) + '&type_demande=eq.visiteur_pro', {
         headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
       });
       var data = await resp.json();
       if (!Array.isArray(data) || !data.length) { showVpError(errEl, 'Compte introuvable. Vérifiez votre email.'); return; }
-      if (data[0].password_hash !== hashHex) { showVpError(errEl, 'Mot de passe incorrect.'); return; }
+      var vpNotes = (function() { try { return JSON.parse(data[0].notes_admin || '{}'); } catch(_e) { return {}; } })();
+      if (!vpNotes.auth_password_sha256 || vpNotes.auth_password_sha256 !== hashHex) { showVpError(errEl, 'Mot de passe incorrect.'); return; }
 
       ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
       window.location.reload();
