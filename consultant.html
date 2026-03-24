@@ -1441,12 +1441,13 @@ document.addEventListener('DOMContentLoaded', () => {
       var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
 
       /* Créer le compte visiteur dans la table entreprises
-         Le hash du mot de passe est stocké dans notes_admin (comme les entreprises dans description) */
+         Le hash du mot de passe est stocké dans 'description' (JSON) — la table entreprises
+         n'a PAS de colonne notes_admin, elle utilise 'description' pour le JSON. */
       var payload = {
         email: email.toLowerCase(),
         nom: 'Visiteur Pro',
         type_demande: 'visiteur_pro',
-        notes_admin: JSON.stringify({
+        description: JSON.stringify({
           auth_password_sha256: hashHex,
           plan: _selectedVpPlan.plan,
           plan_price: _selectedVpPlan.price,
@@ -1486,12 +1487,12 @@ document.addEventListener('DOMContentLoaded', () => {
       var hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(password));
       var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
 
-      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,email,notes_admin&email=eq.' + encodeURIComponent(email.toLowerCase()) + '&type_demande=eq.visiteur_pro', {
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,email,description&email=eq.' + encodeURIComponent(email.toLowerCase()) + '&type_demande=eq.visiteur_pro', {
         headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
       });
       var data = await resp.json();
       if (!Array.isArray(data) || !data.length) { showVpError(errEl, 'Compte introuvable. Vérifiez votre email.'); return; }
-      var vpNotes = (function() { try { return JSON.parse(data[0].notes_admin || '{}'); } catch(_e) { return {}; } })();
+      var vpNotes = (function() { try { return JSON.parse(data[0].description || '{}'); } catch(_e) { return {}; } })();
       if (!vpNotes.auth_password_sha256 || vpNotes.auth_password_sha256 !== hashHex) { showVpError(errEl, 'Mot de passe incorrect.'); return; }
 
       ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
@@ -1508,13 +1509,13 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ═══ Compteur messages visiteur pro ═══ */
   async function getVisiteurMessageQuota(email) {
     try {
-      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=notes_admin&email=eq.' + encodeURIComponent(email) + '&type_demande=eq.visiteur_pro', {
+      var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=id,description&email=eq.' + encodeURIComponent(email) + '&type_demande=eq.visiteur_pro', {
         headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Cache-Control': 'no-cache' },
         cache: 'no-store'
       });
       var data = await resp.json();
       if (!Array.isArray(data) || !data.length) return { limit: 0, used: 0, canSend: false };
-      var notes = typeof data[0].notes_admin === 'string' ? JSON.parse(data[0].notes_admin) : (data[0].notes_admin || {});
+      var notes = typeof data[0].description === 'string' ? JSON.parse(data[0].description) : (data[0].description || {});
       var currentMonth = new Date().toISOString().slice(0, 7);
       /* Reset mensuel automatique */
       if (notes.msgs_reset_date !== currentMonth) {
@@ -1536,7 +1537,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var resp = await fetch(SB_URL + '/rest/v1/entreprises?id=eq.' + quota.id, {
         method: 'PATCH',
         headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ notes_admin: JSON.stringify(quota.notes) })
+        body: JSON.stringify({ description: JSON.stringify(quota.notes) })
       });
       return resp.ok;
     } catch (e) { return false; }
