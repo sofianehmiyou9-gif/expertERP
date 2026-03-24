@@ -857,13 +857,11 @@ img{max-width:100%;height:auto;}
 
 <script src="config.js"></script>
 <script src="utils.js"></script>
+<script src="portal-auth.js"></script>
+<script src="supabase-helpers.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
-<script src="portal-auth.js"></script>
 <script>
-const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
-
 let currentEmail = null;
 let currentConsultant = null;
 
@@ -1091,33 +1089,6 @@ function applyI18n() {
   if (notifTitle) notifTitle.textContent = 'Demandes re\u00e7ues';
 }
 
-function parseNotes(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
-  try { return JSON.parse(raw); } catch(e) { return {}; }
-}
-
-async function sbFetch(table, query = {}) {
-  const params = new URLSearchParams(query);
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
-  });
-  return response.json();
-}
-
-async function sbUpdate(table, id, data) {
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(data)
-  });
-  return response.ok;
-}
 
 function getUrlParam(name) {
   const params = new URLSearchParams(window.location.search);
@@ -1128,12 +1099,6 @@ function getPortalEmail() {
   const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
   if (session && session.role === 'consultant' && session.email) return session.email;
   return null;
-}
-
-async function sha256Hex(text) {
-  const bytes = new TextEncoder().encode(String(text || ''));
-  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 function persistPortalSession(email) {
@@ -1424,11 +1389,11 @@ function openRequestDetail(id) {
     replyDisplay.style.display = '';
     // Permettre de modifier la reponse
     replyInput.value = n.reply;
-    replyInput.placeholder = 'Modifier votre reponse...';
+    replyInput.placeholder = 'Modifier votre réponse...';
   } else {
     replyDisplay.style.display = 'none';
     replyInput.value = '';
-    replyInput.placeholder = 'Ecrivez votre reponse ici...';
+    replyInput.placeholder = 'Écrivez votre réponse ici...';
   }
   replyForm.style.display = '';
 
@@ -1454,7 +1419,7 @@ async function sendReplyFromModal() {
   var input = document.getElementById('rq-reply-input');
   var text = (input.value || '').trim();
   if (!text) {
-    alert('Veuillez ecrire une reponse avant d\'envoyer.');
+    alert('Veuillez écrire une réponse avant d\'envoyer.');
     return;
   }
   var btn = document.getElementById('rq-send-reply-btn');
@@ -1477,10 +1442,10 @@ async function sendReplyFromModal() {
     renderNotifications();
   } catch(err) {
     console.error('[Reply] Error:', err);
-    alert('Erreur lors de l\'envoi de la reponse.');
+    alert('Erreur lors de l\'envoi de la réponse.');
   }
   btn.disabled = false;
-  btn.textContent = 'Envoyer la reponse';
+  btn.textContent = 'Envoyer la réponse';
 }
 
 function closeRequestDetail() {
@@ -2243,11 +2208,11 @@ async function savePhotoToSupabase(photoUrl) {
     notes.photo_url = photoUrl;
     var notesStr = JSON.stringify(notes);
     console.log('[Photo] Saving to Supabase, notes_admin size:', Math.round(notesStr.length / 1024), 'KB');
-    var response = await fetch(SB_URL + '/rest/v1/consultants?id=eq.' + currentConsultant.id, {
+    var response = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?id=eq.' + currentConsultant.id, {
       method: 'PATCH',
       headers: {
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer ' + SB_KEY,
+        'apikey': ExpertConfig.SB_KEY,
+        'Authorization': 'Bearer ' + ExpertConfig.SB_KEY,
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       },
@@ -2262,7 +2227,7 @@ async function savePhotoToSupabase(photoUrl) {
     } else {
       var errText = await response.text();
       console.error('[Photo] Supabase save failed:', response.status, errText);
-      alert('La photo n\'a pas pu etre sauvegardee (' + response.status + '). Verifiez la console.');
+      alert('La photo n\'a pas pu être sauvegardée (' + response.status + '). Vérifiez la console.');
     }
   } catch(err) {
     console.error('[Photo] Sync error:', err);
@@ -2326,17 +2291,17 @@ function loadSavedAvatar() {
 
     <!-- Reponse precedente (si existe) -->
     <div id="rq-reply-display" style="display:none;margin-top:12px;">
-      <div style="font-size:.75rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Votre reponse</div>
+      <div style="font-size:.75rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Votre réponse</div>
       <div id="rq-reply-text" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 16px;font-size:.9rem;line-height:1.55;color:#14532d;white-space:pre-wrap;max-height:140px;overflow-y:auto;"></div>
       <div id="rq-reply-date" style="font-size:.72rem;color:#6b7280;margin-top:4px;"></div>
     </div>
 
-    <!-- Formulaire de reponse -->
+    <!-- Formulaire de réponse -->
     <div id="rq-reply-form" style="margin-top:16px;">
       <div style="font-size:.75rem;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Repondre directement</div>
-      <textarea id="rq-reply-input" placeholder="Ecrivez votre reponse ici..." style="width:100%;min-height:90px;border:1px solid #d1d5db;border-radius:12px;padding:12px 14px;font-size:.88rem;font-family:var(--font-main);resize:vertical;outline:none;transition:border-color .2s;line-height:1.5;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#d1d5db'"></textarea>
+      <textarea id="rq-reply-input" placeholder="Écrivez votre réponse ici..." style="width:100%;min-height:90px;border:1px solid #d1d5db;border-radius:12px;padding:12px 14px;font-size:.88rem;font-family:var(--font-main);resize:vertical;outline:none;transition:border-color .2s;line-height:1.5;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#d1d5db'"></textarea>
       <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
-        <button class="btn btn-primary" id="rq-send-reply-btn" style="padding:10px 22px;font-size:.85rem;border-radius:999px;" onclick="sendReplyFromModal()">Envoyer la reponse</button>
+        <button class="btn btn-primary" id="rq-send-reply-btn" style="padding:10px 22px;font-size:.85rem;border-radius:999px;" onclick="sendReplyFromModal()">Envoyer la réponse</button>
         <span id="rq-reply-status" style="font-size:.78rem;color:#16a34a;display:none;">Reponse envoyee</span>
       </div>
     </div>

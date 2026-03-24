@@ -1605,7 +1605,7 @@ function toggleTheme() {
         </div>
         <div class="sd-pillar">
           <div class="sd-pillar-icon"><span class="material-symbols-outlined" style="color:#d8b9ff;font-size:24px;">bolt</span></div>
-          <h4>Premiere reponse sous 2h</h4>
+          <h4>Première réponse sous 2h</h4>
           <p>Accuse de reception rapide, qualification du besoin et shortlist ciblee en moins de 48h.</p>
         </div>
       </div>
@@ -2919,30 +2919,13 @@ function acceptCguAndClose() {
 <script src="utils.js"></script>
 <script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
+<script src="supabase-helpers.js"></script>
 <script>
-// ── Supabase (centralis\u00e9 dans config.js) ──
-const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
-const SB_HDR = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
-async function sbInsert(table, data) {
-  const r = await fetch(SB_URL + '/rest/v1/' + table, { method:'POST', headers:SB_HDR, body:JSON.stringify(data) });
-  if (!r.ok) throw new Error(await r.text());
-  return r;
-}
-async function sbSelect(table, filter='') {
-  const r = await fetch(SB_URL + '/rest/v1/' + table + '?select=*' + (filter ? '&' + filter : ''), { headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY } });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function sbUpdate(table, id, data) {
-  const r = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(id), {
-    method: 'PATCH',
-    headers: SB_HDR,
-    body: JSON.stringify(data)
-  });
-  if (!r.ok) throw new Error(await r.text());
-  return r;
-}
+// ── Supabase helpers imported from supabase-helpers.js ──
+// sbInsert, sbSelect, sbUpdate are available globally
+// For backward compatibility with existing auth code:
+const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
 
 function normalizeEmailAddress(email) {
   return String(email || '').trim().toLowerCase();
@@ -4627,7 +4610,7 @@ function validateOfferResources() {
       return false;
     }
     if (!Number.isFinite(parseInt(row.tjm, 10)) || parseInt(row.tjm, 10) <= 0) {
-      alert('Le TJM doit etre un nombre positif.');
+      alert('Le TJM doit être un nombre positif.');
       return false;
     }
     if (selectedPlan && selectedPlan < 1) {

@@ -638,6 +638,7 @@ body {
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="portal-auth.js"></script>
+<script src="supabase-helpers.js"></script>
 <script>
 const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
 const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
@@ -875,7 +876,7 @@ function showEnterpriseConsultants(entrepriseId) {
     var notes = parseNotes(c.notes_admin);
     var name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || '-';
     var st = normalizeConsultantStatus(c) || 'n/a';
-    var stLabels = { en_attente:'En attente', approuve:'Approuve', refuse:'Refuse', en_mission:'En mission', desactive:'Desactive' };
+    var stLabels = { en_attente:'En attente', approuve:'Approuvé', refuse:'Refusé', en_mission:'En mission', desactive:'Désactivé' };
     var stLabel = stLabels[st] || st;
     var erps = Array.isArray(c.competences) ? c.competences.join(', ') : String(c.competences || '-');
     var idStr = safe(c.id);
@@ -928,7 +929,7 @@ function renderEntreprises() {
       '<option value="approuve">Approuver</option>' +
       '<option value="en_attente">En attente</option>' +
       '<option value="refuse">Refuser</option>' +
-      '<option value="desactive">Desactiver</option>' +
+      '<option value="desactive">Désactiver</option>' +
       '</select>' +
       '</div></td>' +
       '</tr>';
@@ -1014,7 +1015,7 @@ async function setConsultantStatus(id, status) {
   }
 
   const ok = await sbUpdate('consultants', id, payload);
-  if (!ok) return alert('Erreur mise a jour consultant');
+  if (!ok) return alert('Erreur mise à jour consultant');
   await loadData();
 }
 
@@ -1042,7 +1043,7 @@ async function setEntrepriseStatus(id, status) {
   }
 
   const ok = await sbUpdate('entreprises', id, payload);
-  if (!ok) return alert('Erreur mise a jour entreprise');
+  if (!ok) return alert('Erreur mise à jour entreprise');
   await loadData();
 }
 

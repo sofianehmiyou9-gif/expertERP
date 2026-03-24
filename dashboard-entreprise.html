@@ -557,7 +557,7 @@ body{background:#f7f9fb;}
         <div class="kpi-chart-legend">
           <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publies : 0</span></div>
           <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En revision : 0</span></div>
-          <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refuses : 0</span></div>
+          <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
         </div>
       </div>
 
@@ -857,20 +857,10 @@ body{background:#f7f9fb;}
 
 <script src="config.js"></script>
 <script src="utils.js"></script>
-<script src="i18n.js"></script>
 <script src="portal-auth.js"></script>
+<script src="supabase-helpers.js"></script>
+<script src="i18n.js"></script>
 <script>
-const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
-
-/* SHA-256 hash — nécessaire pour l'authentification entreprise */
-async function sha256Hex(text) {
-  const value = String(text || '');
-  const bytes = new TextEncoder().encode(value);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-}
-
 let currentEmail = null;
 let currentCompany = null;
 let uploadedFile = null;
@@ -965,22 +955,6 @@ function initQuickAddResourceForm() {
   });
 }
 
-function parseNotes(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
-  try { return JSON.parse(raw); } catch (e) { return {}; }
-}
-
-function normalizeStatus(value) {
-  const raw = String(value || '').trim().toLowerCase();
-  const basic = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (basic === 'approuve') return 'approuve';
-  if (basic === 'refuse') return 'refuse';
-  if (basic === 'en_attente') return 'en_attente';
-  if (basic === 'en_mission') return 'en_mission';
-  return basic;
-}
-
 function setLanguage(lang) {
   ExpertI18n.setLang(lang);
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -1015,41 +989,6 @@ function applyI18n() {
   if (importBtn) importBtn.textContent = t('common.import');
   const clearBtn = document.getElementById('clear-btn');
   if (clearBtn) clearBtn.textContent = t('common.cancel');
-}
-
-async function sbFetch(table, query = {}) {
-  const params = new URLSearchParams(query);
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
-  });
-  return response.json();
-}
-
-async function sbInsert(table, data) {
-  const response = await fetch(`${SB_URL}/rest/v1/${table}`, {
-    method: 'POST',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-  return response.json();
-}
-
-async function sbUpdate(table, id, data) {
-  const response = await fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: `Bearer ${SB_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(data)
-  });
-  return response.ok;
 }
 
 function getUrlParam(name) {
@@ -1089,7 +1028,7 @@ async function loadResources() {
       'en_attente': '<span class="badge badge-pending">En revision</span>',
       'approuve': '<span class="badge badge-approved">Publie</span>',
       'en_mission': '<span class="badge badge-approved" style="background:#dbeafe;color:#1e40af;">En mission</span>',
-      'refuse': '<span class="badge badge-rejected">Refuse</span>'
+      'refuse': '<span class="badge badge-rejected">Refusé</span>'
     };
     const statusKey = normalizeStatus(r.statut);
     const resourceCode = formatResourceId(r);
@@ -1310,7 +1249,7 @@ function renderTeam() {
     const canManageTeam = currentAccessRole === 'owner';
     const toggleBtn = member.status === 'disabled'
       ? `<button class="btn btn-secondary" data-action="toggle-team-member" data-member-id="${member.id}" data-member-status="active">Activer</button>`
-      : `<button class="btn btn-secondary" data-action="toggle-team-member" data-member-id="${member.id}" data-member-status="disabled">Desactiver</button>`;
+      : `<button class="btn btn-secondary" data-action="toggle-team-member" data-member-id="${member.id}" data-member-status="disabled">Désactiver</button>`;
     const actionsHtml = !canManageTeam
       ? '<span style="color:var(--muted);font-size:.78rem;">Owner uniquement</span>'
       : (isOwner
@@ -1319,7 +1258,7 @@ function renderTeam() {
     return `<tr>
       <td>${safe(member.email || '')}</td>
       <td><span class="team-badge ${roleClass}">${safe(teamRoleLabel(member.role))}</span></td>
-      <td><span class="team-badge ${statusClass}">${member.status === 'disabled' ? 'Desactive' : 'Actif'}</span></td>
+      <td><span class="team-badge ${statusClass}">${member.status === 'disabled' ? 'Désactivé' : 'Actif'}</span></td>
       <td>${safe(invited)}</td>
       <td>
         <div class="team-actions">
@@ -1532,7 +1471,7 @@ async function authenticate() {
     return;
   }
   if (access && access.status === 'disabled') {
-    showAuthError('Votre acces equipe est desactive.');
+    showAuthError('Votre accès équipe est désactivé.');
     return;
   }
 
@@ -1606,7 +1545,7 @@ function renderKPIs(filtered) {
   if (el('kpi-donut-center')) el('kpi-donut-center').textContent = total;
   if (el('leg-approved'))     el('leg-approved').textContent = 'Publies : ' + approved;
   if (el('leg-pending'))      el('leg-pending').textContent = 'En revision : ' + pending;
-  if (el('leg-rejected'))     el('leg-rejected').textContent = 'Refuses : ' + rejected;
+  if (el('leg-rejected'))     el('leg-rejected').textContent = 'Refusés : ' + rejected;
 
   const C = 2 * Math.PI * 48;
   function setArc(id, count, offset) {
@@ -1671,8 +1610,8 @@ let companyMessages = [];
 async function loadCompanyMessages() {
   if (!currentEmail) return;
   try {
-    const resp = await fetch(SB_URL + '/rest/v1/notifications?select=*&company_email=eq.' + encodeURIComponent(currentEmail) + '&order=created_at.desc', {
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    const resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/notifications?select=*&company_email=eq.' + encodeURIComponent(currentEmail) + '&order=created_at.desc', {
+      headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY }
     });
     const data = await resp.json();
     companyMessages = Array.isArray(data) ? data : [];
@@ -1792,8 +1731,8 @@ async function saveResourceEdit() {
 
   try {
     /* Lire les notes actuelles pour ne pas écraser les autres champs */
-    var resp = await fetch(SB_URL + '/rest/v1/consultants?select=notes_admin&id=eq.' + encodeURIComponent(resourceId), {
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    var resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?select=notes_admin&id=eq.' + encodeURIComponent(resourceId), {
+      headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY }
     });
     var data = await resp.json();
     var notes = parseNotes(data && data[0] ? data[0].notes_admin : '{}');
@@ -1833,8 +1772,8 @@ let _searchLoaded = false;
 async function loadSearchConsultants() {
   if (_searchLoaded && _searchCache.length) return _searchCache;
   try {
-    const resp = await fetch(SB_URL + '/rest/v1/consultants?select=*&statut=eq.approuve&order=created_at.desc', {
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Cache-Control': 'no-cache' },
+    const resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?select=*&statut=eq.approuve&order=created_at.desc', {
+      headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY, 'Cache-Control': 'no-cache' },
       cache: 'no-store'
     });
     _searchCache = await resp.json();
@@ -2018,7 +1957,7 @@ document.getElementById('import-btn').addEventListener('click', async () => {
       const row = {};
       headers.forEach((h, idx) => row[h] = values[idx] || null);
 
-      const internalName = String(row.nom || '').trim() || ('Ressource importee ' + i);
+      const internalName = String(row.nom || '').trim() || ('Ressource importée ' + i);
       const resourceCode = buildResourceCode(internalName);
       const rateUnit = normalizeRateUnit(row.taux_unite || row.rate_unit || row.unite_taux || row.unite || 'jour');
 
@@ -2061,7 +2000,7 @@ document.getElementById('import-btn').addEventListener('click', async () => {
     document.getElementById('file-input').value = '';
     applyAccessPermissions();
     loadResources();
-    alert('Ressources importees avec succes');
+    alert('Ressources importées avec succès');
   };
   reader.readAsText(uploadedFile);
 });
@@ -2092,7 +2031,7 @@ document.getElementById('qa-add-btn').addEventListener('click', async () => {
     return;
   }
   if (!Number.isFinite(tjm) || tjm <= 0) {
-    alert('Le taux doit etre un nombre positif.');
+    alert('Le taux doit être un nombre positif.');
     return;
   }
   if (!canAddSlots(1)) {
@@ -2137,7 +2076,7 @@ document.getElementById('qa-add-btn').addEventListener('click', async () => {
     populateResourceModuleSelect('qa-modules', '');
     populateCitySelect('qa-ville', '');
     await loadResources();
-    alert('Ressource ajoutee avec succes.');
+    alert('Ressource ajoutée avec succès.');
   } catch (e) {
     alert('Impossible d\'ajouter la ressource pour le moment.');
   }
@@ -2206,8 +2145,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       /* Lire les notes actuelles */
-      var resp = await fetch(SB_URL + '/rest/v1/consultants?select=notes_admin&id=eq.' + encodeURIComponent(resourceId), {
-        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+      var resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?select=notes_admin&id=eq.' + encodeURIComponent(resourceId), {
+        headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY }
       });
       var data = await resp.json();
       var notes = parseNotes(data && data[0] ? data[0].notes_admin : '{}');
