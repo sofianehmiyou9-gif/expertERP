@@ -7,6 +7,9 @@
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil Consultant — ExpertERPHub</title>
+<link rel="canonical" href="https://project-ggx81.vercel.app/consultant.html" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;1,6..72,600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -516,8 +519,8 @@ body { font-family: 'Manrope', sans-serif; }
 <script src="notifications.js"></script>
 <script>
 // Define SB_URL and SB_KEY for inline scripts that use them directly
-const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
+const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || '';
 
 let currentConsultant = null;
 
@@ -1277,10 +1280,8 @@ async function sendContactMessage() {
    envoyé un message depuis CE navigateur.
    ═══════════════════════════════════════════════════════════════ */
 
-var ACCESS_TOKEN_SECRET = 'erphub_secure_2026';
-
 async function generateAccessTokenHash(email) {
-  var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + ACCESS_TOKEN_SECRET;
+  var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + (ExpertConfig && ExpertConfig.ACCESS_TOKEN_SECRET || '');
   var bytes = new TextEncoder().encode(raw);
   var hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');

@@ -7,6 +7,8 @@
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Entreprise — ExpertERPHub</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <style>
@@ -782,6 +784,16 @@ body{background:#f7f9fb;}
       <div class="section-title" id="profile-title">Mon Profil</div>
       <div class="section-sub">Informations de votre compte entreprise sur ExpertERPHub.</div>
       <div class="profile-info" id="profile-info">
+      </div>
+      <!-- GDPR Section -->
+      <div style="margin-top:2rem;padding:1.5rem;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:32px;">
+        <div style="margin-bottom:1rem;">
+          <h3 style="color:#374151;font-size:.95rem;margin:0;">Données personnelles et conformité RGPD</h3>
+        </div>
+        <div style="display:grid;gap:.75rem;">
+          <button id="export-company-data-btn" class="btn btn-secondary" data-i18n="rgpd.exportData" style="width:100%;text-align:center;padding:.8rem;border-radius:32px;font-size:.9rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;">Télécharger mes données</button>
+          <button id="delete-company-account-btn" class="btn" style="width:100%;text-align:center;padding:.8rem;border-radius:32px;font-size:.9rem;background:#dc2626;color:#fff;border:none;cursor:pointer;" data-i18n="rgpd.deleteAccount">Supprimer mon compte</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2173,6 +2185,87 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Erreur lors de la mise à jour de la visibilité.');
     }
   });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   GDPR / RGPD COMPLIANCE FUNCTIONS FOR ENTERPRISES
+   ═══════════════════════════════════════════════════════════════ */
+
+async function exportCompanyDataRGPD() {
+  if (!currentEmail || !currentCompany) {
+    alert('Impossible d\'exporter vos données. Veuillez vous reconnecter.');
+    return;
+  }
+
+  try {
+    const companyData = {
+      company: currentCompany,
+      resources: _allLoadedResources || [],
+      team: companyTeam || [],
+      exportDate: new Date().toISOString(),
+      exportedBy: currentEmail
+    };
+
+    const jsonString = JSON.stringify(companyData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `company_data_${currentEmail.replace('@', '_at_')}_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    alert(ExpertI18n.t('rgpd.exportSuccess'));
+  } catch (err) {
+    alert('Erreur lors de l\'export: ' + err.message);
+  }
+}
+
+async function deleteCompanyAccountRGPD() {
+  if (!currentEmail || !currentCompany) {
+    alert('Impossible de supprimer votre compte. Veuillez vous reconnecter.');
+    return;
+  }
+
+  const confirmed = confirm(ExpertI18n.t('rgpd.deleteConfirm'));
+  if (!confirmed) return;
+
+  try {
+    const timestamp = Date.now();
+    const anonymizedData = {
+      nom: 'Entreprise supprimée',
+      contact: 'Anonyme',
+      email: `deleted_${timestamp}@anonymized.local`,
+      telephone: '',
+      description: JSON.stringify({}),
+      statut: 'supprime'
+    };
+
+    const success = await sbUpdate('entreprises', currentCompany.id, anonymizedData);
+    if (!success) {
+      alert('Erreur lors de la suppression du compte.');
+      return;
+    }
+
+    alert(ExpertI18n.t('rgpd.deleteSuccess'));
+    logout();
+  } catch (err) {
+    alert('Erreur lors de la suppression: ' + err.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('export-company-data-btn');
+  const deleteBtn = document.getElementById('delete-company-account-btn');
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportCompanyDataRGPD);
+  }
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', deleteCompanyAccountRGPD);
+  }
 });
 </script>
 

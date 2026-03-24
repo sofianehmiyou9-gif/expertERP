@@ -19,6 +19,9 @@
 <meta name="twitter:title" content="ExpertERPHub — Staff Augmentation ERP B2B">
 <meta name="twitter:description" content="La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent.">
 <title>ExpertERPHub — Plateforme B2B de Staff Augmentation ERP | Consultants SAP, Oracle, Dynamics</title>
+<link rel="canonical" href="https://project-ggx81.vercel.app/index.html" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <script>
 (function () {
   var path = String(window.location.pathname || '').toLowerCase();
@@ -2992,8 +2995,8 @@ function acceptCguAndClose() {
 // ── Supabase helpers imported from supabase-helpers.js ──
 // sbInsert, sbSelect, sbUpdate are available globally
 // For backward compatibility with existing auth code:
-const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
+const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || '';
 
 function normalizeEmailAddress(email) {
   return String(email || '').trim().toLowerCase();
@@ -3089,12 +3092,6 @@ function safeJsonParse(raw, fallback = {}) {
   try { return JSON.parse(raw); } catch (e) { return fallback; }
 }
 
-async function sha256Hex(text) {
-  const value = String(text || '');
-  const bytes = new TextEncoder().encode(value);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
-  return Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
 
 const ACCESS_COPY = {
   fr: {
@@ -3319,7 +3316,7 @@ function refreshPortalEntryButton() {
       (async function() {
         try {
           var SB = window.ExpertConfig || {};
-          var resp = await fetch((SB.SB_URL || 'https://aqvkcbeezzbmoiykzfyo.supabase.co') + '/rest/v1/entreprises?select=nom&email=eq.' + encodeURIComponent(session.email) + '&type_demande=eq.offrir', {
+          var resp = await fetch((SB.SB_URL || '') + '/rest/v1/entreprises?select=nom&email=eq.' + encodeURIComponent(session.email) + '&type_demande=eq.offrir', {
             headers: { 'apikey': SB.SB_KEY || '', 'Authorization': 'Bearer ' + (SB.SB_KEY || '') }
           });
           var data = await resp.json();
@@ -3392,11 +3389,8 @@ function handleAdminRevealGesture() {
   const now = Date.now();
   adminRevealClicks = adminRevealClicks.filter((ts) => now - ts < 4000);
   adminRevealClicks.push(now);
-  // Debug : affiche le nombre de clics restants dans la console
-  console.log('[ADMIN DEBUG] Clic admin:', adminRevealClicks.length, '/ 5');
   if (adminRevealClicks.length >= 5) {
     adminRevealClicks = [];
-    console.log('[ADMIN DEBUG] Geste secret détecté, déblocage admin.');
     unlockAdminPortal(true);
   }
 }
@@ -3950,7 +3944,6 @@ async function consumeInviteCodeOnce(code, email) {
     return false;
   }
   const result = await r.json();
-  console.log('RPC result:', result);
   if (result === true) return true;
   if (result === false) return false;
   if (result && typeof result === 'object' && 'consume_invitation_code' in result) return !!result.consume_invitation_code;

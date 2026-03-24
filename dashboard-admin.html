@@ -7,6 +7,8 @@
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Administration - ExpertERPHub</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -640,8 +642,8 @@ body {
 <script src="portal-auth.js"></script>
 <script src="supabase-helpers.js"></script>
 <script>
-const SB_URL = window.ExpertConfig ? ExpertConfig.SB_URL : 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
-const SB_KEY = window.ExpertConfig ? ExpertConfig.SB_KEY : 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
+const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || '';
 const ADMIN_PWD = 'erphub2026!';
 const ADMIN_AUTH_KEY = 'admin-auth-v2';
 const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse', 'en_mission'];
@@ -658,11 +660,6 @@ function statusClass(status) {
   return 'b-other';
 }
 
-function parseNotes(raw) {
-  if (!raw) return {};
-  if (typeof raw === 'object') return raw;
-  try { return JSON.parse(raw); } catch(e) { return {}; }
-}
 
 function toDbStatut(raw) {
   const s = String(raw || '').toLowerCase();
@@ -703,34 +700,7 @@ function safe(v) {
     .replace(/'/g, '&#39;');
 }
 
-async function sbSelect(table, params) {
-  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + params, {
-    headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
-}
 
-async function sbUpdate(table, id, data) {
-  const payload = Object.assign({}, data);
-  if (Object.prototype.hasOwnProperty.call(payload, 'statut')) {
-    payload.statut = toDbStatut(payload.statut);
-  }
-  const res = await fetch(SB_URL + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(id), {
-    method: 'PATCH',
-    headers: {
-      apikey: SB_KEY,
-      Authorization: 'Bearer ' + SB_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify(payload)
-  });
-  if (!res.ok) {
-    console.error('sbUpdate failed:', table, id, payload, await res.text());
-  }
-  return res.ok;
-}
 
 let syncPillTimer = null;
 function setSyncPill(text, tone, ms) {

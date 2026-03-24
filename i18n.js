@@ -183,6 +183,13 @@
         findExpert: "Trouver un expert",
         dashboard: "Dashboard",
         logout: "Déconnexion"
+      },
+      rgpd: {
+        exportData: "Télécharger mes données",
+        deleteAccount: "Supprimer mon compte",
+        deleteConfirm: "Êtes-vous sûr ? Cette action est irréversible.",
+        deleteSuccess: "Compte supprimé. Redirection...",
+        exportSuccess: "Données exportées avec succès."
       }
     },
     en: {
@@ -368,6 +375,13 @@
         findExpert: "Find an expert",
         dashboard: "Dashboard",
         logout: "Logout"
+      },
+      rgpd: {
+        exportData: "Download my data",
+        deleteAccount: "Delete my account",
+        deleteConfirm: "Are you sure? This action is irreversible.",
+        deleteSuccess: "Account deleted. Redirecting...",
+        exportSuccess: "Data exported successfully."
       }
     }
   };

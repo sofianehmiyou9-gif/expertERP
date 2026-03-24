@@ -160,7 +160,6 @@
       _loaded = true;
       // Also update localStorage as cache
       lsSave(_cache);
-      console.log('[Notif] Loaded', _cache.length, 'notifications from Supabase');
       return _cache;
     }
     // Fallback to localStorage

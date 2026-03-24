@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard-admin.html
+Disallow: /dashboard-consultant.html
+Disallow: /dashboard-entreprise.html
+Disallow: /reset-password.html
+Disallow: /recovery.html
+
+Sitemap: https://project-ggx81.vercel.app/sitemap.xml

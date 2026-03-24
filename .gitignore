@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.local
+*.bak
+*.backup
+.backup_pre_optimization/
+ARCHITECTURE_AUDIT_REPORT.md
+FINDINGS_SUMMARY.txt
+.DS_Store
+Thumbs.db
+*.log
