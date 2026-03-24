@@ -1084,7 +1084,9 @@ async function loadResources() {
   currentPlanQty = getCompanyPlanQty();
   updatePlanDisplay(filtered.length);
   renderKPIs(filtered);
+}
 
+function generateResourceCode(seed) {
   const base = String(seed || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
