@@ -156,9 +156,9 @@ body { font-family: 'Manrope', sans-serif; }
     </button>
     <!-- Nav links -->
     <div class="hidden md:flex items-center gap-8">
-      <button class="nav-link font-manrope text-sm font-600 text-on-surface-variant hover:text-on-surface transition-colors" data-nav-href="index.html">Accueil</button>
-      <button class="nav-link font-manrope text-sm font-600 text-primary border-b-2 border-primary transition-colors" data-nav-href="index.html">Consultants</button>
-      <button class="nav-link font-manrope text-sm font-600 text-on-surface-variant hover:text-on-surface transition-colors" data-nav-href="index.html">Entreprises</button>
+      <button class="nav-link font-manrope text-sm font-600 text-on-surface-variant hover:text-on-surface transition-colors" data-nav-href="index.html" data-i18n="nav.home">Accueil</button>
+      <button class="nav-link font-manrope text-sm font-600 text-primary border-b-2 border-primary transition-colors" data-nav-href="index.html" data-i18n="nav.consultants">Consultants</button>
+      <button class="nav-link font-manrope text-sm font-600 text-on-surface-variant hover:text-on-surface transition-colors" data-nav-href="index.html" data-i18n="nav.companies">Entreprises</button>
     </div>
     <!-- Right actions -->
     <div class="flex items-center gap-3">
@@ -168,14 +168,14 @@ body { font-family: 'Manrope', sans-serif; }
         <a id="nav-session-dash" href="dashboard-entreprise.html" style="font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#00288e,#0058be);padding:.4rem .8rem;border-radius:999px;text-decoration:none;white-space:nowrap;">Dashboard</a>
       </div>
       <!-- Login button — visible si NON connecté -->
-      <a id="nav-login-btn" href="dashboard-entreprise.html" class="hidden sm:block px-5 py-2 text-xs font-bold uppercase tracking-wider text-white rounded-lg transition-all" style="background:linear-gradient(135deg,#00288e,#0058be);">Se connecter</a>
+      <a id="nav-login-btn" href="dashboard-entreprise.html" class="hidden sm:block px-5 py-2 text-xs font-bold uppercase tracking-wider text-white rounded-lg transition-all" style="background:linear-gradient(135deg,#00288e,#0058be);" data-i18n="nav.login">Se connecter</a>
       <!-- Language switcher -->
       <div class="flex items-center gap-1 p-1 border border-outline-variant/30 rounded-full bg-white">
         <button class="lang-btn" id="lang-fr" data-lang="fr">FR</button>
         <button class="lang-btn" id="lang-en" data-lang="en">EN</button>
       </div>
       <!-- Find Expert -->
-      <button class="btn-outline hidden sm:block px-5 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase tracking-wider text-on-surface hover:bg-surface-container transition-all" data-nav-href="index.html">Trouver un expert</button>
+      <button class="btn-outline hidden sm:block px-5 py-2 border border-outline-variant rounded-lg text-xs font-bold uppercase tracking-wider text-on-surface hover:bg-surface-container transition-all" data-nav-href="index.html" data-i18n="nav.findExpert">Trouver un expert</button>
     </div>
   </div>
 </nav>
@@ -369,7 +369,7 @@ body { font-family: 'Manrope', sans-serif; }
     <div class="max-w-2xl mx-auto px-8">
       <div class="text-center mb-12">
         <span class="font-manrope text-sm font-bold tracking-[0.2em] uppercase text-secondary block mb-4">Prise de contact</span>
-        <h2 id="contact-title" class="text-5xl font-headline font-bold text-primary">Contacter ce consultant</h2>
+        <h2 id="contact-title" class="text-5xl font-headline font-bold text-primary" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
       </div>
 
       <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
@@ -465,20 +465,20 @@ body { font-family: 'Manrope', sans-serif; }
       <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
       <form id="contact-form" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm flex flex-col gap-5" style="display:none;">
         <input id="company-name" type="text" placeholder="Votre entreprise"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant"/>
+          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.enterprise"/>
         <input id="company-email" type="email" placeholder="Email professionnel"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant"/>
+          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.yourEmail"/>
         <input id="company-phone" type="tel" placeholder="Téléphone"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant"/>
+          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.phone"/>
         <textarea id="contact-message" placeholder="Décrivez votre projet et vos besoins…"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant min-h-[140px] resize-y"></textarea>
+          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant min-h-[140px] resize-y" data-i18n-placeholder="contact.message"></textarea>
         <!-- Consentement obligatoire -->
         <label id="contact-consent-label" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.85rem;line-height:1.5;color:#475569;">
           <input type="checkbox" id="contact-consent" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#2563eb;">
           <span>J'accepte la <a href="privacy.html" target="_blank" style="color:#2563eb;text-decoration:underline;">politique de confidentialité</a> d'ExpertERPHub. <span style="color:#dc2626;">*</span></span>
         </label>
         <button id="contact-btn" type="submit" data-action="send-contact"
-          class="w-full py-5 bg-primary text-on-primary rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.99]">
+          class="w-full py-5 bg-primary text-on-primary rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.99]" data-i18n="contact.send">
           Envoyer ma demande →
         </button>
       </form>
@@ -496,10 +496,10 @@ body { font-family: 'Manrope', sans-serif; }
       Expert<span class="not-italic font-bold">ERP</span>Hub
     </div>
     <div class="flex flex-wrap justify-center gap-8 font-manrope text-sm">
-      <a href="index.html" class="text-slate-500 hover:text-primary transition-colors">Accueil</a>
-      <a href="privacy.html" class="text-slate-500 hover:text-primary transition-colors">Confidentialité</a>
-      <a href="conditions.html" class="text-slate-500 hover:text-primary transition-colors">Conditions</a>
-      <a href="mentions.html" class="text-slate-500 hover:text-primary transition-colors">Mentions légales</a>
+      <a href="index.html" class="text-slate-500 hover:text-primary transition-colors" data-i18n="index.footer.about">Accueil</a>
+      <a href="privacy.html" class="text-slate-500 hover:text-primary transition-colors" data-i18n="index.footer.privacy">Confidentialité</a>
+      <a href="conditions.html" class="text-slate-500 hover:text-primary transition-colors" data-i18n="index.footer.terms">Conditions</a>
+      <a href="mentions.html" class="text-slate-500 hover:text-primary transition-colors" data-i18n="index.footer.legalNotice">Mentions légales</a>
     </div>
     <div class="text-slate-500 font-manrope text-sm">© 2026 ExpertERPHub. Tous droits réservés.</div>
   </div>
@@ -553,6 +553,8 @@ function applyI18n() {
   if (cm) cm.placeholder = 'Décrivez votre projet et vos besoins…';
   const cb = document.getElementById('contact-btn');
   if (cb) cb.textContent = 'Envoyer ma demande →';
+  // Apply data-i18n attributes
+  ExpertI18n.applyByDataAttr();
 }
 
 function toggleTheme() {

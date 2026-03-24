@@ -475,10 +475,10 @@ body{background:#f7f9fb;}
 <div id="auth-container" class="auth-container" style="display:none;">
   <div class="auth-card">
     <div class="logo">Expert<span>ERP</span>Hub</div>
-    <h2 id="auth-title">Accès à votre espace entreprise</h2>
+    <h2 id="auth-title" data-i18n="dashboardCompany.dashboardAccess">Accès à votre espace entreprise</h2>
     <input type="email" id="email-input" placeholder="Adresse email">
     <input type="password" id="password-input" placeholder="Mot de passe">
-    <button id="auth-btn">Se connecter</button>
+    <button id="auth-btn" data-i18n="common.login">Se connecter</button>
     <div class="auth-link"><button type="button" data-action="open-reset-page">Mot de passe oublie ?</button></div>
     <div class="auth-link" style="text-align:center;margin-top:.75rem;"><a href="/" style="font-size:.8rem;color:#6b7280;text-decoration:none;">← Retour à l'accueil</a></div>
     <div class="auth-error" id="auth-error"></div>
@@ -493,20 +493,20 @@ body{background:#f7f9fb;}
       <div class="company-name" id="company-name"></div>
     </div>
     <div class="nav-right">
-      <a href="index.html#page-consultants" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;font-size:.74rem;">🔍 Rechercher un consultant</a>
-      <button class="btn btn-cta" data-action="show-tab" data-tab-name="resources" id="nav-cta-btn" style="cursor:pointer;">+ Nouvelle ressource</button>
-      <button class="btn btn-secondary" id="logout-btn" data-action="logout">Deconnexion</button>
+      <a href="index.html#page-consultants" class="btn btn-primary" id="nav-search-consultant" data-i18n="dashboardCompany.searchConsultant" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;font-size:.74rem;">🔍 Rechercher un consultant</a>
+      <button class="btn btn-cta" data-action="show-tab" data-tab-name="resources" id="nav-cta-btn" data-i18n="dashboardCompany.newResource" style="cursor:pointer;">+ Nouvelle ressource</button>
+      <button class="btn btn-secondary" id="logout-btn" data-action="logout" data-i18n="common.logout">Deconnexion</button>
       <button class="lang-btn" id="lang-fr" data-action="set-language" data-lang="fr">FR</button>
       <button class="lang-btn" id="lang-en" data-action="set-language" data-lang="en">EN</button>
     </div>
   </nav>
 
   <div class="tab-buttons">
-    <button class="tab-button active" data-action="show-tab" data-tab-name="resources" id="tab-resources">Mes Ressources</button>
-    <button class="tab-button" data-action="show-tab" data-tab-name="search" id="tab-search">Rechercher</button>
-    <button class="tab-button" data-action="show-tab" data-tab-name="messages" id="tab-messages">Messages <span id="messages-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
-    <button class="tab-button" data-action="show-tab" data-tab-name="team" id="tab-team">Equipe</button>
-    <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile">Mon Profil</button>
+    <button class="tab-button active" data-action="show-tab" data-tab-name="resources" id="tab-resources" data-i18n="dashboardCompany.myResources">Mes Ressources</button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="search" id="tab-search" data-i18n="dashboardCompany.search">Rechercher</button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="messages" id="tab-messages" data-i18n="dashboardCompany.messages">Messages <span id="messages-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="team" id="tab-team" data-i18n="dashboardCompany.team">Equipe</button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile" data-i18n="dashboardCompany.myProfile">Mon Profil</button>
   </div>
 
   <div class="content">
@@ -989,6 +989,10 @@ function applyI18n() {
   if (importBtn) importBtn.textContent = t('common.import');
   const clearBtn = document.getElementById('clear-btn');
   if (clearBtn) clearBtn.textContent = t('common.cancel');
+  // Apply i18n to all elements with data-i18n attribute
+  if (ExpertI18n && ExpertI18n.applyByDataAttr) {
+    ExpertI18n.applyByDataAttr();
+  }
 }
 
 function getUrlParam(name) {

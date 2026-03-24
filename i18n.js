@@ -65,7 +65,105 @@
         dragDrop: "Glissez et déposez un fichier CSV ou Excel",
         browse: "ou cliquez pour parcourir",
         submitted: "Date soumission",
-        validationStatus: "Statut de validation"
+        validationStatus: "Statut de validation",
+        search: "Rechercher",
+        searchTitle: "Rechercher des consultants",
+        searchSubtitle: "Trouvez les experts ERP disponibles sur la plateforme.",
+        searchBtn: "Rechercher",
+        allErp: "Tous",
+        allRoles: "Tous",
+        allAvailability: "Toutes",
+        tjmMax: "TJM Max ($)",
+        city: "Ville",
+        viewProfile: "Voir le profil",
+        consultantsFound: "consultants trouvés",
+        noResults: "Aucun consultant ne correspond à vos critères.",
+        messages: "Messages",
+        team: "Équipe",
+        newResource: "Nouvelle Ressource",
+        searchConsultant: "Rechercher un consultant",
+        total: "Total",
+        published: "Publiés",
+        validated: "Validés",
+        averageRate: "Taux moyen",
+        slotsRemaining: "Restants",
+        perDay: "$/jour",
+        ofPlan: "sur {n} du plan"
+      },
+      index: {
+        hero: {
+          badge1: "Experts ERP validés",
+          badge2: "Disponibilité temps réel",
+          badge3: "Traçabilité ressource",
+          title: "Accélérez votre projet ERP sans les marges des grandes firmes",
+          subtitle: "Staff augmentation ERP depuis un tableau de bord unique. Disponibilité, traçabilité complète, décisions de staffing plus rapides.",
+          ctaFind: "Trouver un expert ERP",
+          ctaHire: "Recruter une ressource",
+          ctaOffer: "Proposer mes ressources"
+        },
+        features: {
+          speedTitle: "Vitesse inégalée",
+          speedDesc: "De la demande à la mise en relation en moins de 48h.",
+          qualityTitle: "Qualité souveraine",
+          qualityDesc: "Chaque profil est validé manuellement par notre équipe.",
+          specTitle: "100% spécialisé ERP",
+          specDesc: "SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — spécialisation totale."
+        },
+        stats: {
+          consultants: "Consultants ERP",
+          enterprises: "Entreprises partenaires",
+          countries: "Pays couverts",
+          response: "Première réponse sous 2h"
+        },
+        sections: {
+          whyTitle: "Pourquoi ExpertERPHub ?",
+          howTitle: "Comment ça marche ?",
+          ctaTitle: "Prêt à transformer votre approche ERP ?",
+          faqTitle: "Questions fréquentes"
+        },
+        footer: {
+          about: "Plateforme B2B de Staff Augmentation ERP",
+          links: "Liens rapides",
+          legal: "Légal",
+          privacy: "Confidentialité",
+          terms: "Conditions",
+          legalNotice: "Mentions légales",
+          rights: "Tous droits réservés"
+        }
+      },
+      contact: {
+        title: "Contacter ce consultant",
+        enterprise: "Entreprise",
+        visiteurPro: "Visiteur Pro",
+        accessEntreprise: "Accès Entreprise",
+        accessDesc: "Contactez ce consultant, publiez des demandes et gérez vos ressources.",
+        connectBtn: "Se connecter",
+        createAccount: "Créer un compte entreprise",
+        vpTitle: "Contactez les consultants directement",
+        vpSubtitle: "Choisissez votre forfait et envoyez des messages aux freelances ERP.",
+        vpLogin: "Connexion Visiteur Pro",
+        vpCreate: "Créer mon compte Visiteur Pro",
+        alreadyRegistered: "Déjà inscrit ?",
+        noAccount: "Pas encore de compte ?",
+        yourEmail: "Votre email",
+        password: "Mot de passe",
+        choosePassword: "Choisissez un mot de passe",
+        yourName: "Votre nom ou entreprise",
+        phone: "Téléphone",
+        message: "Décrivez votre projet et vos besoins...",
+        privacyAccept: "J'accepte la politique de confidentialité",
+        send: "Envoyer ma demande",
+        messagesRemaining: "messages restants ce mois-ci",
+        plan: "forfait"
+      },
+      nav: {
+        home: "Accueil",
+        consultants: "Consultants",
+        companies: "Entreprises",
+        login: "Se connecter",
+        findExpert: "Trouver un expert",
+        dashboard: "Dashboard",
+        logout: "Déconnexion"
       }
     },
     en: {
@@ -133,7 +231,105 @@
         dragDrop: "Drag and drop a CSV or Excel file",
         browse: "or click to browse",
         submitted: "Submission date",
-        validationStatus: "Validation status"
+        validationStatus: "Validation status",
+        search: "Search",
+        searchTitle: "Search consultants",
+        searchSubtitle: "Find available ERP experts on the platform.",
+        searchBtn: "Search",
+        allErp: "All",
+        allRoles: "All",
+        allAvailability: "All",
+        tjmMax: "Max rate ($)",
+        city: "City",
+        viewProfile: "View profile",
+        consultantsFound: "consultants found",
+        noResults: "No consultants match your criteria.",
+        messages: "Messages",
+        team: "Team",
+        newResource: "New Resource",
+        searchConsultant: "Search a consultant",
+        total: "Total",
+        published: "Published",
+        validated: "Validated",
+        averageRate: "Average rate",
+        slotsRemaining: "Remaining",
+        perDay: "$/day",
+        ofPlan: "of {n} in plan"
+      },
+      index: {
+        hero: {
+          badge1: "Verified ERP experts",
+          badge2: "Real-time availability",
+          badge3: "Resource traceability",
+          title: "Accelerate your ERP project without big firm markups",
+          subtitle: "ERP staff augmentation from one dashboard. Availability, full traceability, and faster staffing decisions.",
+          ctaFind: "Find an ERP expert",
+          ctaHire: "Hire a professional resource",
+          ctaOffer: "Offer my resources"
+        },
+        features: {
+          speedTitle: "Unmatched speed",
+          speedDesc: "From request to connection in under 48h.",
+          qualityTitle: "Sovereign quality",
+          qualityDesc: "Each profile is manually validated by our team.",
+          specTitle: "100% ERP specialized",
+          specDesc: "SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — total specialization."
+        },
+        stats: {
+          consultants: "ERP Consultants",
+          enterprises: "Partner enterprises",
+          countries: "Countries covered",
+          response: "First response under 2h"
+        },
+        sections: {
+          whyTitle: "Why ExpertERPHub?",
+          howTitle: "How does it work?",
+          ctaTitle: "Ready to transform your ERP approach?",
+          faqTitle: "FAQ"
+        },
+        footer: {
+          about: "B2B ERP Staff Augmentation Platform",
+          links: "Quick links",
+          legal: "Legal",
+          privacy: "Privacy",
+          terms: "Terms",
+          legalNotice: "Legal notice",
+          rights: "All rights reserved"
+        }
+      },
+      contact: {
+        title: "Contact this consultant",
+        enterprise: "Enterprise",
+        visiteurPro: "Visitor Pro",
+        accessEntreprise: "Enterprise Access",
+        accessDesc: "Contact this consultant, post requests and manage your resources.",
+        connectBtn: "Sign in",
+        createAccount: "Create an enterprise account",
+        vpTitle: "Contact consultants directly",
+        vpSubtitle: "Choose your plan and send messages to ERP freelancers.",
+        vpLogin: "Visitor Pro Login",
+        vpCreate: "Create my Visitor Pro account",
+        alreadyRegistered: "Already registered?",
+        noAccount: "No account yet?",
+        yourEmail: "Your email",
+        password: "Password",
+        choosePassword: "Choose a password",
+        yourName: "Your name or company",
+        phone: "Phone",
+        message: "Describe your project and needs...",
+        privacyAccept: "I accept the privacy policy",
+        send: "Send my request",
+        messagesRemaining: "messages remaining this month",
+        plan: "plan"
+      },
+      nav: {
+        home: "Home",
+        consultants: "Consultants",
+        companies: "Companies",
+        login: "Sign in",
+        findExpert: "Find an expert",
+        dashboard: "Dashboard",
+        logout: "Logout"
       }
     }
   };

@@ -983,10 +983,15 @@ const translations = {
   'nav.consultants': 'Consultants',
   'nav.entreprises': 'Entreprises',
   'nav.comment': 'Fonctionnement',
+  'nav.login': 'Se connecter',
   'nav.register': 'Devenir consultant',
   'nav.find': 'Rechercher un expert',
 
   'hero.badge': 'Plateforme B2B · Staff Augmentation ERP · Enterprise-grade',
+  'hero.badge1': 'Experts ERP validés',
+  'hero.badge2': 'Dashboard Unique',
+  'hero.badge3': 'Disponibilité temps réel',
+  'hero.badge4': 'Traçabilité ressource',
   'hero.title': 'Rentabilisez vos consultants ERP. Trouvez les experts qu\'il vous faut.',
   'hero.subtitle': 'La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co\u00fbteux que les grandes firmes.',
   'kpi.active': 'Consultants sur la plateforme',
@@ -1124,6 +1129,13 @@ const translations = {
   'value.speed': 'Vitesse de déploiement',
   'value.speed_desc': 'De la demande au démarrage en 48h. Les grandes firmes prennent des semaines.',
 
+  'features.speed': 'Vitesse inégalée',
+  'features.speed_desc': 'De la demande à la mise en relation en moins de 48h. Nos consultants validés sont disponibles immédiatement pour vos projets urgents.',
+  'features.quality': 'Qualité souveraine',
+  'features.quality_desc': 'Chaque profil est validé manuellement par notre équipe. Certifications vérifiées, expériences confirmées. Zéro profil non vérifié.',
+  'features.expertise': 'Expertise profonde',
+  'features.expertise_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% focalisé ERP. Pas d\'approche généraliste, une spécialisation totale.',
+
   'footer.copyright': '© 2026 ExpertERPHub. Tous droits réservés.',
   },
   
@@ -1133,10 +1145,15 @@ const translations = {
   'nav.consultants': 'Consultants',
   'nav.entreprises': 'Companies',
   'nav.comment': 'How it works',
+  'nav.login': 'Sign in',
   'nav.register': 'Join as consultant',
   'nav.find': 'Search an expert',
 
   'hero.badge': 'B2B Platform · ERP Staff Augmentation · Enterprise-grade',
+  'hero.badge1': 'Verified ERP experts',
+  'hero.badge2': 'Single dashboard',
+  'hero.badge3': 'Real-time availability',
+  'hero.badge4': 'Resource traceability',
   'hero.title': 'Monetize your ERP consultants. Find the experts you need.',
   'hero.subtitle': 'The B2B platform connecting companies with available ERP resources to those who need them. Faster and more cost-effective than large consulting firms.',
   'kpi.active': 'Consultants on the platform',
@@ -1274,6 +1291,13 @@ const translations = {
   'value.speed': 'Deployment speed',
   'value.speed_desc': 'From request to start in 48 hours. Big firms take weeks.',
 
+  'features.speed': 'Unmatched speed',
+  'features.speed_desc': 'From request to introduction in under 48 hours. Our validated consultants are available immediately for your urgent projects.',
+  'features.quality': 'Sovereign quality',
+  'features.quality_desc': 'Every profile is manually validated by our team. Certifications verified, experience confirmed. Zero unverified profiles.',
+  'features.expertise': 'Deep expertise',
+  'features.expertise_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% ERP-focused. No generalist approach, total specialization.',
+
   'footer.copyright': '© 2026 ExpertERPHub. All rights reserved.',
   }
 };
@@ -1380,7 +1404,7 @@ function toggleTheme() {
   <div class="nav-r">
     <!-- ═══ ÉTAT NON CONNECTÉ ═══ -->
     <div id="nav-guest" style="display:flex;gap:.5rem;align-items:center;">
-      <button class="btn-outline portal-trigger" id="portal-entry-btn" data-action="open-client-space">Se connecter</button>
+      <button class="btn-outline portal-trigger" id="portal-entry-btn" data-action="open-client-space" data-i18n="nav.login">Se connecter</button>
       <button class="btn-outline" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
     </div>
     <!-- ═══ ÉTAT CONNECTÉ — Dropdown compte unique (style pro) ═══ -->
@@ -1459,17 +1483,17 @@ function toggleTheme() {
             <span class="material-symbols-outlined" style="color:#d8b9ff;font-size:20px;">location_on</span>
             <input class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-3 font-manrope text-sm" placeholder="Localisation (Paris, Montréal…)" type="text" id="hero-location-input">
           </div>
-          <button class="px-8 py-3 rounded-lg font-manrope font-bold transition-all duration-300 text-sm flex items-center gap-2" style="background:linear-gradient(135deg,#2563eb,#7c3aed);color:#ffffff;box-shadow:var(--shadow-md);" data-action="show-page" data-page="consultants">
+          <button class="px-8 py-3 rounded-lg font-manrope font-bold transition-all duration-300 text-sm flex items-center gap-2" style="background:linear-gradient(135deg,#2563eb,#7c3aed);color:#ffffff;box-shadow:var(--shadow-md);" data-action="show-page" data-page="consultants" data-i18n="nav.find">
             <span>Trouver un expert</span>
             <span class="material-symbols-outlined" style="font-size:18px;">rocket_launch</span>
           </button>
         </div>
         <!-- Hero badges -->
         <div class="hero-badges">
-          <span class="hero-badge">Experts ERP validés</span>
-          <span class="hero-badge">Dashboard Unique</span>
-          <span class="hero-badge">Disponibilité temps réel</span>
-          <span class="hero-badge">Traçabilité ressource</span>
+          <span class="hero-badge" data-i18n="hero.badge1">Experts ERP validés</span>
+          <span class="hero-badge" data-i18n="hero.badge2">Dashboard Unique</span>
+          <span class="hero-badge" data-i18n="hero.badge3">Disponibilité temps réel</span>
+          <span class="hero-badge" data-i18n="hero.badge4">Traçabilité ressource</span>
         </div>
       </div>
     </div>
@@ -1540,8 +1564,8 @@ function toggleTheme() {
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.15);">
               <span class="material-symbols-outlined" style="color:var(--primary);font-size:28px;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;">bolt</span>
             </div>
-            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);">Vitesse inégalée</h3>
-            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);">De la demande à la mise en relation en moins de 48h. Nos consultants validés sont disponibles immédiatement pour vos projets urgents.</p>
+            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.speed">Vitesse inégalée</h3>
+            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.speed_desc">De la demande à la mise en relation en moins de 48h. Nos consultants validés sont disponibles immédiatement pour vos projets urgents.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:var(--primary);">
               <span>EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
@@ -1554,8 +1578,8 @@ function toggleTheme() {
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(0,244,254,.1);border:1px solid rgba(0,244,254,.2);">
               <span class="material-symbols-outlined" style="color:var(--primary);font-size:28px;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;">verified_user</span>
             </div>
-            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);">Qualité souveraine</h3>
-            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);">Chaque profil est validé manuellement par notre équipe. Certifications vérifiées, expériences confirmées. Zéro profil non vérifié.</p>
+            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.quality">Qualité souveraine</h3>
+            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.quality_desc">Chaque profil est validé manuellement par notre équipe. Certifications vérifiées, expériences confirmées. Zéro profil non vérifié.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:var(--primary);">
               <span>EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
@@ -1568,8 +1592,8 @@ function toggleTheme() {
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(216,185,255,.1);border:1px solid rgba(216,185,255,.2);">
               <span class="material-symbols-outlined" style="color:#d8b9ff;font-size:28px;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;">hub</span>
             </div>
-            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);">Expertise profonde</h3>
-            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);">SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% focalisé ERP. Pas d'approche généraliste, une spécialisation totale.</p>
+            <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.expertise">Expertise profonde</h3>
+            <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.expertise_desc">SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% focalisé ERP. Pas d'approche généraliste, une spécialisation totale.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:#d8b9ff;">
               <span>EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
@@ -2092,10 +2116,10 @@ function toggleTheme() {
   <footer>
     <div class="footer-logo">Expert<span>ERP</span>Hub</div>
     <div class="footer-links">
-      <span class="footer-link" data-action="show-page" data-page="consultants">Consultants</span>
-      <span class="footer-link" data-action="show-page" data-page="home">Accueil</span>
+      <span class="footer-link" data-action="show-page" data-page="consultants" data-i18n="nav.consultants">Consultants</span>
+      <span class="footer-link" data-action="show-page" data-page="home" data-i18n="nav.home">Accueil</span>
     </div>
-    <div class="footer-copy">© 2026 ExpertERPHub. Tous droits réservés.</div>
+    <div class="footer-copy" data-i18n="footer.copyright">© 2026 ExpertERPHub. Tous droits réservés.</div>
   </footer>
 </div>
 
