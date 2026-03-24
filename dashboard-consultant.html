@@ -874,6 +874,8 @@ img{max-width:100%;height:auto;}
 <script src="supabase-auth-client.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
+<script src="messaging.js"></script>
+<script src="email-notify.js"></script>
 <script>
 let currentEmail = null;
 let currentConsultant = null;
@@ -1789,6 +1791,20 @@ async function sendReplyFromModal() {
 
   try {
     await ExpertNotifications.reply(_currentRequestId, text);
+
+    // Aussi envoyer dans la table messages pour conversation continue
+    var notif = ExpertNotifications.getById(_currentRequestId);
+    if (notif && window.ExpertMessaging) {
+      await ExpertMessaging.send({
+        senderEmail: currentEmail,
+        senderName: currentConsultant ? (currentConsultant.prenom + ' ' + currentConsultant.nom) : currentEmail,
+        senderRole: 'consultant',
+        receiverEmail: notif.companyEmail || notif.company_email,
+        receiverName: notif.companyName || notif.company_name,
+        body: text,
+        notificationId: notif.id
+      });
+    }
 
     // Mettre a jour l'affichage
     document.getElementById('rq-reply-text').textContent = text;
