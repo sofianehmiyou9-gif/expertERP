@@ -503,6 +503,7 @@ body{background:#f7f9fb;}
 
   <div class="tab-buttons">
     <button class="tab-button active" data-action="show-tab" data-tab-name="resources" id="tab-resources">Mes Ressources</button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="search" id="tab-search">Rechercher</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="messages" id="tab-messages">Messages <span id="messages-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
     <button class="tab-button" data-action="show-tab" data-tab-name="team" id="tab-team">Equipe</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile">Mon Profil</button>
@@ -702,6 +703,55 @@ body{background:#f7f9fb;}
           </thead>
           <tbody id="team-tbody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ═══ Rechercher des consultants ═══ -->
+    <div class="tab-pane" id="search-tab">
+      <div class="section-title">Rechercher des consultants</div>
+      <div class="section-sub">Trouvez les experts ERP disponibles sur la plateforme.</div>
+
+      <!-- Filtres -->
+      <div style="display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:flex-end;">
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">ERP</label>
+          <select id="search-erp" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:140px;">
+            <option value="">Tous</option>
+            <option>SAP</option><option>Oracle</option><option>Microsoft Dynamics</option>
+            <option>Workday</option><option>Salesforce</option><option>ServiceNow</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Rôle</label>
+          <select id="search-role" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:160px;">
+            <option value="">Tous</option>
+            <option>Consultant fonctionnel</option><option>Consultant technique</option>
+            <option>Chef de projet / PM</option><option>Architecte solution</option>
+            <option>PMO</option><option>SME</option><option>Analyste</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Disponibilité</label>
+          <select id="search-dispo" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:140px;">
+            <option value="">Toutes</option>
+            <option>Immédiat</option><option>Sous 15 jours</option><option>Sous 1 mois</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">TJM max ($)</label>
+          <input id="search-tjm" type="number" placeholder="ex: 1200" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:110px;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Ville</label>
+          <input id="search-ville" type="text" placeholder="ex: Montréal" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:140px;">
+        </div>
+        <button onclick="searchConsultants()" style="padding:.65rem 1.25rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font-main);white-space:nowrap;">Rechercher</button>
+      </div>
+
+      <!-- Résultats -->
+      <div id="search-count" style="font-size:.78rem;color:#6b7280;margin-bottom:1rem;display:none;"></div>
+      <div id="search-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
+        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>
       </div>
     </div>
 
@@ -1760,6 +1810,113 @@ async function saveResourceEdit() {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   RECHERCHE DE CONSULTANTS — Filtres ERP/rôle/dispo/TJM/ville
+   ═══════════════════════════════════════════════════════════════ */
+let _searchCache = [];
+let _searchLoaded = false;
+
+async function loadSearchConsultants() {
+  if (_searchLoaded && _searchCache.length) return _searchCache;
+  try {
+    const resp = await fetch(SB_URL + '/rest/v1/consultants?select=*&statut=eq.approuve&order=created_at.desc', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Cache-Control': 'no-cache' },
+      cache: 'no-store'
+    });
+    _searchCache = await resp.json();
+    _searchLoaded = true;
+    return _searchCache;
+  } catch (e) { return []; }
+}
+
+async function searchConsultants() {
+  const container = document.getElementById('search-results');
+  const countEl = document.getElementById('search-count');
+  container.innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;font-size:.85rem;grid-column:1/-1;">Recherche en cours...</div>';
+
+  const all = await loadSearchConsultants();
+  const erpFilter = (document.getElementById('search-erp').value || '').toLowerCase();
+  const roleFilter = (document.getElementById('search-role').value || '').toLowerCase();
+  const dispoFilter = (document.getElementById('search-dispo').value || '').toLowerCase();
+  const tjmMax = parseInt(document.getElementById('search-tjm').value) || 0;
+  const villeFilter = (document.getElementById('search-ville').value || '').toLowerCase().trim();
+
+  const results = all.filter(function(c) {
+    const notes = (function() { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
+
+    /* ERP */
+    if (erpFilter) {
+      const erps = (Array.isArray(c.competences) ? c.competences.join(' ') : '').toLowerCase();
+      if (!erps.includes(erpFilter)) return false;
+    }
+    /* Rôle */
+    if (roleFilter) {
+      const role = (c.titre || notes.role || '').toLowerCase();
+      if (!role.includes(roleFilter)) return false;
+    }
+    /* Disponibilité */
+    if (dispoFilter) {
+      const dispo = (notes.disponibilite || c.disponibilite || '').toLowerCase();
+      if (!dispo.includes(dispoFilter)) return false;
+    }
+    /* TJM max */
+    if (tjmMax > 0) {
+      const tjm = c.tjm_min || c.tjm_max || 0;
+      if (tjm > tjmMax) return false;
+    }
+    /* Ville */
+    if (villeFilter) {
+      const ville = (notes.ville || '').toLowerCase();
+      if (!ville.includes(villeFilter)) return false;
+    }
+    return true;
+  });
+
+  countEl.style.display = 'block';
+  countEl.textContent = results.length + ' consultant' + (results.length !== 1 ? 's' : '') + ' trouvé' + (results.length !== 1 ? 's' : '');
+
+  if (!results.length) {
+    container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Aucun consultant ne correspond à vos critères.</div>';
+    return;
+  }
+
+  container.innerHTML = results.map(function(c) {
+    const notes = (function() { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
+    const fullName = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || 'Consultant ERP';
+    const photo = notes.photo || notes.photo_url || notes.avatar || '';
+    const erps = Array.isArray(c.competences) ? c.competences.slice(0, 3).join(', ') : '—';
+    const tjm = c.tjm_min ? (c.tjm_min + ' $/j') : '—';
+    const dispo = notes.disponibilite || c.disponibilite || '—';
+    const ville = notes.ville || '—';
+    const resume = (notes.resume_pro || notes.resume || c.resume || '').substring(0, 100);
+    const initials = fullName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+
+    var avatarHtml = photo
+      ? '<img src="' + safe(photo) + '" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        + '<div style="display:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>'
+      : '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>';
+
+    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem;transition:box-shadow .2s;cursor:pointer;" onclick="window.open(\'/consultant.html?id=' + c.id + '\',\'_blank\')" onmouseenter="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.08)\'" onmouseleave="this.style.boxShadow=\'none\'">'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">'
+        + avatarHtml
+        + '<div>'
+          + '<div style="font-size:.92rem;font-weight:600;color:#191c1e;">' + safe(fullName) + '</div>'
+          + '<div style="font-size:.75rem;color:#6b7280;">' + safe(c.titre || 'Consultant ERP') + '</div>'
+        + '</div>'
+      + '</div>'
+      + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.65rem;">'
+        + '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(0,40,142,.06);color:#00288e;border-radius:99px;font-weight:600;">' + safe(erps) + '</span>'
+        + '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(5,150,105,.06);color:#059669;border-radius:99px;font-weight:600;">' + safe(dispo) + '</span>'
+        + (ville !== '—' ? '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(124,58,237,.06);color:#7c3aed;border-radius:99px;font-weight:600;">' + safe(ville) + '</span>' : '')
+      + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;">'
+        + '<span style="font-size:.82rem;font-weight:700;color:#00288e;">' + safe(tjm) + '</span>'
+        + '<span style="font-size:.72rem;color:#0058be;font-weight:600;">Voir le profil →</span>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
 function showTab(tabName, event) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.getElementById(tabName + '-tab').classList.add('active');
@@ -1768,9 +1925,13 @@ function showTab(tabName, event) {
   const targetBtn = event && event.currentTarget ? event.currentTarget : document.getElementById('tab-' + tabName);
   if (targetBtn) targetBtn.classList.add('active');
 
-  /* Sprint 3: Charger les messages quand on clique sur l'onglet */
+  /* Charger les messages quand on clique sur l'onglet */
   if (tabName === 'messages' && companyMessages.length === 0) {
     loadCompanyMessages();
+  }
+  /* Pré-charger les consultants quand on ouvre Rechercher */
+  if (tabName === 'search' && !_searchLoaded) {
+    loadSearchConsultants();
   }
 }
 
