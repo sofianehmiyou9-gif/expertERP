@@ -1136,9 +1136,31 @@ const translations = {
   'features.expertise': 'Expertise profonde',
   'features.expertise_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% focalisé ERP. Pas d\'approche généraliste, une spécialisation totale.',
 
+  'why.badge': 'L\'Avantage ExpertERPHub',
+  'why.title': 'Pourquoi ExpertERPHub ?',
+  'features.learnMore': 'EN SAVOIR PLUS',
+
+  'cta.title': 'Prêt à maîtriser votre<br><span class="italic text-secondary">transformation digitale&nbsp;?</span>',
+  'cta.btn1': 'Trouver un consultant ERP',
+  'cta.btn2': 'Devenir consultant',
+
+  'footer.tagline': 'La référence souveraine en consulting ERP. Experts certifiés, disponibles rapidement.',
+  'footer.platform': 'Plateforme',
+  'footer.link.how': 'Fonctionnement',
+  'footer.link.consultants': 'Consultants ERP',
+  'footer.link.companies': 'Pour les entreprises',
+  'footer.specialties': 'Spécialités',
+  'footer.company': 'Entreprise',
+  'footer.link.privacy': 'Politique de confidentialité',
+  'footer.link.terms': 'Conditions d\'utilisation',
+  'footer.link.legal': 'Mentions légales',
+  'footer.contact': 'Contact',
+  'footer.link.support': 'Support',
+  'footer.link.join': 'Rejoindre la plateforme',
   'footer.copyright': '© 2026 ExpertERPHub. Tous droits réservés.',
+  'footer.slogan': 'La référence souveraine en consulting ERP.',
   },
-  
+
   en: {
 
   'nav.home': 'Home',
@@ -1298,7 +1320,29 @@ const translations = {
   'features.expertise': 'Deep expertise',
   'features.expertise_desc': 'SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% ERP-focused. No generalist approach, total specialization.',
 
+  'why.badge': 'The ExpertERPHub Advantage',
+  'why.title': 'Why ExpertERPHub?',
+  'features.learnMore': 'LEARN MORE',
+
+  'cta.title': 'Ready to master your<br><span class="italic text-secondary">digital transformation?</span>',
+  'cta.btn1': 'Find an ERP consultant',
+  'cta.btn2': 'Become a consultant',
+
+  'footer.tagline': 'The sovereign reference in ERP consulting. Certified experts, available quickly.',
+  'footer.platform': 'Platform',
+  'footer.link.how': 'How it works',
+  'footer.link.consultants': 'ERP Consultants',
+  'footer.link.companies': 'For companies',
+  'footer.specialties': 'Specialties',
+  'footer.company': 'Company',
+  'footer.link.privacy': 'Privacy policy',
+  'footer.link.terms': 'Terms of use',
+  'footer.link.legal': 'Legal notice',
+  'footer.contact': 'Contact',
+  'footer.link.support': 'Support',
+  'footer.link.join': 'Join the platform',
   'footer.copyright': '© 2026 ExpertERPHub. All rights reserved.',
+  'footer.slogan': 'The sovereign reference in ERP consulting.',
   }
 };
 
@@ -1553,8 +1597,8 @@ function toggleTheme() {
   <section class="py-24 reveal-up" style="background:var(--surface-low);">
     <div class="px-8 md:px-12 max-w-screen-2xl mx-auto">
       <div class="mb-20 text-center">
-        <span class="font-manrope text-xs font-bold tracking-[0.2em] uppercase block mb-4" style="color:var(--primary);">L'Avantage ExpertERPHub</span>
-        <h2 class="font-newsreader text-4xl md:text-5xl font-bold" style="color:var(--ink);">Pourquoi ExpertERPHub ?</h2>
+        <span class="font-manrope text-xs font-bold tracking-[0.2em] uppercase block mb-4" style="color:var(--primary);" data-i18n="why.badge">L'Avantage ExpertERPHub</span>
+        <h2 class="font-newsreader text-4xl md:text-5xl font-bold" style="color:var(--ink);" data-i18n="why.title">Pourquoi ExpertERPHub ?</h2>
         <div class="h-1 w-20 mx-auto mt-4 rounded-full" style="background:linear-gradient(to right,#00f4fe,transparent);"></div>
       </div>
       <div class="grid md:grid-cols-3 gap-8">
@@ -1567,7 +1611,7 @@ function toggleTheme() {
             <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.speed">Vitesse inégalée</h3>
             <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.speed_desc">De la demande à la mise en relation en moins de 48h. Nos consultants validés sont disponibles immédiatement pour vos projets urgents.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:var(--primary);">
-              <span>EN SAVOIR PLUS</span>
+              <span data-i18n="features.learnMore">EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
             </div>
           </div>
@@ -1581,7 +1625,7 @@ function toggleTheme() {
             <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.quality">Qualité souveraine</h3>
             <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.quality_desc">Chaque profil est validé manuellement par notre équipe. Certifications vérifiées, expériences confirmées. Zéro profil non vérifié.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:var(--primary);">
-              <span>EN SAVOIR PLUS</span>
+              <span data-i18n="features.learnMore">EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
             </div>
           </div>
@@ -1595,7 +1639,7 @@ function toggleTheme() {
             <h3 class="font-newsreader text-2xl font-bold mb-4" style="color:var(--ink);" data-i18n="features.expertise">Expertise profonde</h3>
             <p class="leading-relaxed font-manrope text-sm" style="color:var(--muted);" data-i18n="features.expertise_desc">SAP, Oracle, Workday, Dynamics, Salesforce, ServiceNow — 100% focalisé ERP. Pas d'approche généraliste, une spécialisation totale.</p>
             <div class="mt-8 flex items-center gap-2 font-bold text-sm tracking-wide" style="color:#d8b9ff;">
-              <span>EN SAVOIR PLUS</span>
+              <span data-i18n="features.learnMore">EN SAVOIR PLUS</span>
               <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
             </div>
           </div>
@@ -1829,13 +1873,13 @@ function toggleTheme() {
   <!-- VALUE SECTION -->
   <!-- Value vs grandes firmes -->
   <div class="value-section">
-    <h2>Pourquoi ExpertERPHub<br>plutôt qu'une grande firme ?</h2>
-    <p>Accédez aux mêmes experts sans les marges d'un cabinet. Direct, transparent, efficace.</p>
+    <h2 data-i18n="value.title">Pourquoi ExpertERPHub<br>plutôt qu'une grande firme ?</h2>
+    <p data-i18n="value.subtitle">Accédez aux mêmes experts sans les marges d'un cabinet. Direct, transparent, efficace.</p>
     <div class="value-grid">
-      <div class="value-card"><h4>Sans intermédiaire</h4><p>Contact direct entre l'expert et l'entreprise. Pas de couche de gestion qui dilue la valeur.</p></div>
-      <div class="value-card"><h4>Tarifs transparents</h4><p>Vous voyez le TJM réel de l'expert. Pas de surcoût de 40–60% d'un cabinet.</p></div>
-      <div class="value-card"><h4>Experts vérifiés</h4><p>Chaque profil est validé par notre équipe. Certifications vérifiées, expériences confirmées.</p></div>
-      <div class="value-card"><h4>Vitesse de déploiement</h4><p>De la demande au démarrage en 48h. Les grandes firmes prennent des semaines.</p></div>
+      <div class="value-card"><h4 data-i18n="value.direct">Sans intermédiaire</h4><p data-i18n="value.direct_desc">Contact direct entre l'expert et l'entreprise. Pas de couche de gestion qui dilue la valeur.</p></div>
+      <div class="value-card"><h4 data-i18n="value.transparent">Tarifs transparents</h4><p data-i18n="value.transparent_desc">Vous voyez le TJM réel de l'expert. Pas de surcoût de 40–60% d'un cabinet.</p></div>
+      <div class="value-card"><h4 data-i18n="value.verified">Experts vérifiés</h4><p data-i18n="value.verified_desc">Chaque profil est validé par notre équipe. Certifications vérifiées, expériences confirmées.</p></div>
+      <div class="value-card"><h4 data-i18n="value.speed">Vitesse de déploiement</h4><p data-i18n="value.speed_desc">De la demande au démarrage en 48h. Les grandes firmes prennent des semaines.</p></div>
     </div>
   </div>
 
@@ -1843,10 +1887,10 @@ function toggleTheme() {
   <!-- FINAL CTA — Stitch style -->
   <section class="py-32 relative reveal-up">
     <div class="px-8 md:px-12 max-w-screen-2xl mx-auto text-center">
-      <h2 class="font-newsreader text-5xl md:text-6xl font-bold text-primary mb-10 tracking-tight">Prêt à maîtriser votre<br><span class="italic text-secondary">transformation digitale&nbsp;?</span></h2>
+      <h2 class="font-newsreader text-5xl md:text-6xl font-bold text-primary mb-10 tracking-tight" data-i18n="cta.title">Prêt à maîtriser votre<br><span class="italic text-secondary">transformation digitale&nbsp;?</span></h2>
       <div class="flex flex-col md:flex-row gap-5 justify-center items-center">
-        <button class="bg-primary text-on-primary px-12 py-4 rounded-lg font-manrope text-base font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20" data-action="open-entreprise-modal">Trouver un consultant ERP</button>
-        <button class="bg-surface-container-high text-on-surface px-12 py-4 rounded-lg font-manrope text-base font-bold hover:bg-surface-container-highest transition-all" data-action="open-consultant-modal">Devenir consultant</button>
+        <button class="bg-primary text-on-primary px-12 py-4 rounded-lg font-manrope text-base font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20" data-action="open-entreprise-modal" data-i18n="cta.btn1">Trouver un consultant ERP</button>
+        <button class="bg-surface-container-high text-on-surface px-12 py-4 rounded-lg font-manrope text-base font-bold hover:bg-surface-container-highest transition-all" data-action="open-consultant-modal" data-i18n="cta.btn2">Devenir consultant</button>
       </div>
     </div>
   </section>
@@ -1856,18 +1900,18 @@ function toggleTheme() {
     <div class="grid grid-cols-2 md:grid-cols-5 gap-10 px-12 py-16 max-w-screen-2xl mx-auto font-manrope text-sm leading-relaxed">
       <div class="col-span-2 md:col-span-1">
         <div class="footer-logo text-blue-900 mb-5">Expert<span>ERP</span>Hub</div>
-        <p class="text-slate-500 text-sm">La référence souveraine en consulting ERP. Experts certifiés, disponibles rapidement.</p>
+        <p class="text-slate-500 text-sm" data-i18n="footer.tagline">La référence souveraine en consulting ERP. Experts certifiés, disponibles rapidement.</p>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest">Plateforme</h5>
+        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.platform">Plateforme</h5>
         <ul class="space-y-3">
-          <li><span class="footer-link cursor-pointer" data-action="go-to-how">Fonctionnement</span></li>
-          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="consultants">Consultants ERP</span></li>
-          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="entreprises">Pour les entreprises</span></li>
+          <li><span class="footer-link cursor-pointer" data-action="go-to-how" data-i18n="footer.link.how">Fonctionnement</span></li>
+          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="consultants" data-i18n="footer.link.consultants">Consultants ERP</span></li>
+          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="entreprises" data-i18n="footer.link.companies">Pour les entreprises</span></li>
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest">Spécialités</h5>
+        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.specialties">Spécialités</h5>
         <ul class="space-y-3">
           <li><span class="text-slate-500">SAP S/4HANA</span></li>
           <li><span class="text-slate-500">Oracle Fusion</span></li>
@@ -1876,24 +1920,24 @@ function toggleTheme() {
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest">Entreprise</h5>
+        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.company">Entreprise</h5>
         <ul class="space-y-3">
-          <li><a href="privacy.html" class="text-slate-500 hover:text-blue-700 transition-colors">Politique de confidentialité</a></li>
-          <li><a href="conditions.html" class="text-slate-500 hover:text-blue-700 transition-colors">Conditions d'utilisation</a></li>
-          <li><a href="mentions.html" class="text-slate-500 hover:text-blue-700 transition-colors">Mentions légales</a></li>
+          <li><a href="privacy.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.privacy">Politique de confidentialité</a></li>
+          <li><a href="conditions.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.terms">Conditions d'utilisation</a></li>
+          <li><a href="mentions.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.legal">Mentions légales</a></li>
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest">Contact</h5>
+        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.contact">Contact</h5>
         <ul class="space-y-3">
-          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com">Support</a></li>
-          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com">Rejoindre la plateforme</a></li>
+          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com" data-i18n="footer.link.support">Support</a></li>
+          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com" data-i18n="footer.link.join">Rejoindre la plateforme</a></li>
         </ul>
       </div>
     </div>
     <div class="px-12 py-6 border-t border-slate-100 max-w-screen-2xl mx-auto flex justify-between items-center text-slate-400 text-xs font-manrope">
-      <span>© 2026 ExpertERPHub. Tous droits réservés.</span>
-      <span>La référence souveraine en consulting ERP.</span>
+      <span data-i18n="footer.copyright">© 2026 ExpertERPHub. Tous droits réservés.</span>
+      <span data-i18n="footer.slogan">La référence souveraine en consulting ERP.</span>
     </div>
   </footer>
 

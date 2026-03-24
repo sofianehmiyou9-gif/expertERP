@@ -532,27 +532,76 @@ function setLanguage(lang) {
 function applyI18n() {
   const t = (k) => ExpertI18n.t(k);
   document.title = 'ExpertERPHub - ' + t('consultant.profileTitle');
+
+  // Nav
   const nav = document.querySelectorAll('.nav-link');
   if (nav[0]) nav[0].textContent = t('common.home');
   if (nav[1]) nav[1].textContent = t('common.consultants');
   if (nav[2]) nav[2].textContent = t('common.companies');
   const findBtn = document.querySelector('.btn-outline');
   if (findBtn) findBtn.textContent = t('common.findExpert');
+
+  // Profile hero labels
+  const verifiedLabel = document.getElementById('profile-verified-label');
+  if (verifiedLabel) verifiedLabel.textContent = t('consultant.verifiedBadge');
+  const sidebarContactBtn = document.getElementById('sidebar-contact-btn');
+  if (sidebarContactBtn) sidebarContactBtn.textContent = t('consultant.contactBtn');
+  const viewProfileLink = document.querySelector('a[href="#resume-section"]');
+  if (viewProfileLink) {
+    const svg = viewProfileLink.querySelector('svg');
+    const svgHtml = svg ? svg.outerHTML : '';
+    viewProfileLink.innerHTML = svgHtml + '\n            ' + t('consultant.viewFullProfile');
+  }
+
+  // Stats row labels
+  document.querySelectorAll('.profile-main .grid .text-\\[10px\\]').forEach((el, i) => {
+    if (i === 0) el.textContent = t('consultant.experience');
+    if (i === 1) el.textContent = t('consultant.location');
+    if (i === 2) el.textContent = t('consultant.languages');
+  });
+
+  // Info cards labels
+  const infoLabels = document.querySelectorAll('.info-card .text-\\[11px\\]');
+  if (infoLabels[0]) infoLabels[0].textContent = t('consultant.dailyRate');
+  if (infoLabels[1]) infoLabels[1].textContent = t('consultant.availability');
+  if (infoLabels[2]) infoLabels[2].textContent = t('consultant.workMode');
+
+  // Resume & Experience sections
   const resumeHeading = document.getElementById('resume-heading');
   if (resumeHeading) resumeHeading.textContent = t('consultant.professionalSummary');
   const experiencesHeading = document.getElementById('experiences-heading');
   if (experiencesHeading) experiencesHeading.textContent = t('consultant.professionalExperience');
+
+  // Certifications
+  const certifSection = document.querySelector('#certif-section h2');
+  if (certifSection) certifSection.textContent = t('consultant.certifications');
+  const skillExpHeading = document.querySelector('#profile-skill-experience')?.closest('div')?.querySelector('h3');
+  if (skillExpHeading) skillExpHeading.textContent = t('consultant.skillExperience');
+
+  // Projects section
+  const projetsHeading = document.getElementById('projets-heading');
+  if (projetsHeading) projetsHeading.innerHTML = t('consultant.projectsMissions');
+  const projetsSubtitle = projetsHeading?.nextElementSibling;
+  if (projetsSubtitle && projetsSubtitle.tagName === 'P') projetsSubtitle.textContent = t('consultant.projectsSubtitle');
+
+  // Contact section
+  const contactSubtitle = document.querySelector('#contact-section .text-secondary');
+  if (contactSubtitle) contactSubtitle.textContent = t('consultant.contactSubtitle');
+
   refreshContactFormLabels();
+
+  // Contact form placeholders
   const companyName = document.getElementById('company-name');
-  if (companyName) companyName.placeholder = 'Votre entreprise';
+  if (companyName) companyName.placeholder = t('consultant.yourCompany');
   const companyEmail = document.getElementById('company-email');
-  if (companyEmail) companyEmail.placeholder = 'Email professionnel';
+  if (companyEmail) companyEmail.placeholder = t('consultant.professionalEmail');
   const companyPhone = document.getElementById('company-phone');
-  if (companyPhone) companyPhone.placeholder = 'Téléphone';
+  if (companyPhone) companyPhone.placeholder = t('consultant.phone');
   const cm = document.getElementById('contact-message');
-  if (cm) cm.placeholder = 'Décrivez votre projet et vos besoins…';
+  if (cm) cm.placeholder = t('consultant.contactPlaceholder');
   const cb = document.getElementById('contact-btn');
-  if (cb) cb.textContent = 'Envoyer ma demande →';
+  if (cb) cb.textContent = t('consultant.sendRequest');
+
   // Apply data-i18n attributes
   ExpertI18n.applyByDataAttr();
 }
@@ -586,17 +635,64 @@ function isB2BResource(consultant) {
 }
 
 function refreshContactFormLabels() {
+  const t = (k) => ExpertI18n.t(k);
   const contactTitle = document.getElementById('contact-title');
   if (!contactTitle) return;
   const b2b = isB2BResource(currentConsultant);
   contactTitle.textContent = b2b
     ? 'Contacter l\'administrateur de cette ressource'
-    : ExpertI18n.t('consultant.contactConsultant');
+    : t('consultant.contactConsultant');
   const sidebarButton = document.getElementById('sidebar-contact-btn');
   if (sidebarButton) {
     sidebarButton.textContent = b2b
       ? 'Contacter l\'administrateur'
-      : 'Contacter ce consultant';
+      : t('consultant.contactBtn');
+  }
+
+  // Gate section labels
+  const gateEntTab = document.getElementById('gate-tab-entreprise');
+  if (gateEntTab) gateEntTab.innerHTML = '🏢 ' + t('contact.enterprise');
+  const gateVpTab = document.getElementById('gate-tab-visiteur');
+  if (gateVpTab) gateVpTab.innerHTML = '👤 ' + t('contact.visiteurPro');
+
+  // Enterprise gate panel
+  const entPanel = document.getElementById('gate-panel-entreprise');
+  if (entPanel) {
+    const h3 = entPanel.querySelector('h3');
+    if (h3) h3.textContent = t('contact.accessEntreprise');
+    const p = entPanel.querySelector('p');
+    if (p) p.textContent = t('contact.accessDesc');
+    const links = entPanel.querySelectorAll('a');
+    if (links[0]) links[0].textContent = t('contact.connectBtn') + ' →';
+    if (links[1]) links[1].textContent = t('contact.createAccount');
+  }
+
+  // Visiteur Pro gate panel
+  const vpLoginSection = document.getElementById('visiteur-login-section');
+  if (vpLoginSection) {
+    const h3 = vpLoginSection.querySelector('h3');
+    if (h3) h3.textContent = t('contact.vpTitle');
+    const p = vpLoginSection.querySelector('p');
+    if (p) p.textContent = t('contact.vpSubtitle');
+    const submitBtn = document.getElementById('vp-submit-btn');
+    if (submitBtn) submitBtn.textContent = t('contact.vpCreate');
+    const emailInput = document.getElementById('vp-email');
+    if (emailInput) emailInput.placeholder = t('contact.yourEmail');
+    const pwInput = document.getElementById('vp-password');
+    if (pwInput) pwInput.placeholder = t('contact.choosePassword');
+  }
+
+  // Visiteur Pro login panel
+  const vpConnectSection = document.getElementById('visiteur-connect-section');
+  if (vpConnectSection) {
+    const h3 = vpConnectSection.querySelector('h3');
+    if (h3) h3.textContent = t('contact.vpLogin');
+    const loginEmail = document.getElementById('vp-login-email');
+    if (loginEmail) loginEmail.placeholder = t('contact.yourEmail');
+    const loginPw = document.getElementById('vp-login-password');
+    if (loginPw) loginPw.placeholder = t('contact.password');
+    const loginBtn = vpConnectSection.querySelector('button');
+    if (loginBtn) loginBtn.textContent = t('contact.connectBtn');
   }
 }
 
