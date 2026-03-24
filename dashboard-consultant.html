@@ -1093,12 +1093,32 @@ function setLanguage(lang) {
 
 function applyI18n() {
   const t = (k) => ExpertI18n.t(k);
-  const authTitle = document.getElementById('auth-title');
-  if (authTitle) authTitle.textContent = t('dashboardConsultant.dashboardAccess');
+
+  // Auth container
+  const authTitle = document.querySelector('#auth-container h2');
+  if (authTitle) authTitle.textContent = t('dashboardConsultant.consultantSpace');
+  const emailInput = document.getElementById('email-input');
+  if (emailInput) emailInput.placeholder = t('dashboardConsultant.emailPlaceholder');
+  const pwInput = document.getElementById('password-input');
+  if (pwInput) pwInput.placeholder = t('dashboardConsultant.passwordPlaceholder');
   const authBtn = document.getElementById('auth-btn');
   if (authBtn) authBtn.textContent = t('common.login');
+  const resetBtn = document.querySelector('[data-action="open-reset-page"]');
+  if (resetBtn) resetBtn.textContent = t('dashboardConsultant.forgotPassword');
+  const backLink = document.querySelector('#auth-container a[href="/"]');
+  if (backLink) backLink.innerHTML = '&#8592; ' + t('dashboardConsultant.backToHome');
+
+  // Sidebar nav
+  const navLinks = document.querySelectorAll('.aside-nav .nav-link');
+  if (navLinks[0]) { const span = navLinks[0].querySelector('.nav-icon'); navLinks[0].textContent = ''; if (span) navLinks[0].appendChild(span); navLinks[0].appendChild(document.createTextNode(t('dashboardConsultant.dashboard'))); }
+  if (navLinks[1]) { const span = navLinks[1].querySelector('.nav-icon'); navLinks[1].textContent = ''; if (span) navLinks[1].appendChild(span); navLinks[1].appendChild(document.createTextNode(t('dashboardConsultant.profile'))); }
+
+  // Notifications title
   const notifTitle = document.getElementById('notif-title');
-  if (notifTitle) notifTitle.textContent = 'Demandes re\u00e7ues';
+  if (notifTitle) notifTitle.textContent = t('dashboardConsultant.requestsReceived');
+
+  // Apply data-i18n attributes (RGPD buttons, etc.)
+  if (window.ExpertI18n && ExpertI18n.applyByDataAttr) ExpertI18n.applyByDataAttr();
 }
 
 

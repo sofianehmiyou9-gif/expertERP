@@ -977,10 +977,19 @@ function setLanguage(lang) {
 
 function applyI18n() {
   const t = (k) => ExpertI18n.t(k);
+  // Auth container
   const authTitle = document.getElementById('auth-title');
   if (authTitle) authTitle.textContent = t('dashboardCompany.dashboardAccess');
+  const emailInput = document.getElementById('email-input');
+  if (emailInput) emailInput.placeholder = t('dashboardCompany.emailPlaceholder');
+  const pwInput = document.getElementById('password-input');
+  if (pwInput) pwInput.placeholder = t('dashboardCompany.passwordPlaceholder');
   const authBtn = document.getElementById('auth-btn');
   if (authBtn) authBtn.textContent = t('common.login');
+  const resetBtn = document.querySelector('[data-action="open-reset-page"]');
+  if (resetBtn) resetBtn.textContent = t('dashboardCompany.forgotPassword');
+  const backLink = document.querySelector('#auth-container a[href="/"]');
+  if (backLink) backLink.innerHTML = '&#8592; ' + t('dashboardCompany.backToHome');
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) logoutBtn.textContent = t('common.logout');
   const tabResources = document.getElementById('tab-resources');
