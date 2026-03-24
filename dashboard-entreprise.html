@@ -1501,6 +1501,12 @@ async function initAuth() {
   showAuthForm();
 }
 
+function persistPortalSession(email) {
+  if (window.ExpertPortalAuth) {
+    ExpertPortalAuth.setSession({ role: 'entreprise', email: email });
+  }
+}
+
 async function authenticate() {
   const email = document.getElementById('email-input').value.trim();
   const password = document.getElementById('password-input').value;
