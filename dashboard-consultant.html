@@ -867,10 +867,12 @@ img{max-width:100%;height:auto;}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="portal-auth.js"></script>
 <script src="supabase-helpers.js"></script>
+<script src="supabase-auth-client.js"></script>
 <script src="i18n.js"></script>
 <script src="notifications.js"></script>
 <script>
@@ -1093,8 +1095,18 @@ function setLanguage(lang) {
 
 function applyI18n() {
   const t = (k) => ExpertI18n.t(k);
+  const lang = ExpertI18n.getLang();
 
-  // Auth container
+  /* ── Helper: set nav-link text keeping icon span ── */
+  function setNavText(el, text) {
+    if (!el) return;
+    const span = el.querySelector('.nav-icon');
+    el.textContent = '';
+    if (span) el.appendChild(span);
+    el.appendChild(document.createTextNode(text));
+  }
+
+  /* ══════════════ AUTH SCREEN ══════════════ */
   const authTitle = document.querySelector('#auth-container h2');
   if (authTitle) authTitle.textContent = t('dashboardConsultant.consultantSpace');
   const emailInput = document.getElementById('email-input');
@@ -1108,16 +1120,282 @@ function applyI18n() {
   const backLink = document.querySelector('#auth-container a[href="/"]');
   if (backLink) backLink.innerHTML = '&#8592; ' + t('dashboardConsultant.backToHome');
 
-  // Sidebar nav
+  /* ══════════════ SIDEBAR NAV ══════════════ */
   const navLinks = document.querySelectorAll('.aside-nav .nav-link');
-  if (navLinks[0]) { const span = navLinks[0].querySelector('.nav-icon'); navLinks[0].textContent = ''; if (span) navLinks[0].appendChild(span); navLinks[0].appendChild(document.createTextNode(t('dashboardConsultant.dashboard'))); }
-  if (navLinks[1]) { const span = navLinks[1].querySelector('.nav-icon'); navLinks[1].textContent = ''; if (span) navLinks[1].appendChild(span); navLinks[1].appendChild(document.createTextNode(t('dashboardConsultant.profile'))); }
+  setNavText(navLinks[0], t('dashboardConsultant.dashboard'));
+  setNavText(navLinks[1], t('dashboardConsultant.profile'));
+  const voirCarte = document.getElementById('voir-carte-link');
+  if (voirCarte) setNavText(voirCarte, t('dashboardConsultant.viewMyCard'));
 
-  // Notifications title
+  /* ── Sidebar sections ── */
+  const sideTitles = document.querySelectorAll('.aside-section .aside-title');
+  sideTitles.forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt === 'ERP & Solutions' || txt === 'ERP &amp; Solutions') el.textContent = t('dashboardConsultant.erpSolutions');
+    else if (txt === 'Certifications') el.textContent = t('dashboardConsultant.certifications');
+    else if (txt === 'Support') el.textContent = t('dashboardConsultant.support');
+  });
+  const supportP = document.querySelector('.aside-section p');
+  if (supportP && (supportP.textContent.includes('aide') || supportP.textContent.includes('help'))) {
+    supportP.textContent = t('dashboardConsultant.supportText');
+  }
+  const logoutBtn = document.querySelector('.aside-logout');
+  if (logoutBtn) logoutBtn.textContent = t('dashboardConsultant.backToSite');
+
+  /* ══════════════ MAIN TOOLBAR ══════════════ */
+  const eyebrow = document.querySelector('.toolbar-title .eyebrow');
+  if (eyebrow) eyebrow.textContent = t('dashboardConsultant.executiveDashboard');
+  const mainH1 = document.querySelector('.toolbar-title h1');
+  if (mainH1) mainH1.textContent = t('dashboardConsultant.mySpace');
+  const mainP = document.querySelector('.toolbar-title p');
+  if (mainP) mainP.textContent = t('dashboardConsultant.dashboardSubtitle');
+
+  /* ══════════════ 4 KPI CARDS ══════════════ */
+  const bentoLabels = document.querySelectorAll('.bento-stat .bento-stat-label');
+  if (bentoLabels[0]) bentoLabels[0].textContent = t('dashboardConsultant.requestsReceived');
+  if (bentoLabels[1]) bentoLabels[1].textContent = t('dashboardConsultant.profileCompleteness');
+  if (bentoLabels[2]) bentoLabels[2].textContent = t('dashboardConsultant.status');
+  if (bentoLabels[3]) bentoLabels[3].textContent = t('dashboardConsultant.availability');
+
+  const bentoSubs = document.querySelectorAll('.bento-stat .bento-stat-sub');
+  /* bento-sub-requests is dynamic (set in renderNotifications), skip index 0 */
+  if (bentoSubs[1]) bentoSubs[1].textContent = t('dashboardConsultant.fillYourProfile');
+  const bentoSubStatus = document.getElementById('bento-sub-status');
+  if (bentoSubStatus) bentoSubStatus.textContent = t('dashboardConsultant.platformVisibility');
+
+  /* Availability dropdown */
+  const avSelect = document.getElementById('availability-select');
+  if (avSelect) {
+    var opts = avSelect.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.select');
+    if (opts[1]) opts[1].textContent = t('dashboardConsultant.immediate');
+    if (opts[2]) opts[2].textContent = t('dashboardConsultant.within15days');
+    if (opts[3]) opts[3].textContent = t('dashboardConsultant.within30days');
+    if (opts[4]) opts[4].textContent = t('dashboardConsultant.within60days');
+  }
+  const updateBtn = document.getElementById('update-btn');
+  if (updateBtn) updateBtn.textContent = t('dashboardConsultant.updateAvailability');
+
+  /* ══════════════ COMMUNICATION CENTER ══════════════ */
   const notifTitle = document.getElementById('notif-title');
   if (notifTitle) notifTitle.textContent = t('dashboardConsultant.requestsReceived');
+  const panelSub = document.querySelector('#comm-center-panel .panel-sub');
+  if (panelSub) panelSub.textContent = t('dashboardConsultant.manageRequests');
 
-  // Apply data-i18n attributes (RGPD buttons, etc.)
+  /* Comm tabs */
+  const commTabs = document.querySelectorAll('.comm-tab');
+  commTabs.forEach(function(tab) {
+    var filter = tab.getAttribute('data-comm-tab');
+    var countSpan = tab.querySelector('.tab-count');
+    var countHtml = countSpan ? countSpan.outerHTML : '';
+    if (filter === 'all') tab.innerHTML = t('dashboardConsultant.tabAll') + countHtml;
+    else if (filter === 'nouveau') tab.innerHTML = t('dashboardConsultant.tabNew') + countHtml;
+    else if (filter === 'repondu') tab.innerHTML = t('dashboardConsultant.tabReplied') + countHtml;
+    else if (filter === 'messages') tab.innerHTML = t('dashboardConsultant.tabMessages');
+  });
+
+  /* ══════════════ PROFILE TAB ══════════════ */
+  /* Profile guide */
+  const guideH3 = document.querySelector('.profile-guide h3');
+  if (guideH3) guideH3.textContent = t('dashboardConsultant.profileCompleteness');
+  const guideScore = document.getElementById('guide-score');
+  if (guideScore) {
+    var pct = guideScore.textContent.match(/\d+/);
+    guideScore.textContent = (pct ? pct[0] : '0') + '% ' + t('dashboardConsultant.complete');
+  }
+  const guideExp = document.getElementById('guide-exp');
+  if (guideExp) { var dot = guideExp.querySelector('.guide-dot'); guideExp.textContent = ''; if (dot) guideExp.appendChild(dot); guideExp.appendChild(document.createTextNode(t('dashboardConsultant.experienceGuide'))); }
+  const guideTjm = document.getElementById('guide-tjm');
+  if (guideTjm) { var dot = guideTjm.querySelector('.guide-dot'); guideTjm.textContent = ''; if (dot) guideTjm.appendChild(dot); guideTjm.appendChild(document.createTextNode(t('dashboardConsultant.pricingGuide'))); }
+  const guideMode = document.getElementById('guide-mode');
+  if (guideMode) { var dot = guideMode.querySelector('.guide-dot'); guideMode.textContent = ''; if (dot) guideMode.appendChild(dot); guideMode.appendChild(document.createTextNode(t('dashboardConsultant.modeGuide'))); }
+  const guideVille = document.getElementById('guide-ville');
+  if (guideVille) { var dot = guideVille.querySelector('.guide-dot'); guideVille.textContent = ''; if (dot) guideVille.appendChild(dot); guideVille.appendChild(document.createTextNode(t('dashboardConsultant.cityGuide'))); }
+  const guideLangItem = document.getElementById('guide-langues');
+  if (guideLangItem) { var dot = guideLangItem.querySelector('.guide-dot'); guideLangItem.textContent = ''; if (dot) guideLangItem.appendChild(dot); guideLangItem.appendChild(document.createTextNode(t('dashboardConsultant.languagesGuide'))); }
+
+  /* Professional info panel */
+  const profInfoH3 = document.querySelector('.editorial-form .panel-title h3');
+  if (profInfoH3) profInfoH3.textContent = t('dashboardConsultant.professionalInfo');
+  const profInfoSub = document.querySelector('.editorial-form .panel-title .panel-sub');
+  if (profInfoSub) profInfoSub.textContent = t('dashboardConsultant.profileSynopsis');
+
+  /* Status select + save button */
+  const profileStatusSel = document.getElementById('profile-status-select');
+  if (profileStatusSel) {
+    var opts = profileStatusSel.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.activeStatus');
+    if (opts[1]) opts[1].textContent = t('dashboardConsultant.onMissionStatus');
+  }
+  const profileSaveBtn = document.getElementById('profile-save-btn');
+  if (profileSaveBtn) profileSaveBtn.textContent = t('dashboardConsultant.saveBtn');
+
+  /* Info cards labels */
+  var detailLabels = document.querySelectorAll('.grid-cards .detail-label');
+  detailLabels.forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt === 'Rôle' || txt === 'Role') el.textContent = t('dashboardConsultant.role');
+    else if (txt.indexOf('ERP') === 0 && txt.indexOf('Modules') > -1) el.textContent = t('dashboardConsultant.erpModules');
+    else if (txt.indexOf('expérience') > -1 || txt.indexOf('experience') > -1 || txt.indexOf("exp\u00e9rience") > -1) el.textContent = t('dashboardConsultant.yearsExperience');
+    else if (txt.indexOf('TJM') > -1 || txt.indexOf('Daily rate') > -1 || txt.indexOf('Tarification') > -1) el.textContent = t('dashboardConsultant.tjmLabel');
+    else if (txt === 'Mode de travail' || txt === 'Work mode') el.textContent = t('dashboardConsultant.workMode');
+    else if (txt === 'Ville' || txt === 'City') el.textContent = t('dashboardConsultant.city');
+    else if (txt === 'Langues' || txt === 'Languages') el.textContent = t('dashboardConsultant.languages');
+    else if (txt.indexOf('Résumé') > -1 || txt.indexOf('Professional summary') > -1 || txt.indexOf("sum") > -1 || txt.indexOf("R\u00e9sum\u00e9") > -1) el.textContent = t('dashboardConsultant.professionalSummary');
+    else if (txt.indexOf('récente') > -1 || txt.indexOf('Recent') > -1 || txt.indexOf("r\u00e9cente") > -1) el.textContent = t('dashboardConsultant.recentExperience');
+    else if (txt === 'Certifications') el.textContent = t('dashboardConsultant.certifications');
+  });
+
+  /* Inline hints */
+  var inlineHints = document.querySelectorAll('.grid-cards .inline-hint');
+  inlineHints.forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt.indexOf('ERP') > -1 && txt.indexOf('modules') > -1) el.textContent = t('dashboardConsultant.erpModulesHint');
+    else if (txt.indexOf('années') > -1 || txt.indexOf('years') > -1 || txt.indexOf("ann\u00e9es") > -1 || txt.indexOf('Exact number') > -1) el.textContent = t('dashboardConsultant.yearsExpHint');
+    else if (txt.indexOf('taux') > -1 || txt.indexOf('rate') > -1) el.textContent = t('dashboardConsultant.tjmHint');
+    else if (txt.indexOf('expérience ERP') > -1 || txt.indexOf('ERP experience') > -1 || txt.indexOf("exp\u00e9rience ERP") > -1 || txt.indexOf("D\u00e9taillez") > -1 || txt.indexOf('Detail your') > -1) el.textContent = t('dashboardConsultant.recentExpHint');
+    else if (txt.indexOf('certifications') > -1) el.textContent = t('dashboardConsultant.certifHint');
+  });
+  /* Summary hint (special — has emoji and background styling) */
+  var summaryHintEl = document.querySelector('#resume-pro-card .inline-hint');
+  if (summaryHintEl) summaryHintEl.innerHTML = '<span style="margin-right:.3rem;">&#128161;</span> ' + t('dashboardConsultant.summaryHint');
+
+  /* Placeholders */
+  var erpModInput = document.getElementById('erp-modules-input');
+  if (erpModInput) erpModInput.placeholder = t('dashboardConsultant.modulesPlaceholder');
+  var expSelect = document.getElementById('edit-exp-select');
+  if (expSelect) expSelect.placeholder = t('dashboardConsultant.yearsExpPlaceholder');
+  var tjmCustom = document.getElementById('edit-tjm-custom');
+  if (tjmCustom) tjmCustom.placeholder = t('dashboardConsultant.enterYourRate');
+  var resumeInput = document.getElementById('resume-pro-input');
+  if (resumeInput) resumeInput.placeholder = t('dashboardConsultant.summaryPlaceholder');
+  var projectExpInput = document.getElementById('project-exp-input');
+  if (projectExpInput) projectExpInput.placeholder = t('dashboardConsultant.expPlaceholder');
+  var certifCustomModule = document.getElementById('certif-custom-module');
+  if (certifCustomModule) certifCustomModule.placeholder = t('dashboardConsultant.certifModuleName');
+
+  /* TJM type select */
+  var tjmTypeSel = document.getElementById('edit-tjm-type');
+  if (tjmTypeSel) {
+    var opts = tjmTypeSel.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.ratePerDay');
+    if (opts[1]) opts[1].textContent = t('dashboardConsultant.ratePerHour');
+  }
+
+  /* Work mode select */
+  var modeSel = document.getElementById('edit-mode-select');
+  if (modeSel) {
+    var opts = modeSel.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.select');
+    if (opts[1]) opts[1].textContent = t('dashboardConsultant.onSite');
+    if (opts[2]) opts[2].textContent = t('dashboardConsultant.hybrid');
+    if (opts[3]) opts[3].textContent = t('dashboardConsultant.remote');
+  }
+
+  /* City select */
+  var villeSel = document.getElementById('edit-ville-select');
+  if (villeSel) {
+    var opts = villeSel.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.select');
+    /* cities are proper nouns, no translation needed — just "Autre" */
+    for (var i = 1; i < opts.length; i++) {
+      if (opts[i].value === 'Autre') opts[i].textContent = t('dashboardConsultant.other');
+    }
+  }
+  var villeCustom = document.getElementById('edit-ville-custom');
+  if (villeCustom) villeCustom.placeholder = t('dashboardConsultant.specifyCity');
+
+  /* Language chips "Autre" */
+  var autreChip = document.getElementById('lang-autre-chip');
+  if (autreChip) autreChip.textContent = t('dashboardConsultant.otherLang');
+  var langCustom = document.getElementById('edit-langues-custom');
+  if (langCustom) langCustom.placeholder = t('dashboardConsultant.customLangPlaceholder');
+
+  /* Experience dates */
+  var startLabel = document.querySelector('#project-exp-card label[style*="Début"], #project-exp-card label');
+  document.querySelectorAll('#project-exp-card label').forEach(function(lbl) {
+    var txt = lbl.textContent.trim();
+    if (txt === 'Début' || txt === 'Start') lbl.textContent = t('dashboardConsultant.startDate');
+    else if (txt === 'Fin' || txt === 'End') lbl.textContent = t('dashboardConsultant.endDate');
+  });
+  var startMonthSel = document.getElementById('exp-start-month');
+  var endMonthSel = document.getElementById('exp-end-month');
+  var months = t('dashboardConsultant.months');
+  [startMonthSel, endMonthSel].forEach(function(sel) {
+    if (!sel) return;
+    var opts = sel.options;
+    if (opts[0]) opts[0].textContent = t('dashboardConsultant.monthLabel');
+    if (Array.isArray(months)) {
+      for (var i = 1; i <= 12 && i < opts.length; i++) {
+        opts[i].textContent = months[i - 1];
+      }
+    }
+  });
+  var startYearInput = document.getElementById('exp-start-year');
+  var endYearInput = document.getElementById('exp-end-year');
+  if (startYearInput) startYearInput.placeholder = t('dashboardConsultant.yearLabel');
+  if (endYearInput) endYearInput.placeholder = t('dashboardConsultant.yearLabel');
+
+  /* Current job checkbox */
+  var currentJobLabel = document.querySelector('#project-exp-card label:last-of-type');
+  if (currentJobLabel && currentJobLabel.querySelector('#exp-current-job')) {
+    var cb = currentJobLabel.querySelector('#exp-current-job');
+    currentJobLabel.textContent = '';
+    currentJobLabel.appendChild(cb);
+    currentJobLabel.appendChild(document.createTextNode(' ' + t('dashboardConsultant.currentJob')));
+  }
+
+  /* Add certification button */
+  var certifAddBtn = document.getElementById('certif-add-btn');
+  if (certifAddBtn) {
+    var iconSpan = certifAddBtn.querySelector('.material-symbols-outlined');
+    certifAddBtn.textContent = '';
+    if (iconSpan) { certifAddBtn.appendChild(iconSpan); certifAddBtn.appendChild(document.createTextNode(' ')); }
+    certifAddBtn.appendChild(document.createTextNode(t('dashboardConsultant.addCertification')));
+  }
+
+  /* GDPR section title */
+  var gdprH3 = document.querySelector('#tab-profil .panel-title h3[style*="color:#374151"]');
+  if (!gdprH3) {
+    document.querySelectorAll('#tab-profil .panel-title h3').forEach(function(el) {
+      if (el.textContent.indexOf('RGPD') > -1 || el.textContent.indexOf('GDPR') > -1 || el.textContent.indexOf('personnelles') > -1 || el.textContent.indexOf('Personal') > -1) gdprH3 = el;
+    });
+  }
+  if (gdprH3) gdprH3.textContent = t('dashboardConsultant.gdprTitle');
+
+  /* ══════════════ REQUEST MODAL ══════════════ */
+  var modalH4 = document.querySelector('#request-modal .request-modal h4');
+  if (modalH4) modalH4.textContent = t('dashboardConsultant.requestDetail');
+  var reqFields = document.querySelectorAll('#request-modal .request-field strong');
+  reqFields.forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt === 'Entreprise' || txt === 'Company') el.textContent = t('dashboardConsultant.company');
+    else if (txt === 'Email') el.textContent = t('dashboardConsultant.emailLabel');
+    else if (txt === 'Telephone' || txt === 'Phone') el.textContent = t('dashboardConsultant.phoneLabel');
+    else if (txt === 'Date') el.textContent = t('dashboardConsultant.dateLabel');
+  });
+  /* "Message recu" label */
+  var msgRecLabel = document.querySelector('#request-modal div[style*="uppercase"]');
+  document.querySelectorAll('#request-modal div[style*="uppercase"]').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt === 'Message recu' || txt === 'Message received') el.textContent = t('dashboardConsultant.messageReceived');
+    else if (txt.indexOf('réponse') > -1 || txt.indexOf('Votre') > -1 || txt === 'Your reply') el.textContent = t('dashboardConsultant.yourReply');
+    else if (txt.indexOf('Repondre') > -1 || txt.indexOf('Reply directly') > -1) el.textContent = t('dashboardConsultant.replyDirectly');
+  });
+  var replyInput = document.getElementById('rq-reply-input');
+  if (replyInput && !replyInput.value) replyInput.placeholder = t('dashboardConsultant.replyPlaceholder');
+  var sendReplyBtn = document.getElementById('rq-send-reply-btn');
+  if (sendReplyBtn) sendReplyBtn.textContent = t('dashboardConsultant.sendReply');
+  var replyStatusEl = document.getElementById('rq-reply-status');
+  if (replyStatusEl) replyStatusEl.textContent = t('dashboardConsultant.replySent');
+  var emailExtBtn = document.getElementById('rq-email-btn');
+  if (emailExtBtn) emailExtBtn.textContent = t('dashboardConsultant.externalEmail');
+  var callExtBtn = document.getElementById('rq-call-btn');
+  if (callExtBtn) callExtBtn.textContent = t('dashboardConsultant.callBtn');
+  var closeModalBtn = document.querySelector('#request-modal [data-action="close-request-detail"]');
+  if (closeModalBtn) closeModalBtn.textContent = t('dashboardConsultant.closeBtn');
+
+  /* ══════════════ DATA-I18N ATTRIBUTES ══════════════ */
   if (window.ExpertI18n && ExpertI18n.applyByDataAttr) ExpertI18n.applyByDataAttr();
 }
 
@@ -1141,6 +1419,27 @@ function persistPortalSession(email) {
 
 async function initAuth() {
   const emailParam = getUrlParam('email');
+
+  // 1. Essayer la session Supabase Auth (Sprint 1)
+  if (window.ExpertSupabaseAuth) {
+    try {
+      const authEmail = await ExpertSupabaseAuth.getEmail();
+      if (authEmail) {
+        const consultants = await sbFetch('consultants', { select: '*', email: `eq.${authEmail}` });
+        if (consultants.length > 0) {
+          currentEmail = authEmail;
+          currentConsultant = consultants[0];
+          persistPortalSession(authEmail);
+          showDashboard();
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('[initAuth] Supabase Auth session check failed:', e);
+    }
+  }
+
+  // 2. Fallback: ancienne session localStorage (compatibilite)
   const portalEmail = getPortalEmail();
   const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
   if (portalEmail) {
@@ -1179,6 +1478,33 @@ async function authenticate() {
     return;
   }
 
+  // Sprint 1: Supabase Auth signIn
+  if (window.ExpertSupabaseAuth) {
+    const { data, error } = await ExpertSupabaseAuth.signIn(email, password);
+    if (error) {
+      // Fallback SHA-256 si Supabase Auth echoue (migration progressive)
+      console.warn('[authenticate] Supabase Auth failed, trying legacy SHA-256:', error.message);
+      return authenticateLegacy(email, password);
+    }
+    // Supabase Auth reussi — charger le profil consultant
+    const consultants = await sbFetch('consultants', { select: '*', email: `eq.${email}` });
+    if (consultants.length === 0) {
+      showAuthError(ExpertI18n.t('common.emailNotFound'));
+      return;
+    }
+    currentEmail = email;
+    currentConsultant = consultants[0];
+    persistPortalSession(email);
+    showDashboard();
+    return;
+  }
+
+  // Fallback complet si supabase-auth-client.js non charge
+  return authenticateLegacy(email, password);
+}
+
+// Legacy: ancien systeme SHA-256 (sera retire apres migration complete)
+async function authenticateLegacy(email, password) {
   const consultants = await sbFetch('consultants', { select: '*', email: `eq.${email}` });
   if (consultants.length === 0) {
     showAuthError(ExpertI18n.t('common.emailNotFound'));
@@ -1213,9 +1539,13 @@ function showDashboard() {
   renderDashboard();
 }
 
-function logout() {
+async function logout() {
   currentEmail = null;
   currentConsultant = null;
+  // Sprint 1: Supabase Auth signOut
+  if (window.ExpertSupabaseAuth) {
+    await ExpertSupabaseAuth.signOut();
+  }
   if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
   window.location.href = 'index.html';
 }
@@ -1312,7 +1642,7 @@ function renderNotifItemHtml(n) {
   const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
   const s = n.status || (n.read ? 'lu' : 'nouveau');
   return '<div class="notif-item notif-clickable ' + (n.read ? '' : 'unread') + '" data-action="open-request-detail" data-request-id="' + n.id + '">' +
-    '<div class="notif-meta">' + safe(n.companyName || 'Entreprise') + ' \u00b7 ' + safe(when) + '<span class="status-badge ' + s + '">' + s + '</span></div>' +
+    '<div class="notif-meta">' + safe(n.companyName || ExpertI18n.t('dashboardConsultant.company')) + ' \u00b7 ' + safe(when) + '<span class="status-badge ' + s + '">' + s + '</span></div>' +
     '<div>' + safe((n.message || '').slice(0, 120)) + ((n.message || '').length > 120 ? '\u2026' : '') + '</div>' +
   '</div>';
 }
@@ -1328,9 +1658,10 @@ function renderNotifications() {
   const cNew = document.getElementById('count-new');
   const cRead = document.getElementById('count-read');
   const cReplied = document.getElementById('count-replied');
-  if (cNew) cNew.textContent = counts.nouveau + ' nouveau';
-  if (cRead) cRead.textContent = counts.lu + ' lu';
-  if (cReplied) cReplied.textContent = counts.repondu + ' r\u00e9pondu';
+  var _t = function(k) { return ExpertI18n.t(k); };
+  if (cNew) cNew.textContent = counts.nouveau + ' ' + _t('dashboardConsultant.newCount');
+  if (cRead) cRead.textContent = counts.lu + ' ' + _t('dashboardConsultant.readCount');
+  if (cReplied) cReplied.textContent = counts.repondu + ' ' + _t('dashboardConsultant.repliedCount');
 
   /* Sync bento request stat */
   const totalNotifs = (counts.nouveau || 0) + (counts.lu || 0) + (counts.repondu || 0);
@@ -1338,7 +1669,7 @@ function renderNotifications() {
   const bentoBarReq = document.getElementById('bento-bar-requests');
   const bentoSubReq = document.getElementById('bento-sub-requests');
   if (bentoReq) bentoReq.textContent = totalNotifs;
-  if (bentoSubReq) bentoSubReq.textContent = counts.nouveau > 0 ? counts.nouveau + ' non lue(s)' : 'Aucune nouvelle demande';
+  if (bentoSubReq) bentoSubReq.textContent = counts.nouveau > 0 ? counts.nouveau + ' ' + _t('dashboardConsultant.unread') : _t('dashboardConsultant.noNewRequest');
   if (bentoBarReq) bentoBarReq.style.width = Math.min(100, totalNotifs * 10) + '%';
 
   /* Sync tab counts */
@@ -1349,13 +1680,13 @@ function renderNotifications() {
   if (tabCountNew) tabCountNew.textContent = counts.nouveau || 0;
   if (tabCountReplied) tabCountReplied.textContent = counts.repondu || 0;
 
-  const emptyHtml = '<div class="empty-state">Aucune demande pour le moment \u2014<br>les int\u00e9r\u00eats des entreprises appara\u00eetront ici.</div>';
+  const emptyHtml = '<div class="empty-state">' + _t('dashboardConsultant.emptyState') + '</div>';
 
   if (!list.length) {
     container.innerHTML = emptyHtml;
     if (newContainer) newContainer.innerHTML = emptyHtml;
     if (repliedContainer) repliedContainer.innerHTML = emptyHtml;
-    if (miniContainer) miniContainer.innerHTML = '<div class="empty-state">Aucun message recent.</div>';
+    if (miniContainer) miniContainer.innerHTML = '<div class="empty-state">' + _t('dashboardConsultant.noRecentMessage') + '</div>';
     return;
   }
 
@@ -1367,7 +1698,7 @@ function renderNotifications() {
     var newItems = list.filter(function(n) { var s = n.status || (n.read ? 'lu' : 'nouveau'); return s === 'nouveau'; });
     newContainer.innerHTML = newItems.length
       ? newItems.slice(0, 10).map(renderNotifItemHtml).join('')
-      : '<div class="empty-state">Aucune nouvelle demande.</div>';
+      : '<div class="empty-state">' + _t('dashboardConsultant.noNewRequestShort') + '</div>';
   }
 
   /* Onglet "Repondues" */
@@ -1375,7 +1706,7 @@ function renderNotifications() {
     var repliedItems = list.filter(function(n) { return n.status === 'repondu' || (n.reply && n.reply.trim()); });
     repliedContainer.innerHTML = repliedItems.length
       ? repliedItems.slice(0, 10).map(renderNotifItemHtml).join('')
-      : '<div class="empty-state">Aucune demande r\u00e9pondue.</div>';
+      : '<div class="empty-state">' + _t('dashboardConsultant.noRepliedRequest') + '</div>';
   }
 
   /* Onglet "Apercu" — mini-messages */
@@ -1383,7 +1714,7 @@ function renderNotifications() {
     miniContainer.innerHTML = list.slice(0, 5).map(function(n) {
       var when = new Date(n.createdAt).toLocaleDateString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
       return '<div class="mini-message">' +
-        '<div class="title">' + safe(n.companyName || 'Entreprise') + '</div>' +
+        '<div class="title">' + safe(n.companyName || ExpertI18n.t('dashboardConsultant.company')) + '</div>' +
         '<div class="meta">' + safe(when) + '</div>' +
         '<div class="excerpt">' + safe((n.message || '').slice(0, 90)) + ((n.message || '').length > 90 ? '\u2026' : '') + '</div>' +
       '</div>';
@@ -1402,7 +1733,7 @@ function openRequestDetail(id) {
     ExpertNotifications.setStatus(id, 'lu');
   }
 
-  document.getElementById('rq-company').textContent = n.companyName || 'Entreprise';
+  document.getElementById('rq-company').textContent = n.companyName || ExpertI18n.t('dashboardConsultant.company');
   document.getElementById('rq-email').textContent = n.companyEmail || '\u2014';
   document.getElementById('rq-phone').textContent = n.companyPhone || '\u2014';
   document.getElementById('rq-date').textContent = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
@@ -1417,20 +1748,19 @@ function openRequestDetail(id) {
 
   if (n.reply && n.reply.trim()) {
     document.getElementById('rq-reply-text').textContent = n.reply;
-    document.getElementById('rq-reply-date').textContent = n.reply_at ? 'Repondu le ' + new Date(n.reply_at).toLocaleString('fr-CA') : '';
+    document.getElementById('rq-reply-date').textContent = n.reply_at ? ExpertI18n.t('dashboardConsultant.repliedOn') + ' ' + new Date(n.reply_at).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA') : '';
     replyDisplay.style.display = '';
-    // Permettre de modifier la reponse
     replyInput.value = n.reply;
-    replyInput.placeholder = 'Modifier votre réponse...';
+    replyInput.placeholder = ExpertI18n.t('dashboardConsultant.editReplyPlaceholder');
   } else {
     replyDisplay.style.display = 'none';
     replyInput.value = '';
-    replyInput.placeholder = 'Écrivez votre réponse ici...';
+    replyInput.placeholder = ExpertI18n.t('dashboardConsultant.replyPlaceholder');
   }
   replyForm.style.display = '';
 
   var emailBtn = document.getElementById('rq-email-btn');
-  emailBtn.href = 'mailto:' + encodeURIComponent(n.companyEmail || '') + '?subject=' + encodeURIComponent('Re: Votre demande ExpertERPHub');
+  emailBtn.href = 'mailto:' + encodeURIComponent(n.companyEmail || '') + '?subject=' + encodeURIComponent(ExpertI18n.t('dashboardConsultant.reSubject'));
   emailBtn.onclick = function() {
     ExpertNotifications.setStatus(id, 'repondu');
     renderNotifications();
@@ -1451,7 +1781,7 @@ async function sendReplyFromModal() {
   var input = document.getElementById('rq-reply-input');
   var text = (input.value || '').trim();
   if (!text) {
-    alert('Veuillez écrire une réponse avant d\'envoyer.');
+    alert(ExpertI18n.t('dashboardConsultant.writeReplyFirst'));
     return;
   }
   var btn = document.getElementById('rq-send-reply-btn');
@@ -1463,12 +1793,12 @@ async function sendReplyFromModal() {
 
     // Mettre a jour l'affichage
     document.getElementById('rq-reply-text').textContent = text;
-    document.getElementById('rq-reply-date').textContent = 'Repondu le ' + new Date().toLocaleString('fr-CA');
+    document.getElementById('rq-reply-date').textContent = ExpertI18n.t('dashboardConsultant.repliedOn') + ' ' + new Date().toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
     document.getElementById('rq-reply-display').style.display = '';
 
     var statusEl = document.getElementById('rq-reply-status');
     statusEl.style.display = '';
-    statusEl.textContent = 'Reponse envoyee !';
+    statusEl.textContent = ExpertI18n.t('dashboardConsultant.replySent') + ' !';
     setTimeout(function() { statusEl.style.display = 'none'; }, 3000);
 
     renderNotifications();
