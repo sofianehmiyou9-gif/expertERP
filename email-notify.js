@@ -1,7 +1,7 @@
 /**
  * ExpertERPHub - Email Notification Module
  * Envoie des notifications par email quand un message est recu.
- * Utilise Supabase Edge Function "send-email" ou fallback mailto.
+ * Utilise Vercel Serverless Function /api/send-email (Resend).
  * Depend de config.js
  */
 (function () {
@@ -12,8 +12,8 @@
     return;
   }
 
-  var EDGE_FN_URL = ExpertConfig.SB_URL + '/functions/v1/send-email';
-  var API_KEY = ExpertConfig.SB_KEY;
+  // Utilise la fonction serverless Vercel /api/send-email (Resend)
+  var EMAIL_API_URL = '/api/send-email';
 
   /**
    * Envoie une notification email via Edge Function
@@ -33,11 +33,10 @@
     };
 
     try {
-      var resp = await fetch(EDGE_FN_URL, {
+      var resp = await fetch(EMAIL_API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + API_KEY
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
       });
@@ -45,11 +44,11 @@
       if (resp.ok) {
         console.log('[EmailNotify] Email envoye a', opts.to);
       } else {
-        console.warn('[EmailNotify] Edge Function non disponible (status ' + resp.status + '). Email non envoye.');
+        var errData = await resp.json().catch(function () { return {}; });
+        console.warn('[EmailNotify] Erreur envoi email (status ' + resp.status + '):', errData);
       }
     } catch (e) {
-      // Edge Function pas encore deployee — silencieux
-      console.warn('[EmailNotify] Edge Function non accessible. Configurer send-email.');
+      console.warn('[EmailNotify] API non accessible:', e.message);
     }
   }
 
