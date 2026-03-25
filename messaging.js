@@ -220,6 +220,140 @@
     }
   }
 
+  /**
+   * Synchronise les notifications (demandes de contact) vers la table messages
+   * Crée des messages dans la table messages pour chaque notification qui n'a pas encore de message
+   * @param {string} email - email de l'utilisateur pour charger ses notifications
+   * @returns {Promise<number>} - nombre de messages synchronisés
+   */
+  async function syncFromNotifications(email) {
+    var emailLower = email.toLowerCase();
+    var syncedCount = 0;
+
+    try {
+      // Charger les notifications pour cet email (comme company_email OU consultant_email)
+      var notificationsUrl = ExpertConfig.SB_URL + '/rest/v1/notifications' +
+        '?or=(company_email.eq.' + encodeURIComponent(emailLower) +
+        ',consultant_email.eq.' + encodeURIComponent(emailLower) + ')';
+
+      console.log('[Messaging] Chargement notifications pour', emailLower);
+      var resp = await fetch(notificationsUrl, { headers: HEADERS });
+      if (!resp.ok) {
+        console.warn('[Messaging] Erreur chargement notifications:', resp.status);
+        return 0;
+      }
+
+      var notifications = await resp.json();
+      if (!Array.isArray(notifications)) {
+        console.log('[Messaging] Pas de notifications');
+        return 0;
+      }
+
+      console.log('[Messaging] Traitant', notifications.length, 'notifications');
+
+      // Pour chaque notification, créer les messages correspondants
+      for (var i = 0; i < notifications.length; i++) {
+        var notif = notifications[i];
+
+        // Message initial (company -> consultant)
+        if (notif.message) {
+          var threadId = makeThreadId(notif.company_email, notif.consultant_email);
+          var existingCheck = await checkMessageExists(threadId, notif.id, notif.message);
+
+          if (!existingCheck) {
+            var msg1 = {
+              thread_id: threadId,
+              sender_email: notif.company_email.toLowerCase(),
+              sender_name: notif.company_name || null,
+              sender_role: 'entreprise',
+              receiver_email: notif.consultant_email.toLowerCase(),
+              receiver_name: null,
+              body: notif.message,
+              read: false,
+              notification_id: notif.id
+            };
+
+            await insertMessage(msg1);
+            syncedCount++;
+            console.log('[Messaging] Message initial créé pour notification', notif.id);
+          }
+        }
+
+        // Message de réponse (consultant -> company)
+        if (notif.reply) {
+          var threadId = makeThreadId(notif.company_email, notif.consultant_email);
+          var existingCheck = await checkMessageExists(threadId, notif.id, notif.reply);
+
+          if (!existingCheck) {
+            var msg2 = {
+              thread_id: threadId,
+              sender_email: notif.consultant_email.toLowerCase(),
+              sender_name: null,
+              sender_role: 'consultant',
+              receiver_email: notif.company_email.toLowerCase(),
+              receiver_name: null,
+              body: notif.reply,
+              read: false,
+              notification_id: notif.id,
+              created_at: notif.reply_at
+            };
+
+            await insertMessage(msg2);
+            syncedCount++;
+            console.log('[Messaging] Message réponse créé pour notification', notif.id);
+          }
+        }
+      }
+
+      console.log('[Messaging] Sync terminée:', syncedCount, 'messages créés');
+      return syncedCount;
+    } catch (e) {
+      console.error('[Messaging] Erreur synchronisation notifications:', e);
+      return 0;
+    }
+  }
+
+  /**
+   * Vérifie si un message existe déjà pour cette notification
+   * @private
+   */
+  async function checkMessageExists(threadId, notificationId, body) {
+    try {
+      var url = BASE + '?thread_id=eq.' + encodeURIComponent(threadId) +
+        '&notification_id=eq.' + encodeURIComponent(notificationId) +
+        '&body=eq.' + encodeURIComponent(body);
+      var resp = await fetch(url, { headers: HEADERS });
+      if (!resp.ok) return false;
+      var data = await resp.json();
+      return Array.isArray(data) && data.length > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Insère un message dans la table messages
+   * @private
+   */
+  async function insertMessage(row) {
+    try {
+      var resp = await fetch(BASE, {
+        method: 'POST',
+        headers: HEADERS,
+        body: JSON.stringify(row)
+      });
+      if (!resp.ok) {
+        var err = await resp.text();
+        console.error('[Messaging] Erreur insertion message:', err);
+        throw new Error(err);
+      }
+      return await resp.json();
+    } catch (e) {
+      console.error('[Messaging] Erreur insertMessage:', e);
+      throw e;
+    }
+  }
+
   // API publique
   window.ExpertMessaging = {
     send: send,
@@ -227,7 +361,8 @@
     getConversations: getConversations,
     markThreadRead: markThreadRead,
     getUnreadCount: getUnreadCount,
-    makeThreadId: makeThreadId
+    makeThreadId: makeThreadId,
+    syncFromNotifications: syncFromNotifications
   };
 
   console.log('[Messaging] Module initialise.');
