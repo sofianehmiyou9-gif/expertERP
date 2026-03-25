@@ -1102,6 +1102,12 @@ body{background:#f7f9fb;}
 <script src="messaging.js"></script>
 <script src="email-notify.js"></script>
 <script>
+// Utility: escape HTML to prevent XSS
+function safe(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 let currentEmail = null;
 let currentCompany = null;
 let uploadedFile = null;
@@ -2363,8 +2369,9 @@ function renderConversationList(conversations) {
   container.innerHTML = conversations.map(function(conv) {
     var otherEmail = conv.otherEmail || conv.consultant_email || '';
     var otherName = conv.otherName || conv.consultant_name || conv.name || otherEmail;
-    var lastMsg = conv.lastMessage || (conv.messages && conv.messages.length > 0 ? conv.messages[conv.messages.length - 1].body : '');
-    var lastDate = conv.lastDate || (conv.messages && conv.messages.length > 0 ? new Date(conv.messages[conv.messages.length - 1].created_at) : new Date());
+    var lastMsgObj = conv.lastMessage || (conv.messages && conv.messages.length > 0 ? conv.messages[conv.messages.length - 1] : null);
+    var lastMsg = lastMsgObj ? (typeof lastMsgObj === 'string' ? lastMsgObj : (lastMsgObj.body || '')) : '';
+    var lastDate = lastMsgObj ? (typeof lastMsgObj === 'string' ? new Date() : new Date(lastMsgObj.created_at)) : new Date();
     var unreadCount = conv.unreadCount || 0;
 
     var timeStr = '';
@@ -2380,7 +2387,7 @@ function renderConversationList(conversations) {
     var initials = otherName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
     var preview = (lastMsg || '').substring(0, 40) + ((lastMsg || '').length > 40 ? '...' : '');
 
-    return '<div class="conversation-item" onclick="openConversationInPanel(\'' + safe(otherEmail) + '\', \'' + safe(otherName) + '\')">' +
+    return '<div class="conversation-item" data-email="' + safe(otherEmail) + '" onclick="openConversationInPanel(\'' + safe(otherEmail) + '\', \'' + safe(otherName) + '\')">' +
       '<div class="conversation-avatar">' + initials + '</div>' +
       '<div class="conversation-details">' +
         '<div class="conversation-name">' + safe(otherName) + '</div>' +
@@ -2426,7 +2433,10 @@ async function openConversationInPanel(email, name) {
   document.querySelectorAll('.conversation-item').forEach(function(item) {
     item.classList.remove('active');
   });
-  event.currentTarget.classList.add('active');
+  // Trouver et marquer l'item actif par email
+  document.querySelectorAll('.conversation-item').forEach(function(item) {
+    if (item.getAttribute('data-email') === email) item.classList.add('active');
+  });
 
   // Charger les messages
   document.getElementById('chat-messages').innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;">Chargement...</div>';
@@ -2450,7 +2460,7 @@ function renderChatMessages(messages) {
   }
 
   container.innerHTML = messages.map(function(m) {
-    var isMe = m.sender_email === currentEmail.toLowerCase();
+    var isMe = m.sender_email && currentEmail && m.sender_email.toLowerCase() === currentEmail.toLowerCase();
     var bubbleClass = isMe ? 'sent' : 'received';
     var time = m.created_at ? new Date(m.created_at).toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' }) : '';
 
@@ -2470,8 +2480,8 @@ async function sendChatMessage() {
   var text = (input.value || '').trim();
   if (!text || !_messagesCurrentEmail) return;
 
-  var btn = event.currentTarget;
-  btn.disabled = true;
+  var btn = document.querySelector('.chat-send-btn');
+  if (btn) btn.disabled = true;
   input.disabled = true;
 
   try {
@@ -2509,7 +2519,7 @@ async function sendChatMessage() {
     console.error('Error sending message:', e);
   }
 
-  btn.disabled = false;
+  if (btn) btn.disabled = false;
   input.disabled = false;
   input.focus();
 }
