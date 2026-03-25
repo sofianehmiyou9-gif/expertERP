@@ -298,6 +298,54 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
 /* TODO: unused - empty ruleset, can be removed */
 .badge-pending,.badge-approved,.badge-rejected{}
 
+/* ═══ MESSAGING TAB — 2-column layout ═══ */
+.messages-container{display:grid;grid-template-columns:40% 60%;gap:1.5rem;height:calc(100vh - 280px);min-height:500px;}
+.conversations-panel{background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conversations-header{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(196,197,213,.2);display:flex;align-items:center;justify-content:space-between;}
+.conversations-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:600;color:#191c1e;display:flex;align-items:center;gap:.5rem;}
+.conversations-badge{background:var(--red);color:#fff;border-radius:999px;padding:.25rem .5rem;font-size:.68rem;font-weight:700;min-width:24px;text-align:center;}
+.conversations-search{margin:1rem 1.5rem;padding:.75rem 1rem;border:1px solid rgba(196,197,213,.4);border-radius:14px;font-size:.85rem;font-family:var(--font-main);background:#f2f4f6;}
+.conversations-list{flex:1;overflow-y:auto;padding:.5rem;}
+.conversation-item{padding:1rem;border-radius:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.75rem;margin:.25rem .5rem;border:1px solid transparent;}
+.conversation-item:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.1);}
+.conversation-item.active{background:rgba(0,40,142,.1);border-color:rgba(0,40,142,.2);}
+.conversation-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;flex-shrink:0;}
+.conversation-details{flex:1;min-width:0;}
+.conversation-name{font-size:.9rem;font-weight:600;color:#191c1e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.conversation-preview{font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:.15rem;}
+.conversation-meta{display:flex;align-items:center;gap:.5rem;margin-top:.25rem;font-size:.7rem;color:#6b7280;}
+.conversation-date{flex-shrink:0;}
+.conversation-unread-badge{background:var(--blue);color:#fff;border-radius:999px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0;}
+
+.chat-panel{background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.chat-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:2rem;}
+.chat-header{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(196,197,213,.2);display:flex;align-items:center;justify-content:space-between;}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;}
+.chat-name{font-size:.95rem;font-weight:600;color:#191c1e;}
+.chat-role{font-size:.75rem;color:#6b7280;margin-top:.15rem;}
+.chat-email-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:.5rem;border-radius:8px;transition:all .2s;}
+.chat-email-btn:hover{background:rgba(0,40,142,.08);}
+.chat-messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;}
+.chat-message{display:flex;gap:.75rem;align-items:flex-end;}
+.chat-message.sent{flex-direction:row-reverse;}
+.chat-bubble{max-width:75%;padding:.75rem 1rem;border-radius:14px;font-size:.88rem;line-height:1.5;word-break:break-word;}
+.chat-bubble.received{background:rgba(196,197,213,.25);color:#191c1e;border-radius:14px 14px 14px 4px;}
+.chat-bubble.sent{background:var(--blue);color:#fff;border-radius:14px 14px 4px 14px;}
+.chat-timestamp{font-size:.68rem;color:#6b7280;margin-top:.25rem;}
+.chat-input-area{padding:1.25rem 1.5rem;border-top:1px solid rgba(196,197,213,.2);display:flex;gap:.75rem;}
+.chat-input{flex:1;padding:.75rem 1rem;border:1px solid rgba(196,197,213,.4);border-radius:14px;font-size:.88rem;font-family:var(--font-main);resize:none;max-height:100px;}
+.chat-send-btn{padding:.75rem 1.5rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:14px;cursor:pointer;font-weight:600;font-size:.85rem;transition:all .2s;}
+.chat-send-btn:hover{opacity:.9;transform:translateY(-1px);}
+.chat-send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+@media(max-width:900px){.messages-container{grid-template-columns:1fr;}.conversations-panel{display:none;}}
+@media(max-width:600px){.chat-bubble{max-width:90%;}.chat-messages{padding:1rem;gap:.75rem;}}
+
+/* ═══ SEARCH TAB — Enhanced consultant cards ═══ */
+#search-results{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));}
+@media(max-width:900px){#search-results{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}}
+@media(max-width:600px){#search-results{grid-template-columns:1fr;}}
+
 /* formulaire: contraste et lisibilite */
 .auth-card input,
 .quick-add-grid select,
@@ -466,6 +514,11 @@ body{background:#f7f9fb;}
 .auth-card input,.quick-add-grid select,.quick-add-grid input[type=text],.quick-add-grid input[type=number],.quick-add-search,.team-form select,.team-form input{color:#191c1e;background:#ffffff;border-color:rgba(196,197,213,.4);}
 .auth-card input::placeholder,.quick-add-grid input[type=text]::placeholder,.quick-add-grid input[type=number]::placeholder,.quick-add-search::placeholder,.team-form input::placeholder{color:#757684;opacity:1;}
 
+/* -- PROFILE EDITABLE FORM -- */
+.profile-input,.profile-select,.profile-textarea{width:100%;padding:.85rem .95rem;border:1px solid rgba(196,197,213,.4);border-radius:14px;font-size:.9rem;font-family:var(--font-main);background:#ffffff;color:#191c1e;transition:all .2s ease;}
+.profile-input:focus,.profile-select:focus,.profile-textarea:focus{outline:none;border-color:#00288e;box-shadow:0 0 0 3px rgba(0,40,142,.1);}
+.profile-textarea{resize:vertical;font-family:var(--font-main);}
+
 </style>
 <!-- saas-overrides.css removed -->
 </head>
@@ -560,6 +613,34 @@ body{background:#f7f9fb;}
           <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publies : 0</span></div>
           <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En revision : 0</span></div>
           <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
+        </div>
+      </div>
+
+      <!-- Activity KPIs Row 2 -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-blue">
+          <div class="kpi-icon">Mail</div>
+          <div class="kpi-value" id="kpi-messages-sent">0</div>
+          <div class="kpi-label">Messages envoyés</div>
+          <div class="kpi-trend" id="kpi-messages-trend">--</div>
+        </div>
+        <div class="kpi-card kpi-green">
+          <div class="kpi-icon">Forum</div>
+          <div class="kpi-value" id="kpi-conversations">0</div>
+          <div class="kpi-label">Conversations</div>
+          <div class="kpi-trend" id="kpi-conversations-trend">--</div>
+        </div>
+        <div class="kpi-card kpi-amber">
+          <div class="kpi-icon">Reply</div>
+          <div class="kpi-value" id="kpi-response-rate">0%</div>
+          <div class="kpi-label">Taux de réponse</div>
+          <div class="kpi-trend" id="kpi-response-trend">--</div>
+        </div>
+        <div class="kpi-card kpi-violet">
+          <div class="kpi-icon">Schedule</div>
+          <div class="kpi-value" id="kpi-last-activity">--</div>
+          <div class="kpi-label">Dernière activité</div>
+          <div class="kpi-trend" id="kpi-activity-trend">--</div>
         </div>
       </div>
 
@@ -757,34 +838,179 @@ body{background:#f7f9fb;}
       </div>
     </div>
 
-    <!-- ═══ SPRINT 3: Messages Tab — Historique des messages envoyés ═══ -->
+    <!-- ═══ SPRINT 3: Messages Tab — Messagerie intégrée 2 colonnes ═══ -->
     <div class="tab-pane" id="messages-tab">
       <div class="section-title">Messages</div>
-      <div class="section-sub">Suivez vos échanges avec les consultants de la plateforme.</div>
+      <div class="section-sub">Messagerie intégrée avec les consultants de la plateforme.</div>
 
-      <!-- Filtres messages -->
-      <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">
-        <select id="msg-filter-status" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;">
-          <option value="">Tous les statuts</option>
-          <option value="nouveau">Nouveau</option>
-          <option value="lu">Lu</option>
-          <option value="repondu">Répondu</option>
-        </select>
-        <input id="msg-search" type="text" placeholder="Rechercher un consultant..." style="flex:1;min-width:180px;padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;">
-      </div>
+      <!-- Layout 2 colonnes: Conversations (40%) + Chat actif (60%) -->
+      <div class="messages-container">
+        <!-- COLONNE GAUCHE: Liste des conversations -->
+        <div class="conversations-panel">
+          <div class="conversations-header">
+            <div class="conversations-title">
+              Conversations
+              <span id="conv-unread-badge" class="conversations-badge" style="display:none;">0</span>
+            </div>
+          </div>
+          <input id="conv-search-input" type="text" placeholder="Rechercher une conversation..." class="conversations-search" onkeyup="filterConversations()">
+          <div id="conversations-list" class="conversations-list">
+            <div style="text-align:center;padding:2rem;color:#6b7280;font-size:.85rem;">Chargement des conversations...</div>
+          </div>
+        </div>
 
-      <!-- Liste des messages -->
-      <div id="messages-list" style="display:flex;flex-direction:column;gap:1rem;">
-        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Chargement des messages...</div>
+        <!-- COLONNE DROITE: Conversation active -->
+        <div class="chat-panel">
+          <div id="chat-empty-state" class="chat-empty">
+            <div style="font-size:2.5rem;margin-bottom:1rem;">💬</div>
+            <div style="font-size:.95rem;color:#191c1e;margin-bottom:.5rem;">Sélectionnez une conversation</div>
+            <div style="font-size:.82rem;color:#6b7280;">Cliquez sur une conversation à gauche pour commencer à discuter.</div>
+          </div>
+
+          <div id="chat-active" style="display:none;height:100%;display:flex;flex-direction:column;">
+            <!-- Header du chat -->
+            <div class="chat-header">
+              <div style="display:flex;align-items:center;gap:.75rem;flex:1;">
+                <div id="chat-avatar" class="chat-avatar"></div>
+                <div>
+                  <div id="chat-name" class="chat-name"></div>
+                  <div id="chat-role" class="chat-role"></div>
+                </div>
+              </div>
+              <button id="chat-email-btn" class="chat-email-btn" title="Envoyer un email">✉️</button>
+            </div>
+
+            <!-- Zone de messages -->
+            <div id="chat-messages" class="chat-messages">
+              <div style="text-align:center;padding:2rem;color:#6b7280;">Chargement...</div>
+            </div>
+
+            <!-- Input du message -->
+            <div class="chat-input-area">
+              <textarea id="chat-message-input" class="chat-input" placeholder="Écrivez votre message..." rows="2"></textarea>
+              <button onclick="sendChatMessage()" class="chat-send-btn">Envoyer</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Profile Tab -->
     <div class="tab-pane" id="profile-tab">
       <div class="section-title" id="profile-title">Mon Profil</div>
-      <div class="section-sub">Informations de votre compte entreprise sur ExpertERPHub.</div>
-      <div class="profile-info" id="profile-info">
+      <div class="section-sub">Gérez les informations de votre compte entreprise sur ExpertERPHub.</div>
+
+      <!-- Editable Company Profile Section -->
+      <div class="profile-info" id="profile-info" style="padding:2rem;">
+        <!-- Logo Upload -->
+        <div class="profile-field" style="margin-bottom:2rem;">
+          <div class="profile-label">Logo de l'entreprise</div>
+          <div style="display:flex;gap:1.5rem;align-items:flex-start;margin-top:1rem;">
+            <div style="position:relative;width:120px;height:120px;">
+              <img id="profile-logo-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect fill='%23f2f4f6' width='120' height='120'/%3E%3Ctext x='60' y='65' text-anchor='middle' font-size='14' fill='%23999'>Logo</text>%3E%3C/svg%3E" alt="Logo preview" style="width:100%;height:100%;border-radius:12px;border:2px solid rgba(196,197,213,.4);object-fit:contain;background:#f2f4f6;">
+              <input type="file" id="profile-logo-input" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)">
+            </div>
+            <div style="flex:1;">
+              <button type="button" onclick="document.getElementById('profile-logo-input').click();" class="btn btn-secondary" style="margin-bottom:.5rem;">Changer le logo</button>
+              <div style="font-size:.78rem;color:#6b7280;line-height:1.6;">Format recommandé: JPG, PNG (carré, 200x200 minimum)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editable Fields -->
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+          <div class="profile-field">
+            <label class="profile-label">Nom de l'entreprise *</label>
+            <input type="text" id="profile-name" class="profile-input" placeholder="Nom de l'entreprise">
+          </div>
+          <div class="profile-field">
+            <label class="profile-label">Secteur d'activité</label>
+            <select id="profile-sector" class="profile-select">
+              <option value="">-- Sélectionner --</option>
+              <option>Informatique</option>
+              <option>Finance</option>
+              <option>Santé</option>
+              <option>Retail</option>
+              <option>Manufacturing</option>
+              <option>Supply Chain</option>
+              <option>Logistique</option>
+              <option>RH</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="profile-field">
+            <label class="profile-label">Ville</label>
+            <input type="text" id="profile-city" class="profile-input" placeholder="Ex: Paris">
+          </div>
+          <div class="profile-field">
+            <label class="profile-label">Site web</label>
+            <input type="url" id="profile-website" class="profile-input" placeholder="https://example.com">
+          </div>
+          <div class="profile-field">
+            <label class="profile-label">Téléphone</label>
+            <input type="tel" id="profile-phone" class="profile-input" placeholder="+33 1 23 45 67 89">
+          </div>
+          <div class="profile-field">
+            <label class="profile-label">Taille de l'entreprise</label>
+            <select id="profile-size" class="profile-select">
+              <option value="">-- Sélectionner --</option>
+              <option>1-10</option>
+              <option>11-50</option>
+              <option>51-200</option>
+              <option>201-500</option>
+              <option>500+</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="profile-field" style="margin-top:1.5rem;">
+          <label class="profile-label">Description de l'entreprise</label>
+          <textarea id="profile-description" class="profile-textarea" placeholder="Décrivez votre entreprise..." rows="4"></textarea>
+        </div>
+
+        <!-- Profile Completion -->
+        <div class="profile-field" style="margin-top:2rem;">
+          <div class="profile-label">Complétion du profil</div>
+          <div style="display:flex;align-items:center;gap:1rem;margin-top:.75rem;">
+            <div style="flex:1;">
+              <div class="progress-bar">
+                <div class="progress-fill" id="profile-completion-bar" style="width:0%;"></div>
+              </div>
+            </div>
+            <span id="profile-completion-percent" style="font-weight:700;font-size:.95rem;min-width:50px;">0%</span>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="margin-top:2rem;display:flex;gap:1rem;">
+          <button type="button" onclick="saveProfile()" class="btn btn-primary">Sauvegarder les modifications</button>
+          <button type="button" onclick="cancelProfileEdit()" class="btn btn-secondary">Annuler</button>
+        </div>
       </div>
+
+      <!-- Plan Information Section (Read-only) -->
+      <div class="profile-info" style="margin-top:2rem;padding:1.5rem;">
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:600;color:#191c1e;margin:0;">Informations de mon plan</h3>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem;">
+          <div class="profile-field">
+            <div class="profile-label">Nom du plan</div>
+            <div class="profile-value" id="plan-info-name">--</div>
+          </div>
+          <div class="profile-field">
+            <div class="profile-label">Slots disponibles</div>
+            <div class="profile-value" id="plan-info-slots">--</div>
+          </div>
+          <div class="profile-field">
+            <div class="profile-label">Renouvellement</div>
+            <div class="profile-value" id="plan-info-renewal">--</div>
+          </div>
+        </div>
+        <button type="button" onclick="alert('Gestion de l\'abonnement non disponible actuellement')" class="btn btn-secondary">Gérer mon abonnement</button>
+      </div>
+
       <!-- GDPR Section -->
       <div style="margin-top:2rem;padding:1.5rem;background:#f8f9fa;border:1px solid #e5e7eb;border-radius:32px;">
         <div style="margin-bottom:1rem;">
@@ -1269,6 +1495,7 @@ async function loadResources() {
   currentPlanQty = getCompanyPlanQty();
   updatePlanDisplay(filtered.length);
   renderKPIs(filtered);
+  loadActivityKPIs();
 }
 
 function generateResourceCode(seed) {
@@ -1827,60 +2054,293 @@ function updatePlanDisplay(usedSlots) {
   document.getElementById('progress-label').textContent = usedSlots + '/' + planQty + ' ' + ExpertI18n.t('dashboardCompany.resourcesUsed');
 }
 
+let _profileLogoBase64 = null;
+
 function loadProfile() {
+  if (!currentCompany) return;
   const planQty = currentPlanQty || getCompanyPlanQty();
-  const html = `
-    <div class=”profile-field”>
-      <div class=”profile-label”>Nom de l'entreprise</div>
-      <div class=”profile-value”>${safe(currentCompany.nom || '\u2014')}</div>
-    </div>
-    <div class=”profile-field”>
-      <div class=”profile-label”>Secteur</div>
-      <div class=”profile-value”>${safe(currentCompany.secteur || '\u2014')}</div>
-    </div>
-    <div class=”profile-field”>
-      <div class=”profile-label”>Contact</div>
-      <div class=”profile-value”>${safe(currentCompany.contact || '\u2014')}</div>
-    </div>
-    <div class=”profile-field”>
-      <div class=”profile-label”>Email</div>
-      <div class=”profile-value”>${safe(currentCompany.email || '\u2014')}</div>
-    </div>
-    <div class=”profile-field”>
-      <div class=”profile-label”>Plan</div>
-      <div class=”profile-value”>${safe(getPlanLabel(planQty))} (${planQty} slots)</div>
-    </div>
-  `;
-  document.getElementById('profile-info').innerHTML = html;
+  const desc = parseNotes(currentCompany.description);
+
+  /* Charger le logo s'il existe */
+  const logoBase64 = desc.logo_base64 || null;
+  if (logoBase64) {
+    _profileLogoBase64 = logoBase64;
+    document.getElementById('profile-logo-preview').src = logoBase64;
+  }
+
+  /* Remplir les champs éditables */
+  document.getElementById('profile-name').value = currentCompany.nom || '';
+  document.getElementById('profile-sector').value = currentCompany.secteur || '';
+  document.getElementById('profile-city').value = desc.ville || '';
+  document.getElementById('profile-website').value = desc.website || '';
+  document.getElementById('profile-phone').value = currentCompany.telephone || '';
+  document.getElementById('profile-size').value = desc.company_size || '';
+  document.getElementById('profile-description').value = desc.company_description || '';
+
+  /* Plan info */
+  document.getElementById('plan-info-name').textContent = getPlanLabel(planQty);
+  document.getElementById('plan-info-slots').textContent = planQty + ' slots';
+  document.getElementById('plan-info-renewal').textContent = desc.renewal_date || 'Non défini';
+
+  /* Calculer et afficher la complétion */
+  calculateProfileCompletion();
+
+  /* Charger les KPIs d'activité */
+  loadActivityKPIs();
+}
+
+function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    alert('Veuillez sélectionner une image');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _profileLogoBase64 = e.target.result;
+    document.getElementById('profile-logo-preview').src = _profileLogoBase64;
+  };
+  reader.readAsDataURL(file);
+}
+
+function calculateProfileCompletion() {
+  const fields = [
+    'profile-name',
+    'profile-sector',
+    'profile-city',
+    'profile-website',
+    'profile-phone',
+    'profile-size',
+    'profile-description'
+  ];
+
+  let filled = 0;
+  fields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field && field.value && field.value.trim()) {
+      filled++;
+    }
+  });
+
+  const percent = Math.round((filled / fields.length) * 100);
+  document.getElementById('profile-completion-percent').textContent = percent + '%';
+  document.getElementById('profile-completion-bar').style.width = percent + '%';
+}
+
+function cancelProfileEdit() {
+  loadProfile();
+  alert('Les modifications ont été annulées');
+}
+
+async function saveProfile() {
+  if (!currentCompany) return;
+
+  const name = document.getElementById('profile-name').value.trim();
+  if (!name) {
+    alert('Le nom de l\'entreprise est obligatoire');
+    return;
+  }
+
+  const sector = document.getElementById('profile-sector').value;
+  const city = document.getElementById('profile-city').value;
+  const website = document.getElementById('profile-website').value;
+  const phone = document.getElementById('profile-phone').value;
+  const size = document.getElementById('profile-size').value;
+  const description = document.getElementById('profile-description').value;
+
+  try {
+    /* Préparer les données description (notes) */
+    const desc = parseNotes(currentCompany.description || '{}');
+    desc.ville = city;
+    desc.website = website;
+    desc.company_size = size;
+    desc.company_description = description;
+    if (_profileLogoBase64) {
+      desc.logo_base64 = _profileLogoBase64;
+    }
+
+    /* Mettre à jour via Supabase REST API */
+    const response = await fetch(
+      window.ExpertConfig.SB_URL + '/rest/v1/entreprises?id=eq.' + encodeURIComponent(currentCompany.id),
+      {
+        method: 'PATCH',
+        headers: {
+          'apikey': window.ExpertConfig.SB_KEY,
+          'Authorization': 'Bearer ' + window.ExpertConfig.SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({
+          nom: name,
+          secteur: sector,
+          telephone: phone,
+          description: JSON.stringify(desc)
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la sauvegarde');
+    }
+
+    const updated = await response.json();
+    if (updated && updated[0]) {
+      currentCompany = {
+        ...currentCompany,
+        nom: name,
+        secteur: sector,
+        telephone: phone,
+        description: JSON.stringify(desc)
+      };
+
+      /* Mettre à jour le nom de l'entreprise dans la navbar */
+      document.getElementById('company-name').textContent = name;
+
+      alert('Profil sauvegardé avec succès');
+      loadProfile();
+    }
+  } catch (error) {
+    console.error('Erreur sauvegarde profil:', error);
+    alert('Erreur lors de la sauvegarde: ' + error.message);
+  }
+}
+
+async function loadActivityKPIs() {
+  if (!currentEmail || !window.ExpertMessaging) {
+    /* Initialiser à 0 si ExpertMessaging n'est pas disponible */
+    document.getElementById('kpi-messages-sent').textContent = '0';
+    document.getElementById('kpi-conversations').textContent = '0';
+    document.getElementById('kpi-response-rate').textContent = '0%';
+    document.getElementById('kpi-last-activity').textContent = '--';
+    return;
+  }
+
+  try {
+    const conversations = await window.ExpertMessaging.getConversations(currentEmail);
+    if (!conversations) {
+      document.getElementById('kpi-messages-sent').textContent = '0';
+      document.getElementById('kpi-conversations').textContent = '0';
+      document.getElementById('kpi-response-rate').textContent = '0%';
+      document.getElementById('kpi-last-activity').textContent = '--';
+      return;
+    }
+
+    /* Compter les messages et conversations */
+    let totalMessages = 0;
+    let conversationsWithReply = 0;
+    let lastActivityDate = null;
+
+    conversations.forEach(conv => {
+      const messages = conv.messages || [];
+      totalMessages += messages.length;
+
+      /* Vérifier si l'entreprise a répondu */
+      const hasReply = messages.some(m => m.sender_email === currentEmail.toLowerCase());
+      if (hasReply) {
+        conversationsWithReply++;
+      }
+
+      /* Trouver la dernière activité */
+      if (messages.length > 0) {
+        const lastMsg = messages[messages.length - 1];
+        const msgDate = new Date(lastMsg.created_at || Date.now());
+        if (!lastActivityDate || msgDate > lastActivityDate) {
+          lastActivityDate = msgDate;
+        }
+      }
+    });
+
+    /* Calculer le taux de réponse */
+    const responseRate = conversations.length > 0
+      ? Math.round((conversationsWithReply / conversations.length) * 100)
+      : 0;
+
+    /* Formater la dernière activité */
+    let lastActivityStr = '--';
+    if (lastActivityDate) {
+      const now = new Date();
+      const diff = now - lastActivityDate;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 1) lastActivityStr = 'À l\'instant';
+      else if (minutes < 60) lastActivityStr = minutes + 'm';
+      else if (hours < 24) lastActivityStr = hours + 'h';
+      else if (days < 30) lastActivityStr = days + 'j';
+      else lastActivityStr = lastActivityDate.toLocaleDateString('fr-FR');
+    }
+
+    /* Mettre à jour les KPIs */
+    document.getElementById('kpi-messages-sent').textContent = totalMessages;
+    document.getElementById('kpi-conversations').textContent = conversations.length;
+    document.getElementById('kpi-response-rate').textContent = responseRate + '%';
+    document.getElementById('kpi-last-activity').textContent = lastActivityStr;
+
+    /* Mettre à jour les trends */
+    document.getElementById('kpi-messages-trend').textContent = totalMessages > 0 ? 'Actif' : 'En attente';
+    document.getElementById('kpi-conversations-trend').textContent = conversations.length > 0 ? 'En cours' : 'Aucune';
+    document.getElementById('kpi-response-trend').textContent = responseRate > 70 ? 'Très bon' : (responseRate > 30 ? 'Bon' : '--');
+    document.getElementById('kpi-activity-trend').textContent = lastActivityStr !== '--' ? 'Récent' : '--';
+  } catch (error) {
+    console.warn('Erreur chargement KPIs activité:', error);
+    document.getElementById('kpi-messages-sent').textContent = '0';
+    document.getElementById('kpi-conversations').textContent = '0';
+    document.getElementById('kpi-response-rate').textContent = '0%';
+    document.getElementById('kpi-last-activity').textContent = '--';
+  }
+}
+
+async function loadCompanyMessages() {
+  /* Placeholder pour initialiser le badge de messages */
+  if (window.ExpertMessaging && currentEmail) {
+    try {
+      const conversations = await window.ExpertMessaging.getConversations(currentEmail);
+      const unreadCount = (conversations || []).reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+      const badge = document.getElementById('messages-badge');
+      if (badge && unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'inline';
+      }
+    } catch (e) {
+      console.warn('Erreur chargement messages:', e);
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SPRINT 3: Système de messagerie entreprise
-   - Charge les notifications envoyées par l'entreprise connectée
-   - Affiche l'historique avec statut (nouveau/lu/répondu)
-   - Filtre par statut et recherche texte
+   SPRINT 3: Système de messagerie entreprise — Game Changer UI
+   - Messagerie intégrée avec design WhatsApp/Slack
+   - 2 colonnes: liste conversations + chat actif
    ═══════════════════════════════════════════════════════════════ */
-let companyMessages = [];
+let _messagesConversations = [];
+let _messagesCurrentEmail = null;
+let _messagesCurrentName = null;
 
-async function loadCompanyMessages() {
+async function loadMessagesTab() {
   if (!currentEmail) return;
   try {
-    const resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/notifications?select=*&company_email=eq.' + encodeURIComponent(currentEmail) + '&order=created_at.desc', {
-      headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY }
-    });
-    const data = await resp.json();
-    companyMessages = Array.isArray(data) ? data : [];
-    renderCompanyMessages();
+    if (!window.ExpertMessaging) return;
+    const conversations = await window.ExpertMessaging.getConversations(currentEmail);
+    _messagesConversations = conversations || [];
+    renderConversationList(conversations || []);
     updateMessagesBadge();
   } catch (e) {
-    document.getElementById('messages-list').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;font-size:.85rem;">' + ExpertI18n.t('dashboardCompany.errorLoadMessages') + '</div>';
+    console.error('Error loading conversations:', e);
+    document.getElementById('conversations-list').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;font-size:.85rem;">Erreur lors du chargement des conversations.</div>';
   }
 }
 
 function updateMessagesBadge() {
   var badge = document.getElementById('messages-badge');
   if (!badge) return;
-  var unread = companyMessages.filter(function(m) { return m.status === 'repondu'; }).length;
+  var unread = (_messagesConversations || []).reduce(function(sum, conv) {
+    var unreadCount = conv.unreadCount || 0;
+    return sum + unreadCount;
+  }, 0);
   if (unread > 0) {
     badge.textContent = String(unread);
     badge.style.display = 'inline';
@@ -1889,164 +2349,182 @@ function updateMessagesBadge() {
   }
 }
 
-function renderCompanyMessages() {
-  var container = document.getElementById('messages-list');
-  if (!container) return;
-
-  var statusFilter = (document.getElementById('msg-filter-status') || {}).value || '';
-  var searchFilter = (document.getElementById('msg-search') || {}).value.toLowerCase().trim();
-
-  var filtered = companyMessages.filter(function(m) {
-    if (statusFilter && m.status !== statusFilter) return false;
-    if (searchFilter) {
-      var haystack = ((m.consultant_email || '') + ' ' + (m.message || '') + ' ' + (m.reply || '')).toLowerCase();
-      if (haystack.indexOf(searchFilter) === -1) return false;
-    }
-    return true;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">' + ExpertI18n.t('dashboardCompany.noMessages') + ' ' + (statusFilter ? ExpertI18n.t('dashboardCompany.withStatus') : ExpertI18n.t('dashboardCompany.forNow')) + '.</div>';
+function renderConversationList(conversations) {
+  var container = document.getElementById('conversations-list');
+  if (!conversations || conversations.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;font-size:.85rem;">Aucune conversation pour le moment.</div>';
+    updateUnreadBadge(0);
     return;
   }
 
-  container.innerHTML = filtered.map(function(m) {
-    var _locale = ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA';
-    var date = m.created_at ? new Date(m.created_at).toLocaleDateString(_locale, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
-    var statusLabel = m.status === 'repondu' ? ExpertI18n.t('dashboardCompany.statusReplied') : m.status === 'lu' ? ExpertI18n.t('dashboardCompany.statusRead') : ExpertI18n.t('dashboardCompany.statusNew');
-    var statusClass = m.status === 'repondu' ? 'badge-approved' : m.status === 'lu' ? 'badge-pending' : 'badge-rejected';
-    var consultantName = safe(m.consultant_email || 'Consultant');
-    var msgPreview = safe((m.message || '').substring(0, 120)) + ((m.message || '').length > 120 ? '...' : '');
-    var replyHtml = '';
-    if (m.reply) {
-      var replyDate = m.reply_at ? new Date(m.reply_at).toLocaleDateString(_locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-      replyHtml = '<div style="margin-top:.75rem;padding:.75rem 1rem;background:rgba(5,150,105,.06);border-radius:12px;border:1px solid rgba(5,150,105,.15);">' +
-        '<div style="font-size:.7rem;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">' + ExpertI18n.t('dashboardCompany.consultantReply') + (replyDate ? ' — ' + replyDate : '') + '</div>' +
-        '<div style="font-size:.85rem;color:#191c1e;line-height:1.6;">' + safe(m.reply) + '</div>' +
-      '</div>';
+  var unread = conversations.reduce(function(sum, c) { return sum + (c.unreadCount || 0); }, 0);
+  updateUnreadBadge(unread);
+
+  container.innerHTML = conversations.map(function(conv) {
+    var otherEmail = conv.otherEmail || conv.consultant_email || '';
+    var otherName = conv.otherName || conv.consultant_name || conv.name || otherEmail;
+    var lastMsg = conv.lastMessage || (conv.messages && conv.messages.length > 0 ? conv.messages[conv.messages.length - 1].body : '');
+    var lastDate = conv.lastDate || (conv.messages && conv.messages.length > 0 ? new Date(conv.messages[conv.messages.length - 1].created_at) : new Date());
+    var unreadCount = conv.unreadCount || 0;
+
+    var timeStr = '';
+    if (lastDate) {
+      var now = new Date();
+      var diff = now - new Date(lastDate);
+      if (diff < 60000) timeStr = 'À l\'instant';
+      else if (diff < 3600000) timeStr = Math.floor(diff / 60000) + 'm';
+      else if (diff < 86400000) timeStr = Math.floor(diff / 3600000) + 'h';
+      else timeStr = new Date(lastDate).toLocaleDateString('fr-CA', { month: 'short', day: 'numeric' });
     }
 
-    // Bouton pour continuer la conversation (si le consultant a repondu)
-    var replyBtnHtml = '';
-    if (m.reply && m.consultant_email) {
-      replyBtnHtml = '<div style="margin-top:.75rem;">' +
-        '<button onclick="openConversation(\'' + safe(m.consultant_email) + '\', \'' + safe(consultantName) + '\', \'' + safe(m.id) + '\')" style="background:#00288e;color:#fff;border:none;padding:.5rem 1.25rem;border-radius:10px;font-size:.82rem;cursor:pointer;font-weight:600;">Continuer la conversation</button>' +
-      '</div>';
-    }
+    var initials = otherName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+    var preview = (lastMsg || '').substring(0, 40) + ((lastMsg || '').length > 40 ? '...' : '');
 
-    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem 1.5rem;transition:box-shadow .2s;" onmouseenter="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.08)\'" onmouseleave="this.style.boxShadow=\'none\'">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">' +
-        '<div style="display:flex;align-items:center;gap:.75rem;">' +
-          '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;">' + (consultantName.charAt(0) || 'C').toUpperCase() + '</div>' +
-          '<div>' +
-            '<div style="font-size:.92rem;font-weight:600;color:#191c1e;">' + consultantName + '</div>' +
-            '<div style="font-size:.72rem;color:#6b7280;">' + date + '</div>' +
-          '</div>' +
+    return '<div class="conversation-item" onclick="openConversationInPanel(\'' + safe(otherEmail) + '\', \'' + safe(otherName) + '\')">' +
+      '<div class="conversation-avatar">' + initials + '</div>' +
+      '<div class="conversation-details">' +
+        '<div class="conversation-name">' + safe(otherName) + '</div>' +
+        '<div class="conversation-preview">' + safe(preview) + '</div>' +
+        '<div class="conversation-meta">' +
+          '<span class="conversation-date">' + timeStr + '</span>' +
+          (unreadCount > 0 ? '<span class="conversation-unread-badge">' + unreadCount + '</span>' : '') +
         '</div>' +
-        '<span class="badge ' + statusClass + '">' + statusLabel + '</span>' +
       '</div>' +
-      '<div style="font-size:.88rem;color:#374151;line-height:1.7;margin-bottom:.25rem;">' + msgPreview + '</div>' +
-      replyHtml +
-      replyBtnHtml +
     '</div>';
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   CONVERSATION — Fenetre de chat avec un consultant
-   ═══════════════════════════════════════════════════════════════ */
-var _convConsultantEmail = null;
-var _convConsultantName = null;
-
-async function openConversation(consultantEmail, consultantName, notifId) {
-  _convConsultantEmail = consultantEmail;
-  _convConsultantName = consultantName;
-
-  var overlay = document.getElementById('conversation-modal-overlay');
-  if (!overlay) {
-    // Creer le modal dynamiquement
-    overlay = document.createElement('div');
-    overlay.id = 'conversation-modal-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
-    overlay.innerHTML = '<div id="conversation-modal" style="background:#fff;border-radius:20px;width:95%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2);">' +
-      '<div style="padding:1rem 1.5rem;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;">' +
-        '<h3 id="conv-title" style="margin:0;font-size:1rem;color:#191c1e;">Conversation</h3>' +
-        '<button onclick="closeConversation()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6b7280;">&times;</button>' +
-      '</div>' +
-      '<div id="conv-messages" style="flex:1;overflow-y:auto;padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.75rem;min-height:200px;max-height:400px;"></div>' +
-      '<div style="padding:1rem 1.5rem;border-top:1px solid #e5e7eb;display:flex;gap:.5rem;">' +
-        '<textarea id="conv-input" rows="2" placeholder="Votre message..." style="flex:1;border:1px solid #d1d5db;border-radius:12px;padding:.6rem .9rem;font-size:.88rem;resize:none;font-family:inherit;"></textarea>' +
-        '<button onclick="sendConversationMessage()" style="background:#00288e;color:#fff;border:none;padding:.6rem 1.2rem;border-radius:12px;font-size:.85rem;cursor:pointer;font-weight:600;white-space:nowrap;">Envoyer</button>' +
-      '</div>' +
-    '</div>';
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeConversation(); });
-  }
-
-  overlay.style.display = 'flex';
-  document.getElementById('conv-title').textContent = 'Conversation avec ' + (consultantName || consultantEmail);
-  document.getElementById('conv-messages').innerHTML = '<div style="text-align:center;color:#6b7280;padding:2rem;">Chargement...</div>';
-
-  // Charger les messages du thread
-  if (window.ExpertMessaging) {
-    var messages = await ExpertMessaging.getThread(currentEmail, consultantEmail);
-    renderConversationMessages(messages);
-    await ExpertMessaging.markThreadRead(ExpertMessaging.makeThreadId(currentEmail, consultantEmail), currentEmail);
+function updateUnreadBadge(count) {
+  var badge = document.getElementById('conv-unread-badge');
+  if (badge) {
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
   }
 }
 
-function renderConversationMessages(messages) {
-  var container = document.getElementById('conv-messages');
+async function openConversationInPanel(email, name) {
+  _messagesCurrentEmail = email;
+  _messagesCurrentName = name;
+
+  // Afficher le panel actif
+  var emptyState = document.getElementById('chat-empty-state');
+  var activeChat = document.getElementById('chat-active');
+  if (emptyState) emptyState.style.display = 'none';
+  if (activeChat) activeChat.style.display = 'flex';
+
+  // Mettre à jour header
+  var initials = name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+  document.getElementById('chat-avatar').textContent = initials;
+  document.getElementById('chat-name').textContent = safe(name);
+  document.getElementById('chat-role').textContent = 'Consultant'; // Note: on pourrait enrichir ça avec le rôle réel
+
+  // Marquer la conversation comme sélectionnée
+  document.querySelectorAll('.conversation-item').forEach(function(item) {
+    item.classList.remove('active');
+  });
+  event.currentTarget.classList.add('active');
+
+  // Charger les messages
+  document.getElementById('chat-messages').innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;">Chargement...</div>';
+  if (window.ExpertMessaging) {
+    try {
+      const messages = await window.ExpertMessaging.getThread(currentEmail, email);
+      renderChatMessages(messages || []);
+      await window.ExpertMessaging.markThreadRead(window.ExpertMessaging.makeThreadId(currentEmail, email), currentEmail);
+    } catch (e) {
+      console.error('Error loading thread:', e);
+      document.getElementById('chat-messages').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;">Erreur lors du chargement.</div>';
+    }
+  }
+}
+
+function renderChatMessages(messages) {
+  var container = document.getElementById('chat-messages');
   if (!messages || messages.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:#6b7280;padding:2rem;">Debut de la conversation. Envoyez votre premier message.</div>';
+    container.innerHTML = '<div style="text-align:center;color:#6b7280;padding:2rem;font-size:.88rem;">Début de la conversation. Envoyez votre premier message!</div>';
     return;
   }
+
   container.innerHTML = messages.map(function(m) {
     var isMe = m.sender_email === currentEmail.toLowerCase();
-    var align = isMe ? 'flex-end' : 'flex-start';
-    var bg = isMe ? '#00288e' : '#f3f4f6';
-    var color = isMe ? '#fff' : '#191c1e';
-    var name = isMe ? 'Vous' : (m.sender_name || m.sender_email);
-    var time = m.created_at ? new Date(m.created_at).toLocaleString('fr-CA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-    return '<div style="display:flex;flex-direction:column;align-items:' + align + ';">' +
-      '<div style="font-size:.68rem;color:#6b7280;margin-bottom:2px;">' + safe(name) + ' — ' + time + '</div>' +
-      '<div style="background:' + bg + ';color:' + color + ';padding:.6rem 1rem;border-radius:14px;max-width:80%;font-size:.88rem;line-height:1.5;word-break:break-word;">' + safe(m.body) + '</div>' +
+    var bubbleClass = isMe ? 'sent' : 'received';
+    var time = m.created_at ? new Date(m.created_at).toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' }) : '';
+
+    return '<div class="chat-message ' + bubbleClass + '">' +
+      '<div>' +
+        '<div class="chat-bubble ' + bubbleClass + '">' + safe(m.body) + '</div>' +
+        '<div class="chat-timestamp">' + time + '</div>' +
+      '</div>' +
     '</div>';
   }).join('');
+
   container.scrollTop = container.scrollHeight;
 }
 
-async function sendConversationMessage() {
-  var input = document.getElementById('conv-input');
+async function sendChatMessage() {
+  var input = document.getElementById('chat-message-input');
   var text = (input.value || '').trim();
-  if (!text || !_convConsultantEmail) return;
+  if (!text || !_messagesCurrentEmail) return;
 
-  input.value = '';
+  var btn = event.currentTarget;
+  btn.disabled = true;
   input.disabled = true;
 
-  if (window.ExpertMessaging) {
-    await ExpertMessaging.send({
-      senderEmail: currentEmail,
-      senderName: currentCompany ? currentCompany.company_name : currentEmail,
-      senderRole: 'entreprise',
-      receiverEmail: _convConsultantEmail,
-      receiverName: _convConsultantName,
-      body: text
-    });
+  try {
+    if (window.ExpertMessaging) {
+      await window.ExpertMessaging.send({
+        senderEmail: currentEmail,
+        senderName: currentCompany ? currentCompany.company_name : currentEmail,
+        senderRole: 'entreprise',
+        receiverEmail: _messagesCurrentEmail,
+        receiverName: _messagesCurrentName,
+        body: text
+      });
 
-    // Recharger les messages
-    var messages = await ExpertMessaging.getThread(currentEmail, _convConsultantEmail);
-    renderConversationMessages(messages);
+      // Notifier le consultant
+      if (window.ExpertEmailNotify) {
+        await window.ExpertEmailNotify.notify({
+          to: _messagesCurrentEmail,
+          toName: _messagesCurrentName,
+          fromName: currentCompany ? currentCompany.company_name : currentEmail,
+          fromEmail: currentEmail,
+          body: text
+        });
+      }
+
+      input.value = '';
+
+      // Recharger les messages
+      const messages = await window.ExpertMessaging.getThread(currentEmail, _messagesCurrentEmail);
+      renderChatMessages(messages || []);
+
+      // Recharger la liste
+      loadMessagesTab();
+    }
+  } catch (e) {
+    console.error('Error sending message:', e);
   }
+
+  btn.disabled = false;
   input.disabled = false;
   input.focus();
 }
 
-function closeConversation() {
-  var overlay = document.getElementById('conversation-modal-overlay');
-  if (overlay) overlay.style.display = 'none';
-  _convConsultantEmail = null;
-  _convConsultantName = null;
+function filterConversations() {
+  var searchText = (document.getElementById('conv-search-input').value || '').toLowerCase().trim();
+  document.querySelectorAll('.conversation-item').forEach(function(item) {
+    var name = item.querySelector('.conversation-name').textContent.toLowerCase();
+    var preview = item.querySelector('.conversation-preview').textContent.toLowerCase();
+    if (name.includes(searchText) || preview.includes(searchText)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2211,23 +2689,32 @@ async function searchConsultants() {
         + '<div style="display:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>'
       : '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>';
 
-    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.25rem;transition:box-shadow .2s;cursor:pointer;" onclick="window.open(\'/consultant.html?id=' + c.id + '\',\'_blank\')" onmouseenter="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.08)\'" onmouseleave="this.style.boxShadow=\'none\'">'
-      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">'
-        + avatarHtml
-        + '<div>'
-          + '<div style="font-size:.92rem;font-weight:600;color:#191c1e;">' + safe(fullName) + '</div>'
-          + '<div style="font-size:.75rem;color:#6b7280;">' + safe(c.titre || 'Consultant ERP') + '</div>'
+    const consultantEmail = c.email || c.consultant_email || '';
+    const dispoIsGreen = (dispo.toLowerCase().includes('immédiat') || dispo.toLowerCase().includes('immediate'));
+    const dispoColor = dispoIsGreen ? 'rgba(5,150,105,.08);color:#059669' : 'rgba(251,146,60,.08);color:#fb923c';
+    const dispoColorBorder = dispoIsGreen ? 'rgba(5,150,105,.2)' : 'rgba(251,146,60,.2)';
+
+    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:24px;padding:1.5rem;transition:all .2s;overflow:hidden;" onmouseenter="this.style.boxShadow=\'0 8px 24px rgba(0,0,0,.12)\';this.style.transform=\'translateY(-2px)\'" onmouseleave="this.style.boxShadow=\'none\';this.style.transform=\'none\'">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem;">'
+        + '<div style="display:flex;align-items:center;gap:.75rem;flex:1;min-width:0;">'
+          + avatarHtml
+          + '<div style="min-width:0;">'
+            + '<div style="font-size:.95rem;font-weight:700;color:#191c1e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + safe(fullName) + '</div>'
+            + '<div style="font-size:.78rem;color:#6b7280;margin-top:.15rem;">' + safe(c.titre || 'Consultant ERP') + '</div>'
+          + '</div>'
         + '</div>'
+        + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" style="padding:.6rem 1rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;" onmouseenter="this.style.opacity=\'0.9\'" onmouseleave="this.style.opacity=\'1\'">Contacter</button>'
       + '</div>'
-      + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.65rem;">'
-        + '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(0,40,142,.06);color:#00288e;border-radius:99px;font-weight:600;">' + safe(erps) + '</span>'
-        + '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(5,150,105,.06);color:#059669;border-radius:99px;font-weight:600;">' + safe(dispo) + '</span>'
-        + (ville !== '—' ? '<span style="font-size:.68rem;padding:.25rem .6rem;background:rgba(124,58,237,.06);color:#7c3aed;border-radius:99px;font-weight:600;">' + safe(ville) + '</span>' : '')
+      + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">'
+        + '<span style="font-size:.7rem;padding:.35rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;border:1px solid rgba(0,40,142,.15);">ERP: ' + safe(erps) + '</span>'
+        + '<span style="font-size:.7rem;padding:.35rem .7rem;background:' + dispoColor + ';border-radius:8px;font-weight:600;border:1px solid ' + dispoColorBorder + ';">' + safe(dispo) + '</span>'
+        + (ville !== '—' ? '<span style="font-size:.7rem;padding:.35rem .7rem;background:rgba(124,58,237,.08);color:#7c3aed;border-radius:8px;font-weight:600;border:1px solid rgba(124,58,237,.2);">' + safe(ville) + '</span>' : '')
       + '</div>'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;">'
-        + '<span style="font-size:.82rem;font-weight:700;color:#00288e;">' + safe(tjm) + '</span>'
-        + '<span style="font-size:.72rem;color:#0058be;font-weight:600;">Voir le profil →</span>'
+      + '<div style="padding:1rem;background:#f2f4f6;border-radius:12px;margin-bottom:1rem;text-align:center;">'
+        + '<div style="font-size:.7rem;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">TJM</div>'
+        + '<div style="font-size:1.2rem;font-weight:700;color:#00288e;">' + safe(tjm) + '</div>'
       + '</div>'
+      + '<button onclick="window.open(\'/consultant.html?id=' + c.id + '\',\'_blank\')" style="width:100%;padding:.7rem;background:none;border:1px solid rgba(0,40,142,.2);color:#00288e;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;" onmouseenter="this.style.background=\'rgba(0,40,142,.04)\'" onmouseleave="this.style.background=\'none\'">Voir le profil complet →</button>'
     + '</div>';
   }).join('');
 }
@@ -2240,14 +2727,27 @@ function showTab(tabName, event) {
   const targetBtn = event && event.currentTarget ? event.currentTarget : document.getElementById('tab-' + tabName);
   if (targetBtn) targetBtn.classList.add('active');
 
-  /* Charger les messages quand on clique sur l'onglet */
-  if (tabName === 'messages' && companyMessages.length === 0) {
-    loadCompanyMessages();
+  /* Charger les messages quand on clique sur l'onglet Messages */
+  if (tabName === 'messages') {
+    loadMessagesTab();
   }
   /* Pré-charger les consultants quand on ouvre Rechercher */
   if (tabName === 'search' && !_searchLoaded) {
     loadSearchConsultants();
   }
+}
+
+function contactConsultant(email, name) {
+  /* Switch to Messages tab */
+  const btn = document.querySelector('[data-tab="messages"]') || document.getElementById('tab-messages');
+  if (btn) {
+    showTab('messages', { currentTarget: btn });
+  }
+
+  /* Delay opening conversation to let loadMessagesTab complete */
+  setTimeout(function() {
+    openConversationInPanel(email, name);
+  }, 300);
 }
 
 async function logout() {
@@ -2614,6 +3114,24 @@ document.addEventListener('DOMContentLoaded', () => {
   if (deleteBtn) {
     deleteBtn.addEventListener('click', deleteCompanyAccountRGPD);
   }
+
+  /* Profile form: recalculate completion on input */
+  const profileFields = [
+    'profile-name',
+    'profile-sector',
+    'profile-city',
+    'profile-website',
+    'profile-phone',
+    'profile-size',
+    'profile-description'
+  ];
+  profileFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('input', calculateProfileCompletion);
+      field.addEventListener('change', calculateProfileCompletion);
+    }
+  });
 });
 </script>
 
