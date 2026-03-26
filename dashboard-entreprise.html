@@ -630,6 +630,7 @@ body{background:#f7f9fb;}
           <option value="b2b">B2B uniquement</option>
         </select>
         <button class="btn btn-secondary" onclick="toggleTableView()" id="toggle-table-btn" style="font-size:.72rem;padding:.4rem .8rem;border-radius:999px;margin-left:auto;">Vue tableau</button>
+        <button class="btn btn-secondary" onclick="exportResourcesCSV()" style="font-size:.72rem;padding:.4rem .8rem;border-radius:999px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;cursor:pointer;">⬇ Export CSV</button>
       </div>
 
       <!-- Resource Cards Grid (premium view) -->
@@ -787,6 +788,10 @@ body{background:#f7f9fb;}
       <!-- Filtres -->
       <div style="display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:flex-end;">
         <div style="display:flex;flex-direction:column;gap:.25rem;">
+          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Mot-clé</label>
+          <input id="search-keyword" type="text" placeholder="Nom, compétence..." style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:160px;" onkeydown="if(event.key==='Enter')searchConsultants()">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;">
           <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">ERP</label>
           <select id="search-erp" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:140px;">
             <option value="">Tous</option>
@@ -819,12 +824,18 @@ body{background:#f7f9fb;}
           <input id="search-ville" type="text" placeholder="ex: Montréal" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:140px;">
         </div>
         <button onclick="searchConsultants()" style="padding:.65rem 1.25rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font-main);white-space:nowrap;">Rechercher</button>
+        <button onclick="resetSearchFilters()" style="padding:.65rem 1rem;background:none;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.78rem;cursor:pointer;font-family:var(--font-main);color:#6b7280;white-space:nowrap;">Réinitialiser</button>
       </div>
 
       <!-- Résultats -->
       <div id="search-count" style="font-size:.78rem;color:#6b7280;margin-bottom:1rem;display:none;"></div>
       <div id="search-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
         <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>
+      </div>
+      <div id="search-pagination" style="display:none;margin-top:1.25rem;display:none;justify-content:center;align-items:center;gap:.75rem;">
+        <button id="search-prev" onclick="searchChangePage(-1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">← Précédent</button>
+        <span id="search-page-info" style="font-size:.8rem;color:#6b7280;font-weight:500;"></span>
+        <button id="search-next" onclick="searchChangePage(1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">Suivant →</button>
       </div>
     </div>
 
@@ -2112,6 +2123,8 @@ function showDashboard() {
   applyAccessPermissions();
   /* Sprint 3: Charger le badge de messages dès la connexion */
   loadCompanyMessages();
+  /* Sprint 4: Polling auto-refresh messages toutes les 30s */
+  startMessagePolling();
 }
 
 function renderKPIs(filtered) {
@@ -2449,6 +2462,44 @@ async function loadCompanyMessages() {
       console.warn('Erreur chargement messages:', e);
     }
   }
+}
+
+/* ═══ POLLING AUTO-REFRESH MESSAGES (toutes les 30s) ═══ */
+var _msgPollingInterval = null;
+function startMessagePolling() {
+  if (_msgPollingInterval) return;
+  _msgPollingInterval = setInterval(function() {
+    if (!window.ExpertMessaging || !currentEmail) return;
+    window.ExpertMessaging.getConversations(currentEmail).then(function(convos) {
+      var unread = (convos || []).reduce(function(s, c) { return s + (c.unreadCount || 0); }, 0);
+      /* Badge onglet */
+      var badge = document.getElementById('messages-badge');
+      if (badge) {
+        if (unread > 0) { badge.textContent = String(unread); badge.style.display = 'inline'; }
+        else { badge.style.display = 'none'; }
+      }
+      /* Bannière si pas dans l'onglet messages */
+      var messagesTabActive = document.getElementById('messages-tab') && document.getElementById('messages-tab').classList.contains('active');
+      var banner = document.getElementById('unread-banner');
+      if (banner && !messagesTabActive) {
+        if (unread > 0) {
+          var txt = document.getElementById('unread-banner-text');
+          if (txt) txt.textContent = unread === 1 ? 'Vous avez 1 message non lu' : 'Vous avez ' + unread + ' messages non lus';
+          banner.style.display = 'flex';
+        } else {
+          banner.style.display = 'none';
+        }
+      }
+      /* Rafraîchir la liste si on est dans l'onglet messages */
+      if (messagesTabActive && convos) {
+        _messagesConversations = convos;
+        renderConversationList(convos);
+      }
+    }).catch(function() {});
+  }, 30000);
+}
+function stopMessagePolling() {
+  if (_msgPollingInterval) { clearInterval(_msgPollingInterval); _msgPollingInterval = null; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2801,21 +2852,33 @@ async function loadSearchConsultants() {
   } catch (e) { return []; }
 }
 
+/* ═══ PAGINATION STATE ═══ */
+var _searchResults = [];
+var _searchPage = 1;
+var _searchPerPage = 12;
+
 async function searchConsultants() {
   const container = document.getElementById('search-results');
   const countEl = document.getElementById('search-count');
   container.innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;font-size:.85rem;grid-column:1/-1;">' + ExpertI18n.t('dashboardCompany.searching') + '</div>';
 
   const all = await loadSearchConsultants();
+  const keywordFilter = (document.getElementById('search-keyword').value || '').toLowerCase().trim();
   const erpFilter = (document.getElementById('search-erp').value || '').toLowerCase();
   const roleFilter = (document.getElementById('search-role').value || '').toLowerCase();
   const dispoFilter = (document.getElementById('search-dispo').value || '').toLowerCase();
   const tjmMax = parseInt(document.getElementById('search-tjm').value) || 0;
   const villeFilter = (document.getElementById('search-ville').value || '').toLowerCase().trim();
 
-  const results = all.filter(function(c) {
+  _searchResults = all.filter(function(c) {
     const notes = (function() { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
 
+    /* Mot-clé (nom, compétences, résumé, titre) */
+    if (keywordFilter) {
+      var haystack = [c.prenom, c.nom, c.titre, notes.resume_pro, notes.resume, c.resume,
+        Array.isArray(c.competences) ? c.competences.join(' ') : '', notes.ville].join(' ').toLowerCase();
+      if (!haystack.includes(keywordFilter)) return false;
+    }
     /* ERP */
     if (erpFilter) {
       const erps = (Array.isArray(c.competences) ? c.competences.join(' ') : '').toLowerCase();
@@ -2844,15 +2907,49 @@ async function searchConsultants() {
     return true;
   });
 
+  _searchPage = 1;
   countEl.style.display = 'block';
-  countEl.textContent = results.length + ' ' + (results.length !== 1 ? ExpertI18n.t('dashboardCompany.consultantPlural') : ExpertI18n.t('dashboardCompany.consultantSingular')) + ' ' + (results.length !== 1 ? ExpertI18n.t('dashboardCompany.foundPlural') : ExpertI18n.t('dashboardCompany.foundSingular'));
+  countEl.textContent = _searchResults.length + ' ' + (_searchResults.length !== 1 ? ExpertI18n.t('dashboardCompany.consultantPlural') : ExpertI18n.t('dashboardCompany.consultantSingular')) + ' ' + (_searchResults.length !== 1 ? ExpertI18n.t('dashboardCompany.foundPlural') : ExpertI18n.t('dashboardCompany.foundSingular'));
 
-  if (!results.length) {
+  if (!_searchResults.length) {
     container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">' + ExpertI18n.t('dashboardCompany.noResults') + '</div>';
+    document.getElementById('search-pagination').style.display = 'none';
     return;
   }
 
-  container.innerHTML = results.map(function(c) {
+  renderSearchPage();
+}
+
+function resetSearchFilters() {
+  document.getElementById('search-keyword').value = '';
+  document.getElementById('search-erp').value = '';
+  document.getElementById('search-role').value = '';
+  document.getElementById('search-dispo').value = '';
+  document.getElementById('search-tjm').value = '';
+  document.getElementById('search-ville').value = '';
+  document.getElementById('search-results').innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>';
+  document.getElementById('search-count').style.display = 'none';
+  document.getElementById('search-pagination').style.display = 'none';
+  _searchResults = [];
+  _searchPage = 1;
+}
+
+function searchChangePage(dir) {
+  var totalPages = Math.ceil(_searchResults.length / _searchPerPage);
+  _searchPage = Math.max(1, Math.min(totalPages, _searchPage + dir));
+  renderSearchPage();
+  document.getElementById('search-tab').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderSearchPage() {
+  var container = document.getElementById('search-results');
+  var results = _searchResults;
+  var start = (_searchPage - 1) * _searchPerPage;
+  var end = start + _searchPerPage;
+  var pageResults = results.slice(start, end);
+  var totalPages = Math.ceil(results.length / _searchPerPage);
+
+  container.innerHTML = pageResults.map(function(c) {
     const notes = (function() { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
     const fullName = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || 'Consultant ERP';
     const photo = notes.photo || notes.photo_url || notes.avatar || '';
@@ -2896,6 +2993,19 @@ async function searchConsultants() {
       + '<button onclick="window.open(\'/consultant.html?id=' + c.id + '\',\'_blank\')" style="width:100%;padding:.7rem;background:none;border:1px solid rgba(0,40,142,.2);color:#00288e;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;" onmouseenter="this.style.background=\'rgba(0,40,142,.04)\'" onmouseleave="this.style.background=\'none\'">Voir le profil complet →</button>'
     + '</div>';
   }).join('');
+
+  /* Pagination controls */
+  var pag = document.getElementById('search-pagination');
+  if (totalPages > 1) {
+    pag.style.display = 'flex';
+    document.getElementById('search-page-info').textContent = 'Page ' + _searchPage + ' / ' + totalPages;
+    document.getElementById('search-prev').disabled = (_searchPage <= 1);
+    document.getElementById('search-prev').style.opacity = (_searchPage <= 1) ? '.4' : '1';
+    document.getElementById('search-next').disabled = (_searchPage >= totalPages);
+    document.getElementById('search-next').style.opacity = (_searchPage >= totalPages) ? '.4' : '1';
+  } else {
+    pag.style.display = 'none';
+  }
 }
 
 function showTab(tabName, event) {
@@ -3248,6 +3358,43 @@ async function exportCompanyDataRGPD() {
   } catch (err) {
     alert('Erreur lors de l\'export: ' + err.message);
   }
+}
+
+/* ═══ EXPORT CSV DES RESSOURCES ═══ */
+function exportResourcesCSV() {
+  var resources = _allLoadedResources || [];
+  if (!resources.length) { alert('Aucune ressource à exporter.'); return; }
+
+  var headers = ['Nom','Prénom','Rôle','ERP / Compétences','Tarif min','Tarif max','Ville','Statut','Visibilité','Disponibilité'];
+  var rows = resources.map(function(r) {
+    var notes = parseNotes(r.notes_admin);
+    var erps = Array.isArray(r.competences) ? r.competences.join('; ') : (r.competences || '');
+    var statusLabels = { 'approuve': 'Publié', 'en_attente': 'En attente', 'en_mission': 'En mission', 'refuse': 'Refusé' };
+    var vis = (notes.visibility || 'b2b').toUpperCase();
+    var dispo = notes.disponibilite || r.disponibilite || '';
+    return [
+      r.nom || '', r.prenom || '', r.titre || '', erps,
+      r.tjm_min || '', r.tjm_max || '', notes.ville || r.ville || '',
+      statusLabels[normalizeStatus(r.statut)] || r.statut || '',
+      vis, dispo
+    ];
+  });
+
+  var csvContent = '\uFEFF'; /* BOM for Excel UTF-8 */
+  csvContent += headers.map(function(h){ return '"' + h.replace(/"/g,'""') + '"'; }).join(',') + '\n';
+  rows.forEach(function(row) {
+    csvContent += row.map(function(cell){ return '"' + String(cell).replace(/"/g,'""') + '"'; }).join(',') + '\n';
+  });
+
+  var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = 'ressources_' + new Date().toISOString().split('T')[0] + '.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 async function deleteCompanyAccountRGPD() {
