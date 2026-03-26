@@ -80,37 +80,39 @@ body { font-family: 'Manrope', sans-serif; }
     pointer-events: none;
   }
 
-  /* ── Photo frame — premium 4:5 ── */
+  /* ── Photo frame — compact circular avatar ── */
   .profile-photo-frame {
     position: relative;
-    aspect-ratio: 4/5;
-    border-radius: 2rem;
+    width: 100px; height: 100px;
+    border-radius: 50%;
     overflow: hidden;
     background: linear-gradient(135deg, #e0eaff 0%, #c7d7fe 50%, #dbeafe 100%);
     box-shadow:
-      0 32px 80px rgba(0,40,142,.14),
-      0 12px 32px rgba(0,40,142,.08),
+      0 8px 24px rgba(0,40,142,.12),
+      0 2px 8px rgba(0,40,142,.06),
       0 0 0 1px rgba(0,40,142,.06);
-    border: 4px solid rgba(255,255,255,.9);
-    transition: transform .4s cubic-bezier(.25,.46,.45,.94), box-shadow .4s;
+    border: 3px solid rgba(255,255,255,.9);
+    flex-shrink: 0;
+    transition: transform .3s cubic-bezier(.25,.46,.45,.94), box-shadow .3s;
   }
   .profile-photo-frame:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow:
-      0 40px 100px rgba(0,40,142,.18),
-      0 16px 40px rgba(0,40,142,.10),
+      0 12px 36px rgba(0,40,142,.16),
+      0 4px 12px rgba(0,40,142,.08),
       0 0 0 1px rgba(0,40,142,.08);
   }
   #profile-avatar {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 5rem; font-weight: 800; color: #fff;
+    font-size: 2.2rem; font-weight: 800; color: #fff;
     letter-spacing: .06em;
+    border-radius: 50%;
     background: linear-gradient(145deg, #001d6e 0%, #00288e 30%, #0058be 60%, #3b82f6 100%);
-    text-shadow: 0 2px 12px rgba(0,0,0,.15);
+    text-shadow: 0 2px 8px rgba(0,0,0,.15);
   }
   #profile-avatar img {
-    width: 100%; height: 100%; object-fit: cover;
+    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
   }
 
   /* ── Availability pill ── */
@@ -259,146 +261,88 @@ body { font-family: 'Manrope', sans-serif; }
 <main class="min-h-screen">
 
   <!-- ══════════════════════════════════════════
-       HERO — Editorial magazine profile header
+       HERO — Compact horizontal profile
   ══════════════════════════════════════════ -->
-  <section class="profile-hero-section pt-24">
-    <div class="max-w-screen-2xl mx-auto px-6 lg:px-8 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+  <section class="profile-hero-section pt-16">
+    <div class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-5 lg:py-6">
 
-      <!-- LEFT: Large rectangular photo -->
-      <div class="lg:col-span-5 relative">
-        <div class="profile-photo-frame">
-          <div id="profile-avatar" style="background:#1e3a8a;">ER</div>
+      <!-- ROW 1: Avatar + Identity + CTA -->
+      <div style="display:flex;align-items:center;gap:1.75rem;flex-wrap:wrap;">
+        <div class="profile-photo-frame" style="width:100px;height:100px;aspect-ratio:1;border-radius:50%;flex-shrink:0;">
+          <div id="profile-avatar" style="background:#1e3a8a;border-radius:50%;font-size:2.2rem;">ER</div>
         </div>
-        <!-- Glass quote bubble RETIRÉ -->
-      </div>
-
-      <!-- RIGHT: Profile content -->
-      <div class="lg:col-span-7 flex flex-col gap-6 profile-main">
-
-        <!-- Role label -->
-        <span id="profile-role" class="text-secondary font-bold tracking-[.18em] uppercase text-xs">Consultant ERP</span>
-
-        <!-- Name — HUGE editorial typography -->
-        <h1 id="profile-name" class="font-headline font-bold text-on-surface tracking-tight leading-[1.05]"
-            style="font-size:clamp(2.4rem,5vw,4.25rem);">Expert ERP</h1>
-
-        <!-- Verified badge -->
-        <div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container border border-outline-variant/30 text-xs font-bold uppercase tracking-widest text-on-surface-variant">
-            <span class="text-primary" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
-            <span id="profile-verified-label">Expert validé ERP</span>
-          </span>
-        </div>
-
-        <!-- Skill chips -->
-        <div id="profile-skills" class="flex flex-wrap gap-2"></div>
-
-        <!-- CTA buttons -->
-        <div class="flex flex-wrap gap-3 pt-1">
-          <button id="sidebar-contact-btn"
-                  class="px-7 py-3.5 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.98]">
-            Contacter l'administrateur
-          </button>
-          <a href="#resume-section"
-             class="px-7 py-3.5 rounded-xl font-bold text-sm text-on-surface bg-surface-container hover:bg-surface-container-high transition-all flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Voir le profil complet
-          </a>
-        </div>
-
-        <!-- Stats — 3 columns with big values -->
-        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-outline-variant/20 mt-2">
-          <div>
-            <div class="font-headline font-bold text-primary leading-none"
-                 style="font-size:clamp(1.5rem,3vw,2.5rem);" id="profile-years-exp">—</div>
-            <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Expérience</div>
-          </div>
-          <div>
-            <div class="font-bold text-on-surface leading-tight"
-                 style="font-size:clamp(.85rem,1.8vw,1.1rem);" id="profile-location">—</div>
-            <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Localisation</div>
-          </div>
-          <div>
-            <div class="font-bold text-on-surface leading-tight"
-                 style="font-size:clamp(.85rem,1.8vw,1.1rem);" id="profile-languages">—</div>
-            <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Langues</div>
-          </div>
-        </div>
-
-        <!-- Member since (subtle) -->
-        <div class="text-xs text-on-surface-variant flex items-center gap-1.5">
-          <svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span id="profile-member-since">—</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       INFO CARDS STRIP — rate / availability / mode
-  ══════════════════════════════════════════ -->
-  <div class="py-10" style="background:linear-gradient(180deg,#fff 0%,#f8faff 100%);border-top:1px solid rgba(0,40,142,.04);border-bottom:1px solid rgba(0,40,142,.04);">
-    <div class="max-w-screen-2xl mx-auto px-6 lg:px-12">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-        <!-- Rate -->
-        <div class="info-card">
-          <div class="info-card-icon" style="background:rgba(0,40,142,.07);">
-            <span class="text-primary" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
-          </div>
-          <div class="min-w-0">
-            <div class="font-bold text-primary font-manrope truncate text-[15px]" id="profile-rate-line">Tarif sur demande</div>
-            <div class="text-[11px] uppercase tracking-wider font-bold text-on-surface-variant mt-0.5">Taux journalier</div>
-          </div>
-        </div>
-
-        <!-- Availability -->
-        <div class="info-card">
-          <div class="info-card-icon bg-emerald-50">
-            <span class="text-emerald-600" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span>
-          </div>
-          <div>
-            <div id="profile-availability-pill" class="inline-flex items-center gap-2">
+        <div style="flex:1;min-width:220px;" class="profile-main">
+          <span id="profile-role" class="text-secondary font-bold tracking-[.15em] uppercase" style="font-size:.65rem;">Consultant ERP</span>
+          <h1 id="profile-name" class="font-headline font-bold text-on-surface tracking-tight leading-[1.1]"
+              style="font-size:clamp(1.5rem,3vw,2.4rem);margin:.15rem 0 .35rem;">Expert ERP</h1>
+          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container border border-outline-variant/30" style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#444653;">
+              <span class="text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+              <span id="profile-verified-label">Validé</span>
+            </span>
+            <div id="profile-availability-pill">
               <span class="availability-dot"></span>
               <span id="profile-availability-label" class="font-bold font-manrope">Disponible</span>
             </div>
-            <div class="text-[11px] uppercase tracking-wider font-bold text-on-surface-variant mt-0.5">Disponibilité</div>
+            <span class="flex items-center gap-1" style="font-size:.7rem;color:#6b7280;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span id="profile-member-since">—</span>
+            </span>
           </div>
         </div>
-
-        <!-- Work mode -->
-        <div class="info-card">
-          <div class="info-card-icon" style="background:rgba(0,88,190,.08);">
-            <span class="text-secondary" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>
-          </div>
-          <div>
-            <div class="font-bold text-on-surface font-manrope text-[15px]" id="profile-mode">Mode flexible</div>
-            <div class="text-[11px] uppercase tracking-wider font-bold text-on-surface-variant mt-0.5">Mode de travail</div>
-          </div>
+        <div style="display:flex;gap:.5rem;flex-shrink:0;">
+          <button id="sidebar-contact-btn" class="px-5 py-2.5 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.98]">Contacter</button>
+          <a href="#contact-section" class="px-4 py-2.5 rounded-xl font-bold text-on-surface bg-surface-container hover:bg-surface-container-high transition-all" style="font-size:.8rem;">Profil complet ↓</a>
         </div>
-
       </div>
+
+      <!-- ROW 2: Skills -->
+      <div id="profile-skills" class="flex flex-wrap gap-1.5" style="margin-top:.6rem;"></div>
+
+      <!-- ROW 3: Stats strip horizontal -->
+      <div style="display:flex;gap:0;margin-top:.75rem;padding:.6rem 1rem;background:#fff;border-radius:12px;border:1px solid rgba(0,40,142,.06);box-shadow:0 1px 6px rgba(0,0,0,.03);align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:.5rem;padding-right:1.25rem;border-right:1px solid rgba(0,0,0,.06);">
+          <span class="font-headline font-bold text-primary" style="font-size:1.2rem;" id="profile-years-exp">—</span>
+          <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#6b7280;">Expérience</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;padding:0 1.25rem;border-right:1px solid rgba(0,0,0,.06);">
+          <span class="font-bold" style="font-size:.8rem;color:#191c1e;" id="profile-location">—</span>
+          <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#6b7280;">Localisation</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;padding:0 1.25rem;border-right:1px solid rgba(0,0,0,.06);">
+          <span class="font-bold" style="font-size:.8rem;color:#191c1e;" id="profile-languages">—</span>
+          <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#6b7280;">Langues</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;padding:0 1.25rem;border-right:1px solid rgba(0,0,0,.06);">
+          <span class="font-bold text-primary" style="font-size:.85rem;" id="profile-rate-line">—</span>
+          <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#6b7280;">Tarif</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;padding-left:1.25rem;">
+          <span class="font-bold" style="font-size:.8rem;color:#191c1e;" id="profile-mode">Flexible</span>
+          <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:#6b7280;">Mode</span>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
 
   <!-- ── BENTO: RESUME + EXPERIENCE + CERTIFICATIONS ── -->
-  <section id="resume-section" class="py-24" style="background:linear-gradient(180deg,#f4f6fb 0%,#f0f2f8 100%);">
-    <div class="max-w-screen-2xl mx-auto px-8">
+  <section id="resume-section" class="py-8" style="background:linear-gradient(180deg,#f4f6fb 0%,#f0f2f8 100%);">
+    <div class="max-w-screen-2xl mx-auto px-6 lg:px-10">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         <!-- LEFT 2/3: Resume + Experiences -->
         <div class="lg:col-span-2 flex flex-col gap-8">
 
           <!-- Resume -->
-          <div class="p-12 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h2 id="resume-heading" class="text-4xl font-headline font-bold mb-6" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
+          <div class="p-6 lg:p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+            <h2 id="resume-heading" class="text-2xl font-headline font-bold mb-4" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
             <p id="profile-resume" class="section-text"></p>
           </div>
 
           <!-- Experiences -->
-          <div class="p-12 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h2 id="experiences-heading" class="text-4xl font-headline font-bold mb-8" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences Professionnelles</h2>
+          <div class="p-6 lg:p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+            <h2 id="experiences-heading" class="text-2xl font-headline font-bold mb-5" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences</h2>
             <div id="profile-experiences"></div>
           </div>
 
@@ -408,8 +352,8 @@ body { font-family: 'Manrope', sans-serif; }
         <div class="flex flex-col gap-8">
 
           <!-- Certifications (premium deep blue) -->
-          <div id="certif-section" class="p-10 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 16px 48px rgba(0,40,142,.25),0 4px 12px rgba(0,40,142,.15);">
-            <h2 class="text-3xl font-headline font-bold mb-8">Certifications</h2>
+          <div id="certif-section" class="p-6 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 12px 36px rgba(0,40,142,.2);">
+            <h2 class="text-xl font-headline font-bold mb-4">Certifications</h2>
             <div id="profile-certifs" class="flex flex-col gap-2">
               <div class="certif-badge">
                 <span class="text-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
@@ -419,8 +363,8 @@ body { font-family: 'Manrope', sans-serif; }
           </div>
 
           <!-- Skill Experience -->
-          <div class="p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-6">Expérience par compétence</h3>
+          <div class="p-5 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+            <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-4">Expérience par compétence</h3>
             <div id="profile-skill-experience" class="space-y-1"></div>
           </div>
 
@@ -430,10 +374,10 @@ body { font-family: 'Manrope', sans-serif; }
   </section>
 
   <!-- ── PROJETS SECTION ── -->
-  <section id="projets-section" class="py-24 max-w-screen-2xl mx-auto px-8">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-14">
+  <section id="projets-section" class="py-8 max-w-screen-2xl mx-auto px-6 lg:px-10">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-6">
       <div class="max-w-xl">
-        <h2 id="projets-heading" class="text-5xl font-headline font-bold mb-3">Projets &amp; Missions</h2>
+        <h2 id="projets-heading" class="text-2xl font-headline font-bold mb-1">Projets &amp; Missions</h2>
         <p class="text-on-surface-variant text-base">Sélection de missions et projets ERP menés avec succès.</p>
       </div>
     </div>
@@ -441,11 +385,11 @@ body { font-family: 'Manrope', sans-serif; }
   </section>
 
   <!-- ── CONTACT FORM — premium ── -->
-  <section id="contact-section" class="py-24" style="background:linear-gradient(180deg,#fff 0%,#f4f6fb 100%);">
-    <div class="max-w-2xl mx-auto px-8">
-      <div class="text-center mb-12">
-        <span class="font-manrope text-sm font-bold tracking-[0.2em] uppercase block mb-4" style="background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
-        <h2 id="contact-title" class="text-5xl font-headline font-bold" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
+  <section id="contact-section" class="py-8" style="background:linear-gradient(180deg,#fff 0%,#f4f6fb 100%);">
+    <div class="max-w-2xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-6">
+        <span class="font-manrope font-bold tracking-[0.15em] uppercase block mb-2" style="font-size:.7rem;background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
+        <h2 id="contact-title" class="text-2xl font-headline font-bold" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
       </div>
 
       <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
@@ -539,7 +483,7 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
-      <form id="contact-form" class="p-12 rounded-2xl flex flex-col gap-5" style="display:none;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.03);">
+      <form id="contact-form" class="p-6 rounded-2xl flex flex-col gap-4" style="display:none;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.03);">
         <input id="company-name" type="text" placeholder="Votre entreprise"
           class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.enterprise"/>
         <input id="company-email" type="email" placeholder="Email professionnel"
@@ -567,7 +511,7 @@ body { font-family: 'Manrope', sans-serif; }
 
 <!-- ── FOOTER — premium ── -->
 <footer style="background:linear-gradient(180deg,#f8faff,#f0f4ff);border-top:1px solid rgba(0,40,142,.06);" class="mt-0">
-  <div class="flex flex-col md:flex-row justify-between items-center px-12 py-14 gap-6 max-w-screen-2xl mx-auto">
+  <div class="flex flex-col md:flex-row justify-between items-center px-8 py-8 gap-4 max-w-screen-2xl mx-auto">
     <div class="font-newsreader italic font-semibold text-xl" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
       Expert<span class="not-italic font-bold">ERP</span>Hub
     </div>
@@ -1048,7 +992,7 @@ function renderConsultant(consultant) {
       avatarEl.innerHTML = '';
       const img = document.createElement('img');
       img.src = photoUrl;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;';
       img.alt = initials;
       img.onerror = function() {
         avatarEl.innerHTML = '';
