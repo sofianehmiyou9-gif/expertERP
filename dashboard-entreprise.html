@@ -565,6 +565,13 @@ body{background:#f7f9fb;}
     <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile" data-i18n="dashboardCompany.myProfile">Mon Profil</button>
   </div>
 
+  <!-- ═══ NOTIFICATION BANNER (visible on dashboard entry when unread messages) ═══ -->
+  <div id="unread-banner" style="display:none;margin:0 1.5rem .75rem;padding:.75rem 1.25rem;background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);color:#fff;border-radius:12px;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,.25);font-size:.9rem;font-weight:500;align-items:center;gap:.75rem;transition:opacity .3s;" onclick="document.querySelector('[data-tab-name=messages]').click();">
+    <span style="font-size:1.2rem;">✉</span>
+    <span id="unread-banner-text">Vous avez des messages non lus</span>
+    <span style="margin-left:auto;font-size:.75rem;opacity:.8;text-decoration:underline;">Voir les messages →</span>
+  </div>
+
   <div class="content">
     <!-- Resources Tab -->
     <div class="tab-pane active" id="resources-tab">
@@ -2410,15 +2417,33 @@ async function loadActivityKPIs() {
 }
 
 async function loadCompanyMessages() {
-  /* Placeholder pour initialiser le badge de messages */
+  /* Charger le badge + bannière de notification dès la connexion */
   if (window.ExpertMessaging && currentEmail) {
     try {
+      /* Synchroniser les notifications d'abord */
+      if (window.ExpertMessaging.syncFromNotifications) {
+        await window.ExpertMessaging.syncFromNotifications(currentEmail);
+      }
       const conversations = await window.ExpertMessaging.getConversations(currentEmail);
       const unreadCount = (conversations || []).reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+
+      /* Badge dans l'onglet Messages */
       const badge = document.getElementById('messages-badge');
       if (badge && unreadCount > 0) {
         badge.textContent = unreadCount;
         badge.style.display = 'inline';
+      }
+
+      /* Bannière de notification en haut du dashboard */
+      const banner = document.getElementById('unread-banner');
+      if (banner && unreadCount > 0) {
+        var bannerText = document.getElementById('unread-banner-text');
+        if (bannerText) {
+          bannerText.textContent = unreadCount === 1
+            ? 'Vous avez 1 message non lu'
+            : 'Vous avez ' + unreadCount + ' messages non lus';
+        }
+        banner.style.display = 'flex';
       }
     } catch (e) {
       console.warn('Erreur chargement messages:', e);
@@ -2451,6 +2476,9 @@ async function loadMessagesTab() {
     _messagesConversations = conversations || [];
     renderConversationList(conversations || []);
     updateMessagesBadge();
+    /* Masquer la bannière quand on entre dans l'onglet Messages */
+    var banner = document.getElementById('unread-banner');
+    if (banner) banner.style.display = 'none';
   } catch (e) {
     console.error('Error loading conversations:', e);
     document.getElementById('conversations-list').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;font-size:.85rem;">Erreur lors du chargement des conversations.</div>';

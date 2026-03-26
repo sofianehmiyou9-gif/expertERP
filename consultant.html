@@ -68,21 +68,27 @@ body { font-family: 'Manrope', sans-serif; }
   h1, h2, h3, .serif { font-family: 'Newsreader', serif; }
 
   /* ── HERO — editorial light style ── */
-  .profile-hero-section { background: #fff; }
+  .profile-hero-section { background: linear-gradient(180deg, #f8faff 0%, #ffffff 60%); }
 
   /* ── Photo frame — rectangular 4:5 ratio ── */
   .profile-photo-frame {
     position: relative;
     aspect-ratio: 4/5;
-    border-radius: 1.5rem;
+    border-radius: 1.75rem;
     overflow: hidden;
-    background: #e8eef8;
-    box-shadow: 0 32px 80px rgba(0,40,142,.12), 0 0 0 1px rgba(0,40,142,.06);
+    background: linear-gradient(135deg, #e8eef8 0%, #dbeafe 100%);
+    box-shadow: 0 24px 64px rgba(0,40,142,.1), 0 0 0 1px rgba(0,40,142,.05);
+    border: 3px solid rgba(255,255,255,.8);
   }
   #profile-avatar {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 5rem; font-weight: 700; color: #fff;
+    font-size: 4.5rem; font-weight: 700; color: #fff;
+    letter-spacing: .04em;
+    background: linear-gradient(145deg, #00288e 0%, #0058be 50%, #3b82f6 100%);
+  }
+  #profile-avatar img {
+    width: 100%; height: 100%; object-fit: cover;
   }
 
   /* ── Availability pill ── */
@@ -224,7 +230,7 @@ body { font-family: 'Manrope', sans-serif; }
         <div class="flex flex-wrap gap-3 pt-1">
           <button id="sidebar-contact-btn"
                   class="px-7 py-3.5 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.98]">
-            Contacter ce consultant
+            Contacter l'administrateur
           </button>
           <a href="#resume-section"
              class="px-7 py-3.5 rounded-xl font-bold text-sm text-on-surface bg-surface-container hover:bg-surface-container-high transition-all flex items-center gap-2">
@@ -236,18 +242,18 @@ body { font-family: 'Manrope', sans-serif; }
         <!-- Stats — 3 columns with big values -->
         <div class="grid grid-cols-3 gap-6 pt-8 border-t border-outline-variant/20 mt-2">
           <div>
-            <div class="font-headline font-bold text-primary leading-none truncate"
+            <div class="font-headline font-bold text-primary leading-none"
                  style="font-size:clamp(1.5rem,3vw,2.5rem);" id="profile-years-exp">—</div>
             <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Expérience</div>
           </div>
           <div>
-            <div class="font-headline font-bold text-primary leading-none truncate"
-                 style="font-size:clamp(1.5rem,3vw,2.5rem);" id="profile-location">—</div>
+            <div class="font-bold text-on-surface leading-tight"
+                 style="font-size:clamp(.85rem,1.8vw,1.1rem);" id="profile-location">—</div>
             <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Localisation</div>
           </div>
           <div>
-            <div class="font-headline font-bold text-primary leading-none truncate"
-                 style="font-size:clamp(1.5rem,3vw,2.5rem);" id="profile-languages">—</div>
+            <div class="font-bold text-on-surface leading-tight"
+                 style="font-size:clamp(.85rem,1.8vw,1.1rem);" id="profile-languages">—</div>
             <div class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mt-2">Langues</div>
           </div>
         </div>
