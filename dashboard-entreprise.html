@@ -165,36 +165,19 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
   .team-form{grid-template-columns:1fr;}
 }
 
-  /* -- DASHBOARD ROWS (horizontal layout) -- */
-  .dash-row{display:flex;gap:1.25rem;align-items:stretch;margin-bottom:1.25rem;}
-  @media(max-width:900px){.dash-row{flex-direction:column;}}
-
-  /* -- KPI SECTION -- */
-  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:0;}
-  .kpi-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.25rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-  .kpi-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:0;}
-  .kpi-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.08);transform:translateY(-2px);border-color:rgba(0,40,142,.2);}
-  .kpi-card.kpi-blue{border-left-color:#00288e;}
-  .kpi-card.kpi-blue::before{background:#00288e;}
-  .kpi-card.kpi-green{border-left-color:#059669;}
-  .kpi-card.kpi-green::before{background:#059669;}
-  .kpi-card.kpi-amber{border-left-color:#c2410c;}
-  .kpi-card.kpi-amber::before{background:#c2410c;}
-  .kpi-card.kpi-violet{border-left-color:#7c3aed;}
-  .kpi-card.kpi-violet::before{background:#7c3aed;}
-  .kpi-icon{font-size:.85rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
-  .kpi-value{font-size:1.6rem;font-weight:700;line-height:1.1;color:#191c1e;font-family:var(--font-main);}
-  .kpi-label{font-size:.65rem;color:#444653;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
-  .kpi-trend{font-size:.7rem;font-weight:500;color:#9ca3af;}
-  .kpi-trend.up{color:#059669;}
-  .kpi-chart-row{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1rem 1.25rem;margin-bottom:0;display:flex;align-items:center;gap:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease;}
-  .kpi-chart-row:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:rgba(0,40,142,.15);}
-  .kpi-chart-title{font-family:var(--font-serif);font-size:1rem;font-weight:600;margin-bottom:.5rem;color:#191c1e;}
-  .kpi-chart-legend{display:flex;flex-direction:column;gap:.35rem;}
-  .kpi-legend-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#191c1e;}
-  .kpi-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-  @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:600px){.kpi-grid{grid-template-columns:1fr;}.kpi-chart-row{flex-direction:column;gap:1rem;}}
+  /* -- STATS STRIP (condensed metrics bar) -- */
+  .stats-strip{background:#fff;border:1px solid rgba(196,197,213,.25);border-radius:16px;padding:1rem 1.5rem;margin-bottom:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .stats-strip-metrics{display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+  .stats-metric{display:flex;flex-direction:column;align-items:center;padding:.25rem 1rem;min-width:0;}
+  .stats-metric-value{font-size:1.4rem;font-weight:700;color:#191c1e;line-height:1.2;font-family:var(--font-main);}
+  .stats-metric-value.stats-green{color:#059669;}
+  .stats-metric-label{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;margin-top:.1rem;white-space:nowrap;}
+  .stats-divider{width:1px;height:28px;background:rgba(196,197,213,.35);flex-shrink:0;}
+  .stats-strip-plan{border-top:1px solid rgba(196,197,213,.2);margin-top:.75rem;padding-top:.65rem;display:flex;flex-direction:column;gap:.35rem;}
+  .stats-plan-row{display:flex;justify-content:space-between;align-items:center;}
+  .stats-plan-name{font-family:var(--font-serif);font-size:.85rem;font-weight:600;color:#00288e;}
+  .stats-plan-count{font-size:.75rem;font-weight:600;color:#64748b;}
+  @media(max-width:768px){.stats-strip-metrics{gap:.25rem;}.stats-metric{padding:.25rem .5rem;}.stats-divider{height:20px;}}
 
 /* -- OVERRIDES: new premium design -- */
 .auth-card{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:32px;padding:2rem;max-width:430px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08);}
@@ -223,33 +206,42 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
 .section-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.15rem;color:#00288e;}
 .section-sub{font-size:.82rem;color:#64748b;margin-bottom:1rem;}
 
-/* ═══ RESOURCE CARDS GRID (Premium) ═══ */
-.resource-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:.5rem;}
-.resource-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1.15rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.resource-card:hover{box-shadow:0 8px 24px rgba(0,40,142,.1);transform:translateY(-3px);border-color:rgba(0,88,190,.25);}
-.resource-card.type-enterprise{border-left:4px solid #0058be;}
-.resource-card.type-freelance{border-left:4px solid #7c3aed;}
-.resource-card-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
-.resource-card-avatar{width:52px;height:52px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 2px 8px rgba(37,99,235,.08);}
-.resource-card-avatar-fallback{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;color:#fff;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.08);}
-.resource-card-name{font-weight:700;font-size:1rem;color:#191c1e;line-height:1.3;}
-.resource-card-role{font-size:.78rem;color:#444653;margin-top:.15rem;}
-.resource-card-type-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .55rem;border-radius:999px;margin-top:.3rem;}
-.resource-card-type-badge.enterprise{background:rgba(0,88,190,.08);color:#0058be;border:1px solid rgba(0,88,190,.2);}
-.resource-card-type-badge.freelance{background:rgba(124,58,237,.08);color:#7c3aed;border:1px solid rgba(124,58,237,.2);}
-.resource-card-details{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem;margin-bottom:1rem;}
-.resource-card-detail{display:flex;flex-direction:column;gap:.15rem;}
-.resource-card-detail-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#9ca3af;}
-.resource-card-detail-value{font-size:.82rem;font-weight:600;color:#191c1e;}
-.resource-card-status{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
-.resource-card-actions{display:flex;gap:.5rem;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(196,197,213,.2);}
-.resource-card-actions .btn{font-size:.72rem;padding:.4rem .8rem;border-radius:999px;}
-.resource-card-empty{grid-column:1/-1;text-align:center;padding:3rem 2rem;color:#9ca3af;font-size:.9rem;}
-.resource-card-empty-icon{font-size:3rem;margin-bottom:.75rem;opacity:.5;}
-.resource-filter-bar{display:flex;gap:.75rem;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;}
-.resource-filter-bar select,.resource-filter-bar input{padding:.5rem .75rem;border:1px solid rgba(196,197,213,.4);border-radius:14px;font-size:.8rem;font-family:var(--font-main);background:#fff;color:#191c1e;}
-.resource-filter-bar input{min-width:200px;}
-@media(max-width:600px){.resource-cards-grid{grid-template-columns:1fr;}.resource-card-details{grid-template-columns:1fr;}}
+/* ═══ RESOURCE LIST (Premium horizontal rows) ═══ */
+.resource-cards-grid{display:flex;flex-direction:column;gap:.4rem;margin-top:.25rem;}
+.resource-card{background:#fff;border:1px solid rgba(196,197,213,.18);border-radius:12px;padding:.7rem 1.1rem;display:flex;align-items:center;gap:1rem;transition:all .2s ease;position:relative;}
+.resource-card:hover{box-shadow:0 2px 12px rgba(0,40,142,.07);border-color:rgba(0,88,190,.18);background:#fafbff;}
+.resource-card.type-enterprise{border-left:3px solid #0058be;}
+.resource-card.type-freelance{border-left:3px solid #7c3aed;}
+.resource-card-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid #e5e7eb;}
+.resource-card-avatar-fallback{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.1);}
+.resource-card-header{display:flex;align-items:center;gap:.6rem;min-width:180px;max-width:220px;flex-shrink:0;}
+.rc-identity{min-width:0;}
+.resource-card-name{font-weight:700;font-size:.82rem;color:#191c1e;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.resource-card-role{font-size:.68rem;color:#64748b;margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.resource-card-type-badge{display:inline-flex;font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.12rem .4rem;border-radius:999px;white-space:nowrap;}
+.resource-card-type-badge.enterprise{background:rgba(0,88,190,.08);color:#0058be;border:1px solid rgba(0,88,190,.15);}
+.resource-card-type-badge.freelance{background:rgba(124,58,237,.08);color:#7c3aed;border:1px solid rgba(124,58,237,.15);}
+.resource-card-details{display:flex;gap:1.25rem;flex:1;align-items:center;min-width:0;}
+.resource-card-detail{display:flex;flex-direction:column;gap:.05rem;min-width:0;}
+.resource-card-detail-label{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;}
+.resource-card-detail-value{font-size:.75rem;font-weight:600;color:#191c1e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.resource-card-status{display:flex;align-items:center;gap:.35rem;flex-shrink:0;}
+.rc-status-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:600;color:#374151;padding:.2rem .55rem;border-radius:999px;background:rgba(0,0,0,.04);white-space:nowrap;}
+.rc-status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--dot,#9ca3af);flex-shrink:0;}
+.rc-vis-pill{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .4rem;border-radius:999px;white-space:nowrap;}
+.rc-vis-public{background:rgba(5,150,105,.08);color:#059669;border:1px solid rgba(5,150,105,.15);}
+.rc-vis-b2b{background:rgba(0,88,190,.06);color:#0058be;border:1px solid rgba(0,88,190,.12);}
+.resource-card-actions{display:flex;gap:.3rem;flex-shrink:0;margin-left:auto;}
+.rc-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;padding:0!important;font-size:0!important;border:1px solid rgba(196,197,213,.25);background:#fff;color:#64748b;cursor:pointer;transition:all .2s ease;}
+.rc-btn:hover{background:#f0f4ff;color:#0058be;border-color:rgba(0,88,190,.2);}
+.rc-btn.btn-primary{background:#0058be;color:#fff;border-color:#0058be;}
+.rc-btn.btn-primary:hover{background:#004a9e;}
+.resource-card-empty{text-align:center;padding:3rem 2rem;color:#9ca3af;font-size:.88rem;}
+.resource-card-empty-icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.5;}
+.resource-filter-bar{display:flex;gap:.6rem;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;}
+.resource-filter-bar select,.resource-filter-bar input{padding:.45rem .7rem;border:1px solid rgba(196,197,213,.35);border-radius:10px;font-size:.78rem;font-family:var(--font-main);background:#fff;color:#191c1e;}
+.resource-filter-bar input{min-width:180px;}
+@media(max-width:768px){.resource-card{flex-direction:column;align-items:flex-start;gap:.6rem;padding:.65rem .85rem;}.resource-card-details{flex-wrap:wrap;gap:.6rem;}.resource-card-header{min-width:auto;max-width:none;}.resource-card-actions{margin-left:0;}}
 /* (duplicate overrides removed — using earlier compact definitions) */
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .quick-add-section{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:20px;padding:1.25rem;margin-top:1rem;}
@@ -579,89 +571,40 @@ body{background:#f7f9fb;}
       <div class="section-title" id="resources-title">Mes Ressources</div>
       <div class="section-sub">Gérez et suivez les consultants associés à votre compte.</div>
 
-      <!-- ═══ ROW 1: KPIs + Donut (horizontal) ═══ -->
-      <div class="dash-row">
-        <div class="kpi-grid" style="flex:1;min-width:0;">
-          <div class="kpi-card kpi-blue">
-            <div class="kpi-icon">Total</div>
-            <div class="kpi-value" id="kpi-total">0</div>
-            <div class="kpi-label">Consultants</div>
-            <div class="kpi-trend" id="kpi-total-trend">0/0 slots</div>
-          </div>
-          <div class="kpi-card kpi-green">
-            <div class="kpi-icon">Publie</div>
-            <div class="kpi-value" id="kpi-approved">0</div>
-            <div class="kpi-label">Valides</div>
-            <div class="kpi-trend up" id="kpi-approved-pct">0%</div>
-          </div>
-          <div class="kpi-card kpi-amber">
-            <div class="kpi-icon">Taux</div>
-            <div class="kpi-value" id="kpi-tjm">--</div>
-            <div class="kpi-label">Moyen</div>
-            <div class="kpi-trend" id="kpi-rate-unit">$/jour</div>
-          </div>
-          <div class="kpi-card kpi-violet">
-            <div class="kpi-icon">Slots</div>
-            <div class="kpi-value" id="kpi-slots">--</div>
-            <div class="kpi-label">Restants</div>
-            <div class="kpi-trend" id="kpi-slots-sub">sur le plan</div>
-          </div>
+      <!-- ═══ STATS STRIP (condensed single panel) ═══ -->
+      <div class="stats-strip">
+        <div class="stats-strip-metrics">
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-total">0</span><span class="stats-metric-label">Ressources</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value stats-green" id="kpi-approved">0</span><span class="stats-metric-label">Publiées</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-tjm">--</span><span class="stats-metric-label" id="kpi-rate-unit">$/jour moy.</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-slots">--</span><span class="stats-metric-label">Slots libres</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-messages-sent">0</span><span class="stats-metric-label">Messages</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-conversations">0</span><span class="stats-metric-label">Conversations</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value stats-green" id="kpi-response-rate">0%</span><span class="stats-metric-label">Taux réponse</span></div>
+          <div class="stats-divider"></div>
+          <div class="stats-metric"><span class="stats-metric-value" id="kpi-last-activity">--</span><span class="stats-metric-label">Dernière activité</span></div>
         </div>
-        <div class="kpi-chart-row" style="flex:0 0 auto;margin-bottom:0;">
-          <div>
-            <div class="kpi-chart-title" style="font-size:.95rem;margin-bottom:.5rem;">Répartition</div>
-            <svg width="90" height="90" viewBox="0 0 120 120" aria-label="Repartition statuts">
-              <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(196,197,213,.3)" stroke-width="16"/>
-              <circle id="kpi-arc-approved" cx="60" cy="60" r="48" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-              <circle id="kpi-arc-pending" cx="60" cy="60" r="48" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-              <circle id="kpi-arc-rejected" cx="60" cy="60" r="48" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-              <text x="60" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#191c1e" id="kpi-donut-center">0</text>
-            </svg>
+        <div class="stats-strip-plan">
+          <div class="stats-plan-row">
+            <span class="stats-plan-name" id="plan-title">Plan Starter</span>
+            <span class="stats-plan-count" id="progress-label">0/5</span>
           </div>
-          <div class="kpi-chart-legend">
-            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publiés : 0</span></div>
-            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En révision : 0</span></div>
-            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
-          </div>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
         </div>
       </div>
-
-      <!-- ═══ ROW 2: Activity KPIs + Plan (horizontal) ═══ -->
-      <div class="dash-row">
-        <div class="kpi-grid" style="flex:1;min-width:0;">
-          <div class="kpi-card kpi-blue">
-            <div class="kpi-icon">Mail</div>
-            <div class="kpi-value" id="kpi-messages-sent">0</div>
-            <div class="kpi-label">Messages envoyés</div>
-            <div class="kpi-trend" id="kpi-messages-trend">--</div>
-          </div>
-          <div class="kpi-card kpi-green">
-            <div class="kpi-icon">Forum</div>
-            <div class="kpi-value" id="kpi-conversations">0</div>
-            <div class="kpi-label">Conversations</div>
-            <div class="kpi-trend" id="kpi-conversations-trend">--</div>
-          </div>
-          <div class="kpi-card kpi-amber">
-            <div class="kpi-icon">Reply</div>
-            <div class="kpi-value" id="kpi-response-rate">0%</div>
-            <div class="kpi-label">Taux de réponse</div>
-            <div class="kpi-trend" id="kpi-response-trend">--</div>
-          </div>
-          <div class="kpi-card kpi-violet">
-            <div class="kpi-icon">Schedule</div>
-            <div class="kpi-value" id="kpi-last-activity">--</div>
-            <div class="kpi-label">Dernière activité</div>
-            <div class="kpi-trend" id="kpi-activity-trend">--</div>
-          </div>
-        </div>
-        <div class="plan-box" style="flex:0 0 280px;margin-bottom:0;">
-          <div class="plan-title" id="plan-title">Plan Starter</div>
-          <div class="plan-subtitle" id="plan-subtitle">Slots utilisés</div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-          </div>
-          <div class="progress-label" id="progress-label">0/5 ressources utilisées</div>
-        </div>
+      <!-- hidden KPI elements for JS compatibility -->
+      <div style="display:none;">
+        <span id="kpi-total-trend"></span><span id="kpi-approved-pct"></span><span id="kpi-slots-sub"></span>
+        <span id="kpi-messages-trend"></span><span id="kpi-conversations-trend"></span><span id="kpi-response-trend"></span><span id="kpi-activity-trend"></span>
+        <span id="plan-subtitle"></span>
+        <svg><circle id="kpi-arc-approved"/><circle id="kpi-arc-pending"/><circle id="kpi-arc-rejected"/><text id="kpi-donut-center">0</text></svg>
+        <span id="leg-approved"></span><span id="leg-pending"></span><span id="leg-rejected"></span>
       </div>
 
       <!-- Filter bar -->
@@ -1572,22 +1515,19 @@ function renderResourceCards(resources) {
     const isEnterprise = notes.source === 'import_b2b';
     const typeClass = isEnterprise ? 'type-enterprise' : 'type-freelance';
     const typeBadge = isEnterprise
-      ? '<span class="resource-card-type-badge enterprise">Ressource entreprise</span>'
+      ? '<span class="resource-card-type-badge enterprise">Entreprise</span>'
       : '<span class="resource-card-type-badge freelance">Freelance</span>';
 
     const name = getResourceDisplayName(r);
     const role = r.titre || 'Non renseigné';
-    const erps = Array.isArray(r.competences) ? r.competences.join(', ') : (r.competences || '-');
+    const erps = Array.isArray(r.competences) ? r.competences.slice(0,3).join(', ') : (r.competences || '-');
     const tjm = formatRateRange(r);
     const visibility = notes.visibility || 'b2b';
     const visLabel = visibility === 'public' ? 'Public' : 'B2B';
     const statusKey = normalizeStatus(r.statut);
     const statusLabels = { 'approuve': 'Publié', 'en_attente': 'En attente', 'en_mission': 'En mission', 'refuse': 'Refusé' };
-    const statusColors = { 'approuve': 'background:rgba(16,185,129,.1);color:#10b981;border-color:rgba(16,185,129,.3);', 'en_attente': 'background:rgba(251,146,60,.1);color:#f59e0b;border-color:rgba(251,146,60,.3);', 'en_mission': 'background:#dbeafe;color:#1e40af;border-color:rgba(30,64,175,.3);', 'refuse': 'background:rgba(239,68,68,.1);color:#ef4444;border-color:rgba(239,68,68,.3);' };
-    const dispo = notes.disponibilite || r.disponibilite || '-';
-    const ville = r.ville || notes.ville || '-';
-    const experience = r.experience || notes.experience || '-';
-    const langues = r.langues || notes.langues || '-';
+    const statusDots = { 'approuve': '#10b981', 'en_attente': '#f59e0b', 'en_mission': '#3b82f6', 'refuse': '#ef4444' };
+    const ville = r.ville || notes.ville || '';
     const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
 
     let avatarHtml = '';
@@ -1600,30 +1540,36 @@ function renderResourceCards(resources) {
       avatarHtml = '<div class="resource-card-avatar-fallback" style="background:' + safe(color) + ';">' + safe(initials) + '</div>';
     }
 
+    const dotColor = statusDots[statusKey] || '#9ca3af';
+    const statusText = statusLabels[statusKey] || safe(r.statut || 'Inconnu');
+    const villeHtml = ville ? '<span class="rc-meta-item">📍 ' + safe(ville) + '</span>' : '';
+    const tjmHtml = tjm !== '-' ? '<span class="rc-meta-item">' + safe(tjm) + '</span>' : '';
+
     return '<div class="resource-card ' + typeClass + '" data-status="' + safe(statusKey) + '" data-visibility="' + safe(visibility) + '" data-search="' + safe((name + ' ' + erps + ' ' + role + ' ' + ville).toLowerCase()) + '">' +
+      /* ── Avatar ── */
       '<div class="resource-card-header">' +
         avatarHtml +
-        '<div>' +
+        '<div class="rc-identity">' +
           '<div class="resource-card-name">' + safe(name) + '</div>' +
           '<div class="resource-card-role">' + safe(role) + '</div>' +
-          typeBadge +
         '</div>' +
       '</div>' +
+      /* ── Inline details ── */
       '<div class="resource-card-details">' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">ERP</div><div class="resource-card-detail-value">' + safe(erps) + '</div></div>' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">Taux</div><div class="resource-card-detail-value">' + safe(tjm) + '</div></div>' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">Disponibilité</div><div class="resource-card-detail-value">' + safe(String(dispo)) + '</div></div>' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">Ville</div><div class="resource-card-detail-value">' + safe(String(ville)) + '</div></div>' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">Expérience</div><div class="resource-card-detail-value">' + safe(String(experience)) + (experience !== '-' ? ' ans' : '') + '</div></div>' +
-        '<div class="resource-card-detail"><div class="resource-card-detail-label">Langues</div><div class="resource-card-detail-value">' + safe(String(langues)) + '</div></div>' +
+        '<div class="resource-card-detail"><span class="resource-card-detail-label">ERP</span><span class="resource-card-detail-value">' + safe(erps) + '</span></div>' +
+        (tjmHtml ? '<div class="resource-card-detail"><span class="resource-card-detail-label">Taux</span><span class="resource-card-detail-value">' + safe(tjm) + '</span></div>' : '') +
+        (ville ? '<div class="resource-card-detail"><span class="resource-card-detail-label">Ville</span><span class="resource-card-detail-value">' + safe(ville) + '</span></div>' : '') +
       '</div>' +
+      /* ── Status + type badges ── */
       '<div class="resource-card-status">' +
-        '<span class="badge" style="' + (statusColors[statusKey] || '') + 'border:1px solid;font-size:.65rem;">' + (statusLabels[statusKey] || safe(r.statut)) + '</span>' +
-        '<span class="badge" style="' + (visibility === 'public' ? 'background:rgba(5,150,105,.08);color:#059669;border-color:rgba(5,150,105,.2);' : 'background:rgba(0,88,190,.08);color:#0058be;border-color:rgba(0,88,190,.2);') + 'border:1px solid;font-size:.65rem;">' + visLabel + '</span>' +
+        '<span class="rc-status-pill" style="--dot:' + dotColor + ';">' + statusText + '</span>' +
+        typeBadge +
+        '<span class="rc-vis-pill ' + (visibility === 'public' ? 'rc-vis-public' : 'rc-vis-b2b') + '">' + visLabel + '</span>' +
       '</div>' +
+      /* ── Actions ── */
       '<div class="resource-card-actions">' +
-        '<a href="' + safe(cardUrl) + '" target="_blank" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;">Voir la carte</a>' +
-        '<button onclick="openResourceEdit(\'' + safe(String(r.id)) + '\')" class="btn btn-secondary">Modifier</button>' +
+        '<a href="' + safe(cardUrl) + '" target="_blank" class="btn btn-primary rc-btn" title="Voir la fiche"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
+        '<button onclick="openResourceEdit(\'' + safe(String(r.id)) + '\')" class="btn btn-secondary rc-btn" title="Modifier"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
       '</div>' +
     '</div>';
   }).join('');
