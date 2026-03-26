@@ -2099,64 +2099,78 @@ function toggleTheme() {
 <div class="page" id="page-entreprises">
 
   <div class="ent-hero">
-    <h1 data-i18n="page.companies.hero.title">Accélérez votre projet ERP<br><em>sans les marges des grandes firmes</em></h1>
-    <p data-i18n="page.companies.hero.subtitle">Structurez votre staff augmentation ERP avec un dashboard unique: visibilite des ressources, disponibilite temps reel et tracabilite complete.</p>
+    <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:.4rem 1rem;margin-bottom:1.5rem;position:relative;z-index:1;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#00f4fe;box-shadow:0 0 8px rgba(0,244,254,.5);"></span>
+      <span style="font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.9);">Plateforme B2B exclusive — annuaire premium + mise en relation</span>
+    </div>
+    <h1 data-i18n="page.companies.hero.title">Placez vos consultants ERP.<br><em>Trouvez les experts qu'il vous manque.</em></h1>
+    <p data-i18n="page.companies.hero.subtitle">ExpertERPHub est le premier annuaire B2B confidentiel dédié au staffing ERP. Publiez vos ressources disponibles en toute anonymité, accédez à des experts qualifiés d'autres firmes — sans intermédiaire, sans marge cachée, sans délai.</p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem 1.25rem;margin-bottom:1.5rem;position:relative;z-index:1;">
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.85);"><span style="color:#00f4fe;">✓</span> Anonymat garanti</div>
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.85);"><span style="color:#00f4fe;">✓</span> Tarifs directs sans surcote</div>
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.85);"><span style="color:#00f4fe;">✓</span> Ressource disponible en 48h</div>
+      <div style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.85);"><span style="color:#00f4fe;">✓</span> 100% spécialisé ERP</div>
+    </div>
     <div class="ent-ctas">
-      <button class="btn-white" data-action="open-entreprise-modal" data-mode="erp" data-i18n="page.companies.hero.btn1">Trouver des SMEs pour mon ERP</button>
-      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="page.companies.hero.btn2">Besoin d'une ressource qualifiée</button>
-      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="offrir" data-i18n="page.companies.hero.btn3">Mettre mes ressources à disposition</button>
+      <button class="btn-white" data-action="open-entreprise-modal" data-mode="offrir" data-i18n="page.companies.hero.btn3">Placer mes ressources disponibles</button>
+      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="chercher" data-i18n="page.companies.hero.btn2">Trouver un expert ERP qualifié</button>
+      <button class="btn-white-outline" data-action="open-entreprise-modal" data-mode="erp" data-i18n="page.companies.hero.btn1">Lancer mon projet ERP</button>
     </div>
   </div>
 
   <div class="ent-sections">
+    <div class="ent-card" style="border-top:3px solid #0058be;">
+      <div class="ent-card-icon">🏢</div>
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0058be;margin-bottom:.35rem;">Rentabilisez votre bench</div>
+      <h3>Placez vos consultants chez d'autres entreprises</h3>
+      <p>Vos experts ERP sont entre deux mandats ? Au lieu de porter le coût, rendez-les visibles auprès d'entreprises qui en ont besoin — en toute confidentialité.</p>
+      <ul>
+        <li><strong>Anonymat total</strong> — Ni le nom, ni le téléphone, ni votre firme ne sont visibles publiquement. Seul le profil de compétences est exposé.</li>
+        <li><strong>Vous gardez le contrôle</strong> — Vous choisissez qui voit vos ressources (B2B uniquement ou public) et vous validez chaque mise en relation.</li>
+        <li><strong>Placement direct</strong> — Accord entre entreprises, sans courtier ni commission cachée. Vous négociez vos tarifs.</li>
+        <li><strong>Import en lot</strong> — Ajoutez 1 ou 50 ressources via CSV en 2 minutes. Dashboard dédié pour suivre disponibilités et demandes.</li>
+      </ul>
+      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="offrir">Placer mes ressources →</button>
+    </div>
+
+    <div class="ent-card" style="border-top:3px solid #7c3aed;">
+      <div class="ent-card-icon">🔍</div>
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#7c3aed;margin-bottom:.35rem;">Trouvez votre expert</div>
+      <h3>Accédez aux ressources qualifiées d'autres firmes</h3>
+      <p>Vous avez un mandat mais il vous manque un expert SAP, Oracle ou Dynamics ? Consultez des profils vérifiés d'autres entreprises prêtes à collaborer.</p>
+      <ul>
+        <li><strong>Réseau inter-entreprises</strong> — Accédez à des consultants qualifiés que d'autres firmes mettent à disposition. Pas des freelances, des ressources d'entreprise.</li>
+        <li><strong>Profils anonymisés</strong> — Vous voyez les compétences, l'expérience et le TJM. L'identité est révélée uniquement après accord mutuel.</li>
+        <li><strong>Disponibilité temps réel</strong> — Filtrez par ERP, rôle, ville et disponibilité. Démarrage possible en 48h.</li>
+        <li><strong>Mise en relation directe</strong> — Contactez la firme propriétaire de la ressource via messagerie intégrée. Zéro intermédiaire.</li>
+      </ul>
+      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="chercher">Trouver une ressource →</button>
+    </div>
+
     <div class="ent-card">
       <div class="ent-card-icon">⚙️</div>
-      <h3>Implémentation ERP</h3>
-      <p>Vous implémentez un ERP et avez besoin d'experts métier (SMEs) pour accompagner vos équipes business.</p>
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#059669;margin-bottom:.35rem;">Projet ERP</div>
+      <h3>Structurez votre équipe d'implémentation</h3>
+      <p>Vous lancez un projet ERP et avez besoin de SMEs, d'analystes fonctionnels ou de chefs de projet expérimentés pour sécuriser votre exécution.</p>
       <ul>
-        <li>SMEs certifiés sur votre ERP cible</li>
-        <li>Accompagnement des équipes métier</li>
-        <li>Gestion du changement et adoption</li>
-        <li>Tests, formation et go-live</li>
+        <li><strong>Experts métier certifiés</strong> — SMEs spécialisés par module et par industrie, validés par notre équipe.</li>
+        <li><strong>Toutes les phases couvertes</strong> — Du cadrage au go-live, en passant par les tests UAT et la formation utilisateur.</li>
+        <li><strong>Tarifs sans marge de cabinet</strong> — Vous payez le TJM affiché, pas 40-60% de plus pour un logo sur la facture.</li>
+        <li><strong>Flexibilité totale</strong> — Contrats souples, durées ajustables. Pas d'engagement rigide sur 12 mois.</li>
       </ul>
-      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="erp">Démarrer mon projet →</button>
+      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="erp">Lancer mon projet →</button>
     </div>
 
-    <div class="ent-card">
-      <div class="ent-card-icon">🔍</div>
-      <h3>Je cherche une ressource qualifiée</h3>
-      <p>Vous avez un mandat acquis et manquez d'un expert ERP qualifié. Accédez rapidement à des ressources certifiées.</p>
+    <div class="ent-card" style="background:linear-gradient(180deg,#f8faff 0%,#fff 100%);border:2px solid rgba(0,88,190,.12);">
+      <div class="ent-card-icon">🔒</div>
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0058be;margin-bottom:.35rem;">Confidentialité B2B</div>
+      <h3>L'anonymat au coeur du modèle</h3>
+      <p>ExpertERPHub est conçu pour protéger vos intérêts commerciaux. Aucune information sensible n'est exposée sans votre accord.</p>
       <ul>
-        <li>Consultants vérifiés disponibles rapidement</li>
-        <li>Mise en relation directe</li>
-        <li>Tous niveaux d'expérience</li>
-        <li>Démarrage possible en 48h</li>
-      </ul>
-      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="chercher">Déposer ma demande →</button>
-    </div>
-
-    <div class="ent-card">
-      <div class="ent-card-icon">🏢</div>
-      <h3>Je propose des ressources</h3>
-      <p>Votre firme dispose de consultants ERP disponibles. Placez-les chez d'autres entreprises qui en ont besoin.</p>
-      <ul>
-        <li>Valorisez vos consultants sur le banc</li>
-        <li>Accès à un réseau d'entreprises qualifiées</li>
-        <li>Accords directs entre entreprises</li>
-        <li>Visibilité immédiate sur le marché</li>
-      </ul>
-      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="offrir">Inscrire mes ressources →</button>
-    </div>
-
-    <div class="ent-card">
-      <div class="ent-card-icon">💡</div>
-      <h3>Pourquoi ExpertERPHub ?</h3>
-      <p>La différence entre nous et une grande firme de consultation :</p>
-      <ul>
-        <li>Accès direct à l'expert — sans gestionnaire de compte</li>
-        <li>TJM transparent, sans surcote de cabinet</li>
-        <li>Experts vérifiés et certifiés</li>
-        <li>Démarrage en 48h vs. plusieurs semaines</li>
+        <li><strong>Identité protégée</strong> — Les profils publics ne montrent que les compétences, l'ERP et le TJM. Le nom du consultant et de votre firme restent cachés.</li>
+        <li><strong>Révélation progressive</strong> — L'identité complète n'est partagée qu'après intérêt mutuel confirmé via la messagerie sécurisée.</li>
+        <li><strong>Visibilité paramétrable</strong> — Mode B2B (visible uniquement aux entreprises inscrites) ou public. Vous décidez pour chaque ressource.</li>
+        <li><strong>Pas de vol de ressources</strong> — Le système de mise en relation protège la relation entreprise-consultant. Pas de contact direct non autorisé.</li>
       </ul>
       <button class="btn-ent" data-action="go-to-how">Voir comment ça marche →</button>
     </div>
@@ -2164,18 +2178,22 @@ function toggleTheme() {
 
   <!-- Comparaison -->
   <div class="vs-section">
-    <h2>ExpertERPHub vs. Grande firme de consultation</h2>
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <span style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0058be;">La différence est claire</span>
+      <h2 style="margin-top:.5rem;">ExpertERPHub vs. Firme de consultation traditionnelle</h2>
+    </div>
     <table class="vs-table">
       <thead>
-        <tr><th>Critère</th><th>ExpertERPHub</th><th>Grande firme</th></tr>
+        <tr><th>Critère</th><th>ExpertERPHub</th><th>Firme traditionnelle</th></tr>
       </thead>
       <tbody>
-        <tr><td>Accès à l'expert</td><td class="ours">✓ Direct, sans intermédiaire</td><td class="theirs">✗ Via gestionnaire de compte</td></tr>
-        <tr><td>Transparence des tarifs</td><td class="ours">✓ TJM visible et négocié directement</td><td class="theirs">✗ Marges de 40–60% non visibles</td></tr>
-        <tr><td>Délai de démarrage</td><td class="ours">✓ 24–48h</td><td class="theirs">✗ 2–6 semaines</td></tr>
-        <tr><td>Flexibilité contractuelle</td><td class="ours">✓ Accord direct souple</td><td class="theirs">✗ Contrats rigides, longue durée</td></tr>
-        <tr><td>Spécialisation ERP</td><td class="ours">✓ 100% focalisé ERP</td><td class="theirs">~ Généraliste avec une pratique ERP</td></tr>
-        <tr><td>Vérification des experts</td><td class="ours">✓ Certifications validées</td><td class="theirs">~ Variable selon les équipes</td></tr>
+        <tr><td>Accès à l'expert</td><td class="ours">✓ Contact direct avec la firme propriétaire. Zéro intermédiaire.</td><td class="theirs">✗ Gestionnaire de compte, 2-3 couches avant de parler à l'expert</td></tr>
+        <tr><td>Coût réel</td><td class="ours">✓ TJM affiché = TJM payé. Négociation directe.</td><td class="theirs">✗ Marge de 40 à 60% ajoutée sur le TJM du consultant</td></tr>
+        <tr><td>Délai de staffing</td><td class="ours">✓ Ressource identifiée en 24h, démarrage possible en 48h</td><td class="theirs">✗ Processus de 2 à 6 semaines minimum</td></tr>
+        <tr><td>Confidentialité</td><td class="ours">✓ Profils anonymisés, identité révélée uniquement sur accord mutuel</td><td class="theirs">✗ CVs circulés largement, risque de débauchage</td></tr>
+        <tr><td>Flexibilité</td><td class="ours">✓ Durée et conditions négociées directement entre entreprises</td><td class="theirs">✗ Contrats cadres rigides, engagement longue durée</td></tr>
+        <tr><td>Spécialisation</td><td class="ours">✓ 100% ERP — SAP, Oracle, Dynamics, Workday, Salesforce</td><td class="theirs">~ Généraliste IT avec une pratique ERP parmi 50 autres</td></tr>
+        <tr><td>Placement de vos ressources</td><td class="ours">✓ Publiez vos consultants disponibles et recevez des demandes</td><td class="theirs">✗ Impossible — vous êtes client, jamais fournisseur</td></tr>
       </tbody>
     </table>
   </div>
