@@ -268,6 +268,32 @@ img{max-width:100%;height:auto;}
 .status-badge.repondu{background:var(--green-bg);color:var(--green);}
 
 /* Messages mini feed — inbox style */
+/* ═══ BIDIRECTIONAL MESSAGING PANEL ═══ */
+.msg-panel{display:grid;grid-template-columns:40% 60%;gap:0;border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;background:var(--surface);min-height:400px;max-height:520px;}
+.msg-conversations{overflow-y:auto;border-right:1px solid var(--border);padding:0;}
+.msg-conv-item{padding:.65rem .9rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;}
+.msg-conv-item:hover{background:rgba(13,71,161,.04);}
+.msg-conv-item.active{background:rgba(13,71,161,.08);border-left:3px solid var(--brand);}
+.msg-conv-name{font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.msg-conv-preview{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem;}
+.msg-conv-meta{font-size:.62rem;color:var(--text-subtle);margin-top:.15rem;}
+.msg-conv-unread{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;font-size:.6rem;font-weight:700;flex-shrink:0;float:right;}
+.msg-chat{display:flex;flex-direction:column;}
+.msg-chat-header{padding:.6rem .9rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:.5rem;}
+.msg-chat-header .msg-back-btn{display:none;border:none;background:none;cursor:pointer;font-size:1.1rem;padding:0;color:var(--brand);}
+.msg-chat-body{flex:1;overflow-y:auto;padding:.75rem;display:flex;flex-direction:column;gap:.4rem;}
+.msg-bubble{max-width:80%;padding:.5rem .75rem;border-radius:12px;font-size:.78rem;line-height:1.5;word-break:break-word;}
+.msg-bubble.sent{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px;}
+.msg-bubble.received{align-self:flex-start;background:#f1f5f9;color:var(--text);border-bottom-left-radius:4px;}
+.msg-bubble-time{font-size:.58rem;color:rgba(0,0,0,.4);margin-top:.15rem;}
+.msg-bubble.sent .msg-bubble-time{color:rgba(255,255,255,.65);}
+.msg-chat-input{display:flex;gap:.4rem;padding:.5rem .75rem;border-top:1px solid var(--border);background:var(--surface);}
+.msg-chat-input input{flex:1;padding:.45rem .65rem;border:1px solid var(--border);border-radius:8px;font-size:.78rem;font-family:var(--font-main);outline:none;transition:border-color .2s;}
+.msg-chat-input input:focus{border-color:var(--brand);}
+.msg-chat-input button{padding:.45rem .85rem;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:.72rem;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.msg-chat-input button:hover{opacity:.85;}
+@media(max-width:768px){.msg-panel{grid-template-columns:1fr;}.msg-conversations.hidden-mobile{display:none;}.msg-chat .msg-back-btn{display:inline-flex!important;}}
+
 .mini-feed{display:flex;flex-direction:column;gap:0 !important;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;margin:0;padding:0;}
 .mini-message{padding:.55rem .9rem;border-radius:0 !important;background:transparent;border:none;border-bottom:1px solid var(--border);overflow:hidden;transition:all var(--ease);margin:0 !important;box-shadow:none !important;}
 .mini-message:last-child{border-bottom:none;}
@@ -635,7 +661,19 @@ img{max-width:100%;height:auto;}
               <div class="notif-list" id="notif-list-replied"></div>
             </div>
             <div class="comm-tab-content" id="comm-content-messages">
-              <div class="mini-feed" id="messages-mini-list"></div>
+              <div class="msg-panel" id="msg-panel">
+                <div class="msg-conversations" id="msg-conv-list">
+                  <div class="empty-state">Chargement...</div>
+                </div>
+                <div class="msg-chat" id="msg-chat-panel" style="display:none;">
+                  <div class="msg-chat-header" id="msg-chat-header"></div>
+                  <div class="msg-chat-body" id="msg-chat-body"></div>
+                  <div class="msg-chat-input">
+                    <input type="text" id="msg-chat-input" placeholder="Votre message..." autocomplete="off">
+                    <button id="msg-chat-send" onclick="sendConsultantMessage()">Envoyer</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1636,6 +1674,8 @@ function switchCommTab(tabName) {
   });
   var target = document.getElementById('comm-content-' + tabName);
   if (target) target.classList.add('active');
+  /* Charger le panel messaging quand on clique sur Messages */
+  if (tabName === 'messages') loadMessagesPanel();
 }
 
 /* ── Generateur HTML d'un item de notification ── */
@@ -1650,7 +1690,6 @@ function renderNotifItemHtml(n) {
 
 function renderNotifications() {
   const container = document.getElementById('notif-list');
-  const miniContainer = document.getElementById('messages-mini-list');
   const newContainer = document.getElementById('notif-list-new');
   const repliedContainer = document.getElementById('notif-list-replied');
   if (!container || !currentConsultant) return;
@@ -1687,7 +1726,6 @@ function renderNotifications() {
     container.innerHTML = emptyHtml;
     if (newContainer) newContainer.innerHTML = emptyHtml;
     if (repliedContainer) repliedContainer.innerHTML = emptyHtml;
-    if (miniContainer) miniContainer.innerHTML = '<div class="empty-state">' + _t('dashboardConsultant.noRecentMessage') + '</div>';
     return;
   }
 
@@ -1710,18 +1748,8 @@ function renderNotifications() {
       : '<div class="empty-state">' + _t('dashboardConsultant.noRepliedRequest') + '</div>';
   }
 
-  /* Onglet "Apercu" — mini-messages */
-  if (miniContainer) {
-    miniContainer.innerHTML = list.slice(0, 5).map(function(n) {
-      var when = new Date(n.createdAt).toLocaleDateString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
-      return '<div class="mini-message">' +
-        '<div class="title">' + safe(n.companyName || ExpertI18n.t('dashboardConsultant.company')) + '</div>' +
-        '<div class="meta">' + safe(when) + '</div>' +
-        '<div class="excerpt">' + safe((n.message || '').slice(0, 90)) + ((n.message || '').length > 90 ? '\u2026' : '') + '</div>' +
-      '</div>';
-    }).join('');
-  }
 }
+
 
 var _currentRequestId = null;
 
@@ -1829,6 +1857,176 @@ function closeRequestDetail() {
   _currentRequestId = null;
   document.getElementById('request-modal').classList.remove('open');
 }
+
+/* ═══════════════════════════════════════════════════
+   BIDIRECTIONAL MESSAGING — Messages Tab
+   ═══════════════════════════════════════════════════ */
+var _msgCurrentConvEmail = null;
+var _msgCurrentConvName = null;
+var _msgConversations = [];
+
+async function loadMessagesPanel() {
+  if (!window.ExpertMessaging || !currentEmail) return;
+  try {
+    // Sync old notifications into messages table first
+    await ExpertMessaging.syncFromNotifications(currentEmail);
+    // Load all conversations
+    var convos = await ExpertMessaging.getConversations(currentEmail);
+    _msgConversations = convos || [];
+    renderMsgConversationList(_msgConversations);
+  } catch(err) {
+    console.error('[Messages] Load error:', err);
+    var el = document.getElementById('msg-conv-list');
+    if (el) el.innerHTML = '<div class="empty-state">Erreur de chargement des messages.</div>';
+  }
+}
+
+function renderMsgConversationList(convos) {
+  var el = document.getElementById('msg-conv-list');
+  if (!el) return;
+  if (!convos || !convos.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:2rem 1rem;text-align:center;font-size:.82rem;color:var(--text-muted);">Aucune conversation pour le moment.</div>';
+    return;
+  }
+  el.innerHTML = convos.map(function(c) {
+    var otherEmail = c.otherEmail || '';
+    var otherName = c.otherName || otherEmail;
+    var lastMsg = c.lastMessage;
+    var lastBody = (lastMsg && lastMsg.body) ? lastMsg.body : '';
+    var preview = lastBody.slice(0, 60) + (lastBody.length > 60 ? '...' : '');
+    var when = (lastMsg && lastMsg.created_at) ? new Date(lastMsg.created_at).toLocaleDateString('fr-CA') : '';
+    var unread = c.unreadCount || 0;
+    var activeClass = otherEmail === _msgCurrentConvEmail ? ' active' : '';
+    return '<div class="msg-conv-item' + activeClass + '" onclick="openMsgConversation(\'' + safe(otherEmail) + '\',\'' + safe(otherName) + '\')">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+        '<span class="msg-conv-name">' + safe(otherName) + '</span>' +
+        (unread > 0 ? '<span class="msg-conv-unread">' + unread + '</span>' : '') +
+      '</div>' +
+      '<div class="msg-conv-preview">' + safe(preview) + '</div>' +
+      '<div class="msg-conv-meta">' + safe(when) + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function openMsgConversation(email, name) {
+  _msgCurrentConvEmail = email;
+  _msgCurrentConvName = name;
+
+  // Show chat panel
+  var chatPanel = document.getElementById('msg-chat-panel');
+  if (chatPanel) chatPanel.style.display = 'flex';
+
+  // Mobile: hide conv list
+  var convList = document.getElementById('msg-conv-list');
+  if (convList && window.innerWidth <= 768) convList.classList.add('hidden-mobile');
+
+  // Set header
+  var header = document.getElementById('msg-chat-header');
+  if (header) header.innerHTML = '<button class="msg-back-btn" onclick="closeMsgChat()">&larr;</button>' + safe(name);
+
+  // Load thread
+  try {
+    var messages = await ExpertMessaging.getThread(currentEmail, email);
+    renderMsgChat(messages || []);
+    // Mark as read
+    var threadId = ExpertMessaging.makeThreadId(currentEmail, email);
+    await ExpertMessaging.markThreadRead(threadId, currentEmail);
+    // Refresh conv list to update unread counts
+    var convos = await ExpertMessaging.getConversations(currentEmail);
+    _msgConversations = convos || [];
+    renderMsgConversationList(_msgConversations);
+  } catch(err) {
+    console.error('[Messages] Thread load error:', err);
+  }
+
+  // Focus input
+  var input = document.getElementById('msg-chat-input');
+  if (input) input.focus();
+}
+
+function renderMsgChat(messages) {
+  var body = document.getElementById('msg-chat-body');
+  if (!body) return;
+  if (!messages.length) {
+    body.innerHTML = '<div class="empty-state" style="padding:2rem;text-align:center;font-size:.8rem;color:var(--text-muted);">D\u00e9but de la conversation</div>';
+    return;
+  }
+  body.innerHTML = messages.map(function(m) {
+    var isSent = (m.sender_email || '').toLowerCase() === currentEmail.toLowerCase();
+    var time = new Date(m.created_at).toLocaleString('fr-CA', {hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'});
+    return '<div class="msg-bubble ' + (isSent ? 'sent' : 'received') + '">' +
+      safe(m.body || '') +
+      '<div class="msg-bubble-time">' + safe(time) + '</div>' +
+    '</div>';
+  }).join('');
+  // Scroll to bottom
+  body.scrollTop = body.scrollHeight;
+}
+
+async function sendConsultantMessage() {
+  if (!_msgCurrentConvEmail || !window.ExpertMessaging) return;
+  var input = document.getElementById('msg-chat-input');
+  var text = (input.value || '').trim();
+  if (!text) return;
+  input.value = '';
+
+  var senderName = currentConsultant ? ((currentConsultant.prenom || '') + ' ' + (currentConsultant.nom || '')).trim() : currentEmail;
+
+  try {
+    await ExpertMessaging.send({
+      senderEmail: currentEmail,
+      senderName: senderName,
+      senderRole: 'consultant',
+      receiverEmail: _msgCurrentConvEmail,
+      receiverName: _msgCurrentConvName,
+      body: text
+    });
+
+    // Send email notification
+    if (window.ExpertEmailNotify) {
+      ExpertEmailNotify.notify({
+        to: _msgCurrentConvEmail,
+        toName: _msgCurrentConvName,
+        fromName: senderName,
+        fromEmail: currentEmail,
+        body: text
+      });
+    }
+
+    // Reload chat
+    var messages = await ExpertMessaging.getThread(currentEmail, _msgCurrentConvEmail);
+    renderMsgChat(messages || []);
+    // Refresh conversation list
+    loadMessagesPanel();
+  } catch(err) {
+    console.error('[Messages] Send error:', err);
+    alert('Erreur lors de l\'envoi du message.');
+  }
+}
+
+function closeMsgChat() {
+  _msgCurrentConvEmail = null;
+  _msgCurrentConvName = null;
+  var chatPanel = document.getElementById('msg-chat-panel');
+  if (chatPanel) chatPanel.style.display = 'none';
+  var convList = document.getElementById('msg-conv-list');
+  if (convList) convList.classList.remove('hidden-mobile');
+}
+
+// Handle Enter key in chat input
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    var chatInput = document.getElementById('msg-chat-input');
+    if (chatInput) {
+      chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendConsultantMessage();
+        }
+      });
+    }
+  }, 500);
+});
 
 function renderStatusBanner() {
   const c = currentConsultant;

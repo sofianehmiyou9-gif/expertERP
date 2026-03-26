@@ -499,9 +499,9 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .consultant-card-chip{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:12px;font-weight:500;border:1px solid rgba(0,0,0,.05);}
 .consultant-card-chip.primary{background:var(--primary-light);color:var(--primary);font-weight:700;}
 .consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #f1f5f9;}
-.consultant-card-stats-row{display:flex;gap:22px;align-items:flex-start;}
-.consultant-card-stat-item{display:flex;flex-direction:column;gap:1px;}
-.consultant-card-stat-num{font-family:var(--font-serif);font-size:1.15rem;font-weight:600;color:var(--ink);line-height:1.15;}
+.consultant-card-stats-row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;min-width:0;}
+.consultant-card-stat-item{display:flex;flex-direction:column;gap:1px;min-width:0;max-width:140px;}
+.consultant-card-stat-num{font-family:var(--font-serif);font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .consultant-card-stat-lbl{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9ca3af;}
 .consultant-card-btns{display:flex;gap:8px;flex-shrink:0;}
 .consultant-card-btn-p{padding:9px 20px;border-radius:999px;border:none;background:linear-gradient(135deg,var(--primary),var(--primary-container));color:#fff;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,40,142,.2);transition:opacity .2s,box-shadow .2s;}
@@ -5137,11 +5137,21 @@ function getConsultantDisplayLocation(c, notes) {
   return String(notes.ville || c.ville || 'Localisation non précisée').trim();
 }
 
+function flattenSkillValueIdx(val) {
+  if (!val) return [];
+  if (typeof val === 'string') return val.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (Array.isArray(val)) return val.map(function(item) {
+    if (typeof item === 'string') return item.trim();
+    if (item && typeof item === 'object') return String(item.name || item.label || item.titre || item.value || '').trim();
+    return '';
+  }).filter(Boolean);
+  if (typeof val === 'object') return Object.values(val).map(function(v){ return String(v || '').trim(); }).filter(Boolean);
+  return [String(val).trim()].filter(Boolean);
+}
+
 function buildConsultantSkills(c, notes) {
-  const directSkills = Array.isArray(c.competences)
-    ? c.competences
-    : String(c.competences || '').split(',').map((skill) => skill.trim()).filter(Boolean);
-  const moduleSkills = String(c.modules || notes.modules || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const directSkills = flattenSkillValueIdx(c.competences);
+  const moduleSkills = flattenSkillValueIdx(c.modules || notes.modules);
   const roleSkill = String(c.role || c.titre || notes.role || '').trim();
   const erpSkill = String(c.erp || notes.erp || '').trim();
   const combined = [...directSkills, ...moduleSkills];

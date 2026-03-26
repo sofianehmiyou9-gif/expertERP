@@ -847,11 +847,21 @@ function isEnterpriseSession() {
   return !!(s && s.role === 'entreprise' && s.email);
 }
 
+function flattenSkillValue(val) {
+  if (!val) return [];
+  if (typeof val === 'string') return val.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (Array.isArray(val)) return val.map(function(item) {
+    if (typeof item === 'string') return item.trim();
+    if (item && typeof item === 'object') return String(item.name || item.label || item.titre || item.value || '').trim();
+    return '';
+  }).filter(Boolean);
+  if (typeof val === 'object') return Object.values(val).map(function(v){ return String(v || '').trim(); }).filter(Boolean);
+  return [String(val).trim()].filter(Boolean);
+}
+
 function collectSkills(consultant, notes) {
-  const directSkills = Array.isArray(consultant.competences)
-    ? consultant.competences
-    : String(consultant.competences || '').split(',').map((skill) => skill.trim()).filter(Boolean);
-  const moduleSkills = String(consultant.modules || notes.modules || '').split(',').map((skill) => skill.trim()).filter(Boolean);
+  const directSkills = flattenSkillValue(consultant.competences);
+  const moduleSkills = flattenSkillValue(consultant.modules || notes.modules);
   const erpSkill = String(consultant.erp || notes.erp || '').trim();
   const roleSkill = String(consultant.role || consultant.titre || notes.role || '').trim();
   const combined = [...directSkills, ...moduleSkills];
@@ -924,13 +934,11 @@ function extractExperienceBullets(exp) {
 
 function extractExperienceTags(exp, skills, consultant, notes) {
   const rawTags = [];
-  if (Array.isArray(exp.skills)) rawTags.push(...exp.skills);
-  if (Array.isArray(exp.competences)) rawTags.push(...exp.competences);
-  if (typeof exp.skills === 'string') rawTags.push(...exp.skills.split(','));
-  if (typeof exp.competences === 'string') rawTags.push(...exp.competences.split(','));
-  if (typeof exp.modules === 'string') rawTags.push(...exp.modules.split(','));
-  if (exp.erp) rawTags.push(exp.erp);
-  const uniqueTags = [...new Set(rawTags.map((item) => String(item).trim()).filter(Boolean))];
+  rawTags.push(...flattenSkillValue(exp.skills));
+  rawTags.push(...flattenSkillValue(exp.competences));
+  rawTags.push(...flattenSkillValue(exp.modules));
+  if (exp.erp) rawTags.push(String(exp.erp).trim());
+  const uniqueTags = [...new Set(rawTags.filter(Boolean))];
   if (uniqueTags.length) return uniqueTags.slice(0, 4);
   return skills.slice(0, 3).length ? skills.slice(0, 3) : [consultant.erp || notes.erp || 'ERP'];
 }
