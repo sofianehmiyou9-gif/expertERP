@@ -440,6 +440,19 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .how-step h3{font-size:.92rem;font-weight:600;margin-bottom:.6rem;letter-spacing:.5px;}
 .how-step p{font-size:.82rem;color:var(--muted);line-height:1.7;}
 
+/* ── FONCTIONNEMENT PAGE ── */
+.how-page-tab{font-family:var(--font-main);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;padding:.6rem 1.4rem;border-radius:999px;cursor:pointer;border:1.5px solid rgba(0,40,142,.15);background:#fff;color:#444;transition:all .3s ease;font-weight:700;}
+.how-page-tab:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+.how-page-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 4px 16px rgba(0,40,142,.2);}
+.how-page-content{display:none;animation:fadeUp .3s ease both;}
+.how-page-content.active{display:block;}
+.how-page-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;}
+.how-page-step{padding:2rem;border:1.5px solid rgba(196,197,213,.3);border-radius:20px;background:#fff;transition:all .3s ease;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.how-page-step:hover{box-shadow:0 8px 24px rgba(0,40,142,.08);border-color:rgba(0,88,190,.25);transform:translateY(-4px);}
+.how-page-step .how-page-num{font-family:var(--font-serif);font-size:3rem;font-weight:300;background:linear-gradient(135deg,var(--primary),#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:.8rem;}
+.how-page-step h3{font-size:1rem;font-weight:700;margin-bottom:.6rem;color:var(--ink);}
+.how-page-step p{font-size:.85rem;color:#64748b;line-height:1.7;}
+
 /* ── VALUE PROP ── */
 .value-section{padding:5rem 2.5rem;background:var(--blue);color:#fff;position:relative;overflow:hidden;}
 .value-section:before{content:'';position:absolute;top:-50%;right:-50%;width:600px;height:600px;background:radial-gradient(circle, rgba(255,255,255,.1) 0%, transparent 70%);border-radius:50%;pointer-events:none;}
@@ -477,6 +490,9 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .consultant-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .consultant-card-role-label{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--primary);opacity:.75;line-height:1.4;}
 .consultant-card-verified{display:inline-flex;align-items:center;gap:5px;padding:3px 10px 3px 8px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-size:10.5px;font-weight:700;flex-shrink:0;}
+.consultant-source-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+.consultant-source-badge.enterprise-source{background:rgba(0,88,190,.08);color:#0058be;border:1px solid rgba(0,88,190,.2);}
+.consultant-source-badge.freelance-source{background:rgba(124,58,237,.08);color:#7c3aed;border:1px solid rgba(124,58,237,.2);}
 .consultant-card-name{font-family:var(--font-serif);font-size:1.55rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.15;letter-spacing:-.02em;margin:0;}
 .consultant-card-bio{font-size:13.5px;line-height:1.65;color:#64748b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
 .consultant-card-chips{display:flex;flex-wrap:wrap;gap:6px;}
@@ -579,38 +595,42 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 }
 
 /* ── ENTREPRISES PAGE ── */
-.ent-hero{padding:calc(4rem + 78px) 2.5rem 3rem;background:linear-gradient(135deg, var(--blue) 0%, rgba(30,58,95,.8) 100%);color:#fff;position:relative;overflow:hidden;}
-.ent-hero:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at top right, rgba(200,169,110,.1) 0%, transparent 70%);pointer-events:none;}
-.ent-hero h1{font-family:var(--font-serif);font-size:clamp(2rem,5vw,3.2rem);font-weight:300;line-height:1.15;margin-bottom:1rem;letter-spacing:-.02em;position:relative;z-index:1;}
-.ent-hero h1 em{font-style:italic;opacity:.8;}
-.ent-hero p{font-size:.95rem;opacity:.8;max-width:580px;line-height:1.8;margin-bottom:2.25rem;position:relative;z-index:1;}
-.ent-ctas{display:flex;gap:1rem;flex-wrap:wrap;position:relative;z-index:1;}
-.btn-white{font-family:var(--font-main);font-size:.7rem;padding:.7rem 1.5rem;background:#fff;color:var(--blue);border:none;cursor:pointer;border-radius:6px;letter-spacing:.08em;text-transform:uppercase;transition:all .3s ease;font-weight:600;}
-.btn-white:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
-.btn-white-outline{font-family:var(--font-main);font-size:.7rem;padding:.7rem 1.5rem;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);cursor:pointer;border-radius:6px;letter-spacing:.08em;text-transform:uppercase;transition:all .3s ease;font-weight:600;}
-.btn-white-outline:hover{background:rgba(255,255,255,.1);border-color:#fff;}
-.ent-sections{padding:3.5rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.ent-hero{padding:calc(5rem + 78px) 2.5rem 4rem;background:linear-gradient(135deg, #00288e 0%, #0a3d91 40%, #0058be 100%);color:#fff;position:relative;overflow:hidden;text-align:center;}
+.ent-hero:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%, rgba(0,244,254,.08) 0%, transparent 60%),radial-gradient(ellipse at 70% 80%, rgba(124,58,237,.06) 0%, transparent 50%);pointer-events:none;}
+.ent-hero:after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(247,249,251,.08),transparent);pointer-events:none;}
+.ent-hero h1{font-family:var(--font-serif);font-size:clamp(2.2rem,5vw,3.5rem);font-weight:600;line-height:1.15;margin-bottom:1.25rem;letter-spacing:-.03em;position:relative;z-index:1;max-width:800px;margin-left:auto;margin-right:auto;}
+.ent-hero h1 em{font-style:italic;opacity:.9;background:linear-gradient(135deg,#00f4fe,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ent-hero p{font-size:1rem;opacity:.85;max-width:620px;line-height:1.8;margin:0 auto 2.5rem;position:relative;z-index:1;}
+.ent-ctas{display:flex;gap:1rem;flex-wrap:wrap;position:relative;z-index:1;justify-content:center;}
+.btn-white{font-family:var(--font-main);font-size:.72rem;padding:.8rem 1.8rem;background:#fff;color:#00288e;border:none;cursor:pointer;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.15);}
+.btn-white:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
+.btn-white-outline{font-family:var(--font-main);font-size:.72rem;padding:.8rem 1.8rem;background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.3);cursor:pointer;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;font-weight:700;backdrop-filter:blur(8px);}
+.btn-white-outline:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.6);transform:translateY(-3px);}
+.ent-sections{padding:3.5rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
 @media(max-width:700px){.ent-sections{grid-template-columns:1fr;}}
-.ent-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:2.25rem;transition:all .3s ease;position:relative;overflow:hidden;}
-.ent-card:before{content:'';position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle, var(--accent) 0%, transparent 70%);opacity:.04;border-radius:50%;}
-.ent-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--shadow-lg);}
-.ent-card-icon{font-size:1.8rem;margin-bottom:1rem;}
-.ent-card h3{font-family:var(--font-serif);font-size:1.4rem;font-weight:300;margin-bottom:.6rem;letter-spacing:-.5px;}
-.ent-card p{font-size:.85rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem;}
-.ent-card ul{padding-left:1.2rem;margin-bottom:1.5rem;}
-.ent-card ul li{font-size:.82rem;color:var(--muted);line-height:1.9;position:relative;}
-.btn-ent{font-family:var(--font-main);font-size:.68rem;padding:.65rem 1.4rem;background:var(--blue);color:#fff;border:none;cursor:pointer;border-radius:6px;letter-spacing:.08em;text-transform:uppercase;transition:all .3s ease;display:inline-block;font-weight:600;position:relative;overflow:hidden;}
-.btn-ent:before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;z-index:-1;}
-.btn-ent:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
-.vs-section{padding:4rem 2.5rem;border-top:1px solid var(--border);}
-.vs-section h2{font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:2rem;letter-spacing:-.02em;}
+.ent-card{background:#fff;border:1px solid rgba(196,197,213,.3);border-radius:22px;padding:2.25rem;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.ent-card:before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#00288e,#0058be);border-radius:4px 0 0 4px;opacity:0;transition:opacity .3s ease;}
+.ent-card:hover{transform:translateY(-6px);border-color:rgba(0,88,190,.25);box-shadow:0 12px 32px rgba(0,40,142,.1);}
+.ent-card:hover:before{opacity:1;}
+.ent-card-icon{font-size:2rem;margin-bottom:1rem;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,40,142,.06),rgba(0,88,190,.04));border-radius:16px;border:1px solid rgba(0,88,190,.1);}
+.ent-card h3{font-family:var(--font-serif);font-size:1.35rem;font-weight:600;margin-bottom:.6rem;letter-spacing:-.02em;color:var(--ink);}
+.ent-card p{font-size:.85rem;color:#64748b;line-height:1.75;margin-bottom:1.5rem;}
+.ent-card ul{padding-left:0;margin-bottom:1.5rem;list-style:none;}
+.ent-card ul li{font-size:.82rem;color:#64748b;line-height:1.9;position:relative;padding-left:1.4rem;}
+.ent-card ul li:before{content:'';position:absolute;left:0;top:.65em;width:6px;height:6px;background:linear-gradient(135deg,#00288e,#0058be);border-radius:50%;}
+.btn-ent{font-family:var(--font-main);font-size:.72rem;padding:.7rem 1.6rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;cursor:pointer;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;transition:all .3s ease;display:inline-block;font-weight:700;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,40,142,.2);}
+.btn-ent:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,40,142,.25);}
+.vs-section{padding:4rem 2.5rem;background:#fff;border-radius:22px;border:1px solid rgba(196,197,213,.3);margin:2rem 2.5rem;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.vs-section h2{font-family:var(--font-serif);font-size:1.8rem;font-weight:600;margin-bottom:2rem;letter-spacing:-.02em;color:var(--ink);text-align:center;}
 .vs-table{width:100%;border-collapse:collapse;font-size:.82rem;}
-.vs-table th{text-align:left;font-family:var(--font-main);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);padding:.8rem 1.2rem;border-bottom:2px solid var(--accent);font-weight:600;}
-.vs-table td{padding:1rem 1.2rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+.vs-table th{text-align:left;font-family:var(--font-main);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);padding:1rem 1.2rem;border-bottom:2px solid #00288e;font-weight:700;}
+.vs-table th:nth-child(2){color:#00288e;}
+.vs-table td{padding:1rem 1.2rem;border-bottom:1px solid rgba(196,197,213,.2);vertical-align:middle;}
 .vs-table tr:last-child td{border-bottom:none;}
-.vs-table td:first-child{color:var(--muted);font-size:.8rem;font-weight:500;}
-.vs-table .ours{color:#22c55e;font-weight:600;}
-.vs-table .theirs{color:#ef4444;}
+.vs-table tr:hover td{background:rgba(0,40,142,.02);}
+.vs-table td:first-child{color:#64748b;font-size:.8rem;font-weight:600;}
+.vs-table .ours{color:#059669;font-weight:700;}
+.vs-table .theirs{color:#dc2626;font-weight:500;opacity:.8;}
 .check{color:#22c55e;font-weight:600;}
 .cross{color:#ef4444;}
 
@@ -2172,57 +2192,151 @@ function toggleTheme() {
 
 
 <!-- ══════════════════════════════════════════════════
-     PAGE — COMMENT ÇA MARCHE (original, unchanged)
-══════════════════════════════════════════════════ -->
-<!-- ══════════════════════════════════════════════════
-     PAGE — COMMENT ÇA MARCHE
+     PAGE — FONCTIONNEMENT
 ══════════════════════════════════════════════════ -->
 <div class="page" id="page-comment">
-  <div class="page-header">
-    <h1 data-i18n="page.howitworks.title">Comment ça marche</h1>
-    <p data-i18n="page.howitworks.subtitle">Un processus simple et rapide selon votre profil</p>
-  </div>
-  <div style="padding:2rem 2.5rem;">
-    <div class="how-tabs" style="margin-bottom:2rem;">
-      <button class="how-tab active-gold" data-action="switch-how-tab-2" data-tab-target="c2" data-i18n="tab.consultant">Consultant indépendant</button>
-      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c3" data-i18n="tab.b2b_offer">Offre de ressources</button>
-      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c4" data-i18n="tab.b2b_seek">Recherche de ressources</button>
-      <button class="how-tab" data-action="switch-how-tab-2" data-tab-target="c5" data-i18n="tab.erp_impl">Implémentation ERP</button>
+  <section class="py-20 px-6" style="background:linear-gradient(180deg,#f8fafc 0%,#ffffff 100%);">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="font-manrope text-xs font-bold tracking-widest uppercase" style="color:var(--primary);">Comment ça marche</span>
+        <h1 class="font-newsreader text-4xl md:text-5xl font-bold mt-4 mb-4" style="color:var(--ink);letter-spacing:-.02em;">Un processus simple,<br><em>adapté à chaque profil.</em></h1>
+        <p class="font-manrope text-base" style="color:#64748b;max-width:600px;margin:0 auto;">Que vous soyez consultant freelance, entreprise cherchant des ressources ou offrant du staff augmentation — voici votre parcours.</p>
+      </div>
+
+      <!-- Tab selector -->
+      <div style="display:flex;justify-content:center;gap:.5rem;margin-bottom:3rem;flex-wrap:wrap;">
+        <button class="how-page-tab active" data-how-tab="consultant" onclick="switchHowPageTab('consultant',this)">Consultant freelance</button>
+        <button class="how-page-tab" data-how-tab="offre" onclick="switchHowPageTab('offre',this)">Offre de ressources</button>
+        <button class="how-page-tab" data-how-tab="cherche" onclick="switchHowPageTab('cherche',this)">Recherche de ressources</button>
+        <button class="how-page-tab" data-how-tab="erp" onclick="switchHowPageTab('erp',this)">Implémentation ERP</button>
+      </div>
+
+      <!-- Consultant freelance -->
+      <div class="how-page-content active" id="how-page-consultant">
+        <div class="how-page-grid">
+          <div class="how-page-step">
+            <div class="how-page-num">01</div>
+            <h3>Créez votre profil</h3>
+            <p>Renseignez vos compétences ERP, certifications, expériences et tarif journalier. Votre profil est votre vitrine professionnelle.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">02</div>
+            <h3>Validation par notre équipe</h3>
+            <p>Votre profil est vérifié et approuvé sous 48h par nos experts. Qualité et authenticité garanties.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">03</div>
+            <h3>Visibilité immédiate</h3>
+            <p>Votre profil apparaît dans l'annuaire premium, accessible aux entreprises qui cherchent exactement vos compétences.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">04</div>
+            <h3>Recevez des mandats</h3>
+            <p>Les entreprises vous contactent directement via la plateforme. Pas d'intermédiaire, pas de frais cachés.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offre de ressources -->
+      <div class="how-page-content" id="how-page-offre">
+        <div class="how-page-grid">
+          <div class="how-page-step">
+            <div class="how-page-num">01</div>
+            <h3>Déclarez vos ressources</h3>
+            <p>Indiquez les consultants disponibles, leurs compétences ERP, disponibilité et taux. Importez en masse via CSV ou ajoutez-les un par un.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">02</div>
+            <h3>Matching automatique</h3>
+            <p>Notre système identifie les entreprises qui ont besoin de vos profils et optimise la visibilité de vos ressources.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">03</div>
+            <h3>Mise en relation directe</h3>
+            <p>Vous êtes contacté directement par les firmes intéressées. Communication fluide via notre messagerie intégrée.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">04</div>
+            <h3>Placement rapide</h3>
+            <p>Vos consultants sont placés rapidement, sans friction. Accord direct entre entreprises, en toute transparence.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recherche de ressources -->
+      <div class="how-page-content" id="how-page-cherche">
+        <div class="how-page-grid">
+          <div class="how-page-step">
+            <div class="how-page-num">01</div>
+            <h3>Décrivez votre besoin</h3>
+            <p>ERP cible, compétences requises, durée du mandat, date de démarrage souhaitée. Soyez précis pour un matching optimal.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">02</div>
+            <h3>Accès au réseau premium</h3>
+            <p>Parcourez l'annuaire de consultants vérifiés et de ressources d'entreprises disponibles immédiatement.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">03</div>
+            <h3>Sélection sur mesure</h3>
+            <p>Comparez les profils détaillés, échangez directement avec les candidats, et sélectionnez la ressource idéale.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">04</div>
+            <h3>Démarrage en 48h</h3>
+            <p>Accord direct, onboarding rapide. Vos projets n'attendent plus.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Implémentation ERP -->
+      <div class="how-page-content" id="how-page-erp">
+        <div class="how-page-grid">
+          <div class="how-page-step">
+            <div class="how-page-num">01</div>
+            <h3>Partagez votre projet ERP</h3>
+            <p>Type d'ERP, modules ciblés, taille d'équipe, phase du projet et calendrier de déploiement.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">02</div>
+            <h3>Sélection des SMEs</h3>
+            <p>Nous identifions les experts métier qui correspondent exactement à vos modules et à votre secteur d'activité.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">03</div>
+            <h3>Accompagnement métier</h3>
+            <p>Les SMEs travaillent avec vos équipes pour s'assurer que chaque processus métier est bien compris et documenté.</p>
+          </div>
+          <div class="how-page-step">
+            <div class="how-page-num">04</div>
+            <h3>Adoption garantie</h3>
+            <p>Vos équipes comprennent et adoptent le système. Formation, tests et go-live accompagnés.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA section -->
+      <div style="text-align:center;margin-top:4rem;padding:3rem 2rem;background:linear-gradient(135deg,rgba(0,40,142,.03),rgba(0,88,190,.05));border-radius:24px;border:1px solid rgba(0,88,190,.1);">
+        <h2 class="font-newsreader text-2xl font-bold mb-3" style="color:var(--ink);">Prêt à commencer ?</h2>
+        <p class="font-manrope text-sm mb-6" style="color:#64748b;max-width:500px;margin:0 auto .5rem;">Rejoignez ExpertERPHub et accédez au réseau premium de consultants et entreprises ERP.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+          <button class="btn-white" data-action="show-page" data-page="consultants" style="background:var(--primary);color:#fff;border:none;padding:.85rem 2rem;border-radius:999px;font-weight:700;font-size:.82rem;cursor:pointer;">Explorer les consultants</button>
+          <button class="btn-white-outline" data-action="show-page" data-page="entreprises" style="padding:.85rem 2rem;border-radius:999px;font-weight:700;font-size:.82rem;cursor:pointer;border:1px solid var(--primary);color:var(--primary);background:transparent;">Espace entreprises</button>
+        </div>
+      </div>
     </div>
-    <div class="how-content active" id="how-c2" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-      <div class="how-step"><div class="how-num">01</div><h3>Créez votre profil en 4 étapes</h3><p>Profil personnel, compétences ERP, expériences, disponibilité. Prend 5 minutes.</p></div>
-      <div class="how-step"><div class="how-num">02</div><h3>Validation sous 48h</h3><p>Notre équipe vérifie vos certifications et votre parcours. Vous recevez une notification.</p></div>
-      <div class="how-step"><div class="how-num">03</div><h3>Profil en ligne</h3><p>Votre profil apparaît dans notre annuaire pour toutes les entreprises inscrites.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Contact direct</h3><p>Les entreprises vous contactent par email. Vous gérez vos missions vous-même.</p></div>
-      <div class="how-step"><div class="how-num">05</div><h3>Évaluation et réputation</h3><p>Chaque mission complétée renforce votre profil et augmente votre visibilité.</p></div>
-    </div>
-    <div class="how-content" id="how-c3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-      <div class="how-step"><div class="how-num">01</div><h3>Inscrivez votre entreprise</h3><p>Nom, secteur, ERP maîtrisés, nombre de consultants disponibles.</p></div>
-      <div class="how-step"><div class="how-num">02</div><h3>Déclarez vos ressources</h3><p>Pour chaque consultant : compétences, niveau, disponibilité, tarif.</p></div>
-      <div class="how-step"><div class="how-num">03</div><h3>Matching automatique</h3><p>Votre profil est mis en face des demandes entrantes correspondantes.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Contact et placement</h3><p>Les entreprises demandeuses vous contactent. Vous finalisez l'accord de collaboration.</p></div>
-    </div>
-    <div class="how-content" id="how-c4" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-      <div class="how-step"><div class="how-num">01</div><h3>Décrivez votre besoin</h3><p>ERP concerné, rôle recherché, durée, budget indicatif, démarrage souhaité.</p></div>
-      <div class="how-step"><div class="how-num">02</div><h3>Accès aux profils</h3><p>Vous accédez immédiatement aux consultants et firmes disponibles sur ce profil.</p></div>
-      <div class="how-step"><div class="how-num">03</div><h3>Shortlist en 24h</h3><p>Notre équipe vous prépare une sélection de 3–5 profils adaptés à votre contexte.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Entretien et sélection</h3><p>Échangez directement avec les candidats. Vous choisissez, nous facilitons.</p></div>
-      <div class="how-step"><div class="how-num">05</div><h3>Démarrage en 48h</h3><p>Accord direct. La ressource démarre dans les meilleurs délais.</p></div>
-    </div>
-    <div class="how-content" id="how-c5" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-      <div class="how-step"><div class="how-num">01</div><h3>Brief de votre projet ERP</h3><p>ERP cible, modules, secteur d'activité, taille d'équipe, phase actuelle.</p></div>
-      <div class="how-step"><div class="how-num">02</div><h3>Sélection des SMEs</h3><p>On identifie les experts métier (SMEs) les plus adaptés à vos modules et à votre industrie.</p></div>
-      <div class="how-step"><div class="how-num">03</div><h3>Atelier de découverte</h3><p>Les SMEs rencontrent vos équipes métier pour comprendre vos processus actuels.</p></div>
-      <div class="how-step"><div class="how-num">04</div><h3>Accompagnement continu</h3><p>Les SMEs guident les équipes tout au long de l'implémentation. Formation, tests, validation.</p></div>
-      <div class="how-step"><div class="how-num">05</div><h3>Go-live réussi</h3><p>Vos équipes comprennent et adoptent le système. Le projet est livré dans les délais.</p></div>
-    </div>
-  </div>
+  </section>
+
   <footer>
     <div class="footer-logo">Expert<span>ERP</span>Hub</div>
+    <div class="footer-links">
+      <span class="footer-link" data-action="show-page" data-page="consultants">Consultants</span>
+      <span class="footer-link" data-action="show-page" data-page="entreprises">Entreprises</span>
+      <span class="footer-link" data-action="show-page" data-page="home">Accueil</span>
+    </div>
     <div class="footer-copy">© 2026 ExpertERPHub. Tous droits réservés.</div>
   </footer>
 </div>
-
 
 <!-- ══════════════════════════════════════════════════
      MODAL — CONSULTANT (original, unchanged)
@@ -3706,17 +3820,15 @@ function showPage(id) {
 }
 
 function goToHowSection() {
-  showPage('home');
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  document.getElementById('nl-comment')?.classList.add('active');
-  const section = document.getElementById('home-how-section');
-  if (!section) return;
-  window.requestAnimationFrame(() => {
-    const nav = document.querySelector('nav');
-    const navHeight = nav ? nav.offsetHeight : 0;
-    const targetTop = section.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-    window.scrollTo({ top: Math.max(targetTop, 0), behavior: 'smooth' });
-  });
+  showPage('comment');
+}
+
+function switchHowPageTab(tab, btn) {
+  document.querySelectorAll('.how-page-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.how-page-content').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const target = document.getElementById('how-page-' + tab);
+  if (target) target.classList.add('active');
 }
 
 function initRevealAnimations() {
@@ -4868,6 +4980,12 @@ async function loadConsultants() {
       c.notes_admin = JSON.stringify(notes);
     }
 
+    /* ═══ STRATÉGIE VISIBILITÉ PAR STATUT ═══
+       - Seuls les consultants 'approuve' sont visibles publiquement
+       - 'en_mission' → profil masqué (consultant en cours de mission)
+       - 'en_attente' → profil masqué (en attente de validation admin)
+       - 'refuse' → profil masqué
+       - admin_state 'desactive'/'expire'/'deleted' → masqué */
     const visible = data.filter(c => {
       const rawStatus = String(c.statut || '').toLowerCase();
       const isApproved = rawStatus === 'approuve' || rawStatus === 'approuvé';
@@ -5086,6 +5204,11 @@ function renderConsultants(list) {
            onerror="var w=this.parentNode;var d=document.createElement('div');d.className='consultant-card-photo-initials';d.style.background=this.dataset.fallbackColor||'#00288e';d.textContent=this.dataset.fallbackInitials||'ER';w.replaceChild(d,this);">`
       : `<div class="consultant-card-photo-initials" style="background:${escapeHtml(avatarBg)};">${escapeHtml(initials||'ER')}</div>`;
 
+    /* ═══ Badge Freelance vs Entreprise ═══ */
+    const sourceTypeBadge = isB2BAnonymous
+      ? '<span class="consultant-source-badge enterprise-source">Ressource entreprise</span>'
+      : '<span class="consultant-source-badge freelance-source">Freelance</span>';
+
     return `<article class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${escapeHtml(c.id)}" style="cursor:pointer;" aria-label="${escapeHtml(displayName)}">
       <div class="consultant-card-photo-wrap">
         ${photoHtml}
@@ -5094,6 +5217,7 @@ function renderConsultants(list) {
       <div class="consultant-card-content">
         <div class="consultant-card-header">
           <span class="consultant-card-role-label">${escapeHtml(title)}</span>
+          ${sourceTypeBadge}
           <span class="consultant-card-verified">
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Expert validé
@@ -5317,6 +5441,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(function() { openEntrepriseModal(''); }, 350);
     } else if (h === 'page-entreprises') {
       showPage('entreprises');
+    } else if (h === 'page-fonctionnement' || h === 'fonctionnement' || h === 'page-comment') {
+      showPage('comment');
     }
   })();
 });
