@@ -561,6 +561,8 @@ body{background:#f7f9fb;}
     <button class="tab-button" data-action="show-tab" data-tab-name="add-resource" id="tab-add-resource">+ Ajouter</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="search" id="tab-search" data-i18n="dashboardCompany.search">Rechercher</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="messages" id="tab-messages" data-i18n="dashboardCompany.messages">Messages <span id="messages-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="favorites" id="tab-favorites">Favoris <span id="favorites-badge" style="display:none;background:#f59e0b;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;">0</span></button>
+    <button class="tab-button" data-action="show-tab" data-tab-name="history" id="tab-history">Historique</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="team" id="tab-team" data-i18n="dashboardCompany.team">Equipe</button>
     <button class="tab-button" data-action="show-tab" data-tab-name="profile" id="tab-profile" data-i18n="dashboardCompany.myProfile">Mon Profil</button>
   </div>
@@ -836,6 +838,24 @@ body{background:#f7f9fb;}
         <button id="search-prev" onclick="searchChangePage(-1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">← Précédent</button>
         <span id="search-page-info" style="font-size:.8rem;color:#6b7280;font-weight:500;"></span>
         <button id="search-next" onclick="searchChangePage(1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- ═══ FAVORIS TAB ═══ -->
+    <div class="tab-pane" id="favorites-tab">
+      <div class="section-title">Favoris</div>
+      <div class="section-sub">Consultants sauvegardés pour un accès rapide.</div>
+      <div id="favorites-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:1rem;">
+        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Aucun favori pour le moment. Utilisez l'onglet <strong>Rechercher</strong> pour trouver des consultants et les ajouter en favoris.</div>
+      </div>
+    </div>
+
+    <!-- ═══ HISTORIQUE TAB ═══ -->
+    <div class="tab-pane" id="history-tab">
+      <div class="section-title">Historique des contacts</div>
+      <div class="section-sub">Toutes vos mises en relation avec les consultants de la plateforme.</div>
+      <div id="history-list" style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem;">
+        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Chargement...</div>
       </div>
     </div>
 
@@ -2125,6 +2145,8 @@ function showDashboard() {
   loadCompanyMessages();
   /* Sprint 4: Polling auto-refresh messages toutes les 30s */
   startMessagePolling();
+  /* Sprint 4: Badge favoris */
+  updateFavoritesBadge();
 }
 
 function renderKPIs(filtered) {
@@ -2979,7 +3001,10 @@ function renderSearchPage() {
             + '<div style="font-size:.78rem;color:#6b7280;margin-top:.15rem;">' + safe(c.titre || 'Consultant ERP') + '</div>'
           + '</div>'
         + '</div>'
-        + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" style="padding:.6rem 1rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;" onmouseenter="this.style.opacity=\'0.9\'" onmouseleave="this.style.opacity=\'1\'">Contacter</button>'
+        + '<div style="display:flex;gap:.5rem;align-items:center;">'
+          + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps) + '\', this)" style="width:36px;height:36px;border:1px solid rgba(245,158,11,.3);background:' + (isFavorite(c.id) ? 'rgba(245,158,11,.15)' : '#fff') + ';border-radius:10px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
+          + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" style="padding:.6rem 1rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;" onmouseenter="this.style.opacity=\'0.9\'" onmouseleave="this.style.opacity=\'1\'">Contacter</button>'
+        + '</div>'
       + '</div>'
       + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">'
         + '<span style="font-size:.7rem;padding:.35rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;border:1px solid rgba(0,40,142,.15);">ERP: ' + safe(erps) + '</span>'
@@ -3019,6 +3044,14 @@ function showTab(tabName, event) {
   /* Charger les messages quand on clique sur l'onglet Messages */
   if (tabName === 'messages') {
     loadMessagesTab();
+  }
+  /* Charger les favoris */
+  if (tabName === 'favorites') {
+    loadFavoritesTab();
+  }
+  /* Charger l'historique */
+  if (tabName === 'history') {
+    loadHistoryTab();
   }
   /* Pré-charger les consultants quand on ouvre Rechercher */
   if (tabName === 'search' && !_searchLoaded) {
@@ -3395,6 +3428,121 @@ function exportResourcesCSV() {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+/* ═══ FAVORIS / SHORTLIST ═══ */
+function _getFavKey() { return 'erphub_favorites_' + (currentEmail || 'anon'); }
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem(_getFavKey()) || '[]'); }
+  catch(e) { return []; }
+}
+function saveFavorites(favs) {
+  localStorage.setItem(_getFavKey(), JSON.stringify(favs));
+  updateFavoritesBadge();
+}
+function isFavorite(consultantId) {
+  return getFavorites().some(function(f) { return f.id === consultantId; });
+}
+function toggleFavorite(id, email, name, titre, erps, btnEl) {
+  var favs = getFavorites();
+  var idx = favs.findIndex(function(f) { return f.id === id; });
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    if (btnEl) { btnEl.textContent = '☆'; btnEl.style.background = '#fff'; }
+  } else {
+    favs.push({ id: id, email: email, name: name, titre: titre, erps: erps, addedAt: new Date().toISOString() });
+    if (btnEl) { btnEl.textContent = '★'; btnEl.style.background = 'rgba(245,158,11,.15)'; }
+  }
+  saveFavorites(favs);
+}
+function updateFavoritesBadge() {
+  var badge = document.getElementById('favorites-badge');
+  if (!badge) return;
+  var count = getFavorites().length;
+  if (count > 0) { badge.textContent = String(count); badge.style.display = 'inline'; }
+  else { badge.style.display = 'none'; }
+}
+function loadFavoritesTab() {
+  var container = document.getElementById('favorites-list');
+  var favs = getFavorites();
+  if (!favs.length) {
+    container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Aucun favori pour le moment. Utilisez l\'onglet <strong>Rechercher</strong> pour trouver des consultants et les ajouter en favoris.</div>';
+    return;
+  }
+  container.innerHTML = favs.map(function(f) {
+    var initials = f.name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+    var addedDate = f.addedAt ? new Date(f.addedAt).toLocaleDateString('fr-FR') : '';
+    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:20px;padding:1.25rem;transition:all .2s;" onmouseenter="this.style.boxShadow=\'0 6px 20px rgba(0,0,0,.1)\'" onmouseleave="this.style.boxShadow=\'none\'">'
+      + '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">'
+        + '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+          + '<div style="font-size:.92rem;font-weight:700;color:#191c1e;">' + safe(f.name) + '</div>'
+          + '<div style="font-size:.76rem;color:#6b7280;">' + safe(f.titre || '') + '</div>'
+        + '</div>'
+        + '<span style="font-size:.65rem;color:#9ca3af;">Ajouté le ' + addedDate + '</span>'
+      + '</div>'
+      + (f.erps ? '<div style="margin-bottom:.75rem;"><span style="font-size:.7rem;padding:.3rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;">ERP: ' + safe(f.erps) + '</span></div>' : '')
+      + '<div style="display:flex;gap:.5rem;">'
+        + '<button onclick="contactConsultant(\'' + safe(f.email) + '\', \'' + safe(f.name) + '\')" style="flex:1;padding:.55rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;">Contacter</button>'
+        + '<button onclick="removeFavorite(\'' + safe(f.id) + '\')" style="padding:.55rem .8rem;background:none;border:1px solid rgba(220,38,38,.2);color:#dc2626;border-radius:10px;font-size:.78rem;cursor:pointer;" title="Retirer des favoris">Retirer</button>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+function removeFavorite(id) {
+  var favs = getFavorites().filter(function(f) { return f.id !== id; });
+  saveFavorites(favs);
+  loadFavoritesTab();
+}
+
+/* ═══ HISTORIQUE DES CONTACTS ═══ */
+async function loadHistoryTab() {
+  var container = document.getElementById('history-list');
+  container.innerHTML = '<div style="text-align:center;padding:2rem;color:#6b7280;font-size:.85rem;">Chargement de l\'historique...</div>';
+  try {
+    if (!window.ExpertMessaging || !currentEmail) {
+      container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Aucun historique disponible.</div>';
+      return;
+    }
+    var convos = await window.ExpertMessaging.getConversations(currentEmail);
+    if (!convos || !convos.length) {
+      container.innerHTML = '<div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Aucune mise en relation pour le moment.</div>';
+      return;
+    }
+    /* Trier par date décroissante (dernier message) */
+    convos.sort(function(a, b) {
+      var da = a.lastMessage && a.lastMessage.created_at ? new Date(a.lastMessage.created_at) : new Date(0);
+      var db = b.lastMessage && b.lastMessage.created_at ? new Date(b.lastMessage.created_at) : new Date(0);
+      return db - da;
+    });
+    container.innerHTML = convos.map(function(c) {
+      var name = c.otherName || c.otherEmail || 'Consultant';
+      var initials = name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+      var msgCount = c.messages ? c.messages.length : 0;
+      var lastDate = c.lastMessage && c.lastMessage.created_at ? new Date(c.lastMessage.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '--';
+      var firstDate = c.messages && c.messages.length ? new Date(c.messages[0].created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '--';
+      var preview = c.lastMessage && c.lastMessage.body ? c.lastMessage.body.substring(0, 80) + (c.lastMessage.body.length > 80 ? '...' : '') : '';
+      var statusColor = c.unreadCount > 0 ? '#059669' : '#6b7280';
+      var statusText = c.unreadCount > 0 ? c.unreadCount + ' non lu(s)' : 'Lu';
+
+      return '<div style="background:#fff;border:1px solid rgba(196,197,213,.25);border-radius:14px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;transition:all .15s;" onmouseenter="this.style.boxShadow=\'0 4px 12px rgba(0,0,0,.06)\'" onmouseleave="this.style.boxShadow=\'none\'">'
+        + '<div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;font-weight:700;flex-shrink:0;">' + initials + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+          + '<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem;">'
+            + '<span style="font-size:.88rem;font-weight:700;color:#191c1e;">' + safe(name) + '</span>'
+            + '<span style="font-size:.6rem;padding:.15rem .5rem;border-radius:999px;background:rgba(0,40,142,.06);color:#00288e;font-weight:600;">' + msgCount + ' msg</span>'
+            + '<span style="font-size:.6rem;padding:.15rem .5rem;border-radius:999px;color:' + statusColor + ';font-weight:600;">' + statusText + '</span>'
+          + '</div>'
+          + '<div style="font-size:.76rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + safe(preview) + '</div>'
+          + '<div style="font-size:.65rem;color:#9ca3af;margin-top:.2rem;">Premier contact : ' + firstDate + ' — Dernier message : ' + lastDate + '</div>'
+        + '</div>'
+        + '<button onclick="contactConsultant(\'' + safe(c.otherEmail) + '\', \'' + safe(name) + '\')" style="padding:.5rem .9rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">Ouvrir</button>'
+      + '</div>';
+    }).join('');
+  } catch(e) {
+    console.warn('Erreur chargement historique:', e);
+    container.innerHTML = '<div style="text-align:center;padding:3rem;color:#dc2626;font-size:.85rem;">Erreur lors du chargement de l\'historique.</div>';
+  }
 }
 
 async function deleteCompanyAccountRGPD() {

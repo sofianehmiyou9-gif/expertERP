@@ -67,7 +67,7 @@
       escapeHtml(opts.body) +
       '</div>' +
       '<p>Pour repondre, connectez-vous a votre tableau de bord :</p>' +
-      '<a href="https://project-ggx81.vercel.app/" style="display:inline-block;background:#1a3a5c;color:white;padding:12px 24px;text-decoration:none;border-radius:5px;">Acceder a mon dashboard</a>' +
+      '<a href="https://expert-erp.vercel.app/" style="display:inline-block;background:#1a3a5c;color:white;padding:12px 24px;text-decoration:none;border-radius:5px;">Acceder a mon dashboard</a>' +
       '<p style="color:#888;font-size:12px;margin-top:20px;">Vous pouvez aussi repondre directement a ' +
       escapeHtml(opts.fromEmail) + '</p>' +
       '</div>' +
