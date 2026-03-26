@@ -68,72 +68,138 @@ if (typeof tailwind !== 'undefined') tailwind.config = {
 body { font-family: 'Manrope', sans-serif; }
   h1, h2, h3, .serif { font-family: 'Newsreader', serif; }
 
-  /* ── HERO — editorial light style ── */
-  .profile-hero-section { background: linear-gradient(180deg, #f8faff 0%, #ffffff 60%); }
+  /* ── HERO — premium editorial ── */
+  .profile-hero-section {
+    background: linear-gradient(180deg, #f0f4ff 0%, #f8faff 40%, #ffffff 100%);
+    position: relative;
+  }
+  .profile-hero-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 50%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0,40,142,.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
 
-  /* ── Photo frame — rectangular 4:5 ratio ── */
+  /* ── Photo frame — premium 4:5 ── */
   .profile-photo-frame {
     position: relative;
     aspect-ratio: 4/5;
-    border-radius: 1.75rem;
+    border-radius: 2rem;
     overflow: hidden;
-    background: linear-gradient(135deg, #e8eef8 0%, #dbeafe 100%);
-    box-shadow: 0 24px 64px rgba(0,40,142,.1), 0 0 0 1px rgba(0,40,142,.05);
-    border: 3px solid rgba(255,255,255,.8);
+    background: linear-gradient(135deg, #e0eaff 0%, #c7d7fe 50%, #dbeafe 100%);
+    box-shadow:
+      0 32px 80px rgba(0,40,142,.14),
+      0 12px 32px rgba(0,40,142,.08),
+      0 0 0 1px rgba(0,40,142,.06);
+    border: 4px solid rgba(255,255,255,.9);
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94), box-shadow .4s;
+  }
+  .profile-photo-frame:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 40px 100px rgba(0,40,142,.18),
+      0 16px 40px rgba(0,40,142,.10),
+      0 0 0 1px rgba(0,40,142,.08);
   }
   #profile-avatar {
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 4.5rem; font-weight: 700; color: #fff;
-    letter-spacing: .04em;
-    background: linear-gradient(145deg, #00288e 0%, #0058be 50%, #3b82f6 100%);
+    font-size: 5rem; font-weight: 800; color: #fff;
+    letter-spacing: .06em;
+    background: linear-gradient(145deg, #001d6e 0%, #00288e 30%, #0058be 60%, #3b82f6 100%);
+    text-shadow: 0 2px 12px rgba(0,0,0,.15);
   }
   #profile-avatar img {
     width: 100%; height: 100%; object-fit: cover;
   }
 
   /* ── Availability pill ── */
-  #profile-availability-pill { display: inline-flex; align-items: center; gap: 7px; }
-  #profile-availability-pill #profile-availability-label { font-size: 15px; font-weight: 700; color: #15803d; line-height: 1.2; }
+  #profile-availability-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(22,163,74,.06); border-radius: 999px; border: 1px solid rgba(22,163,74,.12); }
+  #profile-availability-pill #profile-availability-label { font-size: 14px; font-weight: 700; color: #15803d; line-height: 1.2; }
+  #profile-availability-pill.unavailable { background: rgba(107,114,128,.06); border-color: rgba(107,114,128,.12); }
   #profile-availability-pill.unavailable #profile-availability-label { color: #6b7280; }
   #profile-availability-pill .availability-dot { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; flex-shrink: 0; animation: pulse-dot 2.2s ease-in-out infinite; }
   #profile-availability-pill.unavailable .availability-dot { background: #9ca3af; animation: none; }
-  @keyframes pulse-dot { 0%,100%{ box-shadow:0 0 0 0 rgba(22,163,74,.4); } 50%{ box-shadow:0 0 0 5px rgba(22,163,74,0); } }
+  @keyframes pulse-dot { 0%,100%{ box-shadow:0 0 0 0 rgba(22,163,74,.4); } 50%{ box-shadow:0 0 0 6px rgba(22,163,74,0); } }
 
-  /* ── Info cards strip ── */
-  .info-card { background:#fff; border-radius:16px; padding:20px 22px; box-shadow:0 4px 24px rgba(0,40,142,.07); border:1px solid rgba(0,40,142,.06); display:flex; align-items:center; gap:16px; transition:transform .2s,box-shadow .2s; }
-  .info-card:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(0,40,142,.11); }
-  .info-card-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  /* ── Info cards strip — premium glass ── */
+  .info-card {
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: 0 8px 32px rgba(0,40,142,.06), 0 1px 3px rgba(0,40,142,.04);
+    border: 1px solid rgba(0,40,142,.06);
+    display: flex; align-items: center; gap: 16px;
+    transition: transform .3s cubic-bezier(.25,.46,.45,.94), box-shadow .3s;
+  }
+  .info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,40,142,.12), 0 2px 6px rgba(0,40,142,.06);
+  }
+  .info-card-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-  /* ── Skill chips — light hero ── */
-  .skill-chip { display:inline-flex; align-items:center; padding:5px 14px; border-radius:999px; background:#eceef0; color:#374151; font-size:13px; font-weight:600; border:1px solid rgba(0,0,0,.06); transition:background .15s; }
-  .skill-chip:hover { background:#e2e8f0; }
-  .skill-chip.primary { background:#dde1ff; color:#00288e; border-color:rgba(0,40,142,.15); font-weight:700; }
+  /* ── Skill chips — premium ── */
+  .skill-chip {
+    display: inline-flex; align-items: center;
+    padding: 6px 16px; border-radius: 999px;
+    background: #f0f2f5; color: #374151;
+    font-size: 13px; font-weight: 600;
+    border: 1px solid rgba(0,0,0,.05);
+    transition: all .2s;
+  }
+  .skill-chip:hover { background: #e2e6ed; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+  .skill-chip.primary {
+    background: linear-gradient(135deg, #e8edff, #dde3ff);
+    color: #00288e;
+    border-color: rgba(0,40,142,.12);
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,40,142,.08);
+  }
 
-  /* JS-generated experience items */
-  .experience-item { display: flex; gap: 16px; padding: 24px; border-radius: 12px; background: #f2f4f6; margin-bottom: 16px; transition: background 0.2s; }
-  .experience-item:hover { background: #ffffff; box-shadow: 0 8px 40px rgba(25,28,30,.07); }
-  .experience-icon { width: 44px; height: 44px; border-radius: 12px; background: #dde1ff; color: #00288e; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  /* ── Experience items — premium cards ── */
+  .experience-item {
+    display: flex; gap: 18px; padding: 28px;
+    border-radius: 16px;
+    background: #fff;
+    margin-bottom: 12px;
+    border: 1px solid rgba(0,0,0,.04);
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    transition: all .3s cubic-bezier(.25,.46,.45,.94);
+  }
+  .experience-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 48px rgba(25,28,30,.08);
+    border-color: rgba(0,40,142,.08);
+  }
+  .experience-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, #e8edff, #dde1ff);
+    color: #00288e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,40,142,.08);
+  }
   .experience-body { flex: 1; min-width: 0; }
   .exp-title { font-size: 18px; font-weight: 700; color: #191c1e; margin-bottom: 4px; font-family: 'Newsreader', serif; }
   .exp-company-line { font-size: 14px; color: #444653; margin-bottom: 4px; }
   .exp-sector { font-size: 13px; color: #757684; margin-bottom: 12px; }
   .exp-bullets { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-  .exp-bullets li { list-style: none; position: relative; padding-left: 16px; font-size: 14px; line-height: 1.6; color: #444653; }
-  .exp-bullets li::before { content: '•'; position: absolute; left: 0; color: #00288e; font-weight: 700; }
+  .exp-bullets li { list-style: none; position: relative; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #444653; }
+  .exp-bullets li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: #00288e; }
   .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .exp-tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; background: #eceef0; color: #444653; font-size: 12px; font-weight: 600; }
+  .exp-tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; background: #f0f2f5; color: #444653; font-size: 12px; font-weight: 600; border: 1px solid rgba(0,0,0,.04); }
 
-  /* JS-generated skill experience rows */
-  .skill-exp-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; font-size: 14px; color: #444653; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,.05); }
+  /* ── Skill experience rows ── */
+  .skill-exp-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; font-size: 14px; color: #444653; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
   .skill-exp-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .skill-exp-value { font-weight: 700; color: #191c1e; white-space: nowrap; }
+  .skill-exp-value { font-weight: 700; color: #00288e; white-space: nowrap; }
 
-  /* JS-generated certif badges */
-  .certif-badge { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,.15); color: #ffffff; font-size: 13px; font-weight: 500; margin-bottom: 8px; flex-wrap: wrap; }
-  .certif-badge.certified { background: rgba(255,255,255,.25); font-weight: 700; }
-  .certif-star-pub { color: #fbbf24; }
-  .certif-level-pub { font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  /* ── Certif badges — premium ── */
+  .certif-badge { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.12); color: #ffffff; font-size: 13px; font-weight: 500; margin-bottom: 8px; flex-wrap: wrap; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.1); }
+  .certif-badge.certified { background: rgba(255,255,255,.22); font-weight: 700; }
+  .certif-star-pub { color: #fbbf24; filter: drop-shadow(0 1px 2px rgba(251,191,36,.4)); }
+  .certif-level-pub { font-size: 10px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
   .certif-level-pub.certif-level-associate { background: rgba(219,234,254,.3); color: #93c5fd; }
   .certif-level-pub.certif-level-professional { background: rgba(236,253,245,.3); color: #6ee7b7; }
   .certif-level-pub.certif-level-expert { background: rgba(245,243,255,.3); color: #c4b5fd; }
@@ -141,17 +207,17 @@ body { font-family: 'Manrope', sans-serif; }
   /* Empty block */
   .empty-block { font-size: 14px; color: #757684; font-style: italic; }
 
-  /* Section text (resume) */
-  .section-text { font-size: 16px; line-height: 1.75; color: #444653; white-space: pre-line; }
+  /* Section text (resume) — premium readability */
+  .section-text { font-size: 16px; line-height: 1.85; color: #3d4050; white-space: pre-line; letter-spacing: .01em; }
 
   /* Nav link underline effect */
   .nav-link { position: relative; }
-  .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00288e; transition: width .25s; }
+  .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: linear-gradient(90deg,#00288e,#0058be); transition: width .25s; border-radius: 2px; }
   .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
   /* Lang buttons */
   .lang-btn { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #444653; background: transparent; border: none; cursor: pointer; transition: all .2s; }
-  .lang-btn.active { background: #00288e; color: #fff; }
+  .lang-btn.active { background: linear-gradient(135deg,#00288e,#0058be); color: #fff; box-shadow: 0 2px 8px rgba(0,40,142,.2); }
 </style>
 <!-- saas-overrides.css removed -->
 </head>
@@ -272,7 +338,7 @@ body { font-family: 'Manrope', sans-serif; }
   <!-- ══════════════════════════════════════════
        INFO CARDS STRIP — rate / availability / mode
   ══════════════════════════════════════════ -->
-  <div class="bg-surface-container-low py-8 border-t border-outline-variant/20">
+  <div class="py-10" style="background:linear-gradient(180deg,#fff 0%,#f8faff 100%);border-top:1px solid rgba(0,40,142,.04);border-bottom:1px solid rgba(0,40,142,.04);">
     <div class="max-w-screen-2xl mx-auto px-6 lg:px-12">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
@@ -317,7 +383,7 @@ body { font-family: 'Manrope', sans-serif; }
   </div>
 
   <!-- ── BENTO: RESUME + EXPERIENCE + CERTIFICATIONS ── -->
-  <section id="resume-section" class="bg-surface-container-low py-24">
+  <section id="resume-section" class="py-24" style="background:linear-gradient(180deg,#f4f6fb 0%,#f0f2f8 100%);">
     <div class="max-w-screen-2xl mx-auto px-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -325,14 +391,14 @@ body { font-family: 'Manrope', sans-serif; }
         <div class="lg:col-span-2 flex flex-col gap-8">
 
           <!-- Resume -->
-          <div class="bg-surface-container-lowest p-12 rounded-xl shadow-sm">
-            <h2 id="resume-heading" class="text-4xl font-headline font-bold mb-6">Résumé Professionnel</h2>
+          <div class="p-12 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+            <h2 id="resume-heading" class="text-4xl font-headline font-bold mb-6" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
             <p id="profile-resume" class="section-text"></p>
           </div>
 
           <!-- Experiences -->
-          <div class="bg-surface-container-lowest p-12 rounded-xl shadow-sm">
-            <h2 id="experiences-heading" class="text-4xl font-headline font-bold mb-8">Expériences Professionnelles</h2>
+          <div class="p-12 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+            <h2 id="experiences-heading" class="text-4xl font-headline font-bold mb-8" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences Professionnelles</h2>
             <div id="profile-experiences"></div>
           </div>
 
@@ -341,8 +407,8 @@ body { font-family: 'Manrope', sans-serif; }
         <!-- RIGHT 1/3: Certifications + Skill XP -->
         <div class="flex flex-col gap-8">
 
-          <!-- Certifications (primary blue card) -->
-          <div id="certif-section" class="bg-primary p-10 rounded-xl text-on-primary shadow-xl shadow-primary/25">
+          <!-- Certifications (premium deep blue) -->
+          <div id="certif-section" class="p-10 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 16px 48px rgba(0,40,142,.25),0 4px 12px rgba(0,40,142,.15);">
             <h2 class="text-3xl font-headline font-bold mb-8">Certifications</h2>
             <div id="profile-certifs" class="flex flex-col gap-2">
               <div class="certif-badge">
@@ -353,7 +419,7 @@ body { font-family: 'Manrope', sans-serif; }
           </div>
 
           <!-- Skill Experience -->
-          <div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+          <div class="p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
             <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-6">Expérience par compétence</h3>
             <div id="profile-skill-experience" class="space-y-1"></div>
           </div>
@@ -374,12 +440,12 @@ body { font-family: 'Manrope', sans-serif; }
     <div id="profile-projets" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </section>
 
-  <!-- ── CONTACT FORM ── -->
-  <section id="contact-section" class="bg-surface-container-low py-24">
+  <!-- ── CONTACT FORM — premium ── -->
+  <section id="contact-section" class="py-24" style="background:linear-gradient(180deg,#fff 0%,#f4f6fb 100%);">
     <div class="max-w-2xl mx-auto px-8">
       <div class="text-center mb-12">
-        <span class="font-manrope text-sm font-bold tracking-[0.2em] uppercase text-secondary block mb-4">Prise de contact</span>
-        <h2 id="contact-title" class="text-5xl font-headline font-bold text-primary" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
+        <span class="font-manrope text-sm font-bold tracking-[0.2em] uppercase block mb-4" style="background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
+        <h2 id="contact-title" class="text-5xl font-headline font-bold" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
       </div>
 
       <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
@@ -473,7 +539,7 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
-      <form id="contact-form" class="bg-surface-container-lowest p-12 rounded-xl shadow-sm flex flex-col gap-5" style="display:none;">
+      <form id="contact-form" class="p-12 rounded-2xl flex flex-col gap-5" style="display:none;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.03);">
         <input id="company-name" type="text" placeholder="Votre entreprise"
           class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.enterprise"/>
         <input id="company-email" type="email" placeholder="Email professionnel"
@@ -499,10 +565,10 @@ body { font-family: 'Manrope', sans-serif; }
 
 </main>
 
-<!-- ── FOOTER ── -->
-<footer class="bg-slate-50 border-t border-slate-100 mt-0">
-  <div class="flex flex-col md:flex-row justify-between items-center px-12 py-12 gap-6 max-w-screen-2xl mx-auto">
-    <div class="font-newsreader italic font-semibold text-xl text-primary">
+<!-- ── FOOTER — premium ── -->
+<footer style="background:linear-gradient(180deg,#f8faff,#f0f4ff);border-top:1px solid rgba(0,40,142,.06);" class="mt-0">
+  <div class="flex flex-col md:flex-row justify-between items-center px-12 py-14 gap-6 max-w-screen-2xl mx-auto">
+    <div class="font-newsreader italic font-semibold text-xl" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
       Expert<span class="not-italic font-bold">ERP</span>Hub
     </div>
     <div class="flex flex-wrap justify-center gap-8 font-manrope text-sm">
