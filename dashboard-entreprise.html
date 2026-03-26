@@ -73,13 +73,13 @@ a{color:inherit;text-decoration:none;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
 /* -- PLAN SECTION -- */
-.plan-box{background:linear-gradient(135deg,rgba(0,40,142,.04),rgba(0,88,190,.02));border:1px solid rgba(0,88,190,.2);border-radius:22px;padding:1.5rem;margin-bottom:2rem;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.plan-box{background:linear-gradient(135deg,rgba(0,40,142,.04),rgba(0,88,190,.02));border:1px solid rgba(0,88,190,.2);border-radius:16px;padding:1.1rem 1.25rem;margin-bottom:0;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);display:flex;flex-direction:column;justify-content:center;}
 .plan-box:hover{box-shadow:0 4px 12px rgba(0,40,142,.08);border-color:rgba(0,88,190,.3);}
-.plan-title{font-family:var(--font-serif);font-size:1.3rem;margin-bottom:.5rem;color:#00288e;}
-.plan-subtitle{font-size:.85rem;color:#444653;margin-bottom:1rem;}
-.progress-bar{background:rgba(196,197,213,.2);height:8px;border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);}
+.plan-title{font-family:var(--font-serif);font-size:1.05rem;margin-bottom:.3rem;color:#00288e;font-weight:600;}
+.plan-subtitle{font-size:.75rem;color:#444653;margin-bottom:.6rem;}
+.progress-bar{background:rgba(196,197,213,.2);height:6px;border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);}
 .progress-fill{background:linear-gradient(90deg,#00288e 0%,#0058be 100%);height:100%;transition:width .4s cubic-bezier(.4,.0,.2,1);border-radius:999px;box-shadow:0 0 12px rgba(0,88,190,.4);}
-.progress-label{font-size:.75rem;color:#9ca3af;margin-top:.5rem;font-weight:500;}
+.progress-label{font-size:.7rem;color:#9ca3af;margin-top:.4rem;font-weight:500;}
 
 /* -- TABLE -- */
 .table-container{background:#ffffff;border:1px solid rgba(196,197,213,.35);border-radius:22px;overflow:hidden;margin-bottom:2rem;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:all .3s ease;}
@@ -165,10 +165,14 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
   .team-form{grid-template-columns:1fr;}
 }
 
+  /* -- DASHBOARD ROWS (horizontal layout) -- */
+  .dash-row{display:flex;gap:1.25rem;align-items:stretch;margin-bottom:1.25rem;}
+  @media(max-width:900px){.dash-row{flex-direction:column;}}
+
   /* -- KPI SECTION -- */
-  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
-  .kpi-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:22px;padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:.4rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
-  .kpi-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:0;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:0;}
+  .kpi-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.25rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;border-radius:0;}
   .kpi-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.08);transform:translateY(-2px);border-color:rgba(0,40,142,.2);}
   .kpi-card.kpi-blue{border-left-color:#00288e;}
   .kpi-card.kpi-blue::before{background:#00288e;}
@@ -178,17 +182,17 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
   .kpi-card.kpi-amber::before{background:#c2410c;}
   .kpi-card.kpi-violet{border-left-color:#7c3aed;}
   .kpi-card.kpi-violet::before{background:#7c3aed;}
-  .kpi-icon{font-size:1.3rem;color:#444653;}
-  .kpi-value{font-size:2rem;font-weight:700;line-height:1.1;color:#191c1e;font-family:var(--font-main);}
-  .kpi-label{font-size:.7rem;color:#444653;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
-  .kpi-trend{font-size:.75rem;font-weight:500;color:#444653;}
+  .kpi-icon{font-size:.85rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+  .kpi-value{font-size:1.6rem;font-weight:700;line-height:1.1;color:#191c1e;font-family:var(--font-main);}
+  .kpi-label{font-size:.65rem;color:#444653;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
+  .kpi-trend{font-size:.7rem;font-weight:500;color:#9ca3af;}
   .kpi-trend.up{color:#059669;}
-  .kpi-chart-row{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:22px;padding:1.25rem 1.75rem;margin-bottom:1.75rem;display:flex;align-items:center;gap:2.5rem;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease;}
+  .kpi-chart-row{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1rem 1.25rem;margin-bottom:0;display:flex;align-items:center;gap:1.25rem;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease;}
   .kpi-chart-row:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:rgba(0,40,142,.15);}
-  .kpi-chart-title{font-family:var(--font-serif);font-size:1.15rem;font-weight:600;margin-bottom:.9rem;color:#191c1e;}
-  .kpi-chart-legend{display:flex;flex-direction:column;gap:.6rem;}
-  .kpi-legend-item{display:flex;align-items:center;gap:.6rem;font-size:.83rem;color:#191c1e;}
-  .kpi-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .kpi-chart-title{font-family:var(--font-serif);font-size:1rem;font-weight:600;margin-bottom:.5rem;color:#191c1e;}
+  .kpi-chart-legend{display:flex;flex-direction:column;gap:.35rem;}
+  .kpi-legend-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#191c1e;}
+  .kpi-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:600px){.kpi-grid{grid-template-columns:1fr;}.kpi-chart-row{flex-direction:column;gap:1rem;}}
 
@@ -215,12 +219,13 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
 .tab-button{flex:unset;padding:.95rem 1.35rem;border:none;background:none;cursor:pointer;font-size:.76rem;font-weight:700;color:#444653;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;font-family:var(--font-main);letter-spacing:.06em;text-transform:uppercase;}
 .tab-button:hover{color:#00288e;background:rgba(0,40,142,.04);}
 .tab-button.active{color:#00288e;border-bottom-color:#00288e;}
-.content{flex:1;padding:1.75rem 2rem;overflow-y:auto;background:transparent;}
-.section-title{font-family:var(--font-serif);font-size:2rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.25rem;color:#00288e;}
+.content{flex:1;padding:1.25rem 2rem;overflow-y:auto;background:transparent;}
+.section-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;letter-spacing:-.02em;margin-bottom:.15rem;color:#00288e;}
+.section-sub{font-size:.82rem;color:#64748b;margin-bottom:1rem;}
 
 /* ═══ RESOURCE CARDS GRID (Premium) ═══ */
-.resource-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.25rem;margin-top:.5rem;}
-.resource-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:22px;padding:1.5rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.resource-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:.5rem;}
+.resource-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1.15rem;position:relative;overflow:hidden;transition:all .3s ease;box-shadow:0 1px 4px rgba(0,0,0,.04);}
 .resource-card:hover{box-shadow:0 8px 24px rgba(0,40,142,.1);transform:translateY(-3px);border-color:rgba(0,88,190,.25);}
 .resource-card.type-enterprise{border-left:4px solid #0058be;}
 .resource-card.type-freelance{border-left:4px solid #7c3aed;}
@@ -245,36 +250,7 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
 .resource-filter-bar select,.resource-filter-bar input{padding:.5rem .75rem;border:1px solid rgba(196,197,213,.4);border-radius:14px;font-size:.8rem;font-family:var(--font-main);background:#fff;color:#191c1e;}
 .resource-filter-bar input{min-width:200px;}
 @media(max-width:600px){.resource-cards-grid{grid-template-columns:1fr;}.resource-card-details{grid-template-columns:1fr;}}
-.section-sub{font-size:.88rem;color:#444653;margin-bottom:1.5rem;}
-.plan-box{background:linear-gradient(135deg,rgba(0,40,142,.04),rgba(0,88,190,.02));border:1px solid rgba(0,88,190,.15);border-radius:22px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;backdrop-filter:blur(16px);}
-.plan-title{font-family:var(--font-serif);font-size:1.35rem;font-weight:600;margin-bottom:.3rem;color:#191c1e;}
-.plan-subtitle{font-size:.82rem;color:#444653;margin-bottom:.9rem;}
-.progress-bar{background:rgba(196,197,213,.25);height:8px;border-radius:999px;overflow:hidden;}
-.progress-fill{background:linear-gradient(90deg,#00288e,#0058be);height:100%;border-radius:999px;transition:width .4s ease;}
-.progress-label{font-size:.75rem;color:#444653;margin-top:.5rem;}
-.table-container{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;overflow:hidden;margin-bottom:1.25rem;}
-table{width:100%;border-collapse:collapse;}
-thead{background:#f2f4f6;}
-th{padding:1rem 1.2rem;text-align:left;font-size:.68rem;font-weight:700;color:#444653;font-family:var(--font-main);letter-spacing:.1em;text-transform:uppercase;position:sticky;top:0;z-index:1;}
-td{padding:.9rem 1.2rem;border-top:1px solid rgba(196,197,213,.3);font-size:.88rem;color:#191c1e;}
-tr:hover td{background:#f7f9fb;}
-tr:hover{background:none;}
-.badge{display:inline-flex;align-items:center;padding:.28rem .7rem;border-radius:999px;font-size:.68rem;font-weight:600;font-family:var(--font-main);letter-spacing:.04em;}
-.badge-pending{background:rgba(251,146,60,.1);color:#fb923c;border:1px solid rgba(251,146,60,.25);}
-.badge-approved{background:rgba(74,240,144,.1);color:#4af090;border:1px solid rgba(74,240,144,.25);}
-.badge-rejected{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.25);}
-.import-section{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:22px;padding:1.5rem;margin-top:1.25rem;}
-.import-section h3{font-family:var(--font-serif);font-size:1.4rem;font-weight:600;margin-bottom:1.25rem;color:#191c1e;}
-.drop-zone{border:2px dashed rgba(0,244,254,.2);border-radius:18px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;background:rgba(0,244,254,.03);}
-.drop-zone:hover{border-color:rgba(0,244,254,.4);background:rgba(0,244,254,.05);}
-.drop-label{font-size:.88rem;color:#444653;margin-bottom:.4rem;}
-.drop-hint{font-family:var(--font-main);font-size:.72rem;color:#444653;}
-.import-controls{display:flex;gap:.75rem;margin-top:1.25rem;}
-.btn{padding:.78rem 1.1rem;border:none;border-radius:14px;cursor:pointer;font-family:var(--font-main);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;transition:all .2s ease;font-weight:700;}
-.btn-primary{background:linear-gradient(135deg,#00288e,#0058be);color:#ffffff;box-shadow:0 2px 8px rgba(0,40,142,.2);}
-.btn-primary:hover{transform:translateY(-1px);opacity:.9;}
-.btn-secondary{background:#f2f4f6;color:#00288e;border:1px solid rgba(0,40,142,.15);}
-.btn-secondary:hover{background:#eceef0;color:#00288e;}
+/* (duplicate overrides removed — using earlier compact definitions) */
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .quick-add-section{background:#ffffff;border:1px solid rgba(196,197,213,.4);border-radius:20px;padding:1.25rem;margin-top:1rem;}
 .quick-add-title{font-family:var(--font-serif);font-size:1.28rem;font-weight:600;margin-bottom:.9rem;color:#191c1e;}
@@ -493,8 +469,8 @@ body{line-height:1.5;}
   margin:0 auto;
   padding:1.75rem clamp(1rem,2.2vw,2.2rem);
 }
-.section-title{font-size:clamp(1.85rem,2.4vw,2.35rem);}
-.section-sub{font-size:.96rem;color:#444653;}
+.section-title{font-size:clamp(1.3rem,2vw,1.5rem);}
+.section-sub{font-size:.82rem;color:#64748b;margin-bottom:1rem;}
 
 .tab-button{
   font-size:.79rem;
@@ -690,87 +666,89 @@ body{background:#f7f9fb;}
       <div class="section-title" id="resources-title">Mes Ressources</div>
       <div class="section-sub">Gérez et suivez les consultants associés à votre compte.</div>
 
-      <!-- KPIs -->
-      <div class="kpi-grid">
-        <div class="kpi-card kpi-blue">
-          <div class="kpi-icon">Total</div>
-          <div class="kpi-value" id="kpi-total">0</div>
-          <div class="kpi-label">Consultants</div>
-          <div class="kpi-trend" id="kpi-total-trend">0/0 slots</div>
+      <!-- ═══ ROW 1: KPIs + Donut (horizontal) ═══ -->
+      <div class="dash-row">
+        <div class="kpi-grid" style="flex:1;min-width:0;">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-icon">Total</div>
+            <div class="kpi-value" id="kpi-total">0</div>
+            <div class="kpi-label">Consultants</div>
+            <div class="kpi-trend" id="kpi-total-trend">0/0 slots</div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-icon">Publie</div>
+            <div class="kpi-value" id="kpi-approved">0</div>
+            <div class="kpi-label">Valides</div>
+            <div class="kpi-trend up" id="kpi-approved-pct">0%</div>
+          </div>
+          <div class="kpi-card kpi-amber">
+            <div class="kpi-icon">Taux</div>
+            <div class="kpi-value" id="kpi-tjm">--</div>
+            <div class="kpi-label">Moyen</div>
+            <div class="kpi-trend" id="kpi-rate-unit">$/jour</div>
+          </div>
+          <div class="kpi-card kpi-violet">
+            <div class="kpi-icon">Slots</div>
+            <div class="kpi-value" id="kpi-slots">--</div>
+            <div class="kpi-label">Restants</div>
+            <div class="kpi-trend" id="kpi-slots-sub">sur le plan</div>
+          </div>
         </div>
-        <div class="kpi-card kpi-green">
-          <div class="kpi-icon">Publie</div>
-          <div class="kpi-value" id="kpi-approved">0</div>
-          <div class="kpi-label">Valides</div>
-          <div class="kpi-trend up" id="kpi-approved-pct">0%</div>
-        </div>
-        <div class="kpi-card kpi-amber">
-          <div class="kpi-icon">Taux</div>
-          <div class="kpi-value" id="kpi-tjm">--</div>
-          <div class="kpi-label">Moyen</div>
-          <div class="kpi-trend" id="kpi-rate-unit">$/jour</div>
-        </div>
-        <div class="kpi-card kpi-violet">
-          <div class="kpi-icon">Slots</div>
-          <div class="kpi-value" id="kpi-slots">--</div>
-          <div class="kpi-label">Restants</div>
-          <div class="kpi-trend" id="kpi-slots-sub">sur le plan</div>
-        </div>
-      </div>
-
-      <div class="kpi-chart-row">
-        <div>
-          <div class="kpi-chart-title">Repartition par statut</div>
-          <svg width="120" height="120" viewBox="0 0 120 120" aria-label="Repartition statuts">
-            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(196,197,213,.3)" stroke-width="16"/>
-            <circle id="kpi-arc-approved" cx="60" cy="60" r="48" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-            <circle id="kpi-arc-pending" cx="60" cy="60" r="48" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-            <circle id="kpi-arc-rejected" cx="60" cy="60" r="48" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
-            <text x="60" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#191c1e" id="kpi-donut-center">0</text>
-          </svg>
-        </div>
-        <div class="kpi-chart-legend">
-          <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publies : 0</span></div>
-          <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En revision : 0</span></div>
-          <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
-        </div>
-      </div>
-
-      <!-- Activity KPIs Row 2 -->
-      <div class="kpi-grid">
-        <div class="kpi-card kpi-blue">
-          <div class="kpi-icon">Mail</div>
-          <div class="kpi-value" id="kpi-messages-sent">0</div>
-          <div class="kpi-label">Messages envoyés</div>
-          <div class="kpi-trend" id="kpi-messages-trend">--</div>
-        </div>
-        <div class="kpi-card kpi-green">
-          <div class="kpi-icon">Forum</div>
-          <div class="kpi-value" id="kpi-conversations">0</div>
-          <div class="kpi-label">Conversations</div>
-          <div class="kpi-trend" id="kpi-conversations-trend">--</div>
-        </div>
-        <div class="kpi-card kpi-amber">
-          <div class="kpi-icon">Reply</div>
-          <div class="kpi-value" id="kpi-response-rate">0%</div>
-          <div class="kpi-label">Taux de réponse</div>
-          <div class="kpi-trend" id="kpi-response-trend">--</div>
-        </div>
-        <div class="kpi-card kpi-violet">
-          <div class="kpi-icon">Schedule</div>
-          <div class="kpi-value" id="kpi-last-activity">--</div>
-          <div class="kpi-label">Dernière activité</div>
-          <div class="kpi-trend" id="kpi-activity-trend">--</div>
+        <div class="kpi-chart-row" style="flex:0 0 auto;margin-bottom:0;">
+          <div>
+            <div class="kpi-chart-title" style="font-size:.95rem;margin-bottom:.5rem;">Répartition</div>
+            <svg width="90" height="90" viewBox="0 0 120 120" aria-label="Repartition statuts">
+              <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(196,197,213,.3)" stroke-width="16"/>
+              <circle id="kpi-arc-approved" cx="60" cy="60" r="48" fill="none" stroke="#10b981" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <circle id="kpi-arc-pending" cx="60" cy="60" r="48" fill="none" stroke="#f59e0b" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <circle id="kpi-arc-rejected" cx="60" cy="60" r="48" fill="none" stroke="#ef4444" stroke-width="16" stroke-dasharray="0 301.59" transform="rotate(-90 60 60)"/>
+              <text x="60" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#191c1e" id="kpi-donut-center">0</text>
+            </svg>
+          </div>
+          <div class="kpi-chart-legend">
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#10b981"></div><span id="leg-approved">Publiés : 0</span></div>
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#f59e0b"></div><span id="leg-pending">En révision : 0</span></div>
+            <div class="kpi-legend-item"><div class="kpi-legend-dot" style="background:#ef4444"></div><span id="leg-rejected">Refusés : 0</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="plan-box">
-        <div class="plan-title" id="plan-title">Plan Starter</div>
-        <div class="plan-subtitle" id="plan-subtitle">Slots utilises</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      <!-- ═══ ROW 2: Activity KPIs + Plan (horizontal) ═══ -->
+      <div class="dash-row">
+        <div class="kpi-grid" style="flex:1;min-width:0;">
+          <div class="kpi-card kpi-blue">
+            <div class="kpi-icon">Mail</div>
+            <div class="kpi-value" id="kpi-messages-sent">0</div>
+            <div class="kpi-label">Messages envoyés</div>
+            <div class="kpi-trend" id="kpi-messages-trend">--</div>
+          </div>
+          <div class="kpi-card kpi-green">
+            <div class="kpi-icon">Forum</div>
+            <div class="kpi-value" id="kpi-conversations">0</div>
+            <div class="kpi-label">Conversations</div>
+            <div class="kpi-trend" id="kpi-conversations-trend">--</div>
+          </div>
+          <div class="kpi-card kpi-amber">
+            <div class="kpi-icon">Reply</div>
+            <div class="kpi-value" id="kpi-response-rate">0%</div>
+            <div class="kpi-label">Taux de réponse</div>
+            <div class="kpi-trend" id="kpi-response-trend">--</div>
+          </div>
+          <div class="kpi-card kpi-violet">
+            <div class="kpi-icon">Schedule</div>
+            <div class="kpi-value" id="kpi-last-activity">--</div>
+            <div class="kpi-label">Dernière activité</div>
+            <div class="kpi-trend" id="kpi-activity-trend">--</div>
+          </div>
         </div>
-        <div class="progress-label" id="progress-label">0/5 ressources utilisees</div>
+        <div class="plan-box" style="flex:0 0 280px;margin-bottom:0;">
+          <div class="plan-title" id="plan-title">Plan Starter</div>
+          <div class="plan-subtitle" id="plan-subtitle">Slots utilisés</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+          <div class="progress-label" id="progress-label">0/5 ressources utilisées</div>
+        </div>
       </div>
 
       <!-- Filter bar -->
