@@ -908,19 +908,26 @@ function parseExperienceYears(rawValue) {
 }
 
 function formatRate(notes, consultant) {
-  const amount = notes.tjm_value || consultant.tjm || consultant.tjm_min || null;
-  if (!amount) return 'Tarif sur demande';
+  const min = notes.tjm_value || consultant.tjm || consultant.tjm_min || null;
+  const max = consultant.tjm_max || null;
+  if (!min) return 'Tarif sur demande';
   const unit = String(notes.tjm_type || notes.rate_unit || 'jour').toLowerCase() === 'heure' ? 'heure' : 'jour';
-  return `${amount} $/${unit}`;
+  if (max && max !== min) return `${min} – ${max} $/${unit}`;
+  return `${min} $/${unit}`;
 }
 
 function buildSkillExperienceData(skills, yearsInfo, notes) {
   const explicit = Array.isArray(notes.experience_par_skill) ? notes.experience_par_skill : [];
   if (explicit.length) {
-    return explicit.slice(0, 5).map((item) => ({
+    return explicit.slice(0, 7).map((item) => ({
       label: item.skill || item.nom || item.label || 'Skill',
       value: item.years || item.annees || item.value || '—'
     }));
+  }
+  // Support key-value object format: { "SAP FI/CO": "12 ans", ... }
+  const skillExp = notes.skill_experience;
+  if (skillExp && typeof skillExp === 'object' && !Array.isArray(skillExp)) {
+    return Object.entries(skillExp).slice(0, 7).map(([label, value]) => ({ label, value: String(value) }));
   }
   const totalYears = yearsInfo.years || 0;
   return skills.slice(0, 5).map((skill, index) => {
@@ -1124,8 +1131,22 @@ function renderConsultant(consultant) {
   // Expériences projets
   const projetsSection = document.getElementById('projets-section');
   const projetsContainer = document.getElementById('profile-projets');
+  const structuredProjets = Array.isArray(notes.projets) ? notes.projets : [];
   const projStr2 = notes.experiences_text || notes.experiences_projets || notes.experiences_test || '';
-  if (projStr2 && projetsContainer) {
+  if (structuredProjets.length && projetsContainer) {
+    if (projetsSection) projetsSection.style.display = '';
+    projetsContainer.innerHTML = structuredProjets.map(p => {
+      const tags = Array.isArray(p.tags) ? p.tags.map(t => '<span class="exp-tag">' + escapeHtml(t) + '</span>').join('') : '';
+      return '<div class="experience-item" style="flex-direction:column;gap:10px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">'
+        + '<div><div class="exp-title">' + escapeHtml(p.titre || '') + '</div>'
+        + (p.annee ? '<div class="exp-company-line">' + escapeHtml(p.annee) + '</div>' : '')
+        + '</div></div>'
+        + '<p style="font-size:14px;line-height:1.7;color:#444653;">' + escapeHtml(p.description || '') + '</p>'
+        + (tags ? '<div class="exp-tags">' + tags + '</div>' : '')
+        + '</div>';
+    }).join('');
+  } else if (projStr2 && projetsContainer) {
     if (projetsSection) projetsSection.style.display = '';
     const projets2 = String(projStr2).split(/\n/).map(s => s.trim()).filter(Boolean);
     projetsContainer.innerHTML = projets2.map(p =>
@@ -1147,10 +1168,16 @@ function renderConsultant(consultant) {
   if (Array.isArray(certV2) && certV2.length && typeof certV2[0] === 'object') {
     certifItems = certV2;
   } else {
-    const legacy = Array.isArray(notes.certifications)
-      ? notes.certifications.map(s => String(s).trim()).filter(Boolean)
-      : String(notes.certifications || '').split(',').map(s => s.trim()).filter(Boolean);
-    certifItems = legacy.map(name => ({ erp: '', module: name, level: '' }));
+    const rawCerts = Array.isArray(notes.certifications) ? notes.certifications : [];
+    if (rawCerts.length && typeof rawCerts[0] === 'object') {
+      // Structured format: {nom, level, year}
+      certifItems = rawCerts.map(c => ({ erp: '', module: c.nom || c.name || '', level: c.level || '' }));
+    } else {
+      const legacy = rawCerts.length
+        ? rawCerts.map(s => String(s).trim()).filter(Boolean)
+        : String(notes.certifications || '').split(',').map(s => s.trim()).filter(Boolean);
+      certifItems = legacy.map(name => ({ erp: '', module: name, level: '' }));
+    }
   }
 
   if (certifContainer && certifItems.length) {
