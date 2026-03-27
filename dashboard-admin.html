@@ -644,7 +644,8 @@ body {
 <script>
 const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
 const SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || '';
-const ADMIN_PWD = 'erphub2026!';
+// Mot de passe admin stocké en hash SHA256 (jamais en clair)
+const ADMIN_PWD_HASH = 'dc7e5959782f36f7f99fa7f893d693262581aeb21b87a822a23c66b98e63fc0d';
 const ADMIN_AUTH_KEY = 'admin-auth-v2';
 const DB_ALLOWED_STATUTS = ['en_attente', 'approuve', 'refuse', 'en_mission'];
 
@@ -1043,9 +1044,10 @@ function openApp() {
   });
 }
 
-document.getElementById('login-btn').addEventListener('click', () => {
+document.getElementById('login-btn').addEventListener('click', async () => {
   const pwd = document.getElementById('pwd').value;
-  if (pwd === ADMIN_PWD) {
+  const pwdHash = await sha256Hex(pwd);
+  if (pwdHash === ADMIN_PWD_HASH) {
     sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
     localStorage.setItem(ADMIN_AUTH_KEY, 'true');
     if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });

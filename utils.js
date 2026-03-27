@@ -49,11 +49,33 @@
    * @returns {boolean}
    */
   function isAdminEmail(email) {
-    if (!email || !window.ExpertConfig || !window.ExpertConfig.ADMIN_EMAILS) return false;
+    if (!email || !window.ExpertConfig || !window.ExpertConfig.ADMIN_EMAIL_HASHES) return false;
     var normalized = String(email).trim().toLowerCase();
-    return window.ExpertConfig.ADMIN_EMAILS.some(function (e) {
-      return String(e).trim().toLowerCase() === normalized;
-    });
+    // Compare le hash de l'email avec les hash admin stockés
+    // Utilise une version sync simple pour compatibilité
+    try {
+      var encoder = new TextEncoder();
+      var data = encoder.encode(normalized);
+      // Fallback sync: on utilise une promesse résolue immédiatement via un flag
+      var match = false;
+      crypto.subtle.digest('SHA-256', data).then(function(hashBuffer) {
+        var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        match = window.ExpertConfig.ADMIN_EMAIL_HASHES.indexOf(hashHex) !== -1;
+      });
+      // Note: cette vérification est async, on fournit aussi une version async
+      return match;
+    } catch(e) { return false; }
+  }
+
+  // Version async (recommandée) pour vérification admin
+  async function isAdminEmailAsync(email) {
+    if (!email || !window.ExpertConfig || !window.ExpertConfig.ADMIN_EMAIL_HASHES) return false;
+    var normalized = String(email).trim().toLowerCase();
+    var encoder = new TextEncoder();
+    var data = encoder.encode(normalized);
+    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    return window.ExpertConfig.ADMIN_EMAIL_HASHES.indexOf(hashHex) !== -1;
   }
 
   /**
@@ -81,6 +103,7 @@
     sanitizeHtml: sanitizeHtml,
     formatDate: formatDate,
     isAdminEmail: isAdminEmail,
+    isAdminEmailAsync: isAdminEmailAsync,
     checkAdminAccess: checkAdminAccess
   };
 

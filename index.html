@@ -3311,7 +3311,8 @@ const ACCESS_COPY = {
   }
 };
 
-const PORTAL_ADMIN_PASSWORD = 'erphub2026!';
+// Mot de passe admin stocké en hash SHA256 (jamais en clair côté client)
+const PORTAL_ADMIN_PASSWORD_HASH = 'dc7e5959782f36f7f99fa7f893d693262581aeb21b87a822a23c66b98e63fc0d';
 const ADMIN_PORTAL_REVEAL_KEY = 'experterphub_admin_portal_revealed';
 let portalRole = 'consultant';
 let portalResetMode = false;
@@ -3513,11 +3514,11 @@ document.addEventListener('click', function(e) {
 });
 
 function isAdminPortalVisible() {
+  // Sécurité : accès admin UNIQUEMENT via session authentifiée
+  // Plus de ?admin=1, plus de sessionStorage reveal
   const session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-  if (session && session.role === 'admin') return true;
-  if (sessionStorage.getItem(ADMIN_PORTAL_REVEAL_KEY) === 'true') return true;
-  const params = new URLSearchParams(window.location.search);
-  return params.get('admin') === '1';
+  if (session && session.role === 'admin' && session.adminGranted) return true;
+  return false;
 }
 
 function refreshAdminPortalVisibility() {
@@ -3538,28 +3539,17 @@ function refreshAdminPortalVisibility() {
 }
 
 function unlockAdminPortal(openAfterUnlock) {
-  sessionStorage.setItem(ADMIN_PORTAL_REVEAL_KEY, 'true');
+  // Sécurité : l'accès admin passe UNIQUEMENT par dashboard-admin.html
+  // Le mécanisme de reveal par sessionStorage est désactivé
   refreshAdminPortalVisibility();
-  // Si la modale est déjà ouverte, on force la mise à jour de la visibilité et la sélection du rôle admin
-  const overlay = document.getElementById('overlay-portal');
-  if (overlay && overlay.classList.contains('open')) {
-    setTimeout(() => {
-      refreshAdminPortalVisibility();
-      // Sélectionne le rôle admin via la fonction JS pour garantir l'affichage correct
-      selectPortalRole('admin');
-    }, 10);
+  if (openAfterUnlock) {
+    window.location.href = 'dashboard-admin.html';
   }
-  if (openAfterUnlock) openPortalModal('admin');
 }
 
 function handleAdminRevealGesture() {
-  const now = Date.now();
-  adminRevealClicks = adminRevealClicks.filter((ts) => now - ts < 4000);
-  adminRevealClicks.push(now);
-  if (adminRevealClicks.length >= 5) {
-    adminRevealClicks = [];
-    unlockAdminPortal(true);
-  }
+  // Sécurité : mécanisme de 5 clics désactivé
+  // L'accès admin se fait via dashboard-admin.html uniquement
 }
 
 function openClientSpace() {
@@ -3719,14 +3709,16 @@ async function submitPortalAccess() {
         setPortalFeedback(portalText('passwordRequired'), 'error');
         return;
       }
-      if (password !== PORTAL_ADMIN_PASSWORD) {
+      const adminInputHash = await sha256Hex(password);
+      if (adminInputHash !== PORTAL_ADMIN_PASSWORD_HASH) {
         setPortalFeedback(portalText('adminPassword'), 'error');
         return;
       }
-      // Verify email-based admin access as additional security layer
+      // Verify email-based admin access via hash comparison (async)
       const adminEmail = normalizeEmailAddress(document.getElementById('portal-email').value);
-      if (window.ExpertUtils && window.ExpertUtils.isAdminEmail) {
-        if (!adminEmail || !window.ExpertUtils.isAdminEmail(adminEmail)) {
+      if (window.ExpertUtils && window.ExpertUtils.isAdminEmailAsync) {
+        const isAdmin = await window.ExpertUtils.isAdminEmailAsync(adminEmail);
+        if (!adminEmail || !isAdmin) {
           setPortalFeedback('Accès admin non autorisé pour cet email', 'error');
           return;
         }

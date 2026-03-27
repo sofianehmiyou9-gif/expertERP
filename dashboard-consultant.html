@@ -2080,7 +2080,7 @@ function renderStatusBanner() {
   if (c.statut === 'refuse' && notes.motif_refus) {
     motifHtml = `<div style="margin-top:.65rem;padding:.6rem .85rem;background:rgba(0,0,0,.06);border-radius:4px;font-size:.82rem;"><strong>Raison :</strong> ${safe(notes.motif_refus)}</div>`;
   }
-  bannerEl.innerHTML = `<div class="status-icon">${config.icon}</div><div>${config.text}${motifHtml}</div>`;
+  bannerEl.innerHTML = `<div class="status-icon">${safe(config.icon)}</div><div>${safe(config.text)}${motifHtml}</div>`;
 
   if (summaryTitleEl) summaryTitleEl.textContent = config.label;
   if (summaryVisibilityEl) summaryVisibilityEl.textContent = config.visibility;

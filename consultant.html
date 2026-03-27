@@ -1331,7 +1331,7 @@ async function sendContactMessage() {
    ═══════════════════════════════════════════════════════════════ */
 
 async function generateAccessTokenHash(email) {
-  var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + (ExpertConfig && ExpertConfig.ACCESS_TOKEN_SECRET || '');
+  var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + (ExpertConfig && ExpertConfig.ACCESS_TOKEN_HASH || '');
   var bytes = new TextEncoder().encode(raw);
   var hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
