@@ -502,43 +502,45 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .filter-input:focus,.filter-select:focus{border-color:var(--electric);box-shadow:0 0 0 4px rgba(59,130,246,.16);background:#fff;}
 .filter-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:2rem;background-image:var(--select-arrow),linear-gradient(180deg,#ffffff,#f8fafc);background-repeat:no-repeat;background-position:right .7rem center,center;background-size:11px 8px,100% 100%;cursor:pointer;}
 
-/* ── CONSULTANT CARDS – PREMIUM COMPACT HORIZONTAL ── */
-.consultants-grid{padding:0;display:flex;flex-direction:column;gap:14px;}
-.consultant-card{background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:row;box-shadow:0 0 0 1px rgba(0,40,142,.04),0 2px 12px rgba(15,23,42,.05);transition:box-shadow .3s,transform .25s;position:relative;padding:20px 24px;gap:18px;align-items:flex-start;}
+/* ── CONSULTANT CARDS – PREMIUM 2-COL GRID ── */
+.consultants-grid{padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.consultant-card{background:#fff;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(0,40,142,.04),0 2px 12px rgba(15,23,42,.05);transition:box-shadow .3s,transform .25s;position:relative;padding:16px 18px;gap:0;}
 .consultant-card:hover{box-shadow:0 0 0 1px rgba(0,40,142,.08),0 12px 40px rgba(0,40,142,.1);transform:translateY(-2px);}
 .consultant-card.professional-resource{background:linear-gradient(135deg,#fafbff,#f0f4ff);}
+/* Row 1 inside card: avatar + identity inline */
+.consultant-card-top-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
 /* Avatar — compact circular */
-.consultant-card-photo-wrap{position:relative;width:64px;height:64px;flex-shrink:0;overflow:hidden;border-radius:50%;background:#e8eef8;box-shadow:0 4px 12px rgba(0,40,142,.1);}
+.consultant-card-photo-wrap{position:relative;width:48px;height:48px;flex-shrink:0;overflow:hidden;border-radius:50%;background:#e8eef8;box-shadow:0 4px 12px rgba(0,40,142,.1);}
 .consultant-card-photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;transition:filter .5s ease;}
 .consultant-card:hover .consultant-card-photo{filter:none;}
-.consultant-card-photo-initials{width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:.04em;border-radius:50%;}
+.consultant-card-photo-initials{width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:.04em;border-radius:50%;}
 .consultant-card-avail-badge{display:none;}
-.consultant-card-content{flex:1;min-width:0;padding:0;display:flex;flex-direction:column;gap:8px;}
-.consultant-card-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.consultant-card-role-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);opacity:.8;line-height:1.4;}
-.consultant-card-verified{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 6px;border-radius:20px;background:rgba(0,40,142,.05);color:var(--primary);font-size:9.5px;font-weight:700;flex-shrink:0;}
-.consultant-source-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+.consultant-card-content{flex:1;min-width:0;padding:0;display:flex;flex-direction:column;gap:5px;}
+.consultant-card-header{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.consultant-card-role-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);opacity:.8;line-height:1.4;}
+.consultant-card-verified{display:inline-flex;align-items:center;gap:3px;padding:2px 6px 2px 5px;border-radius:20px;background:rgba(0,40,142,.05);color:var(--primary);font-size:8.5px;font-weight:700;flex-shrink:0;}
+.consultant-source-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
 .consultant-source-badge.enterprise-source{background:rgba(0,88,190,.06);color:#0058be;border:1px solid rgba(0,88,190,.15);}
 .consultant-source-badge.freelance-source{background:rgba(124,58,237,.06);color:#7c3aed;border:1px solid rgba(124,58,237,.15);}
-.consultant-card-name{font-family:var(--font-serif);font-size:1.25rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.15;letter-spacing:-.01em;margin:0;}
-.consultant-card-bio{font-size:12.5px;line-height:1.6;color:#64748b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
-.consultant-card-chips{display:flex;flex-wrap:wrap;gap:5px;}
-.consultant-card-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:11px;font-weight:500;border:1px solid rgba(0,0,0,.04);}
+.consultant-card-name{font-family:var(--font-serif);font-size:1.1rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.15;letter-spacing:-.01em;margin:0;}
+.consultant-card-bio{font-size:11.5px;line-height:1.5;color:#64748b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
+.consultant-card-chips{display:flex;flex-wrap:wrap;gap:4px;}
+.consultant-card-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:10px;font-weight:500;border:1px solid rgba(0,0,0,.04);}
 .consultant-card-chip.primary{background:linear-gradient(135deg,#e8edff,#dde3ff);color:var(--primary);font-weight:700;border-color:rgba(0,40,142,.1);}
 /* Stats strip — compact horizontal bar */
-.consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:10px;border-top:1px solid #f1f5f9;}
-.consultant-card-stats-row{display:flex;gap:0;align-items:center;flex-wrap:wrap;min-width:0;background:#f8fafc;border-radius:10px;padding:6px 12px;border:1px solid rgba(0,0,0,.03);}
-.consultant-card-stat-item{display:flex;align-items:center;gap:4px;min-width:0;padding:0 12px;border-right:1px solid rgba(0,0,0,.06);}
+.consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px solid #f1f5f9;}
+.consultant-card-stats-row{display:flex;gap:0;align-items:center;flex-wrap:wrap;min-width:0;background:#f8fafc;border-radius:8px;padding:4px 8px;border:1px solid rgba(0,0,0,.03);}
+.consultant-card-stat-item{display:flex;align-items:center;gap:3px;min-width:0;padding:0 8px;border-right:1px solid rgba(0,0,0,.06);}
 .consultant-card-stat-item:last-child{border-right:none;padding-right:0;}
 .consultant-card-stat-item:first-child{padding-left:0;}
-.consultant-card-stat-num{font-family:var(--font-serif);font-size:.85rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.consultant-card-stat-lbl{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;white-space:nowrap;}
-.consultant-card-btns{display:flex;gap:6px;flex-shrink:0;}
-.consultant-card-btn-p{padding:8px 18px;border-radius:10px;border:none;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,40,142,.18);transition:all .2s;}
+.consultant-card-stat-num{font-family:var(--font-serif);font-size:.75rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.consultant-card-stat-lbl{font-size:7.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;white-space:nowrap;}
+.consultant-card-btns{display:flex;gap:5px;flex-shrink:0;}
+.consultant-card-btn-p{padding:6px 14px;border-radius:8px;border:none;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,40,142,.18);transition:all .2s;}
 .consultant-card-btn-p:hover{box-shadow:0 4px 16px rgba(0,40,142,.25);transform:translateY(-1px);}
-.consultant-card-btn-s{padding:8px 18px;border-radius:10px;border:1.5px solid rgba(0,40,142,.15);background:transparent;color:var(--primary);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.consultant-card-btn-s{padding:6px 14px;border-radius:8px;border:1.5px solid rgba(0,40,142,.15);background:transparent;color:var(--primary);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
 .consultant-card-btn-s:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.3);}
-.empty-state{padding:3rem;text-align:center;color:var(--muted);}
+.empty-state{padding:3rem;text-align:center;color:var(--muted);grid-column:1/-1;}
 
 /* ── PREMIUM SHOWCASE SECTION ── */
 .premium-showcase{padding:6rem 2.5rem;background:#0f172a url('assets/bg-images/platform-showcase.png') center/cover no-repeat;background-blend-mode:overlay;position:relative;overflow:hidden;color:#fff;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);}
@@ -598,22 +600,24 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
   .filters-bar{position:sticky;top:0;z-index:90;padding:.85rem 1rem;gap:.55rem;background:rgba(248,250,252,.95);backdrop-filter:blur(12px);}
   .filter-input,.filter-select{width:100%;min-width:0;font-size:.82rem;}
 
-  .consultants-grid{gap:10px;}
-  .consultant-card{flex-direction:row;padding:14px 16px;gap:12px;}
-  .consultant-card-photo-wrap{width:48px;height:48px;}
-  .consultant-card-photo-initials{font-size:1rem;}
-  .consultant-card-content{gap:6px;}
-  .consultant-card-name{font-size:1.1rem;}
-  .consultant-card-stats-row{flex-wrap:wrap;gap:4px;}
-  .consultant-card-stat-item{padding:0 8px;}
-  .consultant-card-footer{flex-direction:column;align-items:flex-start;gap:8px;}
-  .consultant-card-btns{width:100%;}
+  .consultants-grid{grid-template-columns:1fr;gap:10px;}
+  .consultant-card{padding:12px 14px;}
+  .consultant-card-photo-wrap{width:40px;height:40px;}
+  .consultant-card-photo-initials{font-size:.9rem;}
+  .consultant-card-content{gap:5px;}
+  .consultant-card-name{font-size:1rem;}
+  .consultant-card-stats-row{flex-wrap:wrap;gap:3px;}
+  .consultant-card-stat-item{padding:0 6px;}
+  .consultant-card-footer{flex-direction:column;align-items:flex-start;gap:6px;}
   .consultant-card-btns{width:100%;}
   .consultant-card-btn-p,.consultant-card-btn-s{flex:1;text-align:center;}
 }
 
 @media(max-width:1120px){
-  /* auto-fill handles this */
+  .consultants-grid{grid-template-columns:1fr 1fr;gap:10px;}
+}
+@media(max-width:900px){
+  .consultants-grid{grid-template-columns:1fr;}
 }
 
 
@@ -5273,20 +5277,24 @@ function renderConsultants(list) {
       : '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#6b7280;">' + escapeHtml(availability.label) + '</span>';
 
     return `<article class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${escapeHtml(c.id)}" style="cursor:pointer;" aria-label="${escapeHtml(displayName)}">
-      <div class="consultant-card-photo-wrap">
-        ${photoHtml}
+      <div class="consultant-card-top-row">
+        <div class="consultant-card-photo-wrap">
+          ${photoHtml}
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div class="consultant-card-header">
+            <span class="consultant-card-role-label">${escapeHtml(title)}</span>
+            ${sourceTypeBadge}
+            <span class="consultant-card-verified">
+              <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Expert validé
+            </span>
+            ${availDot}
+          </div>
+          <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
+        </div>
       </div>
       <div class="consultant-card-content">
-        <div class="consultant-card-header">
-          <span class="consultant-card-role-label">${escapeHtml(title)}</span>
-          ${sourceTypeBadge}
-          <span class="consultant-card-verified">
-            <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Expert validé
-          </span>
-          ${availDot}
-        </div>
-        <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
         ${resume ? `<p class="consultant-card-bio">${escapeHtml(resume)}</p>` : ''}
         <div class="consultant-card-chips">${chips}</div>
         <div class="consultant-card-footer">
