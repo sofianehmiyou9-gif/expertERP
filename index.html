@@ -502,39 +502,42 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .filter-input:focus,.filter-select:focus{border-color:var(--electric);box-shadow:0 0 0 4px rgba(59,130,246,.16);background:#fff;}
 .filter-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:2rem;background-image:var(--select-arrow),linear-gradient(180deg,#ffffff,#f8fafc);background-repeat:no-repeat;background-position:right .7rem center,center;background-size:11px 8px,100% 100%;cursor:pointer;}
 
-/* ── CONSULTANT CARDS – HORIZONTAL EDITORIAL LAYOUT ── */
-.consultants-grid{padding:0;display:flex;flex-direction:column;gap:20px;}
-.consultant-card{background:#fff;border-radius:20px;overflow:hidden;display:flex;flex-direction:row;box-shadow:0 0 0 1px rgba(25,28,30,.05),0 8px 32px rgba(15,23,42,.07);transition:box-shadow .3s,transform .25s;position:relative;}
-.consultant-card:hover{box-shadow:0 0 0 1px rgba(0,40,142,.1),0 16px 48px rgba(0,40,142,.12);transform:translateY(-3px);}
-.consultant-card.professional-resource{background:#fafbff;}
-.consultant-card-photo-wrap{position:relative;width:220px;flex-shrink:0;overflow:hidden;background:#e8eef8;}
-.consultant-card-photo{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(80%);transition:filter .7s ease;}
-.consultant-card:hover .consultant-card-photo{filter:grayscale(0%);}
-.consultant-card-photo-initials{width:100%;height:100%;min-height:240px;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:2.8rem;font-weight:700;color:#fff;letter-spacing:.04em;}
-.consultant-card-avail-badge{position:absolute;bottom:12px;left:12px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#dcfce7;color:#16a34a;border:1px solid rgba(22,163,74,.18);}
-.consultant-card-avail-badge.unavailable{background:#f3f4f6;color:#6b7280;border-color:transparent;}
-.consultant-card-content{flex:1;min-width:0;padding:22px 26px;display:flex;flex-direction:column;gap:12px;}
-.consultant-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.consultant-card-role-label{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--primary);opacity:.75;line-height:1.4;}
-.consultant-card-verified{display:inline-flex;align-items:center;gap:5px;padding:3px 10px 3px 8px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-size:10.5px;font-weight:700;flex-shrink:0;}
-.consultant-source-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
-.consultant-source-badge.enterprise-source{background:rgba(0,88,190,.08);color:#0058be;border:1px solid rgba(0,88,190,.2);}
-.consultant-source-badge.freelance-source{background:rgba(124,58,237,.08);color:#7c3aed;border:1px solid rgba(124,58,237,.2);}
-.consultant-card-name{font-family:var(--font-serif);font-size:1.55rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.15;letter-spacing:-.02em;margin:0;}
-.consultant-card-bio{font-size:13.5px;line-height:1.65;color:#64748b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
-.consultant-card-chips{display:flex;flex-wrap:wrap;gap:6px;}
-.consultant-card-chip{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:12px;font-weight:500;border:1px solid rgba(0,0,0,.05);}
-.consultant-card-chip.primary{background:var(--primary-light);color:var(--primary);font-weight:700;}
-.consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #f1f5f9;}
-.consultant-card-stats-row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;min-width:0;}
-.consultant-card-stat-item{display:flex;flex-direction:column;gap:1px;min-width:0;max-width:140px;}
-.consultant-card-stat-num{font-family:var(--font-serif);font-size:1.05rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.consultant-card-stat-lbl{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9ca3af;}
-.consultant-card-btns{display:flex;gap:8px;flex-shrink:0;}
-.consultant-card-btn-p{padding:9px 20px;border-radius:999px;border:none;background:linear-gradient(135deg,var(--primary),var(--primary-container));color:#fff;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,40,142,.2);transition:opacity .2s,box-shadow .2s;}
-.consultant-card-btn-p:hover{opacity:.9;box-shadow:0 6px 20px rgba(0,40,142,.3);}
-.consultant-card-btn-s{padding:9px 20px;border-radius:999px;border:1.5px solid rgba(0,40,142,.2);background:transparent;color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s;}
-.consultant-card-btn-s:hover{background:var(--primary-light);border-color:rgba(0,40,142,.35);}
+/* ── CONSULTANT CARDS – PREMIUM COMPACT HORIZONTAL ── */
+.consultants-grid{padding:0;display:flex;flex-direction:column;gap:14px;}
+.consultant-card{background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:row;box-shadow:0 0 0 1px rgba(0,40,142,.04),0 2px 12px rgba(15,23,42,.05);transition:box-shadow .3s,transform .25s;position:relative;padding:20px 24px;gap:18px;align-items:flex-start;}
+.consultant-card:hover{box-shadow:0 0 0 1px rgba(0,40,142,.08),0 12px 40px rgba(0,40,142,.1);transform:translateY(-2px);}
+.consultant-card.professional-resource{background:linear-gradient(135deg,#fafbff,#f0f4ff);}
+/* Avatar — compact circular */
+.consultant-card-photo-wrap{position:relative;width:64px;height:64px;flex-shrink:0;overflow:hidden;border-radius:50%;background:#e8eef8;box-shadow:0 4px 12px rgba(0,40,142,.1);}
+.consultant-card-photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;transition:filter .5s ease;}
+.consultant-card:hover .consultant-card-photo{filter:none;}
+.consultant-card-photo-initials{width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:.04em;border-radius:50%;}
+.consultant-card-avail-badge{display:none;}
+.consultant-card-content{flex:1;min-width:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.consultant-card-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.consultant-card-role-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);opacity:.8;line-height:1.4;}
+.consultant-card-verified{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 6px;border-radius:20px;background:rgba(0,40,142,.05);color:var(--primary);font-size:9.5px;font-weight:700;flex-shrink:0;}
+.consultant-source-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+.consultant-source-badge.enterprise-source{background:rgba(0,88,190,.06);color:#0058be;border:1px solid rgba(0,88,190,.15);}
+.consultant-source-badge.freelance-source{background:rgba(124,58,237,.06);color:#7c3aed;border:1px solid rgba(124,58,237,.15);}
+.consultant-card-name{font-family:var(--font-serif);font-size:1.25rem;font-style:italic;font-weight:600;color:var(--ink);line-height:1.15;letter-spacing:-.01em;margin:0;}
+.consultant-card-bio{font-size:12.5px;line-height:1.6;color:#64748b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
+.consultant-card-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.consultant-card-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:11px;font-weight:500;border:1px solid rgba(0,0,0,.04);}
+.consultant-card-chip.primary{background:linear-gradient(135deg,#e8edff,#dde3ff);color:var(--primary);font-weight:700;border-color:rgba(0,40,142,.1);}
+/* Stats strip — compact horizontal bar */
+.consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:10px;border-top:1px solid #f1f5f9;}
+.consultant-card-stats-row{display:flex;gap:0;align-items:center;flex-wrap:wrap;min-width:0;background:#f8fafc;border-radius:10px;padding:6px 12px;border:1px solid rgba(0,0,0,.03);}
+.consultant-card-stat-item{display:flex;align-items:center;gap:4px;min-width:0;padding:0 12px;border-right:1px solid rgba(0,0,0,.06);}
+.consultant-card-stat-item:last-child{border-right:none;padding-right:0;}
+.consultant-card-stat-item:first-child{padding-left:0;}
+.consultant-card-stat-num{font-family:var(--font-serif);font-size:.85rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.consultant-card-stat-lbl{font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9ca3af;white-space:nowrap;}
+.consultant-card-btns{display:flex;gap:6px;flex-shrink:0;}
+.consultant-card-btn-p{padding:8px 18px;border-radius:10px;border:none;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,40,142,.18);transition:all .2s;}
+.consultant-card-btn-p:hover{box-shadow:0 4px 16px rgba(0,40,142,.25);transform:translateY(-1px);}
+.consultant-card-btn-s{padding:8px 18px;border-radius:10px;border:1.5px solid rgba(0,40,142,.15);background:transparent;color:var(--primary);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.consultant-card-btn-s:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.3);}
 .empty-state{padding:3rem;text-align:center;color:var(--muted);}
 
 /* ── PREMIUM SHOWCASE SECTION ── */
@@ -595,13 +598,16 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
   .filters-bar{position:sticky;top:0;z-index:90;padding:.85rem 1rem;gap:.55rem;background:rgba(248,250,252,.95);backdrop-filter:blur(12px);}
   .filter-input,.filter-select{width:100%;min-width:0;font-size:.82rem;}
 
-  .consultants-grid{gap:14px;}
-  .consultant-card{flex-direction:column;}
-  .consultant-card-photo-wrap{width:100%;height:200px;}
-  .consultant-card-photo-initials{min-height:200px;}
-  .consultant-card-content{padding:16px 18px;gap:10px;}
-  .consultant-card-name{font-size:1.3rem;}
-  .consultant-card-footer{flex-direction:column;align-items:flex-start;gap:12px;}
+  .consultants-grid{gap:10px;}
+  .consultant-card{flex-direction:row;padding:14px 16px;gap:12px;}
+  .consultant-card-photo-wrap{width:48px;height:48px;}
+  .consultant-card-photo-initials{font-size:1rem;}
+  .consultant-card-content{gap:6px;}
+  .consultant-card-name{font-size:1.1rem;}
+  .consultant-card-stats-row{flex-wrap:wrap;gap:4px;}
+  .consultant-card-stat-item{padding:0 8px;}
+  .consultant-card-footer{flex-direction:column;align-items:flex-start;gap:8px;}
+  .consultant-card-btns{width:100%;}
   .consultant-card-btns{width:100%;}
   .consultant-card-btn-p,.consultant-card-btn-s{flex:1;text-align:center;}
 }
@@ -1997,20 +2003,20 @@ function toggleTheme() {
      PAGE — CONSULTANTS (Stitch sidebar layout)
 ══════════════════════════════════════════════════ -->
 <div class="page" id="page-consultants">
-  <div class="pt-20 pb-16 px-8 max-w-screen-2xl mx-auto min-h-screen font-manrope">
-    <div class="flex flex-col md:flex-row gap-10">
+  <div class="pt-20 pb-10 px-6 lg:px-8 max-w-screen-2xl mx-auto min-h-screen font-manrope">
+    <div class="flex flex-col md:flex-row gap-8">
 
-      <!-- Sidebar Filters — Stitch style -->
-      <aside class="w-full md:w-80 flex-shrink-0">
-        <div class="sticky top-24 space-y-8">
+      <!-- Sidebar Filters — Premium glass -->
+      <aside class="w-full md:w-72 flex-shrink-0">
+        <div class="sticky top-20 space-y-5">
           <div>
-            <h1 class="font-newsreader text-4xl italic mb-2 text-on-surface" data-i18n="page.consultants.title">Consultants ERP</h1>
-            <p class="text-on-surface-variant font-manrope text-sm tracking-wide" data-i18n="page.consultants.subtitle">Experts vérifiés, disponibles rapidement</p>
+            <h1 class="font-newsreader text-2xl italic mb-1 text-on-surface" data-i18n="page.consultants.title">Consultants ERP</h1>
+            <p class="text-on-surface-variant font-manrope text-xs tracking-wide" data-i18n="page.consultants.subtitle">Experts vérifiés, disponibles rapidement</p>
           </div>
-          <div class="space-y-7 bg-surface-container-low p-7 rounded-xl">
+          <div class="space-y-5 p-5 rounded-2xl" style="background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border:1px solid rgba(0,40,142,.06);box-shadow:0 2px 12px rgba(0,0,0,.04);">
             <!-- Search -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Recherche</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Recherche</h3>
               <div class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2">
                 <span class="text-outline text-base" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
                 <input class="flex-1 bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-outline font-manrope" id="f-search" placeholder="Nom, compétence…" data-filter-consultants="true" data-i18n="filter.search">
@@ -2018,7 +2024,7 @@ function toggleTheme() {
             </section>
             <!-- ERP filter -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Spécialisation ERP</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Spécialisation ERP</h3>
               <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-erp" data-filter-consultants="true">
                 <option value="" data-i18n="filter.erp">Tous les ERP</option>
                 <option>SAP</option>
@@ -2031,7 +2037,7 @@ function toggleTheme() {
             </section>
             <!-- Role filter -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Rôle</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Rôle</h3>
               <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-role" data-filter-consultants="true">
                 <option value="" data-i18n="filter.role">Tous les rôles</option>
                 <option>Consultant fonctionnel</option>
@@ -2044,7 +2050,7 @@ function toggleTheme() {
             </section>
             <!-- Mode filter -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Mode de travail</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Mode de travail</h3>
               <div class="flex gap-2 flex-wrap">
                 <button class="flex-1 py-2 px-3 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold font-manrope hover:bg-primary hover:text-on-primary transition-all" onclick="document.getElementById('f-mode').value='';filterConsultants&&filterConsultants()">Tous</button>
                 <button class="flex-1 py-2 px-3 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold font-manrope hover:bg-primary hover:text-on-primary transition-all" onclick="document.getElementById('f-mode').value='Remote';filterConsultants&&filterConsultants()">Remote</button>
@@ -2058,7 +2064,7 @@ function toggleTheme() {
             </section>
             <!-- ═══ NOUVEAU: Filtre Ville ═══ -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Ville</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Ville</h3>
               <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-ville" data-filter-consultants="true">
                 <option value="">Toutes les villes</option>
                 <option>Montreal</option>
@@ -2070,7 +2076,7 @@ function toggleTheme() {
             </section>
             <!-- ═══ NOUVEAU: Filtre Disponibilité ═══ -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Disponibilit&#233;</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Disponibilit&#233;</h3>
               <select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container cursor-pointer" id="f-dispo" data-filter-consultants="true">
                 <option value="">Toutes</option>
                 <option value="Immédiate">Imm&#233;diate</option>
@@ -2080,15 +2086,15 @@ function toggleTheme() {
             </section>
             <!-- ═══ NOUVEAU: Filtre TJM (budget max) ═══ -->
             <section>
-              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 font-manrope">Tarif max ($/jour)</h3>
+              <h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-2 font-manrope">Tarif max ($/jour)</h3>
               <input type="number" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm font-manrope text-on-surface focus:ring-2 focus:ring-primary-container" id="f-tjm" placeholder="Ex: 1000" min="0" step="50" data-filter-consultants="true">
             </section>
           </div>
           <!-- CTA to become consultant -->
-          <div class="bg-primary p-6 rounded-xl text-on-primary">
-            <h4 class="font-newsreader text-xl font-bold mb-2">Vous êtes consultant ERP ?</h4>
-            <p class="text-on-primary-container text-xs leading-relaxed mb-4 font-manrope">Rejoignez notre réseau d'experts validés et accédez à des mandats directs.</p>
-            <button class="w-full bg-surface-container-lowest text-primary py-2 rounded-lg text-xs font-bold font-manrope hover:opacity-90 transition-all" data-action="open-consultant-modal">Rejoindre la plateforme →</button>
+          <div class="p-4 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e,#00288e,#0046a8);box-shadow:0 8px 24px rgba(0,40,142,.2);">
+            <h4 class="font-newsreader text-base font-bold mb-1">Vous êtes consultant ERP ?</h4>
+            <p class="text-on-primary-container text-xs leading-relaxed mb-3 font-manrope" style="opacity:.8;">Rejoignez notre réseau d'experts validés.</p>
+            <button class="w-full bg-white text-primary py-2 rounded-xl text-xs font-bold font-manrope hover:opacity-90 transition-all" style="box-shadow:0 2px 8px rgba(0,0,0,.1);" data-action="open-consultant-modal">Rejoindre →</button>
           </div>
         </div>
       </aside>
@@ -2096,15 +2102,13 @@ function toggleTheme() {
       <!-- Results Area -->
       <section class="flex-grow min-w-0">
         <!-- Results header -->
-        <div class="flex justify-between items-end mb-8 pb-5 border-b border-outline-variant/20">
-          <div>
-            <nav class="flex text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60 mb-1 font-manrope">
-              <span>ExpertERPHub</span>
-              <span class="mx-2">/</span>
-              <span class="text-primary">Consultants ERP</span>
-            </nav>
-          </div>
-          <button class="bg-primary text-on-primary px-5 py-2 rounded-lg text-xs font-bold font-manrope hover:opacity-90 transition-all" data-action="open-entreprise-modal">Publier une mission</button>
+        <div class="flex justify-between items-center mb-5 pb-3 border-b border-outline-variant/15">
+          <nav class="flex text-[10px] font-bold tracking-widest uppercase text-on-surface-variant/60 font-manrope">
+            <span>ExpertERPHub</span>
+            <span class="mx-2">/</span>
+            <span class="text-primary">Consultants ERP</span>
+          </nav>
+          <button class="px-4 py-2 rounded-xl text-xs font-bold font-manrope hover:opacity-90 transition-all" style="background:linear-gradient(135deg,#00288e,#0058be);color:#fff;box-shadow:0 2px 8px rgba(0,40,142,.18);" data-action="open-entreprise-modal">Publier une mission</button>
         </div>
         <!-- Consultants grid — JS renders here -->
         <div class="consultants-grid" id="consultants-grid">
@@ -5264,19 +5268,23 @@ function renderConsultants(list) {
       ? '<span class="consultant-source-badge enterprise-source">Ressource entreprise</span>'
       : '<span class="consultant-source-badge freelance-source">Freelance</span>';
 
+    const availDot = availability.available
+      ? '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#16a34a;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span> ' + escapeHtml(availability.label) + '</span>'
+      : '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#6b7280;">' + escapeHtml(availability.label) + '</span>';
+
     return `<article class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${escapeHtml(c.id)}" style="cursor:pointer;" aria-label="${escapeHtml(displayName)}">
       <div class="consultant-card-photo-wrap">
         ${photoHtml}
-        <span class="consultant-card-avail-badge${availability.available ? '' : ' unavailable'}">${escapeHtml(availability.label)}</span>
       </div>
       <div class="consultant-card-content">
         <div class="consultant-card-header">
           <span class="consultant-card-role-label">${escapeHtml(title)}</span>
           ${sourceTypeBadge}
           <span class="consultant-card-verified">
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="9" height="9" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Expert validé
           </span>
+          ${availDot}
         </div>
         <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
         ${resume ? `<p class="consultant-card-bio">${escapeHtml(resume)}</p>` : ''}
@@ -5285,24 +5293,19 @@ function renderConsultants(list) {
           <div class="consultant-card-stats-row">
             <div class="consultant-card-stat-item">
               <span class="consultant-card-stat-num">${escapeHtml(String(expNum))}</span>
-              <span class="consultant-card-stat-lbl">Expérience</span>
+              <span class="consultant-card-stat-lbl">Exp.</span>
             </div>
             <div class="consultant-card-stat-item">
               <span class="consultant-card-stat-num">${escapeHtml(cleanLocation || '—')}</span>
-              <span class="consultant-card-stat-lbl">Localisation</span>
+              <span class="consultant-card-stat-lbl">Lieu</span>
             </div>
             <div class="consultant-card-stat-item">
               <span class="consultant-card-stat-num">${escapeHtml(mode)}</span>
               <span class="consultant-card-stat-lbl">Mode</span>
             </div>
-            <!-- ═══ NOUVEAU: TJM + Disponibilité sur la carte ═══ -->
             <div class="consultant-card-stat-item">
-              <span class="consultant-card-stat-num">${escapeHtml(rate || '—')}</span>
+              <span class="consultant-card-stat-num" style="color:var(--primary);">${escapeHtml(rate || '—')}</span>
               <span class="consultant-card-stat-lbl">Tarif</span>
-            </div>
-            <div class="consultant-card-stat-item">
-              <span class="consultant-card-stat-num">${escapeHtml(availability.label || '—')}</span>
-              <span class="consultant-card-stat-lbl">Disponibilit\u00e9</span>
             </div>
           </div>
           <div class="consultant-card-btns">
