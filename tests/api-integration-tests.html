@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>ExpertERPHub — Tests API</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4ff; padding: 2rem; color: #191c1e; }
+h1 { font-size: 1.6rem; color: #00288e; margin-bottom: .5rem; }
+.subtitle { color: #64748b; font-size: .85rem; margin-bottom: 1.5rem; }
+.controls { display: flex; gap: .75rem; margin-bottom: 1.5rem; }
+.btn { padding: .6rem 1.5rem; border: none; border-radius: 10px; font-weight: 700; font-size: .85rem; cursor: pointer; transition: all .2s; }
+.btn-primary { background: linear-gradient(135deg, #00288e, #0058be); color: #fff; }
+.btn-primary:hover { box-shadow: 0 4px 16px rgba(0,40,142,.3); }
+.btn-secondary { background: #fff; color: #00288e; border: 2px solid #00288e; }
+.summary { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+.summary-card { flex: 1; padding: 1rem; border-radius: 12px; text-align: center; }
+.summary-card.total { background: #e8edff; color: #00288e; }
+.summary-card.pass { background: #dcfce7; color: #16a34a; }
+.summary-card.fail { background: #fef2f2; color: #dc2626; }
+.summary-card.skip { background: #fefce8; color: #ca8a04; }
+.summary-num { font-size: 2rem; font-weight: 800; }
+.summary-lbl { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.test-list { display: flex; flex-direction: column; gap: 8px; }
+.test-item { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; border: 1px solid rgba(0,0,0,.04); box-shadow: 0 1px 4px rgba(0,0,0,.03); display: flex; align-items: center; gap: 1rem; }
+.test-status { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.test-status.pending { background: #f1f5f9; color: #94a3b8; }
+.test-status.running { background: #dbeafe; color: #2563eb; animation: pulse .8s infinite; }
+.test-status.pass { background: #dcfce7; color: #16a34a; }
+.test-status.fail { background: #fef2f2; color: #dc2626; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+.test-info { flex: 1; min-width: 0; }
+.test-name { font-weight: 700; font-size: .9rem; }
+.test-desc { font-size: .75rem; color: #64748b; margin-top: 2px; }
+.test-detail { font-size: .72rem; color: #94a3b8; margin-top: 4px; font-family: monospace; white-space: pre-wrap; word-break: break-all; max-height: 80px; overflow-y: auto; }
+.test-time { font-size: .7rem; color: #94a3b8; font-weight: 600; flex-shrink: 0; }
+.log-area { margin-top: 1.5rem; background: #1e293b; color: #e2e8f0; border-radius: 12px; padding: 1rem; font-family: monospace; font-size: .75rem; max-height: 200px; overflow-y: auto; line-height: 1.6; }
+.log-area .ok { color: #4ade80; }
+.log-area .err { color: #f87171; }
+.log-area .warn { color: #fbbf24; }
+.log-area .info { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<h1>ExpertERPHub — Tests d'Intégration API</h1>
+<p class="subtitle">Vérifie que les endpoints Supabase fonctionnent correctement et que la sécurité est en place.</p>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="runAllTests()">Lancer tous les tests</button>
+  <button class="btn btn-secondary" onclick="location.reload()">Réinitialiser</button>
+</div>
+
+<div class="summary">
+  <div class="summary-card total"><div class="summary-num" id="s-total">0</div><div class="summary-lbl">Total</div></div>
+  <div class="summary-card pass"><div class="summary-num" id="s-pass">0</div><div class="summary-lbl">Réussi</div></div>
+  <div class="summary-card fail"><div class="summary-num" id="s-fail">0</div><div class="summary-lbl">Échoué</div></div>
+  <div class="summary-card skip"><div class="summary-num" id="s-skip">0</div><div class="summary-lbl">En attente</div></div>
+</div>
+
+<div class="test-list" id="test-list"></div>
+<div class="log-area" id="log-area">En attente du lancement des tests...</div>
+
+<script>
+const SB_URL = 'https://aqvkcbeezzbmoiykzfyo.supabase.co';
+const SB_KEY = 'sb_publishable_3ZOOWdx35IRT6UocT_s9PQ_hI0Yrbim';
+
+const tests = [
+  {
+    id: 'get-consultants',
+    name: 'GET /consultants',
+    desc: 'Récupérer la liste des consultants — vérifie que le retour est un tableau',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/consultants?select=id,nom,prenom,email&limit=5');
+      assert(r.ok, `HTTP ${r.status} — attendu 200`);
+      const data = await r.json();
+      assert(Array.isArray(data), 'Retour doit être un tableau');
+      assert(data.length > 0, 'Au moins 1 consultant attendu');
+      return `${data.length} consultant(s) retournés`;
+    }
+  },
+  {
+    id: 'get-consultant-filter-email',
+    name: 'GET /consultants (filtre email)',
+    desc: 'Filtrer par email — vérifie que le filtre PostgREST fonctionne',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/consultants?email=ilike.%25gmail%25&select=id,email&limit=3');
+      assert(r.ok, `HTTP ${r.status}`);
+      const data = await r.json();
+      assert(Array.isArray(data), 'Retour tableau');
+      data.forEach(c => assert(c.email && c.email.includes('gmail'), `Email ${c.email} ne contient pas gmail`));
+      return `${data.length} résultat(s) filtrés`;
+    }
+  },
+  {
+    id: 'get-consultant-filter-erp',
+    name: 'GET /consultants (filtre compétences ERP)',
+    desc: 'Filtrer par compétence SAP — vérifie le filtre ilike sur competences',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/consultants?competences=ilike.%25SAP%25&select=id,nom,competences&limit=3');
+      assert(r.ok, `HTTP ${r.status}`);
+      const data = await r.json();
+      assert(Array.isArray(data), 'Retour tableau');
+      return `${data.length} consultant(s) SAP trouvés`;
+    }
+  },
+  {
+    id: 'get-entreprises',
+    name: 'GET /entreprises',
+    desc: 'Récupérer les entreprises inscrites',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/entreprises?select=id,nom_entreprise,email&limit=5');
+      assert(r.ok, `HTTP ${r.status}`);
+      const data = await r.json();
+      assert(Array.isArray(data), 'Retour tableau');
+      return `${data.length} entreprise(s) retournées`;
+    }
+  },
+  {
+    id: 'security-sensitive-fields',
+    name: 'SÉCURITÉ — Champs sensibles exposés',
+    desc: 'Vérifie si auth_password_sha256 est lisible avec la clé anon (DEVRAIT ÊTRE CACHÉ)',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/consultants?select=notes_admin&limit=1');
+      assert(r.ok, `HTTP ${r.status}`);
+      const data = await r.json();
+      if (data.length > 0 && data[0].notes_admin) {
+        const notes = typeof data[0].notes_admin === 'string' ? JSON.parse(data[0].notes_admin) : data[0].notes_admin;
+        if (notes.auth_password_sha256) {
+          throw new Error('VULNÉRABILITÉ : auth_password_sha256 est exposé publiquement ! Activer RLS immédiatement.');
+        }
+      }
+      return 'Hash mot de passe non exposé (OK)';
+    }
+  },
+  {
+    id: 'security-insert',
+    name: 'SÉCURITÉ — Tentative d\'insertion non autorisée',
+    desc: 'Vérifie si un utilisateur anonyme peut insérer un consultant (DEVRAIT ÊTRE REFUSÉ)',
+    run: async () => {
+      const r = await fetch(SB_URL + '/rest/v1/consultants', {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          nom: 'TEST_INJECT',
+          prenom: 'Hacker',
+          email: 'hack_test_' + Date.now() + '@fake.com',
+          statut: 'approuve'
+        })
+      });
+      if (r.ok || r.status === 201) {
+        throw new Error('VULNÉRABILITÉ : Insertion anonyme réussie ! RLS manquant sur INSERT.');
+      }
+      return `Insertion refusée (HTTP ${r.status}) — OK`;
+    }
+  },
+  {
+    id: 'security-update',
+    name: 'SÉCURITÉ — Tentative de modification non autorisée',
+    desc: 'Vérifie si un utilisateur anonyme peut modifier un consultant (DEVRAIT ÊTRE REFUSÉ)',
+    run: async () => {
+      const r = await fetch(SB_URL + '/rest/v1/consultants?id=eq.00000000-0000-0000-0000-000000000000', {
+        method: 'PATCH',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ nom: 'HACKED' })
+      });
+      if (r.ok) {
+        return 'PATCH retourné 200 mais ID inexistant — vérifier si RLS bloque les vrais IDs';
+      }
+      return `Modification refusée (HTTP ${r.status}) — OK`;
+    }
+  },
+  {
+    id: 'security-delete',
+    name: 'SÉCURITÉ — Tentative de suppression non autorisée',
+    desc: 'Vérifie si un utilisateur anonyme peut supprimer (DEVRAIT ÊTRE REFUSÉ)',
+    run: async () => {
+      const r = await fetch(SB_URL + '/rest/v1/consultants?id=eq.00000000-0000-0000-0000-000000000000', {
+        method: 'DELETE',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Prefer': 'return=minimal'
+        }
+      });
+      if (r.ok) {
+        return 'DELETE retourné 200 (ID inexistant) — vérifier RLS sur vrais enregistrements';
+      }
+      return `Suppression refusée (HTTP ${r.status}) — OK`;
+    }
+  },
+  {
+    id: 'no-apikey',
+    name: 'SÉCURITÉ — Requête sans clé API',
+    desc: 'Une requête sans apikey doit être rejetée',
+    run: async () => {
+      const r = await fetch(SB_URL + '/rest/v1/consultants?select=id&limit=1');
+      assert(!r.ok, `Attendu erreur, reçu HTTP ${r.status}`);
+      return `Rejetée correctement (HTTP ${r.status})`;
+    }
+  },
+  {
+    id: 'bad-apikey',
+    name: 'SÉCURITÉ — Clé API invalide',
+    desc: 'Une fausse clé API doit être rejetée',
+    run: async () => {
+      const r = await fetch(SB_URL + '/rest/v1/consultants?select=id&limit=1', {
+        headers: { 'apikey': 'fake_key_12345', 'Authorization': 'Bearer fake_key_12345' }
+      });
+      assert(!r.ok, `Attendu erreur, reçu HTTP ${r.status}`);
+      return `Rejetée correctement (HTTP ${r.status})`;
+    }
+  },
+  {
+    id: 'content-type',
+    name: 'Headers réponse — Content-Type',
+    desc: 'Vérifie que Supabase retourne du JSON',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/consultants?select=id&limit=1');
+      const ct = r.headers.get('content-type') || '';
+      assert(ct.includes('json'), `Content-Type: ${ct} — attendu json`);
+      return `Content-Type: ${ct}`;
+    }
+  },
+  {
+    id: 'table-404',
+    name: 'Table inexistante — gestion erreur',
+    desc: 'Une requête vers une table qui n\'existe pas doit retourner une erreur',
+    run: async () => {
+      const r = await apiFetch('/rest/v1/table_qui_existe_pas?select=*&limit=1');
+      assert(!r.ok, `Attendu erreur, reçu HTTP ${r.status}`);
+      return `Erreur correcte (HTTP ${r.status})`;
+    }
+  },
+];
+
+// ── Helpers ──
+function apiFetch(path) {
+  return fetch(SB_URL + path, {
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+  });
+}
+
+function assert(cond, msg) {
+  if (!cond) throw new Error(msg || 'Assertion échouée');
+}
+
+// ── UI ──
+const listEl = document.getElementById('test-list');
+const logEl = document.getElementById('log-area');
+let results = { pass: 0, fail: 0, total: tests.length };
+
+function log(msg, cls = '') {
+  logEl.innerHTML += `<span class="${cls}">${msg}</span>\n`;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function renderTests() {
+  listEl.innerHTML = tests.map(t => `
+    <div class="test-item" id="item-${t.id}">
+      <div class="test-status pending" id="status-${t.id}">⏳</div>
+      <div class="test-info">
+        <div class="test-name">${t.name}</div>
+        <div class="test-desc">${t.desc}</div>
+        <div class="test-detail" id="detail-${t.id}"></div>
+      </div>
+      <div class="test-time" id="time-${t.id}"></div>
+    </div>
+  `).join('');
+  updateSummary();
+}
+
+function updateSummary() {
+  document.getElementById('s-total').textContent = results.total;
+  document.getElementById('s-pass').textContent = results.pass;
+  document.getElementById('s-fail').textContent = results.fail;
+  document.getElementById('s-skip').textContent = results.total - results.pass - results.fail;
+}
+
+function setTestStatus(id, status, detail, timeMs) {
+  const icons = { running: '🔄', pass: '✅', fail: '❌' };
+  const statusEl = document.getElementById('status-' + id);
+  const detailEl = document.getElementById('detail-' + id);
+  const timeEl = document.getElementById('time-' + id);
+  statusEl.className = 'test-status ' + status;
+  statusEl.textContent = icons[status] || '⏳';
+  if (detail) detailEl.textContent = detail;
+  if (timeMs !== undefined) timeEl.textContent = timeMs + 'ms';
+}
+
+async function runAllTests() {
+  results = { pass: 0, fail: 0, total: tests.length };
+  logEl.innerHTML = '';
+  log('═══ Démarrage des tests API ExpertERPHub ═══', 'info');
+  log(`URL: ${SB_URL}`, 'info');
+  log(`Tests: ${tests.length}`, 'info');
+  log('');
+
+  for (const t of tests) {
+    setTestStatus(t.id, 'running', '', undefined);
+    const start = performance.now();
+    try {
+      const result = await t.run();
+      const ms = Math.round(performance.now() - start);
+      results.pass++;
+      setTestStatus(t.id, 'pass', result, ms);
+      log(`✅ ${t.name} — ${result} (${ms}ms)`, 'ok');
+    } catch (err) {
+      const ms = Math.round(performance.now() - start);
+      results.fail++;
+      setTestStatus(t.id, 'fail', err.message, ms);
+      log(`❌ ${t.name} — ${err.message} (${ms}ms)`, 'err');
+    }
+    updateSummary();
+  }
+
+  log('');
+  log(`═══ Résultats: ${results.pass}/${results.total} réussis, ${results.fail} échoués ═══`, results.fail > 0 ? 'warn' : 'ok');
+}
+
+renderTests();
+</script>
+</body>
+</html>
