@@ -159,12 +159,11 @@ body { font-family: 'Manrope', sans-serif; }
     box-shadow: 0 2px 8px rgba(0,40,142,.08);
   }
 
-  /* ── Experience items — premium cards ── */
+  /* ── Experience items — compact horizontal cards ── */
   .experience-item {
-    display: flex; gap: 18px; padding: 28px;
-    border-radius: 16px;
+    display: flex; gap: 12px; padding: 16px 18px;
+    border-radius: 14px;
     background: #fff;
-    margin-bottom: 12px;
     border: 1px solid rgba(0,0,0,.04);
     box-shadow: 0 2px 12px rgba(0,0,0,.03);
     transition: all .3s cubic-bezier(.25,.46,.45,.94);
@@ -175,30 +174,33 @@ body { font-family: 'Manrope', sans-serif; }
     border-color: rgba(0,40,142,.08);
   }
   .experience-icon {
-    width: 48px; height: 48px; border-radius: 14px;
+    width: 36px; height: 36px; border-radius: 10px;
     background: linear-gradient(135deg, #e8edff, #dde1ff);
     color: #00288e;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
+    font-size: 16px; flex-shrink: 0;
     box-shadow: 0 2px 8px rgba(0,40,142,.08);
   }
   .experience-body { flex: 1; min-width: 0; }
-  .exp-title { font-size: 18px; font-weight: 700; color: #191c1e; margin-bottom: 4px; font-family: 'Newsreader', serif; }
-  .exp-company-line { font-size: 14px; color: #444653; margin-bottom: 4px; }
-  .exp-sector { font-size: 13px; color: #757684; margin-bottom: 12px; }
-  .exp-bullets { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-  .exp-bullets li { list-style: none; position: relative; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #444653; }
-  .exp-bullets li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: #00288e; }
-  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .exp-tag { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 999px; background: #f0f2f5; color: #444653; font-size: 12px; font-weight: 600; border: 1px solid rgba(0,0,0,.04); }
+  .exp-title { font-size: 15px; font-weight: 700; color: #191c1e; margin-bottom: 2px; font-family: 'Newsreader', serif; }
+  .exp-company-line { font-size: 12px; color: #444653; margin-bottom: 2px; }
+  .exp-sector { font-size: 11px; color: #757684; margin-bottom: 6px; }
+  .exp-bullets { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+  .exp-bullets li { list-style: none; position: relative; padding-left: 14px; font-size: 12px; line-height: 1.5; color: #444653; }
+  .exp-bullets li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: #00288e; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .exp-tag { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; background: #f0f2f5; color: #444653; font-size: 11px; font-weight: 600; border: 1px solid rgba(0,0,0,.04); }
+  /* Experience grid — 2 columns on desktop */
+  #profile-experiences { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 768px) { #profile-experiences { grid-template-columns: 1fr 1fr; } }
 
   /* ── Skill experience rows ── */
-  .skill-exp-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; font-size: 14px; color: #444653; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
+  .skill-exp-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; align-items: center; font-size: 13px; color: #444653; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
   .skill-exp-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .skill-exp-value { font-weight: 700; color: #00288e; white-space: nowrap; }
 
-  /* ── Certif badges — premium ── */
-  .certif-badge { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 14px; background: rgba(255,255,255,.12); color: #ffffff; font-size: 13px; font-weight: 500; margin-bottom: 8px; flex-wrap: wrap; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.1); }
+  /* ── Certif badges — compact ── */
+  .certif-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.12); color: #ffffff; font-size: 12px; font-weight: 500; margin-bottom: 4px; flex-wrap: wrap; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.1); }
   .certif-badge.certified { background: rgba(255,255,255,.22); font-weight: 700; }
   .certif-star-pub { color: #fbbf24; filter: drop-shadow(0 1px 2px rgba(251,191,36,.4)); }
   .certif-level-pub { font-size: 10px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
@@ -209,8 +211,8 @@ body { font-family: 'Manrope', sans-serif; }
   /* Empty block */
   .empty-block { font-size: 14px; color: #757684; font-style: italic; }
 
-  /* Section text (resume) — premium readability */
-  .section-text { font-size: 16px; line-height: 1.85; color: #3d4050; white-space: pre-line; letter-spacing: .01em; }
+  /* Section text (resume) — compact readability */
+  .section-text { font-size: 14px; line-height: 1.65; color: #3d4050; white-space: pre-line; letter-spacing: .01em; }
 
   /* Nav link underline effect */
   .nav-link { position: relative; }
@@ -326,74 +328,67 @@ body { font-family: 'Manrope', sans-serif; }
     </div>
   </section>
 
-  <!-- ── BENTO: RESUME + EXPERIENCE + CERTIFICATIONS ── -->
-  <section id="resume-section" class="py-8" style="background:linear-gradient(180deg,#f4f6fb 0%,#f0f2f8 100%);">
-    <div class="max-w-screen-2xl mx-auto px-6 lg:px-10">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- ── BENTO: RESUME + CERTIFICATIONS + EXPERIENCES + SKILL XP — compact horizontal ── -->
+  <section id="resume-section" class="py-6" style="background:linear-gradient(180deg,#f4f6fb 0%,#f0f2f8 100%);">
+    <div class="max-w-screen-2xl mx-auto px-6 lg:px-10 flex flex-col gap-5">
 
-        <!-- LEFT 2/3: Resume + Experiences -->
-        <div class="lg:col-span-2 flex flex-col gap-8">
-
-          <!-- Resume -->
-          <div class="p-6 lg:p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h2 id="resume-heading" class="text-2xl font-headline font-bold mb-4" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
-            <p id="profile-resume" class="section-text"></p>
-          </div>
-
-          <!-- Experiences -->
-          <div class="p-6 lg:p-8 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h2 id="experiences-heading" class="text-2xl font-headline font-bold mb-5" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences</h2>
-            <div id="profile-experiences"></div>
-          </div>
-
+      <!-- ROW 1: Resume (2/3) + Certifications (1/3) side by side -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="lg:col-span-2 p-5 lg:p-6 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+          <h2 id="resume-heading" class="text-lg font-headline font-bold mb-3" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
+          <p id="profile-resume" class="section-text"></p>
         </div>
-
-        <!-- RIGHT 1/3: Certifications + Skill XP -->
-        <div class="flex flex-col gap-8">
-
-          <!-- Certifications (premium deep blue) -->
-          <div id="certif-section" class="p-6 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 12px 36px rgba(0,40,142,.2);">
-            <h2 class="text-xl font-headline font-bold mb-4">Certifications</h2>
-            <div id="profile-certifs" class="flex flex-col gap-2">
-              <div class="certif-badge">
-                <span class="text-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
-                Chargement…
-              </div>
+        <div id="certif-section" class="p-5 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 12px 36px rgba(0,40,142,.2);">
+          <h2 class="text-lg font-headline font-bold mb-3">Certifications</h2>
+          <div id="profile-certifs" class="flex flex-col gap-2">
+            <div class="certif-badge">
+              <span class="text-sm" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+              Chargement…
             </div>
           </div>
-
-          <!-- Skill Experience -->
-          <div class="p-5 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
-            <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-4">Expérience par compétence</h3>
-            <div id="profile-skill-experience" class="space-y-1"></div>
-          </div>
-
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ── PROJETS SECTION ── -->
-  <section id="projets-section" class="py-8 max-w-screen-2xl mx-auto px-6 lg:px-10">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-6">
-      <div class="max-w-xl">
-        <h2 id="projets-heading" class="text-2xl font-headline font-bold mb-1">Projets &amp; Missions</h2>
-        <p class="text-on-surface-variant text-base">Sélection de missions et projets ERP menés avec succès.</p>
+      <!-- ROW 2: Experiences (3/4) + Skill XP (1/4) side by side -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+        <div class="lg:col-span-3 p-5 lg:p-6 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+          <h2 id="experiences-heading" class="text-lg font-headline font-bold mb-4" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences</h2>
+          <div id="profile-experiences"></div>
+        </div>
+        <div class="p-4 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+          <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-3">Expérience par compétence</h3>
+          <div id="profile-skill-experience" class="space-y-0"></div>
+        </div>
       </div>
+
     </div>
-    <div id="profile-projets" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </section>
 
-  <!-- ── CONTACT FORM — premium ── -->
-  <section id="contact-section" class="py-8" style="background:linear-gradient(180deg,#fff 0%,#f4f6fb 100%);">
-    <div class="max-w-2xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-6">
-        <span class="font-manrope font-bold tracking-[0.15em] uppercase block mb-2" style="font-size:.7rem;background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
-        <h2 id="contact-title" class="text-2xl font-headline font-bold" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
+  <!-- ── PROJETS + CONTACT — side by side on desktop ── -->
+  <section id="projets-contact-row" class="py-6 max-w-screen-2xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+      <!-- LEFT 3/5: Projets -->
+      <div id="projets-section" class="lg:col-span-3">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 mb-4">
+          <div>
+            <h2 id="projets-heading" class="text-lg font-headline font-bold mb-1">Projets &amp; Missions</h2>
+            <p class="text-on-surface-variant text-sm">Sélection de missions et projets ERP menés avec succès.</p>
+          </div>
+        </div>
+        <div id="profile-projets" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+      </div>
+
+      <!-- RIGHT 2/5: Contact -->
+      <div id="contact-section" class="lg:col-span-2" style="background:linear-gradient(180deg,#fff 0%,#f4f6fb 100%);border-radius:1rem;padding:1.5rem;">
+    <div class="mx-auto">
+      <div class="text-center mb-4">
+        <span class="font-manrope font-bold tracking-[0.15em] uppercase block mb-1" style="font-size:.65rem;background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
+        <h2 id="contact-title" class="text-xl font-headline font-bold" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="consultant.contactConsultant">Contacter ce consultant</h2>
       </div>
 
       <!-- ═══ GATE: Bloc affiché si l'utilisateur n'est PAS connecté ═══ -->
-      <div id="contact-gate-locked" class="bg-surface-container-lowest rounded-xl shadow-sm" style="display:none;padding:2.5rem;">
+      <div id="contact-gate-locked" class="bg-surface-container-lowest rounded-xl shadow-sm" style="display:none;padding:1.5rem;">
 
         <!-- Onglets Entreprise / Visiteur -->
         <div style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #e5e7eb;">
@@ -428,7 +423,7 @@ body { font-family: 'Manrope', sans-serif; }
             <p style="font-size:.82rem;color:#6b7280;line-height:1.6;margin:0 0 1.25rem;text-align:center;">Choisissez votre forfait et envoyez des messages aux freelances ERP.</p>
 
             <!-- Plans visiteur -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem;">
               <div class="vp-plan-card" data-vp-plan="basic" data-vp-price="10" data-vp-msgs="2" onclick="selectVisiteurPlan(this)" style="border:2px solid #e5e7eb;border-radius:12px;padding:1rem .75rem;text-align:center;cursor:pointer;transition:all .2s;background:#fff;">
                 <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.25rem;">Découverte</div>
                 <div style="font-size:1.5rem;font-weight:800;color:#0f172a;">10 $</div>
@@ -483,35 +478,38 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- ═══ Formulaire visible uniquement si connecté en tant qu'entreprise ═══ -->
-      <form id="contact-form" class="p-6 rounded-2xl flex flex-col gap-4" style="display:none;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.03);">
+      <form id="contact-form" class="p-4 rounded-2xl flex flex-col gap-3" style="display:none;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.03);">
         <input id="company-name" type="text" placeholder="Votre entreprise"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.enterprise"/>
+          class="w-full px-4 py-3 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.enterprise"/>
         <input id="company-email" type="email" placeholder="Email professionnel"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.yourEmail"/>
+          class="w-full px-4 py-3 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.yourEmail"/>
         <input id="company-phone" type="tel" placeholder="Téléphone"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.phone"/>
+          class="w-full px-4 py-3 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant" data-i18n-placeholder="contact.phone"/>
         <textarea id="contact-message" placeholder="Décrivez votre projet et vos besoins…"
-          class="w-full px-5 py-4 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant min-h-[140px] resize-y" data-i18n-placeholder="contact.message"></textarea>
+          class="w-full px-4 py-3 rounded-xl bg-surface-container border-none focus:ring-2 focus:ring-primary font-manrope text-sm text-on-surface placeholder:text-on-surface-variant min-h-[100px] resize-y" data-i18n-placeholder="contact.message"></textarea>
         <!-- Consentement obligatoire -->
         <label id="contact-consent-label" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.85rem;line-height:1.5;color:#475569;">
           <input type="checkbox" id="contact-consent" style="margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:#2563eb;">
           <span>J'accepte la <a href="privacy.html" target="_blank" style="color:#2563eb;text-decoration:underline;">politique de confidentialité</a> d'ExpertERPHub. <span style="color:#dc2626;">*</span></span>
         </label>
         <button id="contact-btn" type="submit" data-action="send-contact"
-          class="w-full py-5 bg-primary text-on-primary rounded-xl font-bold text-base hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.99]" data-i18n="contact.send">
+          class="w-full py-3 bg-primary text-on-primary rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-primary/25 hover:opacity-95 transition-all active:scale-[.99]" data-i18n="contact.send">
           Envoyer ma demande →
         </button>
       </form>
 
       <!-- Section "Suivre mes échanges" retirée — gérée dans dashboard entreprise -->
     </div>
+      </div><!-- /contact col -->
+
+    </div><!-- /grid -->
   </section>
 
 </main>
 
 <!-- ── FOOTER — premium ── -->
 <footer style="background:linear-gradient(180deg,#f8faff,#f0f4ff);border-top:1px solid rgba(0,40,142,.06);" class="mt-0">
-  <div class="flex flex-col md:flex-row justify-between items-center px-8 py-8 gap-4 max-w-screen-2xl mx-auto">
+  <div class="flex flex-col md:flex-row justify-between items-center px-8 py-5 gap-3 max-w-screen-2xl mx-auto">
     <div class="font-newsreader italic font-semibold text-xl" style="background:linear-gradient(135deg,#00288e,#0058be);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
       Expert<span class="not-italic font-bold">ERP</span>Hub
     </div>
