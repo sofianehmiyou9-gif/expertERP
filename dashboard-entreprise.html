@@ -1436,7 +1436,7 @@ function getUrlParam(name) {
 }
 
 async function loadResources() {
-  const rawResources = await sbFetch('consultants', { select: '*' });
+  const rawResources = await sbFetch('consultants', { select: CONSULTANT_COLS });
   const resources = Array.isArray(rawResources) ? rawResources : [];
   const ownerEmail = getCompanyOwnerEmail();
   // Photos reelles depuis Supabase (notes_admin.photo_url)
@@ -2864,7 +2864,7 @@ let _searchLoaded = false;
 async function loadSearchConsultants() {
   if (_searchLoaded && _searchCache.length) return _searchCache;
   try {
-    const resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?select=*&statut=eq.approuve&order=created_at.desc', {
+    const resp = await fetch(ExpertConfig.SB_URL + '/rest/v1/consultants?select=id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut&statut=eq.approuve&order=created_at.desc', {
       headers: { 'apikey': ExpertConfig.SB_KEY, 'Authorization': 'Bearer ' + ExpertConfig.SB_KEY, 'Cache-Control': 'no-cache' },
       cache: 'no-store'
     });

@@ -17,6 +17,9 @@
     return h;
   }
 
+  /* ── Colonnes publiques (exclut password_hash) ── */
+  var CONSULTANT_COLS = 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut';
+
   /* ── CRUD Supabase ── */
 
   /**
@@ -135,7 +138,8 @@
     sbRpc: sbRpc,
     parseNotes: parseNotes,
     normalizeStatus: normalizeStatus,
-    sha256Hex: sha256Hex
+    sha256Hex: sha256Hex,
+    CONSULTANT_COLS: CONSULTANT_COLS
   };
 
   // Rendre disponible globalement pour compatibilité avec le code inline existant
@@ -144,6 +148,7 @@
   if (!window.sbInsert) window.sbInsert = sbInsert;
   if (!window.sbUpdate) window.sbUpdate = sbUpdate;
   if (!window.sbRpc) window.sbRpc = sbRpc;
+  if (!window.CONSULTANT_COLS) window.CONSULTANT_COLS = CONSULTANT_COLS;
   if (!window.parseNotes) window.parseNotes = parseNotes;
   if (!window.normalizeStatus) window.normalizeStatus = normalizeStatus;
   if (!window.sha256Hex) window.sha256Hex = sha256Hex;

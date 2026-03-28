@@ -722,7 +722,7 @@ function setSyncPill(text, tone, ms) {
 async function loadData() {
   setSyncPill('syncing...', 'busy');
   const [consultants, entreprises] = await Promise.all([
-    sbSelect('consultants', 'select=*&order=created_at.desc'),
+    sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&order=created_at.desc'),
     sbSelect('entreprises', 'select=*&order=created_at.desc')
   ]);
   state.consultants = Array.isArray(consultants) ? consultants : [];

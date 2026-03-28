@@ -1464,7 +1464,7 @@ async function initAuth() {
     try {
       const authEmail = await ExpertSupabaseAuth.getEmail();
       if (authEmail) {
-        const consultants = await sbFetch('consultants', { select: '*', email: `eq.${authEmail}` });
+        const consultants = await sbFetch('consultants', { select: CONSULTANT_COLS, email: `eq.${authEmail}` });
         if (consultants.length > 0) {
           currentEmail = authEmail;
           currentConsultant = consultants[0];
@@ -1490,7 +1490,7 @@ async function initAuth() {
 
   if (session && session.role === 'consultant' && session.email) {
     try {
-      const consultants = await sbFetch('consultants', { select: '*', email: `eq.${session.email}` });
+      const consultants = await sbFetch('consultants', { select: CONSULTANT_COLS, email: `eq.${session.email}` });
       if (consultants.length > 0) {
         currentEmail = session.email;
         currentConsultant = consultants[0];
@@ -1526,7 +1526,7 @@ async function authenticate() {
       return authenticateLegacy(email, password);
     }
     // Supabase Auth reussi — charger le profil consultant
-    const consultants = await sbFetch('consultants', { select: '*', email: `eq.${email}` });
+    const consultants = await sbFetch('consultants', { select: CONSULTANT_COLS, email: `eq.${email}` });
     if (consultants.length === 0) {
       showAuthError(ExpertI18n.t('common.emailNotFound'));
       return;

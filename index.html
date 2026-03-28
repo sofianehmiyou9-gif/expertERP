@@ -3158,6 +3158,7 @@ function acceptCguAndClose() {
 <script src="notifications.js"></script>
 <script src="portal-auth.js"></script>
 <script src="supabase-helpers.js"></script>
+<script src="profile-enhancer.js"></script>
 <script>
 // ── Supabase helpers imported from supabase-helpers.js ──
 // sbInsert, sbSelect, sbUpdate are available globally
@@ -3436,7 +3437,7 @@ async function updateAuthPasswordWithToken(token, password) {
 }
 
 async function syncLegacyHashesByEmail(email, passwordHash) {
-  const consultants = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
+  const consultants = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&email=ilike.' + encodeURIComponent(email) + '&limit=20');
   for (const c of consultants) {
     // Store hash in dedicated password_hash column (secure, not in notes_admin)
     await sbUpdate('consultants', c.id, { password_hash: passwordHash });
@@ -3738,7 +3739,7 @@ async function submitPortalAccess() {
 
     if (portalResetMode) {
       if (portalRole === 'consultant') {
-        const consultants = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(email) + '&limit=1');
+        const consultants = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&email=ilike.' + encodeURIComponent(email) + '&limit=1');
         if (!consultants.length) {
           setPortalFeedback(portalText('consultantNotFound'), 'error');
           return;
@@ -4101,7 +4102,7 @@ async function consultantEmailExists(email) {
   const normalizedEmail = String(email || '').trim().toLowerCase();
   if (!normalizedEmail) return false;
   try {
-    const rows = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(normalizedEmail) + '&limit=1');
+    const rows = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&email=ilike.' + encodeURIComponent(normalizedEmail) + '&limit=1');
     return Array.isArray(rows) && rows.length > 0;
   } catch(e) {
     console.warn('consultantEmailExists check failed (non-blocking):', e.message);
@@ -4476,6 +4477,27 @@ async function submitConsultant() {
     try {
       await registerAuthUser(data.email, password);
     } catch (e) {}
+
+    // Bot AI : professionnaliser le profil avant insertion
+    try {
+      if (window.ExpertProfileEnhancer) {
+        const enhanced = await ExpertProfileEnhancer.enhance(data);
+        if (enhanced) {
+          if (enhanced.titre) data.titre = enhanced.titre;
+          if (enhanced.prenom) data.prenom = enhanced.prenom;
+          if (enhanced.nom) data.nom = enhanced.nom;
+          if (enhanced.competences) data.competences = enhanced.competences;
+          // Mettre à jour les champs dans notes_admin
+          const notesObj = typeof data.notes_admin === 'string' ? JSON.parse(data.notes_admin) : (data.notes_admin || {});
+          if (enhanced.resume) notesObj.resume = enhanced.resume;
+          if (enhanced.experiences) notesObj.experiences = enhanced.experiences;
+          data.notes_admin = JSON.stringify(notesObj);
+        }
+      }
+    } catch (enhanceErr) {
+      console.warn('[Inscription] Profil enhancer skipped:', enhanceErr.message);
+    }
+
     await sbInsert('consultants', data);
     document.getElementById('cs-success').style.display = 'block';
     document.getElementById('cs-footer').style.display = 'none';
@@ -4990,7 +5012,7 @@ async function loadConsultants() {
   const grid = document.getElementById('consultants-grid');
   grid.innerHTML = '<div class="empty-state"><p>Chargement…</p></div>';
   try {
-    const data = await sbSelect('consultants', "order=created_at.desc");
+    const data = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&order=created_at.desc');
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
