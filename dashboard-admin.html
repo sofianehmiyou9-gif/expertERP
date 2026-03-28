@@ -709,6 +709,10 @@ body {
     </div>
     <div class="profile-actions">
       <span class="profile-status" id="pm-status"></span>
+      <a id="pm-client-view" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-weight:600;color:#475569;text-decoration:none;background:#f8fafc;transition:background .15s;" onmouseenter="this.style.background='#f1f5f9'" onmouseleave="this.style.background='#f8fafc'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Voir comme client
+      </a>
       <button class="adm-btn adm-btn-approve" id="pm-approve">✓ Approuver</button>
       <button class="adm-btn adm-btn-refuse" id="pm-refuse">✕ Refuser</button>
     </div>
@@ -1110,6 +1114,7 @@ function openProfileModal(id) {
   /* Status + Actions */
   const stBadge = '<span class="badge '+statusClass(st)+'" style="font-size:13px">'+(stLabels[st]||st)+'</span>';
   document.getElementById('pm-status').innerHTML = stBadge;
+  document.getElementById('pm-client-view').href = 'consultant.html?id=' + id;
   document.getElementById('pm-approve').onclick = async () => { await setConsultantStatus(id, 'approuve'); closeProfileModal(); };
   document.getElementById('pm-refuse').onclick  = async () => { await setConsultantStatus(id, 'refuse'); closeProfileModal(); };
 
