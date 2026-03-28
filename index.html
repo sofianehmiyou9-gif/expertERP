@@ -1996,8 +1996,7 @@ function toggleTheme() {
       </div>
     </div>
     <div class="px-12 py-6 border-t border-slate-100 max-w-screen-2xl mx-auto flex justify-between items-center text-slate-400 text-xs font-manrope">
-      <span data-i18n="footer.copyright">© 2026 ExpertERPHub. Tous droits réservés.</span>
-      <span id="admin-secret-trigger" style="cursor:default;user-select:none;">·</span>
+      <span data-i18n="footer.copyright" id="admin-secret-trigger" style="cursor:default;">© 2026 ExpertERPHub. Tous droits réservés.</span>
       <span data-i18n="footer.slogan">La référence souveraine en consulting ERP.</span>
     </div>
   </footer>
@@ -5656,16 +5655,13 @@ function mapErrorToCode(error) {
 </script>
 <script src="cookie-consent.js"></script>
 <script>
-// Admin secret access — triple-clic sur le point du footer
+// Admin secret access — double-clic sur le copyright du footer
 (function(){
   var trigger = document.getElementById('admin-secret-trigger');
   if (!trigger) return;
-  var clicks = 0, timer = null;
-  trigger.addEventListener('click', function(){
-    clicks++;
-    if (timer) clearTimeout(timer);
-    if (clicks >= 5) { clicks = 0; window.location.href = 'dashboard-admin.html'; }
-    timer = setTimeout(function(){ clicks = 0; }, 800);
+  trigger.addEventListener('dblclick', function(e){
+    e.preventDefault();
+    window.location.href = 'dashboard-admin.html';
   });
 })();
 </script>
