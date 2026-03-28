@@ -2026,70 +2026,120 @@ function toggleTheme() {
 
   <!-- VALUE SECTION -->
   <!-- Value vs grandes firmes -->
-  <div class="value-section">
-    <h2 data-i18n="value.title">Pourquoi ExpertERPHub<br>plutôt qu'une grande firme ?</h2>
-    <p data-i18n="value.subtitle">Accédez aux mêmes experts sans les marges d'un cabinet. Direct, transparent, efficace.</p>
-    <div class="value-grid">
-      <div class="value-card"><h4 data-i18n="value.direct">Sans intermédiaire</h4><p data-i18n="value.direct_desc">Contact direct entre l'expert et l'entreprise. Pas de couche de gestion qui dilue la valeur.</p></div>
-      <div class="value-card"><h4 data-i18n="value.transparent">Tarifs transparents</h4><p data-i18n="value.transparent_desc">Vous voyez le tarif journalier réel de l'expert. Pas de surcoût de 40–60% d'un cabinet.</p></div>
-      <div class="value-card"><h4 data-i18n="value.verified">Experts vérifiés</h4><p data-i18n="value.verified_desc">Chaque profil est validé par notre équipe. Certifications vérifiées, expériences confirmées.</p></div>
-      <div class="value-card"><h4 data-i18n="value.speed">Vitesse de déploiement</h4><p data-i18n="value.speed_desc">De la demande au démarrage en 48h. Les grandes firmes prennent des semaines.</p></div>
-    </div>
-  </div>
-
-
-  <!-- FINAL CTA — Stitch style -->
-  <section class="py-32 relative reveal-up">
-    <div class="px-8 md:px-12 max-w-screen-2xl mx-auto text-center">
-      <h2 class="font-newsreader text-5xl md:text-6xl font-bold text-primary mb-10 tracking-tight" data-i18n="cta.title">Prêt à maîtriser votre<br><span class="italic text-secondary">transformation digitale&nbsp;?</span></h2>
-      <div class="flex flex-col md:flex-row gap-5 justify-center items-center">
-        <button class="bg-primary text-on-primary px-12 py-4 rounded-lg font-manrope text-base font-bold hover:scale-105 transition-all shadow-xl shadow-primary/20" data-action="open-entreprise-modal" data-i18n="cta.btn1">Trouver un consultant ERP</button>
-        <button class="bg-surface-container-high text-on-surface px-12 py-4 rounded-lg font-manrope text-base font-bold hover:bg-surface-container-highest transition-all" data-action="open-consultant-modal" data-i18n="cta.btn2">Devenir consultant</button>
+  <!-- VALUE SECTION — Premium redesign -->
+  <section class="py-20 reveal-up" style="background:linear-gradient(180deg,#f8fafc 0%,#fff 100%);">
+    <div class="px-6 md:px-12 max-w-screen-xl mx-auto">
+      <div class="text-center mb-14">
+        <span class="font-manrope text-xs font-bold tracking-[0.15em] uppercase mb-3 block" style="color:var(--primary);">Avantage concurrentiel</span>
+        <h2 class="font-newsreader text-3xl md:text-4xl font-bold" style="color:var(--ink);" data-i18n="value.title">Pourquoi ExpertERPHub<br>plutôt qu'une grande firme ?</h2>
+        <p class="font-manrope text-sm mt-4 max-w-lg mx-auto" style="color:#64748b;" data-i18n="value.subtitle">Accédez aux mêmes experts sans les marges d'un cabinet. Direct, transparent, efficace.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+          <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#2563eb,#1d4ed8);margin-bottom:1.5rem;width:40px;"></div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#eff6ff;border:1px solid #dbeafe;">
+            <span class="material-symbols-outlined" style="color:#2563eb;font-size:22px;">handshake</span>
+          </div>
+          <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.direct">Sans intermédiaire</h4>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.direct_desc">Contact direct entre l'expert et l'entreprise. Pas de couche de gestion qui dilue la valeur.</p>
+        </div>
+        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+          <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#7c3aed,#6d28d9);margin-bottom:1.5rem;width:40px;"></div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#f5f3ff;border:1px solid #ede9fe;">
+            <span class="material-symbols-outlined" style="color:#7c3aed;font-size:22px;">payments</span>
+          </div>
+          <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.transparent">Tarifs transparents</h4>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.transparent_desc">Vous voyez le tarif journalier réel de l'expert. Pas de surcoût de 40–60% d'un cabinet.</p>
+        </div>
+        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+          <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#16a34a,#15803d);margin-bottom:1.5rem;width:40px;"></div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#f0fdf4;border:1px solid #dcfce7;">
+            <span class="material-symbols-outlined" style="color:#16a34a;font-size:22px;">verified</span>
+          </div>
+          <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.verified">Experts vérifiés</h4>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.verified_desc">Chaque profil est validé par notre équipe. Certifications vérifiées, expériences confirmées.</p>
+        </div>
+        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+          <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#f59e0b,#d97706);margin-bottom:1.5rem;width:40px;"></div>
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#fffbeb;border:1px solid #fef3c7;">
+            <span class="material-symbols-outlined" style="color:#d97706;font-size:22px;">rocket_launch</span>
+          </div>
+          <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.speed">Vitesse de déploiement</h4>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.speed_desc">De la demande au démarrage en 48h. Les grandes firmes prennent des semaines.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER — Stitch style -->
-  <footer class="bg-slate-50 border-t border-slate-100">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-10 px-12 py-16 max-w-screen-2xl mx-auto font-manrope text-sm leading-relaxed">
+
+  <!-- FINAL CTA — Premium gradient design -->
+  <section class="py-24 relative reveal-up overflow-hidden" style="background:linear-gradient(135deg,#00288e 0%,#1e40af 50%,#2563eb 100%);">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 30% 50%,rgba(255,255,255,.08),transparent 70%);"></div>
+    <div class="relative z-10 px-8 md:px-12 max-w-screen-2xl mx-auto text-center">
+      <h2 class="font-newsreader text-4xl md:text-5xl font-bold text-white mb-5 tracking-tight" data-i18n="cta.title">Prêt à maîtriser votre<br><span class="italic" style="color:rgba(255,255,255,.8);">transformation digitale ?</span></h2>
+      <p class="font-manrope text-base mb-10 max-w-lg mx-auto" style="color:rgba(255,255,255,.7);">Rejoignez les entreprises qui ont déjà trouvé leur expert ERP idéal.</p>
+      <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+        <button class="px-10 py-4 rounded-xl font-manrope text-base font-bold transition-all duration-300 hover:scale-105 flex items-center gap-2" style="background:#fff;color:#1e40af;box-shadow:0 8px 30px rgba(0,0,0,.2);" data-action="open-entreprise-modal" data-i18n="cta.btn1">
+          <span class="material-symbols-outlined" style="font-size:20px;">search</span>
+          Trouver un consultant ERP
+        </button>
+        <button class="px-10 py-4 rounded-xl font-manrope text-base font-bold transition-all duration-300 hover:scale-105 flex items-center gap-2" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(8px);" data-action="open-consultant-modal" data-i18n="cta.btn2">
+          <span class="material-symbols-outlined" style="font-size:20px;">person_add</span>
+          Devenir consultant
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER — Premium design -->
+  <footer style="background:linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%);border-top:1px solid #e2e8f0;">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-10 px-8 md:px-12 py-16 max-w-screen-xl mx-auto font-manrope text-sm leading-relaxed">
       <div class="col-span-2 md:col-span-1">
-        <div class="footer-logo text-blue-900 mb-5">Expert<span>ERP</span>Hub</div>
-        <p class="text-slate-500 text-sm" data-i18n="footer.tagline">La référence souveraine en consulting ERP. Experts certifiés, disponibles rapidement.</p>
+        <div class="font-newsreader text-xl font-bold mb-4" style="color:#1e293b;">Expert<span style="background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">ERP</span>Hub</div>
+        <p class="text-sm leading-relaxed mb-4" style="color:#64748b;" data-i18n="footer.tagline">La référence souveraine en consulting ERP. Experts certifiés, disponibles rapidement.</p>
+        <div class="flex gap-3">
+          <a href="https://linkedin.com" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5" style="background:#f1f5f9;border:1px solid #e2e8f0;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#64748b;">link</span>
+          </a>
+          <a href="mailto:access@expertERPhub.com" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5" style="background:#f1f5f9;border:1px solid #e2e8f0;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#64748b;">mail</span>
+          </a>
+        </div>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.platform">Plateforme</h5>
+        <h5 class="font-bold mb-5 text-xs uppercase tracking-widest" style="color:#1e293b;" data-i18n="footer.platform">Plateforme</h5>
         <ul class="space-y-3">
-          <li><span class="footer-link cursor-pointer" data-action="go-to-how" data-i18n="footer.link.how">Fonctionnement</span></li>
-          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="consultants" data-i18n="footer.link.consultants">Consultants ERP</span></li>
-          <li><span class="footer-link cursor-pointer" data-action="show-page" data-page="entreprises" data-i18n="footer.link.companies">Pour les entreprises</span></li>
+          <li><span class="cursor-pointer transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-action="go-to-how" data-i18n="footer.link.how">Fonctionnement</span></li>
+          <li><span class="cursor-pointer transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-action="show-page" data-page="consultants" data-i18n="footer.link.consultants">Consultants ERP</span></li>
+          <li><span class="cursor-pointer transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-action="show-page" data-page="entreprises" data-i18n="footer.link.companies">Pour les entreprises</span></li>
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.specialties">Spécialités</h5>
+        <h5 class="font-bold mb-5 text-xs uppercase tracking-widest" style="color:#1e293b;" data-i18n="footer.specialties">Spécialités</h5>
         <ul class="space-y-3">
-          <li><span class="text-slate-500">SAP S/4HANA</span></li>
-          <li><span class="text-slate-500">Oracle Fusion</span></li>
-          <li><span class="text-slate-500">Microsoft Dynamics</span></li>
-          <li><span class="text-slate-500">Workday / Salesforce</span></li>
+          <li><span style="color:#64748b;">SAP S/4HANA</span></li>
+          <li><span style="color:#64748b;">Oracle Fusion</span></li>
+          <li><span style="color:#64748b;">Microsoft Dynamics</span></li>
+          <li><span style="color:#64748b;">Workday / Salesforce</span></li>
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.company">Entreprise</h5>
+        <h5 class="font-bold mb-5 text-xs uppercase tracking-widest" style="color:#1e293b;" data-i18n="footer.company">Entreprise</h5>
         <ul class="space-y-3">
-          <li><a href="privacy.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.privacy">Politique de confidentialité</a></li>
-          <li><a href="conditions.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.terms">Conditions d'utilisation</a></li>
-          <li><a href="mentions.html" class="text-slate-500 hover:text-blue-700 transition-colors" data-i18n="footer.link.legal">Mentions légales</a></li>
+          <li><a href="privacy.html" class="transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-i18n="footer.link.privacy">Politique de confidentialité</a></li>
+          <li><a href="conditions.html" class="transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-i18n="footer.link.terms">Conditions d'utilisation</a></li>
+          <li><a href="mentions.html" class="transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" data-i18n="footer.link.legal">Mentions légales</a></li>
         </ul>
       </div>
       <div>
-        <h5 class="font-bold text-blue-900 mb-5 text-xs uppercase tracking-widest" data-i18n="footer.contact">Contact</h5>
+        <h5 class="font-bold mb-5 text-xs uppercase tracking-widest" style="color:#1e293b;" data-i18n="footer.contact">Contact</h5>
         <ul class="space-y-3">
-          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com" data-i18n="footer.link.support">Support</a></li>
-          <li><a class="text-slate-500 hover:text-blue-700 transition-colors" href="mailto:access@expertERPhub.com" data-i18n="footer.link.join">Rejoindre la plateforme</a></li>
+          <li><a class="transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" href="mailto:access@expertERPhub.com" data-i18n="footer.link.support">Support</a></li>
+          <li><a class="transition-colors duration-200 hover:text-blue-600" style="color:#64748b;" href="mailto:access@expertERPhub.com" data-i18n="footer.link.join">Rejoindre la plateforme</a></li>
         </ul>
       </div>
     </div>
-    <div class="px-12 py-6 border-t border-slate-100 max-w-screen-2xl mx-auto flex justify-between items-center text-slate-400 text-xs font-manrope">
+    <div class="px-8 md:px-12 py-5 max-w-screen-xl mx-auto flex justify-between items-center text-xs font-manrope" style="border-top:1px solid #e2e8f0;color:#94a3b8;">
       <span data-i18n="footer.copyright" id="admin-secret-trigger" style="cursor:default;">© 2026 ExpertERPHub. Tous droits réservés.</span>
       <span data-i18n="footer.slogan">La référence souveraine en consulting ERP.</span>
     </div>
@@ -2249,7 +2299,7 @@ function toggleTheme() {
 
   <div class="ent-sections">
     <div class="ent-card" style="border-top:3px solid #0058be;">
-      <div class="ent-card-icon">🏢</div>
+      <div class="ent-card-icon"><span class="material-symbols-outlined" style="font-size:28px;color:#0058be;">corporate_fare</span></div>
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0058be;margin-bottom:.35rem;">Placement de ressources</div>
       <h3>Placez vos consultants chez d'autres entreprises</h3>
       <p>Vos experts ERP sont entre deux mandats ? Au lieu de porter le coût, rendez-les visibles auprès d'entreprises qui en ont besoin — en toute confidentialité.</p>
@@ -2263,7 +2313,7 @@ function toggleTheme() {
     </div>
 
     <div class="ent-card" style="border-top:3px solid #7c3aed;">
-      <div class="ent-card-icon">🔍</div>
+      <div class="ent-card-icon"><span class="material-symbols-outlined" style="font-size:28px;color:#7c3aed;">person_search</span></div>
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#7c3aed;margin-bottom:.35rem;">Trouvez votre expert</div>
       <h3>Accédez aux ressources qualifiées d'autres firmes</h3>
       <p>Vous avez un mandat mais il vous manque un expert SAP, Oracle ou Dynamics ? Consultez des profils vérifiés d'autres entreprises prêtes à collaborer.</p>
@@ -2277,7 +2327,7 @@ function toggleTheme() {
     </div>
 
     <div class="ent-card">
-      <div class="ent-card-icon">⚙️</div>
+      <div class="ent-card-icon"><span class="material-symbols-outlined" style="font-size:28px;color:#16a34a;">rocket_launch</span></div>
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#059669;margin-bottom:.35rem;">Projet ERP</div>
       <h3>Structurez votre équipe d'implémentation</h3>
       <p>Vous lancez un projet ERP et avez besoin d'experts métier, d'analystes fonctionnels ou de chefs de projet expérimentés pour sécuriser votre exécution.</p>
@@ -2291,7 +2341,7 @@ function toggleTheme() {
     </div>
 
     <div class="ent-card" style="background:linear-gradient(180deg,#f8faff 0%,#fff 100%);border:2px solid rgba(0,88,190,.12);">
-      <div class="ent-card-icon">🔒</div>
+      <div class="ent-card-icon"><span class="material-symbols-outlined" style="font-size:28px;color:#d97706;">shield_lock</span></div>
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0058be;margin-bottom:.35rem;">Confidentialité B2B</div>
       <h3>L'anonymat au coeur du modèle</h3>
       <p>ExpertERPHub est conçu pour protéger vos intérêts commerciaux. Aucune information sensible n'est exposée sans votre accord.</p>
