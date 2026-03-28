@@ -871,9 +871,10 @@ async function loadData() {
 }
 
 function renderOverview() {
-  const total = state.consultants.length;
-  const pending = state.consultants.filter(c => String(normalizeConsultantStatus(c)).toLowerCase() === 'en_attente').length;
-  const approved = state.consultants.filter(c => {
+  const active = state.consultants.filter(c => parseNotes(c.notes_admin).admin_state !== 'deleted');
+  const total = active.length;
+  const pending = active.filter(c => String(normalizeConsultantStatus(c)).toLowerCase() === 'en_attente').length;
+  const approved = active.filter(c => {
     const s = String(normalizeConsultantStatus(c) || '').toLowerCase();
     return s === 'approuve' || s === 'approuvé';
   }).length;
@@ -883,7 +884,7 @@ function renderOverview() {
   document.getElementById('k-entreprises').textContent = String(state.entreprises.length);
   document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approuvés' : 'Total';
 
-  const latest = state.consultants.slice(0, 8).map(c => {
+  const latest = active.slice(0, 8).map(c => {
     const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || '-';
     const st = normalizeConsultantStatus(c) || 'n/a';
     return '<tr>' +
@@ -895,7 +896,7 @@ function renderOverview() {
   document.getElementById('latest-consultants').innerHTML = latest || '<tr><td colspan="3" class="empty">Aucune donnée consultant</td></tr>';
 
   const buckets = {};
-  state.consultants.forEach(c => {
+  active.forEach(c => {
     const key = String(normalizeConsultantStatus(c) || 'unknown').toLowerCase();
     buckets[key] = (buckets[key] || 0) + 1;
   });
@@ -915,6 +916,7 @@ function renderConsultants() {
   const q = document.getElementById('search-consultants').value.trim().toLowerCase();
   const rows = state.consultants.filter(c => {
     const notes = parseNotes(c.notes_admin);
+    if (notes.admin_state === 'deleted') return false;
     const hay = [c.prenom, c.nom, c.email, c.titre, notes.ville, notes.annees_exp,
       Array.isArray(c.competences) ? c.competences.join(' ') : String(c.competences || '')
     ].join(' ').toLowerCase();
