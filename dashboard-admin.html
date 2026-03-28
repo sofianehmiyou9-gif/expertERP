@@ -323,6 +323,59 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 }
 .mini-btn.certif { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
 
+/* ── Profile Preview Modal ── */
+.profile-modal-box {
+  background: #fff; border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  width: min(900px, 96vw); max-height: 88vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.profile-grid {
+  display: grid; grid-template-columns: 280px 1fr;
+  flex: 1; overflow-y: auto; min-height: 0;
+}
+.profile-left {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf8 100%);
+  padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  border-right: 1px solid var(--line);
+}
+.profile-avatar {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 700; font-family: 'Newsreader', serif;
+}
+.profile-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.profile-name { font-size: 18px; font-weight: 700; text-align: center; line-height: 1.2; }
+.profile-title { font-size: 13px; color: var(--brand); text-align: center; font-weight: 600; }
+.profile-meta { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.profile-meta-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.profile-meta-row svg { flex-shrink: 0; }
+.profile-meta-row span { word-break: break-all; }
+.profile-tags { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 6px; }
+.profile-tag { background: #dbeafe; color: #1e40af; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; }
+.profile-right { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+.profile-section h4 { margin: 0 0 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.profile-section p, .profile-section div { font-size: 13px; line-height: 1.6; margin: 0; }
+.profile-exp-item { padding: 8px 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 6px; }
+.profile-exp-title { font-weight: 600; font-size: 13px; }
+.profile-exp-sub { font-size: 11px; color: var(--muted); }
+.profile-modules { display: flex; flex-wrap: wrap; gap: 4px; }
+.profile-module { background: #f1f5f9; color: #475569; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
+.profile-actions {
+  padding: 14px 24px; border-top: 1px solid var(--line);
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+}
+.profile-actions .profile-status { margin-right: auto; font-size: 13px; font-weight: 600; }
+.adm-btn-view {
+  background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;
+  border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 600;
+}
+.adm-btn-view:hover { background: #dbeafe; }
+@media (max-width: 700px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-left { border-right: none; border-bottom: 1px solid var(--line); }
+}
+
 /* Executive Archive consistency */
 .auth-box,
 .card,
@@ -637,6 +690,31 @@ body {
   </div>
 </div>
 
+<!-- Profile Preview Modal -->
+<div id="profile-modal" class="modal-overlay modal-hidden">
+  <div class="profile-modal-box">
+    <div class="modal-head">
+      <h3 id="profile-modal-title">Profil consultant</h3>
+      <button class="modal-close" id="profile-modal-close">✕</button>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-left">
+        <div class="profile-avatar" id="pm-avatar"></div>
+        <div class="profile-name" id="pm-name"></div>
+        <div class="profile-title" id="pm-titre"></div>
+        <div class="profile-tags" id="pm-erps"></div>
+        <div class="profile-meta" id="pm-meta"></div>
+      </div>
+      <div class="profile-right" id="pm-right"></div>
+    </div>
+    <div class="profile-actions">
+      <span class="profile-status" id="pm-status"></span>
+      <button class="adm-btn adm-btn-approve" id="pm-approve">✓ Approuver</button>
+      <button class="adm-btn adm-btn-refuse" id="pm-refuse">✕ Refuser</button>
+    </div>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script src="utils.js"></script>
 <script src="portal-auth.js"></script>
@@ -804,8 +882,9 @@ function renderConsultants() {
     const stLabels = { en_attente:'En attente', approuve:'Approuvé', refuse:'Refusé', en_mission:'En mission', desactive:'Désactivé', expire:'Expiré' };
     const stLabel  = stLabels[st] || st;
 
-    /* Action buttons: Approuver + Refuser always visible, others in select */
+    /* Action buttons: Voir + Approuver + Refuser + more */
     const idStr = safe(c.id);
+    const viewBtn     = '<button class="adm-btn-view" data-action="view-consultant" data-id="'+idStr+'">👁 Voir</button>';
     const approuveBtn = '<button class="adm-btn adm-btn-approve" data-action="set-consultant-status" data-id="'+idStr+'" data-status="approuve">✓ Approuver</button>';
     const refuseBtn   = '<button class="adm-btn adm-btn-refuse"  data-action="set-consultant-status" data-id="'+idStr+'" data-status="refuse">✕ Refuser</button>';
     const moreSelect  = '<select class="action-select" style="min-width:0;width:auto;padding:4px 10px" data-action-select="consultant" data-id="'+idStr+'">' +
@@ -821,7 +900,7 @@ function renderConsultants() {
       '<td><div class="role-cell"><span class="role-main">'+safe(c.titre||'—')+'</span>'+(roleSub?'<span class="role-sub">'+safe(roleSub)+'</span>':'')+'</div></td>' +
       '<td><span class="cons-date">'+safe(dateStr)+'</span></td>' +
       '<td><span class="badge '+statusClass(st)+'">'+safe(stLabel)+'</span>'+reason+'</td>' +
-      '<td><div class="adm-btns">'+approuveBtn+refuseBtn+moreSelect+'</div></td>' +
+      '<td><div class="adm-btns">'+viewBtn+approuveBtn+refuseBtn+moreSelect+'</div></td>' +
       '</tr>';
   }).join('');
   document.getElementById('consultants-body').innerHTML = rows || '<tr><td colspan="6" class="empty">Aucun consultant inscrit pour le moment.</td></tr>';
@@ -919,6 +998,132 @@ let certifModalValidated = [];
 function closeCertifModal() {
   document.getElementById('certif-modal').classList.add('modal-hidden');
 }
+
+/* ── Profile Preview Modal ── */
+let profileModalId = null;
+
+function closeProfileModal() {
+  document.getElementById('profile-modal').classList.add('modal-hidden');
+  profileModalId = null;
+}
+
+function openProfileModal(id) {
+  const c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return;
+  profileModalId = id;
+  const notes = parseNotes(c.notes_admin);
+  const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || '-';
+  const initials = ((c.prenom || '')[0] || '') + ((c.nom || '')[0] || '');
+  const st = normalizeConsultantStatus(c) || 'n/a';
+  const stLabels = { en_attente:'En attente', approuve:'Approuvé', refuse:'Refusé', en_mission:'En mission', desactive:'Désactivé' };
+
+  /* Avatar */
+  const avatarEl = document.getElementById('pm-avatar');
+  if (notes.photo_url) {
+    avatarEl.innerHTML = '<img src="'+safe(notes.photo_url)+'" alt="photo">';
+  } else {
+    avatarEl.textContent = initials.toUpperCase() || '?';
+    avatarEl.innerHTML = initials.toUpperCase() || '?';
+  }
+
+  /* Left panel */
+  document.getElementById('pm-name').textContent = name;
+  document.getElementById('pm-titre').textContent = c.titre || '—';
+
+  /* ERP tags */
+  let erps = [];
+  if (Array.isArray(c.competences)) erps = c.competences;
+  else if (c.competences) erps = String(c.competences).split(',').map(s=>s.trim()).filter(Boolean);
+  document.getElementById('pm-erps').innerHTML = erps.map(e => '<span class="profile-tag">'+safe(e)+'</span>').join('');
+
+  /* Meta info */
+  const metaRows = [];
+  if (c.email) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>'+safe(c.email)+'</span></div>');
+  if (c.telephone) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>'+safe(c.telephone)+'</span></div>');
+  if (notes.ville) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>'+safe(notes.ville)+'</span></div>');
+  if (notes.langues) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>'+safe(notes.langues)+'</span></div>');
+  if (notes.annees_exp) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>'+safe(notes.annees_exp)+' exp.</span></div>');
+  if (c.tjm_min || c.tjm_max) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>'+(c.tjm_min||'?')+' – '+(c.tjm_max||'?')+' €/j</span></div>');
+  if (notes.mode_travail) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>'+safe(notes.mode_travail)+'</span></div>');
+  if (notes.linkedin) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><span>'+safe(notes.linkedin)+'</span></div>');
+  const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'}) : '-';
+  metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Inscrit le '+safe(dateStr)+'</span></div>');
+  document.getElementById('pm-meta').innerHTML = metaRows.join('');
+
+  /* Right panel */
+  let rightHtml = '';
+
+  /* Résumé */
+  const resume = notes.resume || '';
+  if (resume) {
+    rightHtml += '<div class="profile-section"><h4>Résumé professionnel</h4><p>'+safe(resume).replace(/\n/g,'<br>')+'</p></div>';
+  }
+
+  /* Expériences */
+  const exps = Array.isArray(notes.experiences) ? notes.experiences.filter(e => e.titre) : [];
+  if (exps.length) {
+    rightHtml += '<div class="profile-section"><h4>Expériences</h4>';
+    exps.forEach(e => {
+      rightHtml += '<div class="profile-exp-item"><div class="profile-exp-title">'+safe(e.titre||'')+'</div><div class="profile-exp-sub">'+[safe(e.entreprise||''),safe(e.periode||''),safe(e.secteur||'')].filter(Boolean).join(' · ')+'</div></div>';
+    });
+    rightHtml += '</div>';
+  }
+
+  /* ERP Modules */
+  const modules = notes.erp_modules || {};
+  const moduleKeys = Object.keys(modules);
+  if (moduleKeys.length) {
+    rightHtml += '<div class="profile-section"><h4>Modules ERP</h4><div class="profile-modules">';
+    moduleKeys.forEach(erp => {
+      const mods = modules[erp] && modules[erp].modules ? modules[erp].modules : [];
+      mods.forEach(m => { rightHtml += '<span class="profile-module">'+safe(erp)+': '+safe(m)+'</span>'; });
+    });
+    rightHtml += '</div></div>';
+  }
+
+  /* Certifications */
+  const certs = Array.isArray(notes.certifications) ? notes.certifications : (typeof notes.certifications === 'string' && notes.certifications ? notes.certifications.split(',').map(s=>s.trim()) : []);
+  if (certs.length) {
+    rightHtml += '<div class="profile-section"><h4>Certifications déclarées</h4><div class="profile-modules">';
+    certs.forEach(ct => { rightHtml += '<span class="profile-module">'+safe(ct)+'</span>'; });
+    rightHtml += '</div></div>';
+  }
+
+  /* Plan / Promo */
+  const planParts = [];
+  if (notes.subscription_plan_months) planParts.push('Plan: '+notes.subscription_plan_months+' mois');
+  if (notes.subscription_plan_price) planParts.push(notes.subscription_plan_price+' €');
+  if (notes.promo_code) planParts.push('Code promo: '+notes.promo_code+' ('+notes.promo_reduction+'%)');
+  if (notes.invitation_code) planParts.push('Code invitation: '+notes.invitation_code);
+  if (planParts.length) {
+    rightHtml += '<div class="profile-section"><h4>Abonnement</h4><p>'+safe(planParts.join(' · '))+'</p></div>';
+  }
+
+  /* Motif refus si existe */
+  if (notes.motif_refus) {
+    rightHtml += '<div class="profile-section"><h4>Motif du refus</h4><p style="color:var(--danger)">'+safe(notes.motif_refus)+'</p></div>';
+  }
+
+  if (!rightHtml) rightHtml = '<div class="profile-section"><p style="color:var(--muted);font-style:italic">Aucune information complémentaire renseignée.</p></div>';
+  document.getElementById('pm-right').innerHTML = rightHtml;
+
+  /* Status + Actions */
+  const stBadge = '<span class="badge '+statusClass(st)+'" style="font-size:13px">'+(stLabels[st]||st)+'</span>';
+  document.getElementById('pm-status').innerHTML = stBadge;
+  document.getElementById('pm-approve').onclick = async () => { await setConsultantStatus(id, 'approuve'); closeProfileModal(); };
+  document.getElementById('pm-refuse').onclick  = async () => { await setConsultantStatus(id, 'refuse'); closeProfileModal(); };
+
+  /* Title */
+  document.getElementById('profile-modal-title').textContent = 'Profil de ' + name;
+
+  /* Show */
+  document.getElementById('profile-modal').classList.remove('modal-hidden');
+}
+
+document.getElementById('profile-modal-close').addEventListener('click', closeProfileModal);
+document.getElementById('profile-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('profile-modal')) closeProfileModal();
+});
 
 function openCertifModal(id) {
   const c = state.consultants.find(x => String(x.id) === String(id));
@@ -1102,6 +1307,9 @@ document.addEventListener('click', async (event) => {
   const el = event.target.closest('[data-action]');
   if (!el) return;
   const action = el.dataset.action;
+  if (action === 'view-consultant') {
+    openProfileModal(el.dataset.id);
+  }
   if (action === 'set-consultant-status') {
     await setConsultantStatus(el.dataset.id, el.dataset.status);
   }
