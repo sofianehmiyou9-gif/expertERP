@@ -3438,9 +3438,8 @@ async function updateAuthPasswordWithToken(token, password) {
 async function syncLegacyHashesByEmail(email, passwordHash) {
   const consultants = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
   for (const c of consultants) {
-    const notes = safeJsonParse(c.notes_admin, {});
-    notes.auth_password_sha256 = passwordHash;
-    await sbUpdate('consultants', c.id, { notes_admin: JSON.stringify(notes) });
+    // Store hash in dedicated password_hash column (secure, not in notes_admin)
+    await sbUpdate('consultants', c.id, { password_hash: passwordHash });
   }
 
   const companies = await sbSelect('entreprises', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
@@ -3802,18 +3801,9 @@ async function submitPortalAccess() {
     }
 
     if (portalRole === 'consultant') {
-      const consultants = await sbSelect('consultants', 'email=ilike.' + encodeURIComponent(email) + '&limit=1');
-      if (!consultants.length) {
-        setPortalFeedback(portalText('consultantNotFound'), 'error');
-        return;
-      }
-      const notes = safeJsonParse(consultants[0].notes_admin, {});
       const inputHash = await sha256Hex(password);
-      if (!notes.auth_password_sha256) {
-        setPortalFeedback('Compte non sécurisé. Utilisez "Mot de passe oublié" pour initialiser l\'accès.', 'error');
-        return;
-      }
-      if (notes.auth_password_sha256 !== inputHash) {
+      const result = await sbRpc('verify_consultant_password', { p_email: email, p_hash: inputHash });
+      if (!result || !result.success) {
         setPortalFeedback(portalText('invalidCredentials'), 'error');
         return;
       }
@@ -4465,9 +4455,9 @@ async function submitConsultant() {
         erp_modules: getSelectedModules(),
         subscription_plan_months: parseInt(document.getElementById('cs-plan-months').value) || null,
         subscription_plan_price: parseInt(document.getElementById('cs-plan-price').value) || null,
-        auth_password_sha256: passwordHash,
         invitation_code: csInviteCode || null
       }),
+      password_hash: passwordHash,
       statut: 'en_attente'
     };
 

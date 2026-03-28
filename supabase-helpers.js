@@ -74,6 +74,21 @@
     return response.ok;
   }
 
+  /**
+   * RPC — Appel d'une fonction PostgreSQL via PostgREST.
+   * @param {string} fnName  Nom de la fonction (ex: 'verify_consultant_password')
+   * @param {object} params  Paramètres de la fonction
+   * @returns {Promise<any>}
+   */
+  async function sbRpc(fnName, params) {
+    var response = await fetch(url() + '/rest/v1/rpc/' + fnName, {
+      method: 'POST',
+      headers: headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(params || {})
+    });
+    return response.json();
+  }
+
   /* ── Utilitaires données ── */
 
   /**
@@ -117,6 +132,7 @@
     sbSelect: sbSelect,
     sbInsert: sbInsert,
     sbUpdate: sbUpdate,
+    sbRpc: sbRpc,
     parseNotes: parseNotes,
     normalizeStatus: normalizeStatus,
     sha256Hex: sha256Hex
@@ -127,6 +143,7 @@
   if (!window.sbSelect) window.sbSelect = sbSelect;
   if (!window.sbInsert) window.sbInsert = sbInsert;
   if (!window.sbUpdate) window.sbUpdate = sbUpdate;
+  if (!window.sbRpc) window.sbRpc = sbRpc;
   if (!window.parseNotes) window.parseNotes = parseNotes;
   if (!window.normalizeStatus) window.normalizeStatus = normalizeStatus;
   if (!window.sha256Hex) window.sha256Hex = sha256Hex;
