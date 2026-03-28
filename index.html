@@ -541,6 +541,11 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .consultant-card-btn-s{padding:6px 14px;border-radius:8px;border:1.5px solid rgba(0,40,142,.15);background:transparent;color:var(--primary);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;}
 .consultant-card-btn-s:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.3);}
 .empty-state{padding:3rem;text-align:center;color:var(--muted);grid-column:1/-1;}
+/* ── PAGINATION ── */
+.pagination-btn{min-width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:1.5px solid rgba(0,40,142,.12);background:#fff;color:#191c1e;font-size:13px;font-weight:700;font-family:var(--font-main);cursor:pointer;transition:all .2s;}
+.pagination-btn:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.25);}
+.pagination-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(0,40,142,.2);}
+.pagination-btn:disabled{opacity:.4;cursor:default;}
 
 /* ── PREMIUM SHOWCASE SECTION ── */
 .premium-showcase{padding:6rem 2.5rem;background:#0f172a url('assets/bg-images/platform-showcase.png') center/cover no-repeat;background-blend-mode:overlay;position:relative;overflow:hidden;color:#fff;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);}
@@ -2262,7 +2267,9 @@ function toggleTheme() {
         <div class="consultants-grid" id="consultants-grid">
           <div class="empty-state"><p>Chargement des consultants…</p></div>
         </div>
-        <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:1.5rem;font-family:var(--font-main);">D'autres experts rejoignent la plateforme chaque semaine.</p>
+        <!-- Pagination -->
+        <div id="consultants-pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:1.5rem;font-family:var(--font-main);"></div>
+        <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:.75rem;font-family:var(--font-main);">D'autres experts rejoignent la plateforme chaque semaine.</p>
       </section>
 
     </div>
@@ -5503,6 +5510,51 @@ function openConsultantContact(id, event) {
   openPortalModal('entreprise');
 }
 
+/* ── Pagination state ── */
+const CONSULTANTS_PER_PAGE = 8;
+let currentConsultantsPage = 1;
+let currentFilteredList = [];
+
+/* ── Daily rotation: shuffle based on day seed ── */
+function shuffleWithSeed(arr, seed) {
+  const shuffled = arr.slice();
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    seed = (seed * 16807 + 0) % 2147483647;
+    const j = seed % (i + 1);
+    const tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+  }
+  return shuffled;
+}
+function getDaySeed() {
+  const d = new Date();
+  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+
+function renderPagination(totalItems) {
+  const container = document.getElementById('consultants-pagination');
+  if (!container) return;
+  const totalPages = Math.ceil(totalItems / CONSULTANTS_PER_PAGE);
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+  let html = '<button class="pagination-btn" onclick="goToConsultantsPage(' + (currentConsultantsPage - 1) + ')" ' + (currentConsultantsPage <= 1 ? 'disabled' : '') + '>←</button>';
+  for (let p = 1; p <= totalPages; p++) {
+    html += '<button class="pagination-btn' + (p === currentConsultantsPage ? ' active' : '') + '" onclick="goToConsultantsPage(' + p + ')">' + p + '</button>';
+  }
+  html += '<button class="pagination-btn" onclick="goToConsultantsPage(' + (currentConsultantsPage + 1) + ')" ' + (currentConsultantsPage >= totalPages ? 'disabled' : '') + '>→</button>';
+  container.innerHTML = html;
+}
+
+function goToConsultantsPage(page) {
+  const totalPages = Math.ceil(currentFilteredList.length / CONSULTANTS_PER_PAGE);
+  if (page < 1 || page > totalPages) return;
+  currentConsultantsPage = page;
+  const start = (page - 1) * CONSULTANTS_PER_PAGE;
+  const pageItems = currentFilteredList.slice(start, start + CONSULTANTS_PER_PAGE);
+  renderConsultants(pageItems);
+  renderPagination(currentFilteredList.length);
+  const grid = document.getElementById('consultants-grid');
+  if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 let filterConsultantsTimer = null;
 
 function runConsultantsFilter() {
@@ -5554,7 +5606,13 @@ function runConsultantsFilter() {
     }
     return true;
   });
-  renderConsultants(filtered);
+  /* Daily rotation: shuffle results so first page rotates each day */
+  const rotated = shuffleWithSeed(filtered, getDaySeed());
+  currentFilteredList = rotated;
+  currentConsultantsPage = 1;
+  const pageItems = rotated.slice(0, CONSULTANTS_PER_PAGE);
+  renderConsultants(pageItems);
+  renderPagination(rotated.length);
 }
 
 function filterConsultants() {
