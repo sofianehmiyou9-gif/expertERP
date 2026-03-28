@@ -537,6 +537,7 @@ body { font-family: 'Manrope', sans-serif; }
 <script src="portal-auth.js"></script>
 <script src="supabase-helpers.js"></script>
 <script src="i18n.js"></script>
+<script src="translate-content.js"></script>
 <script src="notifications.js"></script>
 <script>
 // Define SB_URL and SB_KEY for inline scripts that use them directly
@@ -551,6 +552,8 @@ function setLanguage(lang) {
   const btn = document.getElementById('lang-' + lang);
   if (btn) btn.classList.add('active');
   applyI18n();
+  // Translate dynamic content (resume, experiences, projects)
+  if (window.ExpertTranslate) ExpertTranslate.translatePageContent(lang);
 }
 
 function applyI18n() {
@@ -1214,6 +1217,14 @@ function renderConsultant(consultant) {
   }
 
   refreshContactFormLabels();
+
+  // After all content is rendered, reset translation cache and apply if EN is active
+  if (window.ExpertTranslate) {
+    ExpertTranslate.resetCache();
+    if (ExpertI18n.getLang() === 'en') {
+      ExpertTranslate.translatePageContent('en');
+    }
+  }
 }
 
 async function loadConsultant() {
