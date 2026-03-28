@@ -771,6 +771,7 @@ body {
       </a>
       <button class="adm-btn adm-btn-approve" id="pm-approve">✓ Approuver</button>
       <button class="adm-btn adm-btn-refuse" id="pm-refuse">✕ Refuser</button>
+      <button class="adm-btn" id="pm-delete" style="background:#dc2626;color:#fff;border:none;margin-left:auto;">🗑 Supprimer</button>
     </div>
   </div>
 </div>
@@ -1190,6 +1191,7 @@ function openProfileModal(id) {
   document.getElementById('pm-client-view').href = 'consultant.html?id=' + id;
   document.getElementById('pm-approve').onclick = async () => { await setConsultantStatus(id, 'approuve'); closeProfileModal(); };
   document.getElementById('pm-refuse').onclick  = async () => { await setConsultantStatus(id, 'refuse'); closeProfileModal(); };
+  document.getElementById('pm-delete').onclick  = async () => { await deleteConsultant(id); };
 
   /* Title */
   document.getElementById('profile-modal-title').textContent = 'Profil de ' + name;
@@ -1270,6 +1272,29 @@ async function setConsultantStatus(id, status) {
 
   const ok = await sbUpdate('consultants', id, payload);
   if (!ok) return alert('Erreur mise à jour consultant');
+  await loadData();
+}
+
+async function deleteConsultant(id) {
+  const c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return alert('Consultant introuvable');
+  const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || 'Ce consultant';
+
+  // Double confirmation pour éviter les suppressions accidentelles
+  const confirm1 = confirm('⚠️ Supprimer le profil de ' + name + ' ?\n\nCette action est IRRÉVERSIBLE. Le profil sera supprimé définitivement de la base de données.');
+  if (!confirm1) return;
+
+  const confirm2 = prompt('Pour confirmer la suppression, tapez le nom du consultant :\n\n' + name);
+  if (!confirm2 || confirm2.trim().toLowerCase() !== name.trim().toLowerCase()) {
+    alert('Suppression annulée — le nom ne correspond pas.');
+    return;
+  }
+
+  const ok = await sbDelete('consultants', id);
+  if (!ok) return alert('Erreur lors de la suppression du consultant.');
+
+  alert('✓ Le profil de ' + name + ' a été supprimé définitivement.');
+  closeProfileModal();
   await loadData();
 }
 

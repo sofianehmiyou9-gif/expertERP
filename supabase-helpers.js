@@ -87,6 +87,20 @@
   }
 
   /**
+   * DELETE — Supprime une ligne par ID.
+   * @param {string} table
+   * @param {string} id
+   * @returns {Promise<boolean>}  true si succès
+   */
+  async function sbDelete(table, id) {
+    var response = await fetch(url() + '/rest/v1/' + table + '?id=eq.' + id, {
+      method: 'DELETE',
+      headers: headers({ 'Prefer': 'return=minimal' })
+    });
+    return response.ok;
+  }
+
+  /**
    * RPC — Appel d'une fonction PostgreSQL via PostgREST.
    * @param {string} fnName  Nom de la fonction (ex: 'verify_consultant_password')
    * @param {object} params  Paramètres de la fonction
@@ -145,6 +159,7 @@
     sbInsert: sbInsert,
     sbUpdate: sbUpdate,
     sbRpc: sbRpc,
+    sbDelete: sbDelete,
     parseNotes: parseNotes,
     normalizeStatus: normalizeStatus,
     sha256Hex: sha256Hex,
@@ -157,6 +172,7 @@
   if (!window.sbInsert) window.sbInsert = sbInsert;
   if (!window.sbUpdate) window.sbUpdate = sbUpdate;
   if (!window.sbRpc) window.sbRpc = sbRpc;
+  if (!window.sbDelete) window.sbDelete = sbDelete;
   if (!window.CONSULTANT_COLS) window.CONSULTANT_COLS = CONSULTANT_COLS;
   if (!window.parseNotes) window.parseNotes = parseNotes;
   if (!window.normalizeStatus) window.normalizeStatus = normalizeStatus;
