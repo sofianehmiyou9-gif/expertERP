@@ -1552,75 +1552,169 @@ function toggleTheme() {
 ══════════════════════════════════════════════════ -->
 <div class="page active" id="page-home">
 
-  <!-- HERO SECTION — Stitch Obsidian Command -->
-  <section class="relative px-8 md:px-12 pt-32 pb-24 md:pt-40 md:pb-32 max-w-screen-2xl mx-auto overflow-hidden cmd-grid">
-    <!-- Glowing ambient blobs -->
-    <div class="absolute top-24 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style="background:rgba(37,99,235,.04);filter:blur(120px);z-index:0;"></div>
-    <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full pointer-events-none" style="background:rgba(0,244,254,.06);filter:blur(100px);z-index:0;"></div>
-    <div class="absolute top-1/2 left-0 w-[300px] h-[300px] rounded-full pointer-events-none" style="background:rgba(216,185,255,.07);filter:blur(90px);z-index:0;"></div>
-    <div class="relative z-10 grid md:grid-cols-12 gap-12 items-center">
-      <div class="md:col-span-8">
-        <!-- Animated ping-pulse status badge -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-outline-variant/30 mb-8" style="border-color:rgba(0,244,254,.2);">
+  <!-- ═══ HERO SECTION — Premium B2B ═══ -->
+  <section class="relative px-6 md:px-12 pt-28 pb-16 md:pt-36 md:pb-20 max-w-screen-2xl mx-auto overflow-hidden">
+    <!-- Ambient background -->
+    <div class="absolute top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style="background:rgba(37,99,235,.04);filter:blur(120px);z-index:0;"></div>
+    <div class="absolute bottom-0 right-10 w-[400px] h-[400px] rounded-full pointer-events-none" style="background:rgba(0,74,198,.06);filter:blur(100px);z-index:0;"></div>
+
+    <div class="relative z-10 grid md:grid-cols-2 gap-10 items-center">
+      <!-- LEFT: Text + Search -->
+      <div>
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6" style="background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.15);">
           <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background:#00f4fe;"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2" style="background:#00f4fe;"></span>
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background:#16a34a;"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2" style="background:#16a34a;"></span>
           </span>
-          <span class="font-manrope text-xs font-bold tracking-[0.2em] uppercase" style="color:var(--primary);" data-i18n="hero.badge">Plateforme professionnelle · ERP · Enterprise-grade</span>
+          <span class="font-manrope text-xs font-bold tracking-[0.12em] uppercase" style="color:var(--primary);">Plateforme B2B · Staff Augmentation ERP</span>
         </div>
-        <!-- Gradient title -->
-        <!-- ═══ HERO B2B — Titre pro sans '?' + sous-titre bien visible ═══ -->
-        <h1 class="font-newsreader text-5xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-6" data-i18n="hero.title" style="color:var(--ink);">
-          Rentabilisez vos<br>consultants ERP.<br><span style="background:linear-gradient(135deg,#00f4fe,#cedcff,#d8b9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic;">Trouvez les experts</span><br>qu'il vous faut.
+
+        <h1 class="font-newsreader font-extrabold leading-[1.08] tracking-tight mb-5" style="color:var(--ink);font-size:clamp(2.4rem,4.5vw,3.6rem);" data-i18n="hero.title">
+          Trouvez votre <span style="background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">expert ERP</span><br>en 48 heures.
         </h1>
-        <p class="font-manrope text-xl max-w-2xl mb-10 leading-relaxed" style="color:var(--ink);opacity:.85;" data-i18n="hero.subtitle">
-          La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins co&#251;teux que les grandes firmes.
+
+        <p class="font-manrope text-base max-w-xl mb-8 leading-relaxed" style="color:var(--ink);opacity:.7;" data-i18n="hero.subtitle">
+          Accédez à un réseau sélectif de consultants SAP, Oracle, Dynamics et Workday. Profils vérifiés, disponibles immédiatement.
         </p>
-        <!-- Search bar cluster — Stitch glass style -->
-        <div class="flex flex-col md:flex-row p-2 rounded-xl max-w-3xl mb-8 gap-2 md:gap-0 glass" style="border:1px solid rgba(37,99,235,.1);box-shadow:0 0 30px rgba(37,99,235,.04);">
-          <div class="flex-1 flex items-center px-4 gap-3 rounded-lg" style="background:var(--surface-low);">
+
+        <!-- Search bar -->
+        <div class="flex flex-col md:flex-row p-2 rounded-2xl max-w-xl mb-5 gap-2 md:gap-0" style="background:#fff;border:1px solid #e2e8f0;box-shadow:0 4px 24px rgba(0,0,0,.06);">
+          <div class="flex-1 flex items-center px-4 gap-3">
             <span class="material-symbols-outlined" style="color:var(--primary);font-size:20px;">search</span>
-            <input class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-3 font-manrope text-sm" placeholder="Compétence ERP (SAP, Oracle, Dynamics…)" type="text" id="hero-search-input">
+            <input class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-slate-400 py-3 font-manrope text-sm" placeholder="SAP, Oracle, Dynamics…" type="text" id="hero-search-input">
           </div>
-          <div class="w-px h-10 hidden md:block self-center mx-1" style="background:rgba(37,99,235,.08);"></div>
-          <div class="flex-1 flex items-center px-4 gap-3 rounded-lg" style="background:var(--surface-low);">
-            <span class="material-symbols-outlined" style="color:#d8b9ff;font-size:20px;">location_on</span>
-            <input class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline py-3 font-manrope text-sm" placeholder="Localisation (Paris, Montréal…)" type="text" id="hero-location-input">
+          <div class="w-px h-8 hidden md:block self-center" style="background:#e2e8f0;"></div>
+          <div class="flex-1 flex items-center px-4 gap-3">
+            <span class="material-symbols-outlined" style="color:#94a3b8;font-size:20px;">location_on</span>
+            <input class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-slate-400 py-3 font-manrope text-sm" placeholder="Paris, Montréal…" type="text" id="hero-location-input">
           </div>
-          <button class="px-8 py-3 rounded-lg font-manrope font-bold transition-all duration-300 text-sm flex items-center gap-2" style="background:linear-gradient(135deg,#2563eb,#7c3aed);color:#ffffff;box-shadow:var(--shadow-md);" data-action="show-page" data-page="consultants" data-i18n="nav.find">
-            <span>Trouver un expert</span>
-            <span class="material-symbols-outlined" style="font-size:18px;">rocket_launch</span>
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold transition-all duration-300 text-sm whitespace-nowrap" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3);" data-action="show-page" data-page="consultants" data-i18n="nav.find">
+            Rechercher
           </button>
         </div>
-        <!-- Hero badges -->
-        <div class="hero-badges">
-          <span class="hero-badge" data-i18n="hero.badge1">Experts ERP validés</span>
-          <span class="hero-badge" data-i18n="hero.badge2">Dashboard Unique</span>
-          <span class="hero-badge" data-i18n="hero.badge3">Disponibilité temps réel</span>
-          <span class="hero-badge" data-i18n="hero.badge4">Traçabilité ressource</span>
+
+        <!-- Dual CTA -->
+        <div class="flex flex-wrap gap-3 mb-8">
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.25);" data-action="show-page" data-page="consultants">
+            <span class="material-symbols-outlined" style="font-size:18px;">business</span>
+            Je cherche un consultant
+          </button>
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.04);" onclick="document.getElementById('page-home').querySelector('[data-action=&quot;show-page&quot;][data-page=&quot;inscription-consultant&quot;]')?.click() || document.querySelector('[data-page=inscription-consultant]')?.click();">
+            <span class="material-symbols-outlined" style="font-size:18px;">person_add</span>
+            Je suis consultant
+          </button>
+        </div>
+
+        <!-- Trust badges inline -->
+        <div class="flex flex-wrap items-center gap-4 text-xs font-manrope" style="color:#64748b;">
+          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined" style="font-size:16px;color:#16a34a;">verified</span> Profils vérifiés</span>
+          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined" style="font-size:16px;color:#2563eb;">speed</span> Réponse en 2h</span>
+          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined" style="font-size:16px;color:#7c3aed;">shield</span> 100% confidentiel</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Visual illustration card -->
+      <div class="hidden md:block">
+        <div class="relative" style="perspective:1000px;">
+          <!-- Floating consultant card mockup -->
+          <div class="rounded-2xl p-6 relative" style="background:#fff;border:1px solid #e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);transform:rotateY(-2deg) rotateX(1deg);">
+            <!-- Card header -->
+            <div class="flex items-center gap-4 mb-5 pb-5" style="border-bottom:1px solid #f1f5f9;">
+              <div class="w-14 h-14 rounded-full flex items-center justify-center font-newsreader font-bold text-xl text-white" style="background:linear-gradient(135deg,#2563eb,#7c3aed);">SC</div>
+              <div class="flex-1">
+                <div class="font-manrope font-bold text-base" style="color:#1e293b;">Sophie C.</div>
+                <div class="font-manrope text-sm" style="color:#2563eb;">Consultante Fonctionnelle SAP FI/CO</div>
+              </div>
+              <div class="px-3 py-1 rounded-full text-xs font-bold" style="background:#ecfdf5;color:#16a34a;">Disponible</div>
+            </div>
+            <!-- Stats row -->
+            <div class="grid grid-cols-3 gap-4 mb-5">
+              <div class="text-center p-3 rounded-xl" style="background:#f8fafc;">
+                <div class="font-manrope font-bold text-lg" style="color:#1e293b;">8+</div>
+                <div class="font-manrope text-xs" style="color:#94a3b8;">Années exp.</div>
+              </div>
+              <div class="text-center p-3 rounded-xl" style="background:#f8fafc;">
+                <div class="font-manrope font-bold text-lg" style="color:#1e293b;">750€</div>
+                <div class="font-manrope text-xs" style="color:#94a3b8;">TJM</div>
+              </div>
+              <div class="text-center p-3 rounded-xl" style="background:#f8fafc;">
+                <div class="font-manrope font-bold text-lg" style="color:#1e293b;">Paris</div>
+                <div class="font-manrope text-xs" style="color:#94a3b8;">Localisation</div>
+              </div>
+            </div>
+            <!-- Skills -->
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="px-3 py-1.5 rounded-lg text-xs font-bold" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;">SAP S/4HANA</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-bold" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;">FI/CO</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-bold" style="background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;">Migration S/4</span>
+              <span class="px-3 py-1.5 rounded-lg text-xs font-bold" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;">Hybride</span>
+            </div>
+            <!-- Action -->
+            <button class="w-full py-3 rounded-xl font-manrope font-bold text-sm" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;">Voir le profil complet</button>
+          </div>
+          <!-- Floating notification badge -->
+          <div class="absolute -top-3 -right-3 px-4 py-2 rounded-xl font-manrope text-xs font-bold flex items-center gap-2" style="background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.1);border:1px solid #e2e8f0;animation:float 3s ease-in-out infinite;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#16a34a;">check_circle</span>
+            <span style="color:#1e293b;">3 nouveaux profils</span>
+          </div>
+          <!-- Floating stat badge -->
+          <div class="absolute -bottom-2 -left-4 px-4 py-2 rounded-xl font-manrope text-xs font-bold flex items-center gap-2" style="background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.1);border:1px solid #e2e8f0;animation:float 3s ease-in-out 1.5s infinite;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:#2563eb;">trending_up</span>
+            <span style="color:#1e293b;">Matching en 48h</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- KPI STRIP -->
-  <div class="kpi-strip reveal-up">
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-top"><span class="kpi-value">380+</span><span class="kpi-unit">ERP</span></div>
-        <div class="kpi-label" data-i18n="kpi.active">Consultants sur la plateforme</div>
+  <!-- ═══ HOW IT WORKS — 3 Steps ═══ -->
+  <section class="py-16 reveal-up" style="background:#fff;border-top:1px solid #f1f5f9;border-bottom:1px solid #f1f5f9;">
+    <div class="px-6 md:px-12 max-w-screen-xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="font-manrope text-xs font-bold tracking-[0.15em] uppercase mb-3 block" style="color:var(--primary);">Comment ça marche</span>
+        <h2 class="font-newsreader text-3xl md:text-4xl font-bold" style="color:var(--ink);">Trouvez votre consultant en 3 étapes</h2>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-top"><span class="kpi-value">2h</span><span class="kpi-unit">AVG</span></div>
-        <div class="kpi-label" data-i18n="kpi.response">Délai moyen de première réponse</div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">1</div>
+          <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Décrivez votre besoin</h3>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Indiquez l'ERP, les modules, la localisation et la durée de mission souhaitée.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">2</div>
+          <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Recevez des profils qualifiés</h3>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Notre équipe vous propose des consultants vérifiés, disponibles et adaptés à votre projet.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#16a34a,#15803d);">3</div>
+          <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Démarrez la mission</h3>
+          <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Validez le profil, signez le contrat et votre consultant démarre sous 48h.</p>
+        </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-top"><span class="kpi-value">100%</span><span class="kpi-unit">LIVE</span></div>
-        <div class="kpi-label" data-i18n="kpi.traceability">Des profils validés manuellement</div>
+    </div>
+  </section>
+
+  <!-- ═══ KPI STRIP — Compact ═══ -->
+  <div class="py-12 reveal-up" style="background:linear-gradient(135deg,#00288e 0%,#1e40af 50%,#2563eb 100%);">
+    <div class="px-6 md:px-12 max-w-screen-xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
+      <div>
+        <div class="font-newsreader text-4xl font-bold">380+</div>
+        <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Consultants ERP</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-top"><span class="kpi-value">48h</span><span class="kpi-unit">SLA</span></div>
-        <div class="kpi-label" data-i18n="kpi.staffing">De la demande au matching</div>
+      <div>
+        <div class="font-newsreader text-4xl font-bold">2h</div>
+        <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Délai de réponse</div>
+      </div>
+      <div>
+        <div class="font-newsreader text-4xl font-bold">100%</div>
+        <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Profils vérifiés</div>
+      </div>
+      <div>
+        <div class="font-newsreader text-4xl font-bold">48h</div>
+        <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Demande au matching</div>
       </div>
     </div>
   </div>
