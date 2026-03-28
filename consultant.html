@@ -638,7 +638,8 @@ function toggleTheme() {
 }
 
 async function sbSelectById(table, id) {
-  const url = `${ExpertConfig.SB_URL}/rest/v1/${table}?select=*&id=eq.${encodeURIComponent(id)}&limit=1`;
+  const cols = (table === 'consultants') ? (window.CONSULTANT_COLS || 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut') : '*';
+  const url = `${ExpertConfig.SB_URL}/rest/v1/${table}?select=${cols}&id=eq.${encodeURIComponent(id)}&limit=1`;
   const response = await fetch(url, {
     headers: { apikey: ExpertConfig.SB_KEY, Authorization: `Bearer ${ExpertConfig.SB_KEY}`, 'Cache-Control': 'no-cache' },
     cache: 'no-store'
@@ -800,7 +801,7 @@ function readUrlId() {
 
 async function sbSelectPublicConsultants(limit) {
   const query = new URLSearchParams({
-    select: '*',
+    select: window.CONSULTANT_COLS || 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut',
     statut: 'in.(approuve,en_mission)',
     order: 'created_at.desc',
     limit: String(limit || 20)
