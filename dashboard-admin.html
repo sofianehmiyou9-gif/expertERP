@@ -323,57 +323,110 @@ th { background: #f8fafc; position: sticky; top: 0; z-index: 1; font-family: 'IB
 }
 .mini-btn.certif { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
 
-/* ── Profile Preview Modal ── */
+/* ── Profile Preview Modal — Premium Design ── */
 .profile-modal-box {
-  background: #fff; border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-  width: min(900px, 96vw); max-height: 88vh;
+  background: #fff; border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.08);
+  width: min(960px, 96vw); max-height: 90vh;
   display: flex; flex-direction: column; overflow: hidden;
 }
-.profile-grid {
-  display: grid; grid-template-columns: 280px 1fr;
-  flex: 1; overflow-y: auto; min-height: 0;
+.profile-modal-box .modal-head {
+  padding: 18px 24px; border-bottom: 1px solid #f1f5f9;
+  background: linear-gradient(135deg, #f8faff 0%, #fff 100%);
 }
-.profile-left {
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf8 100%);
-  padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-  border-right: 1px solid var(--line);
+/* ── Hero banner horizontal ── */
+.profile-hero {
+  display: flex; align-items: center; gap: 20px;
+  padding: 24px 28px; background: linear-gradient(135deg, #00288e 0%, #1e40af 50%, #2563eb 100%);
+  color: #fff; position: relative; overflow: hidden;
+}
+.profile-hero::before {
+  content: ''; position: absolute; top: -40%; right: -10%; width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
 }
 .profile-avatar {
-  width: 90px; height: 90px; border-radius: 50%;
-  background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 32px; font-weight: 700; font-family: 'Newsreader', serif;
+  width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(255,255,255,0.2); color: #fff; display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 700; font-family: 'Newsreader', serif;
+  border: 3px solid rgba(255,255,255,0.3); backdrop-filter: blur(8px);
 }
 .profile-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.profile-name { font-size: 18px; font-weight: 700; text-align: center; line-height: 1.2; }
-.profile-title { font-size: 13px; color: var(--brand); text-align: center; font-weight: 600; }
-.profile-meta { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-.profile-meta-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
-.profile-meta-row svg { flex-shrink: 0; }
-.profile-meta-row span { word-break: break-all; }
-.profile-tags { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 6px; }
-.profile-tag { background: #dbeafe; color: #1e40af; font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600; }
-.profile-right { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
-.profile-section h4 { margin: 0 0 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
-.profile-section p, .profile-section div { font-size: 13px; line-height: 1.6; margin: 0; }
-.profile-exp-item { padding: 8px 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 6px; }
-.profile-exp-title { font-weight: 600; font-size: 13px; }
-.profile-exp-sub { font-size: 11px; color: var(--muted); }
-.profile-modules { display: flex; flex-wrap: wrap; gap: 4px; }
-.profile-module { background: #f1f5f9; color: #475569; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
+.profile-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+.profile-name { font-size: 22px; font-weight: 700; font-family: 'Newsreader', serif; line-height: 1.2; margin: 0 0 4px; }
+.profile-title { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500; margin: 0 0 10px; }
+.profile-hero-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.profile-hero-tag { background: rgba(255,255,255,0.18); color: #fff; font-size: 11px; padding: 4px 12px; border-radius: 999px; font-weight: 600; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15); }
+.profile-hero-stats {
+  display: flex; gap: 12px; flex-shrink: 0; position: relative; z-index: 1;
+}
+.profile-stat-card {
+  background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 14px;
+  padding: 10px 16px; text-align: center; min-width: 80px;
+}
+.profile-stat-val { font-size: 18px; font-weight: 700; display: block; }
+.profile-stat-label { font-size: 10px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: .04em; }
+
+/* ── Content grid horizontal ── */
+.profile-content {
+  display: grid; grid-template-columns: 1fr 1fr;
+  flex: 1; overflow-y: auto; min-height: 0;
+}
+.profile-col { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.profile-col:first-child { border-right: 1px solid #f1f5f9; }
+.profile-section { }
+.profile-section h4 {
+  margin: 0 0 10px; font-size: 11px; color: #94a3b8; text-transform: uppercase;
+  letter-spacing: .08em; font-weight: 700; display: flex; align-items: center; gap: 6px;
+}
+.profile-section h4 svg { opacity: 0.5; }
+.profile-section p, .profile-section div { font-size: 13px; line-height: 1.65; margin: 0; color: #334155; }
+.profile-resume-text {
+  background: #f8fafc; border-radius: 12px; padding: 14px 16px;
+  border-left: 3px solid var(--brand); font-size: 13px; line-height: 1.65; color: #334155;
+}
+.profile-exp-item {
+  padding: 12px 14px; background: #f8fafc; border-radius: 12px; margin-bottom: 8px;
+  border: 1px solid #f1f5f9; transition: border-color .15s;
+}
+.profile-exp-item:hover { border-color: #dbeafe; }
+.profile-exp-title { font-weight: 600; font-size: 13px; color: #1e293b; }
+.profile-exp-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.profile-exp-desc { font-size: 12px; color: #64748b; margin-top: 6px; line-height: 1.5; }
+.profile-meta-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.profile-meta-card {
+  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  background: #f8fafc; border-radius: 10px; font-size: 12px; color: #475569;
+}
+.profile-meta-card svg { flex-shrink: 0; color: #94a3b8; }
+.profile-modules { display: flex; flex-wrap: wrap; gap: 5px; }
+.profile-module {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #1e40af;
+  font-size: 11px; padding: 4px 10px; border-radius: 8px; font-weight: 600;
+  border: 1px solid #bfdbfe;
+}
+/* ── Actions footer ── */
 .profile-actions {
-  padding: 14px 24px; border-top: 1px solid var(--line);
+  padding: 16px 24px; border-top: 1px solid #f1f5f9;
   display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  background: #fafbfc;
 }
 .profile-actions .profile-status { margin-right: auto; font-size: 13px; font-weight: 600; }
 .adm-btn-view {
   background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;
-  border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 600;
+  border-radius: 8px; padding: 6px 12px; font-size: 11px; cursor: pointer; font-weight: 600;
+  transition: all .15s;
 }
-.adm-btn-view:hover { background: #dbeafe; }
+.adm-btn-view:hover { background: #dbeafe; box-shadow: 0 2px 8px rgba(37,99,235,0.15); }
 @media (max-width: 700px) {
-  .profile-grid { grid-template-columns: 1fr; }
-  .profile-left { border-right: none; border-bottom: 1px solid var(--line); }
+  .profile-content { grid-template-columns: 1fr; }
+  .profile-col:first-child { border-right: none; border-bottom: 1px solid #f1f5f9; }
+  .profile-hero { flex-direction: column; text-align: center; }
+  .profile-hero-stats { justify-content: center; }
+  .profile-meta-grid { grid-template-columns: 1fr; }
 }
 
 /* Executive Archive consistency */
@@ -690,26 +743,29 @@ body {
   </div>
 </div>
 
-<!-- Profile Preview Modal -->
+<!-- Profile Preview Modal — Premium -->
 <div id="profile-modal" class="modal-overlay modal-hidden">
   <div class="profile-modal-box">
-    <div class="modal-head">
-      <h3 id="profile-modal-title">Profil consultant</h3>
+    <div class="modal-head" style="display:flex;justify-content:space-between;align-items:center;">
+      <h3 id="profile-modal-title" style="margin:0;font-size:15px;">Profil consultant</h3>
       <button class="modal-close" id="profile-modal-close">✕</button>
     </div>
-    <div class="profile-grid">
-      <div class="profile-left">
-        <div class="profile-avatar" id="pm-avatar"></div>
+    <div class="profile-hero">
+      <div class="profile-avatar" id="pm-avatar"></div>
+      <div class="profile-hero-info">
         <div class="profile-name" id="pm-name"></div>
         <div class="profile-title" id="pm-titre"></div>
-        <div class="profile-tags" id="pm-erps"></div>
-        <div class="profile-meta" id="pm-meta"></div>
+        <div class="profile-hero-tags" id="pm-erps"></div>
       </div>
-      <div class="profile-right" id="pm-right"></div>
+      <div class="profile-hero-stats" id="pm-stats"></div>
+    </div>
+    <div class="profile-content">
+      <div class="profile-col" id="pm-col-left"></div>
+      <div class="profile-col" id="pm-col-right"></div>
     </div>
     <div class="profile-actions">
       <span class="profile-status" id="pm-status"></span>
-      <a id="pm-client-view" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;font-weight:600;color:#475569;text-decoration:none;background:#f8fafc;transition:background .15s;" onmouseenter="this.style.background='#f1f5f9'" onmouseleave="this.style.background='#f8fafc'">
+      <a id="pm-client-view" href="#" target="_blank" class="adm-btn-view" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         Voir comme client
       </a>
@@ -1027,48 +1083,65 @@ function openProfileModal(id) {
     avatarEl.innerHTML = '<img src="'+safe(notes.photo_url)+'" alt="photo">';
   } else {
     avatarEl.textContent = initials.toUpperCase() || '?';
-    avatarEl.innerHTML = initials.toUpperCase() || '?';
   }
 
-  /* Left panel */
+  /* Hero */
   document.getElementById('pm-name').textContent = name;
   document.getElementById('pm-titre').textContent = c.titre || '—';
 
-  /* ERP tags */
+  /* ERP tags in hero */
   let erps = [];
   if (Array.isArray(c.competences)) erps = c.competences;
   else if (c.competences) erps = String(c.competences).split(',').map(s=>s.trim()).filter(Boolean);
-  document.getElementById('pm-erps').innerHTML = erps.map(e => '<span class="profile-tag">'+safe(e)+'</span>').join('');
+  document.getElementById('pm-erps').innerHTML = erps.map(e => '<span class="profile-hero-tag">'+safe(e)+'</span>').join('');
 
-  /* Meta info */
-  const metaRows = [];
-  if (c.email) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>'+safe(c.email)+'</span></div>');
-  if (c.telephone) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>'+safe(c.telephone)+'</span></div>');
-  if (notes.ville) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>'+safe(notes.ville)+'</span></div>');
-  if (notes.langues) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>'+safe(notes.langues)+'</span></div>');
-  if (notes.annees_exp) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>'+safe(notes.annees_exp)+' exp.</span></div>');
-  if (c.tjm_min || c.tjm_max) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>'+(c.tjm_min||'?')+' – '+(c.tjm_max||'?')+' €/j</span></div>');
-  if (notes.mode_travail) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>'+safe(notes.mode_travail)+'</span></div>');
-  if (notes.linkedin) metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><span>'+safe(notes.linkedin)+'</span></div>');
-  const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'}) : '-';
-  metaRows.push('<div class="profile-meta-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Inscrit le '+safe(dateStr)+'</span></div>');
-  document.getElementById('pm-meta').innerHTML = metaRows.join('');
+  /* Stats cards in hero */
+  let statsHtml = '';
+  if (notes.annees_exp) {
+    statsHtml += '<div class="profile-stat-card"><span class="profile-stat-val">'+safe(notes.annees_exp)+'</span><span class="profile-stat-label">Expérience</span></div>';
+  }
+  if (c.tjm_min || c.tjm_max) {
+    statsHtml += '<div class="profile-stat-card"><span class="profile-stat-val">'+(c.tjm_min||'?')+'€</span><span class="profile-stat-label">TJM/jour</span></div>';
+  }
+  document.getElementById('pm-stats').innerHTML = statsHtml;
 
-  /* Right panel */
-  let rightHtml = '';
+  /* ── LEFT COLUMN: Info + Meta ── */
+  let leftHtml = '';
 
   /* Résumé */
   const resume = notes.resume || '';
   if (resume) {
-    rightHtml += '<div class="profile-section"><h4>Résumé professionnel</h4><p>'+safe(resume).replace(/\n/g,'<br>')+'</p></div>';
+    leftHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Résumé</h4><div class="profile-resume-text">'+safe(resume).replace(/\n/g,'<br>')+'</div></div>';
   }
+
+  /* Coordonnées */
+  let metaHtml = '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Coordonnées</h4><div class="profile-meta-grid">';
+  if (c.email) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'+safe(c.email)+'</div>';
+  if (c.telephone) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+safe(c.telephone)+'</div>';
+  if (notes.ville) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+safe(notes.ville)+'</div>';
+  if (notes.mode_travail) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'+safe(notes.mode_travail)+'</div>';
+  if (notes.langues) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'+safe(notes.langues)+'</div>';
+  if (notes.linkedin) metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</div>';
+  const dateStr = c.created_at ? new Date(c.created_at).toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'}) : '-';
+  metaHtml += '<div class="profile-meta-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Inscrit le '+safe(dateStr)+'</div>';
+  metaHtml += '</div></div>';
+  leftHtml += metaHtml;
+
+  document.getElementById('pm-col-left').innerHTML = leftHtml;
+
+  /* ── RIGHT COLUMN: Expériences + Modules + Certifs + Plan ── */
+  let rightHtml = '';
 
   /* Expériences */
   const exps = Array.isArray(notes.experiences) ? notes.experiences.filter(e => e.titre) : [];
   if (exps.length) {
-    rightHtml += '<div class="profile-section"><h4>Expériences</h4>';
+    rightHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Expériences</h4>';
     exps.forEach(e => {
-      rightHtml += '<div class="profile-exp-item"><div class="profile-exp-title">'+safe(e.titre||'')+'</div><div class="profile-exp-sub">'+[safe(e.entreprise||''),safe(e.periode||''),safe(e.secteur||'')].filter(Boolean).join(' · ')+'</div></div>';
+      let expHtml = '<div class="profile-exp-item"><div class="profile-exp-title">'+safe(e.titre||'')+'</div>';
+      expHtml += '<div class="profile-exp-sub">'+[safe(e.entreprise||''),safe(e.periode||''),safe(e.secteur||'')].filter(Boolean).join(' · ')+'</div>';
+      if (e.description) expHtml += '<div class="profile-exp-desc">'+safe(e.description)+'</div>';
+      expHtml += '</div>';
+      rightHtml += expHtml;
     });
     rightHtml += '</div>';
   }
@@ -1077,7 +1150,7 @@ function openProfileModal(id) {
   const modules = notes.erp_modules || {};
   const moduleKeys = Object.keys(modules);
   if (moduleKeys.length) {
-    rightHtml += '<div class="profile-section"><h4>Modules ERP</h4><div class="profile-modules">';
+    rightHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M15 20v2M9 20v2M2 15h2M2 9h2M20 15h2M20 9h2"/></svg> Modules ERP</h4><div class="profile-modules">';
     moduleKeys.forEach(erp => {
       const mods = modules[erp] && modules[erp].modules ? modules[erp].modules : [];
       mods.forEach(m => { rightHtml += '<span class="profile-module">'+safe(erp)+': '+safe(m)+'</span>'; });
@@ -1088,7 +1161,7 @@ function openProfileModal(id) {
   /* Certifications */
   const certs = Array.isArray(notes.certifications) ? notes.certifications : (typeof notes.certifications === 'string' && notes.certifications ? notes.certifications.split(',').map(s=>s.trim()) : []);
   if (certs.length) {
-    rightHtml += '<div class="profile-section"><h4>Certifications déclarées</h4><div class="profile-modules">';
+    rightHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Certifications</h4><div class="profile-modules">';
     certs.forEach(ct => { rightHtml += '<span class="profile-module">'+safe(ct)+'</span>'; });
     rightHtml += '</div></div>';
   }
@@ -1100,16 +1173,16 @@ function openProfileModal(id) {
   if (notes.promo_code) planParts.push('Code promo: '+notes.promo_code+' ('+notes.promo_reduction+'%)');
   if (notes.invitation_code) planParts.push('Code invitation: '+notes.invitation_code);
   if (planParts.length) {
-    rightHtml += '<div class="profile-section"><h4>Abonnement</h4><p>'+safe(planParts.join(' · '))+'</p></div>';
+    rightHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Abonnement</h4><p>'+safe(planParts.join(' · '))+'</p></div>';
   }
 
-  /* Motif refus si existe */
+  /* Motif refus */
   if (notes.motif_refus) {
-    rightHtml += '<div class="profile-section"><h4>Motif du refus</h4><p style="color:var(--danger)">'+safe(notes.motif_refus)+'</p></div>';
+    rightHtml += '<div class="profile-section"><h4 style="color:var(--danger)">Motif du refus</h4><p style="color:var(--danger)">'+safe(notes.motif_refus)+'</p></div>';
   }
 
-  if (!rightHtml) rightHtml = '<div class="profile-section"><p style="color:var(--muted);font-style:italic">Aucune information complémentaire renseignée.</p></div>';
-  document.getElementById('pm-right').innerHTML = rightHtml;
+  if (!rightHtml) rightHtml = '<div class="profile-section"><p style="color:var(--muted);font-style:italic">Aucune information complémentaire.</p></div>';
+  document.getElementById('pm-col-right').innerHTML = rightHtml;
 
   /* Status + Actions */
   const stBadge = '<span class="badge '+statusClass(st)+'" style="font-size:13px">'+(stLabels[st]||st)+'</span>';
@@ -1259,7 +1332,6 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   const pwdHash = await sha256Hex(pwd);
   if (pwdHash === ADMIN_PWD_HASH) {
     sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
-    localStorage.setItem(ADMIN_AUTH_KEY, 'true');
     if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
     openApp();
   } else {
@@ -1295,9 +1367,10 @@ const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : 
 const hasPortalAdmin = !!(portalSession && portalSession.role === 'admin' && portalSession.adminGranted);
 // Add secondary verification layer using checkAdminAccess if available
 const adminAccessVerified = hasPortalAdmin && (window.ExpertUtils && window.ExpertUtils.checkAdminAccess ? window.ExpertUtils.checkAdminAccess(portalSession) : true);
-if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || localStorage.getItem(ADMIN_AUTH_KEY) === 'true' || adminAccessVerified) {
+// Sécurité : supprime l'ancien localStorage (faille)
+localStorage.removeItem(ADMIN_AUTH_KEY);
+if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || adminAccessVerified) {
   sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
-  localStorage.setItem(ADMIN_AUTH_KEY, 'true');
   openApp();
 }
 
@@ -1361,7 +1434,6 @@ document.addEventListener('change', async (event) => {
 
 document.getElementById('logout-btn').addEventListener('click', () => {
   sessionStorage.removeItem(ADMIN_AUTH_KEY);
-  localStorage.removeItem(ADMIN_AUTH_KEY);
   if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
   window.location.href = 'index.html';
 });
