@@ -5211,7 +5211,7 @@ async function loadConsultants() {
       ).join(' ').toLowerCase();
     });
     allConsultants = visible;
-    renderConsultants(visible);
+    runConsultantsFilter();
   } catch(e) {
     grid.innerHTML = '<div class="empty-state"><p>Impossible de charger les consultants. Vérifiez votre connexion.</p></div>';
   }
