@@ -95,9 +95,9 @@ const tests = [
   {
     id: 'get-consultant-filter-erp',
     name: 'GET /consultants (filtre compétences ERP)',
-    desc: 'Filtrer par compétence SAP — vérifie le filtre ilike sur competences',
+    desc: 'Filtrer par compétence SAP — vérifie le filtre cs (contains) sur competences (text[])',
     run: async () => {
-      const r = await apiFetch('/rest/v1/consultants?competences=ilike.%25SAP%25&select=id,nom,competences&limit=3');
+      const r = await apiFetch('/rest/v1/consultants?competences=cs.%7BSAP%7D&select=id,nom,competences&limit=3');
       assert(r.ok, `HTTP ${r.status}`);
       const data = await r.json();
       assert(Array.isArray(data), 'Retour tableau');
@@ -109,7 +109,7 @@ const tests = [
     name: 'GET /entreprises',
     desc: 'Récupérer les entreprises inscrites',
     run: async () => {
-      const r = await apiFetch('/rest/v1/entreprises?select=id,nom_entreprise,email&limit=5');
+      const r = await apiFetch('/rest/v1/entreprises?select=id,nom,email&limit=5');
       assert(r.ok, `HTTP ${r.status}`);
       const data = await r.json();
       assert(Array.isArray(data), 'Retour tableau');
