@@ -1281,19 +1281,29 @@ async function deleteConsultant(id) {
   const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || c.email || 'Ce consultant';
 
   // Double confirmation pour éviter les suppressions accidentelles
-  const confirm1 = confirm('⚠️ Supprimer le profil de ' + name + ' ?\n\nCette action est IRRÉVERSIBLE. Le profil sera supprimé définitivement de la base de données.');
+  const confirm1 = confirm('⚠️ Supprimer le profil de ' + name + ' ?\n\nLe profil sera masqué de toute la plateforme.');
   if (!confirm1) return;
 
-  const confirm2 = prompt('Pour confirmer la suppression, tapez le nom du consultant :\n\n' + name);
-  if (!confirm2 || confirm2.trim().toLowerCase() !== name.trim().toLowerCase()) {
-    alert('Suppression annulée — le nom ne correspond pas.');
-    return;
-  }
+  // Soft delete : on marque le profil comme supprimé via notes_admin + statut refuse
+  const notes = parseNotes(c.notes_admin);
+  notes.admin_state = 'deleted';
+  notes.deleted_at = new Date().toISOString();
+  notes.deleted_by = 'admin';
 
-  const ok = await sbDelete('consultants', id);
+  const payload = {
+    statut: toDbStatut('refuse'),
+    notes_admin: JSON.stringify(notes),
+    // Anonymiser les données sensibles
+    email: 'deleted_' + id.substring(0, 8) + '@removed.local',
+    telephone: '',
+    prenom: '[Supprimé]',
+    nom: ''
+  };
+
+  const ok = await sbUpdate('consultants', id, payload);
   if (!ok) return alert('Erreur lors de la suppression du consultant.');
 
-  alert('✓ Le profil de ' + name + ' a été supprimé définitivement.');
+  alert('✓ Le profil de ' + name + ' a été supprimé.');
   closeProfileModal();
   await loadData();
 }
