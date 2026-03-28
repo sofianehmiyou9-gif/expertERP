@@ -4502,7 +4502,10 @@ async function submitConsultant() {
       console.warn('[Inscription] Profil enhancer skipped:', enhanceErr.message);
     }
 
-    await sbInsert('consultants', data);
+    const insertResult = await sbInsert('consultants', data);
+    if (insertResult && insertResult.code) {
+      throw new Error(insertResult.message || 'Erreur lors de l\'enregistrement du profil.');
+    }
     document.getElementById('cs-success').style.display = 'block';
     document.getElementById('cs-footer').style.display = 'none';
     for (let i = 1; i <= CS_TOTAL; i++) document.getElementById('cs-step-' + i)?.classList.remove('active');

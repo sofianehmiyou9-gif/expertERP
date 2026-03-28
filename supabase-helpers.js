@@ -53,11 +53,20 @@
    * @returns {Promise<object>}
    */
   async function sbInsert(table, data) {
-    var response = await fetch(url() + '/rest/v1/' + table, {
+    var prefer = 'return=minimal';
+    var qs = '';
+    if (table === 'consultants') {
+      prefer = 'return=representation';
+      qs = '?select=' + CONSULTANT_COLS;
+    } else {
+      prefer = 'return=representation';
+    }
+    var response = await fetch(url() + '/rest/v1/' + table + qs, {
       method: 'POST',
-      headers: headers({ 'Content-Type': 'application/json', 'Prefer': 'return=representation' }),
+      headers: headers({ 'Content-Type': 'application/json', 'Prefer': prefer }),
       body: JSON.stringify(data)
     });
+    if (prefer === 'return=minimal') return { success: true };
     return response.json();
   }
 
