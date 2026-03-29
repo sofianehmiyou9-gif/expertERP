@@ -2331,15 +2331,41 @@ function toggleTheme() {
     <div class="ent-card" style="border-top:3px solid #7c3aed;">
       <div class="ent-card-icon"><span class="material-symbols-outlined" style="font-size:28px;color:#7c3aed;">person_search</span></div>
       <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#7c3aed;margin-bottom:.35rem;">Trouvez votre expert</div>
-      <h3>Accédez aux ressources qualifiées d'autres firmes</h3>
-      <p>Vous avez un mandat mais il vous manque un expert SAP, Oracle ou Dynamics ? Consultez des profils vérifiés d'autres entreprises prêtes à collaborer.</p>
-      <ul>
-        <li><strong>Réseau inter-entreprises</strong> — Accédez à des consultants qualifiés que d'autres firmes mettent à disposition. Pas des freelances, des ressources d'entreprise.</li>
-        <li><strong>Profils anonymisés</strong> — Vous voyez les compétences, l'expérience et le tarif journalier. L'identité est révélée uniquement après accord mutuel.</li>
-        <li><strong>Disponibilité temps réel</strong> — Filtrez par ERP, rôle, ville et disponibilité. Démarrage possible en 48h.</li>
-        <li><strong>Mise en relation directe</strong> — Contactez la firme propriétaire de la ressource via messagerie intégrée. Zéro intermédiaire.</li>
-      </ul>
-      <button class="btn-ent" data-action="open-entreprise-modal" data-mode="chercher">Trouver une ressource →</button>
+      <h3>Accédez aux ressources qualifiées</h3>
+      <p>Vous avez un mandat mais il vous manque un expert SAP, Oracle ou Dynamics ? Deux options s'offrent à vous selon vos besoins :</p>
+
+      <!-- Option A: Entreprise partenaire -->
+      <div style="background:linear-gradient(135deg,#f0f4ff,#fafbff);border:1.5px solid rgba(0,40,142,.15);border-radius:12px;padding:1rem 1.1rem;margin-bottom:.75rem;position:relative;">
+        <div style="position:absolute;top:-.5rem;left:1rem;padding:.15rem .6rem;border-radius:999px;font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;background:var(--blue);color:#fff;font-weight:700;">Recommandé</div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;margin-top:.25rem;">
+          <span class="material-symbols-outlined" style="font-size:20px;color:var(--blue);">verified</span>
+          <strong style="font-size:.85rem;color:var(--ink);">Entreprise partenaire</strong>
+        </div>
+        <p style="font-size:.75rem;color:#64748b;line-height:1.5;margin:0 0 .5rem;">Inscrivez-vous comme entreprise et accédez à <strong style="color:var(--ink);">toutes les ressources</strong> — consultants d'entreprise et freelances. Profils anonymisés, mise en relation directe, filtres avancés.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 .6rem;display:flex;flex-wrap:wrap;gap:.3rem .8rem;">
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:var(--blue);font-weight:700;">✓</span> Réseau inter-entreprises complet</li>
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:var(--blue);font-weight:700;">✓</span> Profils anonymisés & vérifiés</li>
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:var(--blue);font-weight:700;">✓</span> Messagerie directe sécurisée</li>
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:var(--blue);font-weight:700;">✓</span> Disponibilité temps réel</li>
+        </ul>
+        <button class="btn-ent" data-action="open-entreprise-modal" data-mode="chercher" style="width:100%;padding:.55rem;font-size:.78rem;">S'inscrire comme entreprise →</button>
+      </div>
+
+      <!-- Option B: Visiteur pro -->
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:1rem 1.1rem;">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+          <span class="material-symbols-outlined" style="font-size:20px;color:#64748b;">visibility</span>
+          <strong style="font-size:.85rem;color:var(--ink);">Visiteur professionnel</strong>
+        </div>
+        <p style="font-size:.75rem;color:#64748b;line-height:1.5;margin:0 0 .5rem;">Consultez les profils de <strong style="color:var(--ink);">consultants freelances</strong> disponibles sur la plateforme. Accès limité — les ressources d'entreprise sont réservées aux partenaires inscrits.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 .6rem;display:flex;flex-wrap:wrap;gap:.3rem .8rem;">
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:#64748b;font-weight:700;">✓</span> Freelances ERP uniquement</li>
+          <li style="font-size:.7rem;color:var(--ink);display:flex;align-items:center;gap:.3rem;"><span style="color:#64748b;font-weight:700;">✓</span> Aucune inscription requise</li>
+          <li style="font-size:.7rem;color:#94a3b8;display:flex;align-items:center;gap:.3rem;"><span style="color:#cbd5e1;">✗</span> Ressources d'entreprise</li>
+          <li style="font-size:.7rem;color:#94a3b8;display:flex;align-items:center;gap:.3rem;"><span style="color:#cbd5e1;">✗</span> Messagerie directe</li>
+        </ul>
+        <button class="btn-ent" data-action="show-page" data-page="consultants" style="width:100%;padding:.55rem;font-size:.78rem;background:#f1f5f9;color:var(--blue);border:1.5px solid rgba(0,40,142,.15);">Voir les freelances disponibles →</button>
+      </div>
     </div>
 
     <div class="ent-card">
