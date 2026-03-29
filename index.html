@@ -3156,7 +3156,7 @@ function acceptCguAndClose() {
 
           <div class="offer-section-block" id="offer-import-block">
             <div class="template-actions">
-              <div class="template-note">Téléchargez le modèle CSV, remplissez les informations de vos consultants, puis réimportez-le.</div>
+              <div class="template-note">1. Téléchargez le modèle &nbsp;→&nbsp; 2. Remplissez les infos de vos consultants &nbsp;→&nbsp; 3. Réimportez le fichier</div>
               <button type="button" class="btn-template" data-action="download-offer-template">Télécharger le modèle CSV</button>
             </div>
             <div class="form-group" style="margin-bottom:0;">
@@ -3164,7 +3164,7 @@ function acceptCguAndClose() {
               <div class="import-drop-zone" id="import-drop-zone" data-action="open-file-dialog" data-file-input="ent-off-file">
                 <div class="import-drop-icon">📎</div>
                 <div class="import-drop-label">Glissez votre fichier ici ou <span class="import-link">parcourir</span></div>
-                <div class="import-drop-hint">Colonnes requises : email, erp, modules, role, annees_exp, tjm, disponibilite, resume<br>Colonnes optionnelles : nom, telephone, mode_travail, ville, langues</div>
+                <div class="import-drop-hint">Utilisez le modèle fourni ci-dessus pour un import sans erreur</div>
                 <div id="import-file-name" style="display:none;margin-top:.5rem;font-size:.78rem;color:var(--accent-dark);font-weight:500;"></div>
               </div>
               <input type="file" id="ent-off-file" accept=".csv,.xlsx,.xls" style="display:none" data-file-handler="offer-import">
@@ -4802,14 +4802,45 @@ function setOfferEntryMode(mode) {
 }
 
 function downloadOfferTemplate() {
-  const headers = ['email','erp','modules','role','annees_exp','tjm','disponibilite','resume','nom','telephone','mode_travail','ville','langues'];
-  const sample = ['consultant@firme.com','SAP','FI;CO','Consultant fonctionnel','8','850','Immediat','Consultant SAP FI/CO disponible rapidement','Jean Dupont','+1 514 000 0000','Hybride','Montreal','Francais;Anglais'];
-  const csv = [headers.join(','), sample.map(escapeCsvValue).join(',')].join('\n');
+  const SEP = ',';
+  const headers = ['email','nom','erp','modules','role','annees_exp','tjm','disponibilite','mode_travail','ville','langues','resume','telephone'];
+  const headerLabels = [
+    'Email *',
+    'Nom complet',
+    'ERP *',
+    'Modules (séparés par ;)',
+    'Rôle *',
+    "Années d'expérience",
+    'TJM ($)',
+    'Disponibilité',
+    'Mode de travail',
+    'Ville',
+    'Langues (séparées par ;)',
+    'Résumé professionnel',
+    'Téléphone'
+  ];
+  const examples = [
+    ['consultant1@firme.com','Karim Benali','SAP','FI/CO;MM;SD','Consultant fonctionnel','12','850','Immédiat','Hybride','Paris','Français;Anglais;Arabe','Consultant SAP FI/CO confirmé avec 12 ans d\'expérience en transformation financière. Expert S/4HANA certifié.','+33 6 12 34 56 78'],
+    ['consultant2@firme.com','Sophie Martin','Oracle','Financials;HCM;Procurement','Chef de projet','15','1000','Sous 30 jours','Hybride','Lyon','Français;Anglais;Espagnol','Chef de projet Oracle ERP Cloud avec 15 ans d\'expérience. Track record de 6 déploiements internationaux réussis.','+33 6 23 45 67 89'],
+    ['consultant3@firme.com','Thomas Durand','Dynamics 365','F&O;Business Central;Power Platform','Consultant technique','9','800','Immédiat','Remote','Nantes','Français;Anglais','Consultant technique Dynamics 365 spécialisé en développement X++ et intégrations Azure.','+33 6 34 56 78 90']
+  ];
+  const instructionRow = [
+    '→ Obligatoire','→ Optionnel','→ Obligatoire (SAP, Oracle, Dynamics...)','→ Séparez par des ;','→ Obligatoire','→ Nombre','→ Tarif journalier','→ Immédiat / Sous 15 jours / Sous 30 jours','→ Remote / Hybride / Sur site','→ Ville principale','→ Séparez par des ;','→ Court résumé de compétences','→ Optionnel'
+  ];
+  const lines = [
+    headerLabels.map(escapeCsvValue).join(SEP),
+    instructionRow.map(escapeCsvValue).join(SEP),
+    '',
+    headers.map(escapeCsvValue).join(SEP),
+    ...examples.map(row => row.map(escapeCsvValue).join(SEP))
+  ];
+  const BOM = '\uFEFF';
+  const csv = BOM + lines.join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'experterphub-modele-ressources.csv';
+  link.download = 'ExpertERPHub-Modele-Ressources.csv';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -4850,15 +4881,28 @@ function handleFileSelect(input) {
 }
 
 function parseCSV(text) {
-  const lines = text.trim().split(/\r?\n/);
+  const lines = text.replace(/^\uFEFF/, '').trim().split(/\r?\n/);
   if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,'').toLowerCase());
-  return lines.slice(1).filter(l => l.trim()).map(line => {
-    const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g,''));
+  /* Find the header row: the first line containing 'email' as a field */
+  let headerIdx = 0;
+  for (let i = 0; i < Math.min(lines.length, 10); i++) {
+    const low = lines[i].toLowerCase();
+    if (low.indexOf('email') !== -1 && (low.indexOf('erp') !== -1 || low.indexOf('role') !== -1)) {
+      /* Check if it looks like technical headers (no spaces or arrows) vs label row */
+      if (low.indexOf('→') === -1 && low.indexOf('obligatoire') === -1 && low.indexOf('*') === -1) {
+        headerIdx = i;
+        break;
+      }
+    }
+  }
+  const sep = lines[headerIdx].indexOf(';') !== -1 ? ';' : ',';
+  const headers = lines[headerIdx].split(sep).map(h => h.trim().replace(/^"|"$/g,'').toLowerCase());
+  return lines.slice(headerIdx + 1).filter(l => l.trim() && l.indexOf('→') === -1).map(line => {
+    const vals = line.split(sep).map(v => v.trim().replace(/^"|"$/g,''));
     const obj = {};
     headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
     return obj;
-  });
+  }).filter(obj => obj.email && obj.email.indexOf('@') !== -1);
 }
 
 function generateInternalResourceEmail() {
