@@ -412,16 +412,25 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .stat-l{font-size:.8rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;font-weight:500;}
 
 /* ── PLAN SELECTOR ── */
-.plan-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:.4rem;}
-.plan-card{border:1.5px solid var(--border);border-radius:8px;padding:1rem;cursor:pointer;text-align:center;transition:all .3s ease;background:#fff;}
-.plan-card:hover{border-color:var(--blue);background:var(--blue-light);transform:translateY(-2px);box-shadow:var(--shadow-md);}
-.plan-card.selected{border-color:var(--blue);background:var(--blue-light);box-shadow:0 0 0 3px rgba(30,58,95,.12);}
-.plan-name{font-family:var(--font-main);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem;}
-.plan-qty{font-family:var(--font-serif);font-size:1.5rem;font-weight:600;color:var(--blue);line-height:1.1;margin-bottom:.25rem;}
-.plan-price{font-family:var(--font-main);font-size:.62rem;letter-spacing:.08em;color:var(--blue);margin-bottom:.35rem;}
-.plan-desc{font-size:.72rem;color:var(--muted);}
+.plan-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-top:.5rem;}
+.plan-card{position:relative;border:1.5px solid var(--border);border-radius:12px;padding:1.2rem .8rem 1rem;cursor:pointer;text-align:center;transition:all .3s ease;background:#fff;}
+.plan-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,40,142,.1);}
+.plan-card.selected{border-color:var(--blue);background:linear-gradient(135deg,rgba(0,40,142,.03),rgba(0,40,142,.07));box-shadow:0 0 0 3px rgba(0,40,142,.12),0 8px 24px rgba(0,40,142,.08);}
+.plan-card.popular{border-color:var(--blue);border-width:2px;}
+.plan-name{font-family:var(--font-main);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.15rem;font-weight:600;}
+.plan-qty{font-family:var(--font-serif);font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:0;}
+.plan-qty-label{font-size:.7rem;color:var(--muted);margin-bottom:.5rem;}
+.plan-price{font-family:var(--font-serif);font-size:1.15rem;font-weight:700;color:var(--blue);margin-bottom:.1rem;line-height:1;}
+.plan-price-unit{font-size:.6rem;color:var(--muted);letter-spacing:.04em;margin-bottom:.5rem;}
+.plan-features{list-style:none;padding:0;margin:0;text-align:left;}
+.plan-features li{font-size:.68rem;color:var(--ink);padding:.2rem 0;display:flex;align-items:baseline;gap:.35rem;line-height:1.4;}
+.plan-features li::before{content:'✓';color:var(--blue);font-weight:700;font-size:.6rem;flex-shrink:0;}
+.plan-desc{font-size:.68rem;color:var(--muted);margin-top:.4rem;line-height:1.4;}
 .plan-card.selected .plan-qty{color:var(--blue);}
-.plan-badge{display:inline-block;margin-bottom:.35rem;padding:.2rem .5rem;border-radius:999px;font-family:var(--font-main);font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-border);}
+.plan-card.selected .plan-price{color:var(--blue);}
+.plan-badge{position:absolute;top:-.55rem;left:50%;transform:translateX(-50%);white-space:nowrap;padding:.2rem .7rem;border-radius:999px;font-family:var(--font-main);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;background:var(--blue);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(0,40,142,.2);}
+.plan-saving{display:inline-block;margin-top:.25rem;padding:.15rem .45rem;border-radius:4px;font-size:.55rem;font-weight:600;color:#059669;background:#ecfdf5;letter-spacing:.02em;}
+@media(max-width:780px){.plan-selector{grid-template-columns:repeat(2,1fr);}}
 
 .offer-mode-toggle{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:.75rem;}
 .offer-mode-card{border:1.5px solid var(--border);border-radius:8px;padding:1rem;background:var(--card);cursor:pointer;transition:all .25s ease;}
@@ -3070,34 +3079,63 @@ function acceptCguAndClose() {
 
         <!-- B2B offre — plan + file import -->
         <div id="ent-form-offrir" style="display:none">
-          <p style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;">Choisissez votre plan d'abonnement. Vos ressources sont affichées de manière <strong>anonyme</strong> — aucun nom ni numéro de téléphone n'est visible publiquement.</p>
+          <div style="margin-bottom:1rem;">
+            <p style="font-size:.82rem;color:var(--ink);margin-bottom:.35rem;font-weight:500;">Placez vos consultants devant les décideurs qui recrutent.</p>
+            <p style="font-size:.72rem;color:var(--muted);line-height:1.6;">Vos ressources sont affichées de manière <strong>anonyme</strong> (aucun nom ni téléphone visible). Les entreprises vous contactent directement via la plateforme.</p>
+          </div>
           <div class="form-group">
-            <label class="form-label">Plan d'abonnement <span>*</span></label>
+            <label class="form-label">Choisissez votre plan <span>*</span></label>
             <div class="plan-selector" id="plan-selector">
               <div class="plan-card" id="plan-1" data-action="select-plan" data-plan="1">
                 <div class="plan-name">Solo</div>
-                <div class="plan-qty">1 ressource</div>
-                <div class="plan-price">$49 / mois</div>
-                <div class="plan-desc">Pour inscrire un seul consultant</div>
+                <div class="plan-qty">1</div>
+                <div class="plan-qty-label">ressource</div>
+                <div class="plan-price">$49</div>
+                <div class="plan-price-unit">par mois</div>
+                <ul class="plan-features">
+                  <li>Profil optimisé par IA</li>
+                  <li>Visibilité plateforme</li>
+                  <li>Mise en relation directe</li>
+                </ul>
               </div>
               <div class="plan-card" id="plan-5" data-action="select-plan" data-plan="5">
                 <div class="plan-name">Starter</div>
-                <div class="plan-qty">5 ressources</div>
-                <div class="plan-price">$149 / mois</div>
-                <div class="plan-desc">Idéal pour les petites équipes</div>
+                <div class="plan-qty">5</div>
+                <div class="plan-qty-label">ressources</div>
+                <div class="plan-price">$149</div>
+                <div class="plan-price-unit">par mois · $29.80/ress.</div>
+                <ul class="plan-features">
+                  <li>Tout du plan Solo</li>
+                  <li>Import CSV en lot</li>
+                  <li>Tableau de bord équipe</li>
+                </ul>
               </div>
-              <div class="plan-card" id="plan-10" data-action="select-plan" data-plan="10">
-                <div class="plan-badge">Recommande</div>
+              <div class="plan-card popular" id="plan-10" data-action="select-plan" data-plan="10">
+                <div class="plan-badge">Recommandé</div>
                 <div class="plan-name">Business</div>
-                <div class="plan-qty">10 ressources</div>
-                <div class="plan-price">$249 / mois</div>
-                <div class="plan-desc">Pour les firmes en croissance</div>
+                <div class="plan-qty">10</div>
+                <div class="plan-qty-label">ressources</div>
+                <div class="plan-price">$249</div>
+                <div class="plan-price-unit">par mois · $24.90/ress.</div>
+                <div class="plan-saving">−39% vs Solo</div>
+                <ul class="plan-features">
+                  <li>Tout du plan Starter</li>
+                  <li>Priorité d'affichage</li>
+                  <li>Support dédié</li>
+                </ul>
               </div>
               <div class="plan-card" id="plan-15" data-action="select-plan" data-plan="15">
                 <div class="plan-name">Enterprise</div>
-                <div class="plan-qty">15 ressources</div>
-                <div class="plan-price">$349 / mois</div>
-                <div class="plan-desc">Pour les grands réseaux de consultants</div>
+                <div class="plan-qty">15</div>
+                <div class="plan-qty-label">ressources</div>
+                <div class="plan-price">$349</div>
+                <div class="plan-price-unit">par mois · $23.27/ress.</div>
+                <div class="plan-saving">−53% vs Solo</div>
+                <ul class="plan-features">
+                  <li>Tout du plan Business</li>
+                  <li>Branding personnalisé</li>
+                  <li>Account manager</li>
+                </ul>
               </div>
             </div>
             <input type="hidden" id="ent-off-plan" value="">
@@ -3106,20 +3144,20 @@ function acceptCguAndClose() {
             <label class="form-label">Comment souhaitez-vous inscrire vos ressources ? <span>*</span></label>
             <div class="offer-mode-toggle">
               <button type="button" class="offer-mode-card selected" id="offer-mode-import" data-action="set-offer-entry-mode" data-offer-mode="import">
-                <div class="offer-mode-title">Import de fichier</div>
-                <div class="offer-mode-desc">Importez plusieurs ressources d'un coup a partir d'un modele CSV deja structure.</div>
+                <div class="offer-mode-title">Import en lot (CSV)</div>
+                <div class="offer-mode-desc">Ajoutez plusieurs consultants d'un coup via un fichier CSV pré-structuré.</div>
               </button>
               <button type="button" class="offer-mode-card" id="offer-mode-single" data-action="set-offer-entry-mode" data-offer-mode="single">
-                <div class="offer-mode-title">1 ressource manuelle</div>
-                <div class="offer-mode-desc">Inscrivez immediatement un seul consultant sans passer par un fichier.</div>
+                <div class="offer-mode-title">Ajout manuel</div>
+                <div class="offer-mode-desc">Inscrivez un consultant directement via le formulaire ci-dessous.</div>
               </button>
             </div>
           </div>
 
           <div class="offer-section-block" id="offer-import-block">
             <div class="template-actions">
-              <div class="template-note">Telechargez d'abord le modele CSV ExpertERPHub, remplissez vos ressources, puis reimportez-le pour une inscription pre-machee.</div>
-              <button type="button" class="btn-template" data-action="download-offer-template">Telecharger le modele CSV</button>
+              <div class="template-note">Téléchargez le modèle CSV, remplissez les informations de vos consultants, puis réimportez-le.</div>
+              <button type="button" class="btn-template" data-action="download-offer-template">Télécharger le modèle CSV</button>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Importer vos ressources <span style="color:var(--muted);font-weight:300;">(CSV ou Excel)</span></label>
@@ -5041,8 +5079,8 @@ function updateEntUI() {
       const el = document.getElementById('ent-form-' + t);
       if (el) el.style.display = t === 'offrir' ? 'block' : 'none';
     });
-    document.getElementById('ent-modal-title').textContent = 'Abonnement & Ressources';
-    document.getElementById('ent-modal-sub').textContent = 'Choisissez votre plan et inscrivez vos ressources.';
+    document.getElementById('ent-modal-title').textContent = 'Plan & Ressources';
+    document.getElementById('ent-modal-sub').textContent = 'Sélectionnez votre plan puis ajoutez vos consultants.';
   } else if (ENT_STEP === 2) {
     document.getElementById('ent-modal-title').textContent = 'Créer votre compte entreprise';
     document.getElementById('ent-modal-sub').textContent = 'Coordonnées de votre organisation';
