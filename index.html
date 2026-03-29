@@ -5745,14 +5745,13 @@ function runConsultantsFilter() {
     ).join(' ').toLowerCase());
     const notes = c._parsedNotes || (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
 
-    /* ═══ VISIBILITÉ B2B: Les ressources B2B privées ne sont visibles que par les entreprises connectées ═══
+    /* ═══ VISIBILITÉ B2B: Les ressources d'entreprise ne sont visibles que par les entreprises connectées ═══
        - source = 'import_b2b' → c'est une ressource d'entreprise (bench)
-       - visibility = 'public' → l'admin a rendu cette ressource visible pour tous
-       - visibility = 'b2b' ou absent → visible uniquement pour les entreprises connectées
+       - Visiteurs / non-entreprises → ne voient AUCUNE ressource B2B (même publiques)
+       - Seules les entreprises connectées voient les ressources d'entreprise
        - source != 'import_b2b' → c'est un freelance → visible par tous */
     var isB2B = notes.source === 'import_b2b';
-    var isPublicB2B = notes.visibility === 'public';
-    if (isB2B && !isPublicB2B && !_isEnterprise) return false;
+    if (isB2B && !_isEnterprise) return false;
 
     if (search && !fullName.includes(search) && !skills.includes(search)) return false;
     if (erp && !skills.includes(erp)) return false;
