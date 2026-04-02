@@ -8,6 +8,19 @@
     return value;
   }
 
+  function computeSessionSignature(data) {
+    var payload = data.role + '|' + data.email + '|' + data.expiresAt;
+    var hash = 0;
+    var salt = KEY + '_sig_v1';
+    var str = salt + payload;
+    for (var i = 0; i < str.length; i++) {
+      var ch = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + ch;
+      hash = hash & hash;
+    }
+    return hash.toString(36);
+  }
+
   function getSession() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -16,6 +29,10 @@
       if (!parsed || !parsed.role) return null;
       if (parsed.expiresAt && Date.now() > Date.parse(parsed.expiresAt)) {
         localStorage.removeItem(KEY);
+        return null;
+      }
+      if (parsed._sig !== computeSessionSignature(parsed)) {
+        clearSession();
         return null;
       }
       parsed.role = normalizeRole(parsed.role);
@@ -34,6 +51,7 @@
       createdAt: new Date(now).toISOString(),
       expiresAt: new Date(now + SESSION_TTL_MS).toISOString()
     };
+    normalized._sig = computeSessionSignature(normalized);
     localStorage.setItem(KEY, JSON.stringify(normalized));
     return normalized;
   }

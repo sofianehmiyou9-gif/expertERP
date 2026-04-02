@@ -14,6 +14,7 @@
   ];
 
   // Hash du secret pour tokens d'acces (le secret original n'est JAMAIS expose cote client)
+  // TODO: Replace 'a1b2c3d4e5f6' with a real SHA-256 hash if access tokens are implemented
   var ACCESS_TOKEN_HASH = 'a1b2c3d4e5f6';
 
   window.ExpertConfig = {

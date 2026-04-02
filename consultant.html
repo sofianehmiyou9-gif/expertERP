@@ -740,19 +740,6 @@ const ERP_BRANDS = [
   { key: 'infor', label: 'Infor', mark: 'INF', logo: 'assets/erp-logos/infor.svg', match: ['infor'] }
 ];
 
-function detectErpBrand(value) {
-  const text = String(value || '').toLowerCase();
-  return ERP_BRANDS.find((brand) => brand.match.some((needle) => text.includes(needle))) || null;
-}
-
-function extractErpBrands(skills) {
-  const found = [];
-  skills.forEach((skill) => {
-    const brand = detectErpBrand(skill);
-    if (brand && !found.some((item) => item.key === brand.key)) found.push(brand);
-  });
-  return found;
-}
 
 function renderErpBrandVisual(brand) {
   return `<span class="erp-logo-wrap"><img class="erp-logo-img" src="${brand.logo || ''}" alt="${brand.label}"><span class="erp-logo-mark ${brand.key}" style="display:none;">${brand.mark}</span></span>`;

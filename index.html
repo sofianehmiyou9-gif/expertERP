@@ -4184,7 +4184,6 @@ function handleStaticAction(event) {
   if (action === 'set-language') return setLanguage(trigger.dataset.lang || 'fr');
   if (action === 'toggle-theme') return toggleTheme();
   if (action === 'switch-how-tab') return switchHowTab(trigger.dataset.tabTarget || '', trigger);
-  if (action === 'switch-how-tab-2') return switchHowTab2(trigger.dataset.tabTarget || '', trigger);
   if (action === 'cs-add-exp') return csAddExp();
   if (action === 'apply-promo') return applyPromo(trigger.dataset.inputId || '', trigger.dataset.feedbackId || '');
   if (action === 'cs-back') return csBack();
@@ -4253,13 +4252,6 @@ function switchHowTab(id, btn) {
   document.getElementById('how-' + id).classList.add('active');
   document.querySelectorAll('.how-tabs .how-tab').forEach(t => { t.classList.remove('active-gold','active-blue'); });
   btn.classList.add(id.startsWith('b2b') || id==='erp' ? 'active-blue' : 'active-gold');
-}
-function switchHowTab2(id, btn) {
-  ['c2','c3','c4','c5'].forEach(i => { const el=document.getElementById('how-'+i); if(el) el.classList.remove('active'); });
-  const el = document.getElementById('how-' + id);
-  if (el) el.classList.add('active');
-  btn.closest('.how-tabs').querySelectorAll('.how-tab').forEach(t => t.classList.remove('active-gold','active-blue'));
-  btn.classList.add(id==='c2' ? 'active-gold' : 'active-blue');
 }
 // PROMO CODES
 const PROMO_CODES = {
