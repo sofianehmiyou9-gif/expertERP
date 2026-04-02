@@ -244,6 +244,8 @@ img{max-width:100%;height:auto;}
 .btn-primary{background:var(--brand);color:#fff;box-shadow:0 1px 4px rgba(13,71,161,.2);}
 .btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px);box-shadow:0 2px 8px rgba(13,71,161,.25);}
 .btn-primary:active{transform:translateY(0);box-shadow:0 1px 3px rgba(13,71,161,.15);}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border-strong);border-radius:var(--r);}
+.btn-ghost:hover{background:var(--surface-2);color:var(--text);}
 .btn-secondary{background:var(--surface);color:var(--text-muted);border:1px solid var(--border);}
 .btn-secondary:hover{background:var(--brand-light);color:var(--brand-dark);border-color:rgba(13,71,161,.15);}
 
@@ -550,6 +552,12 @@ img{max-width:100%;height:auto;}
           <div id="aside-certif-list" class="aside-certif-badges"></div>
         </div>
 
+        <!-- EXPERIENCES (sidebar summary) -->
+        <div class="aside-section aside-section-soft" id="aside-exp-section" style="display:none;">
+          <div class="aside-title">Expériences</div>
+          <div id="aside-exp-list" style="font-size:.8rem;color:#444653;line-height:1.5;"></div>
+        </div>
+
         <!-- SUPPORT -->
         <div class="aside-section aside-section-soft">
           <div class="aside-title">Support</div>
@@ -806,46 +814,46 @@ img{max-width:100%;height:auto;}
                   </div>
                   <textarea id="resume-pro-input" class="inline-textarea" rows="22" style="line-height:1.75;white-space:pre-wrap;font-size:.86rem;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
                 </div>
-                <!-- ═══ EXPÉRIENCES PROJETS — Structuré avec dates début/fin + poste actuel ═══ -->
+                <!-- ═══ EXPÉRIENCES PROFESSIONNELLES — Liste structurée ═══ -->
                 <div class="info-card wide" id="project-exp-card">
-                  <div class="detail-label">Exp&#233;rience r&#233;cente</div>
-                  <div class="inline-hint">D&#233;taillez votre exp&#233;rience ERP la plus r&#233;cente ou marquante.</div>
-                  <!-- Période structurée: date début / date fin -->
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
-                    <div>
-                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">D&#233;but</label>
-                      <div style="display:flex;gap:.35rem;">
-                        <select id="exp-start-month" class="inline-select" style="flex:1;font-size:.82rem;padding:.55rem .6rem;">
-                          <option value="">Mois</option>
-                          <option value="01">Janvier</option><option value="02">F&#233;vrier</option><option value="03">Mars</option>
-                          <option value="04">Avril</option><option value="05">Mai</option><option value="06">Juin</option>
-                          <option value="07">Juillet</option><option value="08">Ao&#251;t</option><option value="09">Septembre</option>
-                          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">D&#233;cembre</option>
-                        </select>
-                        <input id="exp-start-year" class="inline-edit" type="number" min="2000" max="2030" placeholder="Ann&#233;e" style="width:90px;font-size:.82rem;padding:.55rem .6rem;">
+                  <div class="detail-label">Expériences professionnelles</div>
+                  <div class="inline-hint">Vos expériences sont affichées sur votre profil public. Ajoutez, modifiez ou supprimez vos expériences ERP.</div>
+                  <!-- Liste des expériences existantes -->
+                  <div id="experiences-list-container" style="margin-bottom:1rem;"></div>
+                  <!-- Formulaire ajout / édition -->
+                  <div id="exp-form-wrapper" style="border:1.5px dashed var(--border);border-radius:var(--r);padding:1rem;background:var(--surface-2);">
+                    <div style="font-size:.82rem;font-weight:700;color:var(--brand);margin-bottom:.6rem;" id="exp-form-title">+ Ajouter une expérience</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
+                      <div>
+                        <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Poste / Titre</label>
+                        <input id="exp-poste-input" class="inline-edit" type="text" placeholder="Ex: Consultant SAP FI/CO" style="font-size:.82rem;padding:.55rem .6rem;width:100%;box-sizing:border-box;">
+                      </div>
+                      <div>
+                        <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Entreprise</label>
+                        <input id="exp-entreprise-input" class="inline-edit" type="text" placeholder="Ex: Camptocamp, Deloitte..." style="font-size:.82rem;padding:.55rem .6rem;width:100%;box-sizing:border-box;">
                       </div>
                     </div>
-                    <div id="exp-end-group">
-                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Fin</label>
-                      <div style="display:flex;gap:.35rem;">
-                        <select id="exp-end-month" class="inline-select" style="flex:1;font-size:.82rem;padding:.55rem .6rem;">
-                          <option value="">Mois</option>
-                          <option value="01">Janvier</option><option value="02">F&#233;vrier</option><option value="03">Mars</option>
-                          <option value="04">Avril</option><option value="05">Mai</option><option value="06">Juin</option>
-                          <option value="07">Juillet</option><option value="08">Ao&#251;t</option><option value="09">Septembre</option>
-                          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">D&#233;cembre</option>
-                        </select>
-                        <input id="exp-end-year" class="inline-edit" type="number" min="2000" max="2030" placeholder="Ann&#233;e" style="width:90px;font-size:.82rem;padding:.55rem .6rem;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
+                      <div>
+                        <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Secteur</label>
+                        <input id="exp-secteur-input" class="inline-edit" type="text" placeholder="Ex: Finance, Retail..." style="font-size:.82rem;padding:.55rem .6rem;width:100%;box-sizing:border-box;">
                       </div>
+                      <div>
+                        <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Période</label>
+                        <input id="exp-periode-input" class="inline-edit" type="text" placeholder="Ex: 2022 - 2024" style="font-size:.82rem;padding:.55rem .6rem;width:100%;box-sizing:border-box;">
+                      </div>
+                    </div>
+                    <div style="margin-bottom:.5rem;">
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Description / Réalisations</label>
+                      <textarea id="exp-description-input" class="inline-textarea" rows="3" placeholder="Décrivez vos réalisations clés, missions, résultats obtenus..." style="font-size:.82rem;"></textarea>
+                    </div>
+                    <div style="display:flex;gap:.5rem;justify-content:flex-end;">
+                      <button type="button" id="exp-cancel-btn" class="btn-ghost" style="font-size:.78rem;padding:.45rem .9rem;display:none;" onclick="cancelExpEdit()">Annuler</button>
+                      <button type="button" id="exp-add-btn" class="btn-primary" style="font-size:.78rem;padding:.45rem .9rem;" onclick="saveExpEntry()">Ajouter</button>
                     </div>
                   </div>
-                  <!-- Checkbox poste actuel -->
-                  <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--text-muted);cursor:pointer;margin-bottom:.6rem;">
-                    <input type="checkbox" id="exp-current-job" style="accent-color:var(--brand);width:15px;height:15px;cursor:pointer;">
-                    Poste actuel (en cours)
-                  </label>
-                  <!-- Descriptif du projet -->
-                  <textarea id="project-exp-input" class="inline-textarea" placeholder="Ex: SAP S/4 migration chez [entreprise], rollout multi-pays, optimisations EWM..."></textarea>
+                  <!-- Hidden legacy field -->
+                  <input type="hidden" id="project-exp-input" value="">
                 </div>
                 <div class="info-card wide" id="certif-section-card">
                   <div class="detail-label">Certifications</div>
@@ -1107,21 +1115,130 @@ function setupInlineChoices() {
     });
   });
 
-  /* ═══ Expérience: checkbox "Poste actuel" masque les champs de fin ═══ */
-  var expCurrentJob = document.getElementById('exp-current-job');
-  var expEndGroup = document.getElementById('exp-end-group');
-  if (expCurrentJob && expEndGroup) {
-    expCurrentJob.addEventListener('change', function() {
-      var hide = expCurrentJob.checked;
-      expEndGroup.style.opacity = hide ? '.4' : '1';
-      expEndGroup.style.pointerEvents = hide ? 'none' : 'auto';
-      if (hide) {
-        document.getElementById('exp-end-month').value = '';
-        document.getElementById('exp-end-year').value = '';
-      }
-    });
-  }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   EXPÉRIENCES PROFESSIONNELLES — Gestion structurée (add/edit/remove)
+   ═══════════════════════════════════════════════════════════ */
+var experiencesList = [];
+var editingExpIndex = -1;
+
+function renderExperienceCards() {
+  var container = document.getElementById("experiences-list-container");
+  if (!container) return;
+  if (!experiencesList.length) {
+    container.innerHTML = '<div style="text-align:center;padding:1.2rem;color:var(--text-muted);font-size:.82rem;font-style:italic;">Aucune exp\u00e9rience ajout\u00e9e. Utilisez le formulaire ci-dessous.</div>';
+    return;
+  }
+  container.innerHTML = experiencesList.map(function(exp, idx) {
+    var poste = safe(exp.poste || "Exp\u00e9rience ERP");
+    var entreprise = safe(exp.entreprise || "Entreprise confidentielle");
+    var secteur = safe(exp.secteur || "");
+    var periode = safe(exp.periode || "");
+    var desc = safe(exp.description || "");
+    var bullets = desc ? desc.split("\n").filter(function(l){return l.trim();}) : [];
+    return '<div style="background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.5rem;position:relative;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+        '<div style="flex:1;">' +
+          '<div style="font-weight:700;font-size:.88rem;color:var(--text);">\uD83C\uDFE2 ' + poste + '</div>' +
+          '<div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">' + entreprise + (periode ? " \u2014 " + periode : "") + '</div>' +
+          (secteur ? '<div style="font-size:.75rem;color:var(--text-subtle);margin-top:.1rem;">Secteur : ' + secteur + '</div>' : "") +
+        '</div>' +
+        '<div style="display:flex;gap:.3rem;flex-shrink:0;">' +
+          '<button type="button" onclick="editExpEntry(' + idx + ')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:.25rem .5rem;font-size:.72rem;cursor:pointer;color:var(--brand);" title="Modifier">\u270F\uFE0F</button>' +
+          '<button type="button" onclick="removeExpEntry(' + idx + ')" style="background:none;border:1px solid #e8c4c4;border-radius:6px;padding:.25rem .5rem;font-size:.72rem;cursor:pointer;color:#c62828;" title="Supprimer">\uD83D\uDDD1\uFE0F</button>' +
+        '</div>' +
+      '</div>' +
+      (bullets.length ? '<ul style="margin:.4rem 0 0 1.2rem;padding:0;font-size:.8rem;color:#444653;line-height:1.6;">' + bullets.map(function(b){return "<li>" + safe(b) + "</li>";}).join("") + "</ul>" : "") +
+    '</div>';
+  }).join("");
+}
+
+function clearExpForm() {
+  var ids = ["exp-poste-input","exp-entreprise-input","exp-secteur-input","exp-periode-input","exp-description-input"];
+  ids.forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ""; });
+  editingExpIndex = -1;
+  var title = document.getElementById("exp-form-title");
+  var addBtn = document.getElementById("exp-add-btn");
+  var cancelBtn = document.getElementById("exp-cancel-btn");
+  if (title) title.textContent = "+ Ajouter une exp\u00e9rience";
+  if (addBtn) addBtn.textContent = "Ajouter";
+  if (cancelBtn) cancelBtn.style.display = "none";
+}
+
+function saveExpEntry() {
+  var poste = (document.getElementById("exp-poste-input").value || "").trim();
+  var entreprise = (document.getElementById("exp-entreprise-input").value || "").trim();
+  var secteur = (document.getElementById("exp-secteur-input").value || "").trim();
+  var periode = (document.getElementById("exp-periode-input").value || "").trim();
+  var desc = (document.getElementById("exp-description-input").value || "").trim();
+  if (!poste && !entreprise) { alert("Veuillez saisir au moins le poste ou l\u2019entreprise."); return; }
+  var entry = { poste: poste, entreprise: entreprise, secteur: secteur, periode: periode, description: desc };
+  if (editingExpIndex >= 0 && editingExpIndex < experiencesList.length) {
+    experiencesList[editingExpIndex] = entry;
+  } else {
+    experiencesList.push(entry);
+  }
+  clearExpForm();
+  renderExperienceCards();
+  renderSidebarExps();
+  syncExpLegacyField();
+}
+
+function editExpEntry(idx) {
+  if (idx < 0 || idx >= experiencesList.length) return;
+  var exp = experiencesList[idx];
+  document.getElementById("exp-poste-input").value = exp.poste || "";
+  document.getElementById("exp-entreprise-input").value = exp.entreprise || "";
+  document.getElementById("exp-secteur-input").value = exp.secteur || "";
+  document.getElementById("exp-periode-input").value = exp.periode || "";
+  document.getElementById("exp-description-input").value = exp.description || "";
+  editingExpIndex = idx;
+  var title = document.getElementById("exp-form-title");
+  var addBtn = document.getElementById("exp-add-btn");
+  var cancelBtn = document.getElementById("exp-cancel-btn");
+  if (title) title.textContent = "\u270F\uFE0F Modifier l\u2019exp\u00e9rience";
+  if (addBtn) addBtn.textContent = "Mettre \u00e0 jour";
+  if (cancelBtn) cancelBtn.style.display = "";
+  document.getElementById("exp-form-wrapper").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function removeExpEntry(idx) {
+  if (idx < 0 || idx >= experiencesList.length) return;
+  if (!confirm("Supprimer cette exp\u00e9rience ?")) return;
+  experiencesList.splice(idx, 1);
+  if (editingExpIndex === idx) clearExpForm();
+  else if (editingExpIndex > idx) editingExpIndex--;
+  renderExperienceCards();
+  renderSidebarExps();
+  syncExpLegacyField();
+}
+
+function cancelExpEdit() { clearExpForm(); }
+
+function syncExpLegacyField() {
+  var f = document.getElementById("project-exp-input");
+  if (!f) return;
+  f.value = experiencesList.map(function(e) {
+    return (e.poste||"") + " @ " + (e.entreprise||"") + " (" + (e.periode||"") + ")";
+  }).join("\n");
+}
+
+function renderSidebarExps() {
+  var section = document.getElementById("aside-exp-section");
+  var container = document.getElementById("aside-exp-list");
+  if (!container || !section) return;
+  if (!experiencesList.length) { section.style.display = "none"; return; }
+  section.style.display = "";
+  container.innerHTML = experiencesList.map(function(e) {
+    return '<div style="margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid rgba(0,0,0,.06);">' +
+      '<div style="font-weight:600;font-size:.78rem;color:var(--text);">' + safe(e.poste || "Exp\u00e9rience") + '</div>' +
+      '<div style="font-size:.72rem;color:var(--text-muted);">' + safe(e.entreprise || "") + (e.periode ? " \u2014 " + safe(e.periode) : "") + '</div>' +
+    '</div>';
+  }).join("");
+}
+
+
 
 function setLanguage(lang) {
   ExpertI18n.setLang(lang);
@@ -2439,8 +2556,7 @@ function renderBasicInfo() {
   const editVille = document.getElementById('edit-ville-select');
   const editVilleCustom = document.getElementById('edit-ville-custom');
   const statusSelect = document.getElementById('profile-status-select');
-  const projectInput = document.getElementById('project-exp-input');
-
+  
   if (editExp) editExp.value = notes.annees_exp ?? '';
   const tjmType = notes.tjm_type === 'heure' ? 'heure' : 'jour';
   const tjmValue = notes.tjm_value || currentConsultant.tjm_min || '';
@@ -2464,26 +2580,34 @@ function renderBasicInfo() {
   }
 
   if (statusSelect) statusSelect.value = currentConsultant.statut === 'en_mission' ? 'en_mission' : 'actif';
-  if (projectInput) projectInput.value = notes.experiences_projets || notes.experiences_test || '';
-  /* ═══ Charger les dates d'expérience structurées ═══ */
-  var expStartMonth = document.getElementById('exp-start-month');
-  var expStartYear = document.getElementById('exp-start-year');
-  var expEndMonth = document.getElementById('exp-end-month');
-  var expEndYear = document.getElementById('exp-end-year');
-  var expCurrentJob = document.getElementById('exp-current-job');
-  if (expStartMonth) expStartMonth.value = notes.exp_start_month || '';
-  if (expStartYear) expStartYear.value = notes.exp_start_year || '';
-  if (expEndMonth) expEndMonth.value = notes.exp_end_month || '';
-  if (expEndYear) expEndYear.value = notes.exp_end_year || '';
-  if (expCurrentJob) {
-    expCurrentJob.checked = !!notes.exp_current_job;
-    if (notes.exp_current_job) {
-      var endGroup = document.getElementById('exp-end-group');
-      if (endGroup) { endGroup.style.opacity = '.4'; endGroup.style.pointerEvents = 'none'; }
+  /* ═══ Charger les expériences structurées ═══ */
+  var rawExps = Array.isArray(notes.experiences) ? notes.experiences : [];
+  if (!rawExps.length && (notes.experiences_projets || notes.experiences_test)) {
+    var legacyText = notes.experiences_projets || notes.experiences_test || "";
+    var legacyLines = String(legacyText).split("\n").map(function(l){return l.trim();}).filter(Boolean);
+    if (legacyLines.length) {
+      var _startM = notes.exp_start_month || "";
+      var _startY = notes.exp_start_year || "";
+      var _endM = notes.exp_end_month || "";
+      var _endY = notes.exp_end_year || "";
+      var _periode = "";
+      if (_startM && _startY) {
+        _periode = _startM + "/" + _startY;
+        if (_endM && _endY && !notes.exp_current_job) _periode += " - " + _endM + "/" + _endY;
+        else if (notes.exp_current_job) _periode += " - Présent";
+      }
+      rawExps = [{ poste: currentConsultant.titre || "Expérience ERP", entreprise: "", secteur: "", periode: _periode, description: legacyLines.join("\n") }];
     }
   }
-  /* ═══ Resume professionnel — Template standardisé complet ═══ */
-  var resumeInput = document.getElementById('resume-pro-input');
+  experiencesList = rawExps.map(function(e) {
+    return { poste: e.poste || e.titre || "", entreprise: e.entreprise || "", secteur: e.secteur || "", periode: e.periode || "", description: e.description || "" };
+  });
+  renderExperienceCards();
+  renderSidebarExps();
+  clearExpForm();
+  syncExpLegacyField();
+  /* ═══ Resume professionnel ═══ */
+    var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
     if (notes.resume_pro) {
       /* Le consultant a déjà un résumé sauvegardé — on le restaure */
@@ -2571,7 +2695,7 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   const ville = villeSelect === 'Autre' ? villeCustom : villeSelect;
   const langues = (document.getElementById('edit-langues-input').value || '').trim();
   const statusChoice = (document.getElementById('profile-status-select').value || 'actif').trim();
-  const projectExp = document.getElementById('project-exp-input').value.trim();
+  const projectExp = (document.getElementById('project-exp-input') ? document.getElementById('project-exp-input').value : '').trim();
   const resumePro = (document.getElementById('resume-pro-input') ? document.getElementById('resume-pro-input').value : '').trim();
   const certifs = getSelectedCertifications();
 
@@ -2599,16 +2723,17 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   notes.mode_travail = modeTravail;
   notes.ville = ville;
   notes.langues = langues;
+  /* ═══ Sauvegarder les expériences structurées ═══ */
+  notes.experiences = experiencesList.map(function(e) {
+    return { poste: e.poste || "", entreprise: e.entreprise || "", secteur: e.secteur || "", periode: e.periode || "", description: e.description || "" };
+  });
   notes.experiences_projets = projectExp;
   notes.experiences_test = projectExp;
-  notes.resume_pro = resumePro; /* Resume professionnel */
-  notes.resume = resumePro; /* Synchroniser les deux champs pour consultant.html */
-  /* ═══ Sauvegarder les dates d'expérience structurées ═══ */
-  notes.exp_start_month = (document.getElementById('exp-start-month').value || '').trim();
-  notes.exp_start_year = (document.getElementById('exp-start-year').value || '').trim();
-  notes.exp_end_month = (document.getElementById('exp-end-month').value || '').trim();
-  notes.exp_end_year = (document.getElementById('exp-end-year').value || '').trim();
-  notes.exp_current_job = !!document.getElementById('exp-current-job').checked;
+  notes.experiences_text = experiencesList.map(function(e) {
+    return (e.poste || "") + " @ " + (e.entreprise || "") + (e.periode ? " (" + e.periode + ")" : "");
+  }).join("\n");
+  notes.resume_pro = resumePro;
+  notes.resume = resumePro;
   notes.certifications = certifs;
   notes.certifications_v2 = getCertificationsForSave();
   /* ═══ Sauvegarder les ERP sélectionnés + modules ═══ */
