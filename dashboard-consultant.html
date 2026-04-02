@@ -1106,8 +1106,6 @@ function setupInlineChoices() {
     });
   }
 
-  /* edit-langues-input est maintenant hidden — ancien listener supprime */
-
   /* ═══ ERP chips: toggle sélection ═══ */
   document.querySelectorAll('#erp-edit-chips .choice-chip').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -1466,40 +1464,6 @@ function applyI18n() {
   if (autreChip) autreChip.textContent = t('dashboardConsultant.otherLang');
   var langCustom = document.getElementById('edit-langues-custom');
   if (langCustom) langCustom.placeholder = t('dashboardConsultant.customLangPlaceholder');
-
-  /* Experience dates */
-  var startLabel = document.querySelector('#project-exp-card label[style*="Début"], #project-exp-card label');
-  document.querySelectorAll('#project-exp-card label').forEach(function(lbl) {
-    var txt = lbl.textContent.trim();
-    if (txt === 'Début' || txt === 'Start') lbl.textContent = t('dashboardConsultant.startDate');
-    else if (txt === 'Fin' || txt === 'End') lbl.textContent = t('dashboardConsultant.endDate');
-  });
-  var startMonthSel = document.getElementById('exp-start-month');
-  var endMonthSel = document.getElementById('exp-end-month');
-  var months = t('dashboardConsultant.months');
-  [startMonthSel, endMonthSel].forEach(function(sel) {
-    if (!sel) return;
-    var opts = sel.options;
-    if (opts[0]) opts[0].textContent = t('dashboardConsultant.monthLabel');
-    if (Array.isArray(months)) {
-      for (var i = 1; i <= 12 && i < opts.length; i++) {
-        opts[i].textContent = months[i - 1];
-      }
-    }
-  });
-  var startYearInput = document.getElementById('exp-start-year');
-  var endYearInput = document.getElementById('exp-end-year');
-  if (startYearInput) startYearInput.placeholder = t('dashboardConsultant.yearLabel');
-  if (endYearInput) endYearInput.placeholder = t('dashboardConsultant.yearLabel');
-
-  /* Current job checkbox */
-  var currentJobLabel = document.querySelector('#project-exp-card label:last-of-type');
-  if (currentJobLabel && currentJobLabel.querySelector('#exp-current-job')) {
-    var cb = currentJobLabel.querySelector('#exp-current-job');
-    currentJobLabel.textContent = '';
-    currentJobLabel.appendChild(cb);
-    currentJobLabel.appendChild(document.createTextNode(' ' + t('dashboardConsultant.currentJob')));
-  }
 
   /* Add certification button */
   var certifAddBtn = document.getElementById('certif-add-btn');
@@ -2380,121 +2344,10 @@ function getCertificationsForSave() {
 function getCertificationsString() {
   return certifList.map(c => [c.erp, c.module, c.level].filter(Boolean).join(' \u2013 ')).join(', ');
 }
-
-/* Legacy support */
-const ERP_CERTIF_MAP = [
-  {
-    keywords: ['sap'],
-    certs: [
-      'SAP Certified Associate \u2013 SAP S/4HANA Business Process Integration',
-      'SAP Certified Application Associate \u2013 Financial Accounting (SAP FI/CO)',
-      'SAP Certified Application Associate \u2013 Materials Management (SAP MM)',
-      'SAP Certified Application Associate \u2013 Sales & Distribution (SAP SD)',
-      'SAP Certified Application Associate \u2013 Production Planning (SAP PP)',
-      'SAP Certified Application Associate \u2013 Warehouse Management (SAP EWM)',
-      'SAP Certified Application Associate \u2013 SuccessFactors (SAP HCM)',
-      'SAP Certified Development Associate \u2013 ABAP',
-      'SAP Certified Technology Associate \u2013 SAP Basis Administration',
-      'SAP Activate Project Manager Certified',
-    ]
-  },
-  {
-    keywords: ['oracle'],
-    certs: [
-      'Oracle ERP Cloud: Financials Certified Implementation Professional',
-      'Oracle ERP Cloud: Project Management Certified Implementation Professional',
-      'Oracle ERP Cloud: Order Management Certified Specialist',
-      'Oracle E-Business Suite R12: Financial Management Certified',
-      'Oracle Database SQL Certified Associate',
-    ]
-  },
-  {
-    keywords: ['dynamics', 'microsoft dynamics', 'd365'],
-    certs: [
-      'Microsoft Certified: Dynamics 365 Finance Functional Consultant Associate',
-      'Microsoft Certified: Dynamics 365 Supply Chain Management Functional Consultant Associate',
-      'Microsoft Certified: Dynamics 365 Business Central Functional Consultant Associate',
-      'Microsoft Certified: Dynamics 365 Sales Functional Consultant Associate',
-      'Microsoft Certified: Power Platform Functional Consultant Associate',
-    ]
-  },
-  {
-    keywords: ['salesforce'],
-    certs: [
-      'Salesforce Certified Administrator',
-      'Salesforce Certified Advanced Administrator',
-      'Salesforce Certified Platform Developer I',
-      'Salesforce Certified Platform Developer II',
-      'Salesforce Certified Sales Cloud Consultant',
-      'Salesforce Certified Service Cloud Consultant',
-    ]
-  },
-  {
-    keywords: ['workday'],
-    certs: [
-      'Workday HCM Pro Certified',
-      'Workday Financials Pro Certified',
-      'Workday Payroll Pro Certified',
-      'Workday Recruiting Pro Certified',
-      'Workday Integration Pro Certified',
-    ]
-  },
-  {
-    keywords: ['netsuite'],
-    certs: [
-      'NetSuite ERP Consultant Certified',
-      'NetSuite SuiteFoundation Certified',
-      'NetSuite Financial User Certified',
-      'NetSuite Administrator Certified',
-    ]
-  },
-  {
-    keywords: ['odoo'],
-    certs: [
-      'Odoo Certified Functional Consultant',
-      'Odoo Certified Technical Consultant',
-      'Odoo Business Advisor Certified',
-    ]
-  },
-  {
-    keywords: ['infor'],
-    certs: [
-      'Infor CloudSuite Industrial Certified',
-      'Infor M3 Certified Consultant',
-      'Infor LN Certified Consultant',
-    ]
-  },
-  {
-    keywords: ['sage'],
-    certs: [
-      'Sage Certified Consultant \u2013 Sage 300',
-      'Sage Certified Consultant \u2013 Sage X3',
-      'Sage Certified Consultant \u2013 Sage 100',
-    ]
-  },
-];
-const GENERIC_CERTIFS = [
-  'PMP \u2013 Project Management Professional',
-  'CSM \u2013 Certified Scrum Master',
-  'ISTQB Foundation Level',
-  'ITIL 4 Foundation',
-  'AWS Certified Cloud Practitioner',
-  'Microsoft Azure Fundamentals (AZ-900)',
-];
-
 function parseCertifications(val) {
   if (Array.isArray(val)) return val.map(s => String(s).trim()).filter(Boolean);
   return String(val || '').split(',').map(s => s.trim()).filter(Boolean);
 }
-
-function getConsultantERPs() {
-  const source = currentConsultant && currentConsultant.competences;
-  const list = Array.isArray(source)
-    ? source.map(e => String(e).trim().toLowerCase())
-    : String(source || '').split(',').map(e => e.trim().toLowerCase());
-  return list.filter(Boolean);
-}
-
 function renderCertifChecklist() {
   /* v2: load from notes and render badges */
   const notes = parseNotes(currentConsultant.notes_admin);
