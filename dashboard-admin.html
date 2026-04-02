@@ -1400,16 +1400,24 @@ document.getElementById('pwd').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('login-btn').click();
 });
 
-const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
-const hasPortalAdmin = !!(portalSession && portalSession.role === 'admin' && portalSession.adminGranted);
-// Add secondary verification layer using checkAdminAccess if available
-const adminAccessVerified = hasPortalAdmin && (window.ExpertUtils && window.ExpertUtils.checkAdminAccess ? window.ExpertUtils.checkAdminAccess(portalSession) : true);
-// Sécurité : supprime l'ancien localStorage (faille)
-localStorage.removeItem(ADMIN_AUTH_KEY);
-if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || adminAccessVerified) {
-  sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
-  openApp();
-}
+// Initialize admin access check (async)
+(async function() {
+  const portalSession = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  const hasPortalAdmin = !!(portalSession && portalSession.role === 'admin' && portalSession.adminGranted);
+  // Add secondary verification layer using checkAdminAccess if available
+  let adminAccessVerified = false;
+  if (hasPortalAdmin && window.ExpertUtils && window.ExpertUtils.checkAdminAccess) {
+    adminAccessVerified = await window.ExpertUtils.checkAdminAccess(portalSession);
+  } else if (hasPortalAdmin) {
+    adminAccessVerified = true;
+  }
+  // Sécurité : supprime l'ancien localStorage (faille)
+  localStorage.removeItem(ADMIN_AUTH_KEY);
+  if (sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true' || adminAccessVerified) {
+    sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+    openApp();
+  }
+})();
 
 document.querySelectorAll('.menu button').forEach(btn => {
   btn.addEventListener('click', () => setView(btn.dataset.view));

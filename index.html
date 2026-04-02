@@ -1613,7 +1613,7 @@ function toggleTheme() {
             <span class="material-symbols-outlined" style="font-size:18px;">business</span>
             Je cherche un consultant
           </button>
-          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.04);" onclick="document.getElementById('page-home').querySelector('[data-action=&quot;show-page&quot;][data-page=&quot;inscription-consultant&quot;]')?.click() || document.querySelector('[data-page=inscription-consultant]')?.click();">
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.04);" onclick="window.location.href='/inscription-consultant.html'">
             <span class="material-symbols-outlined" style="font-size:18px;">person_add</span>
             Je suis consultant
           </button>
@@ -3376,6 +3376,9 @@ function acceptCguAndClose() {
 <script src="supabase-helpers.js"></script>
 <script src="profile-enhancer.js"></script>
 <script>
+// ── CONSULTANT_COLS: Define column string for backward compatibility ──
+var CONSULTANT_COLS = window.CONSULTANT_COLS || 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut';
+
 // ── Supabase helpers imported from supabase-helpers.js ──
 // sbInsert, sbSelect, sbUpdate are available globally
 // For backward compatibility with existing auth code:

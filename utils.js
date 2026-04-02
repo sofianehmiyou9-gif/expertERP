@@ -43,29 +43,7 @@
     }
   }
 
-  /**
-   * Verifie si un email est dans la liste des admins autorises
-   * @param {string} email
-   * @returns {boolean}
-   */
-  function isAdminEmail(email) {
-    if (!email || !window.ExpertConfig || !window.ExpertConfig.ADMIN_EMAIL_HASHES) return false;
-    var normalized = String(email).trim().toLowerCase();
-    // Compare le hash de l'email avec les hash admin stockés
-    // Utilise une version sync simple pour compatibilité
-    try {
-      var encoder = new TextEncoder();
-      var data = encoder.encode(normalized);
-      // Fallback sync: on utilise une promesse résolue immédiatement via un flag
-      var match = false;
-      crypto.subtle.digest('SHA-256', data).then(function(hashBuffer) {
-        var hashHex = Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-        match = window.ExpertConfig.ADMIN_EMAIL_HASHES.indexOf(hashHex) !== -1;
-      });
-      // Note: cette vérification est async, on fournit aussi une version async
-      return match;
-    } catch(e) { return false; }
-  }
+  // isAdminEmail sync removed — always use isAdminEmailAsync (async)
 
   // Version async (recommandée) pour vérification admin
   async function isAdminEmailAsync(email) {
@@ -81,10 +59,11 @@
   /**
    * Verifie l'acces admin. Combine le check de session + email.
    * Retourne true si l'acces est autorise, false sinon.
+   * ASYNC: doit être appelé avec await
    * @param {object} session - Session portal-auth (optionnel, auto-detect si absent)
-   * @returns {boolean}
+   * @returns {Promise<boolean>}
    */
-  function checkAdminAccess(session) {
+  async function checkAdminAccess(session) {
     var s = session;
     if (!s && window.ExpertPortalAuth) {
       s = window.ExpertPortalAuth.getSession();
@@ -94,7 +73,7 @@
     // Si adminGranted (login par password), verifier aussi l'email si disponible
     if (s.adminGranted) return true;
     // Si l'email est dans la liste admin, autoriser
-    if (s.email && isAdminEmail(s.email)) return true;
+    if (s.email && await isAdminEmailAsync(s.email)) return true;
     return false;
   }
 
@@ -102,7 +81,6 @@
     safe: safe,
     sanitizeHtml: sanitizeHtml,
     formatDate: formatDate,
-    isAdminEmail: isAdminEmail,
     isAdminEmailAsync: isAdminEmailAsync,
     checkAdminAccess: checkAdminAccess
   };

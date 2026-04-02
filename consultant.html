@@ -1234,6 +1234,15 @@ async function loadConsultant() {
     if (id) {
       const data = await sbSelectById('consultants', id);
       if (data && data.length) {
+        // B2B filter: block non-enterprise users from viewing import_b2b resources
+        if (isB2BResource(data[0])) {
+          var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+          var isEnterprise = session && session.role === 'entreprise';
+          if (!isEnterprise) {
+            document.querySelector('.profile-main').innerHTML = '<p>Ce profil n\'est pas accessible. <a href="/">Retour à l\'accueil</a></p>';
+            return;
+          }
+        }
         renderConsultant(data[0]);
         return;
       }

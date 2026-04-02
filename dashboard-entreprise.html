@@ -1683,6 +1683,14 @@ function getResourceInternalName(resource) {
   return full;
 }
 
+function generateInternalResourceEmail() {
+  return 'res_' + Date.now() + '_' + Math.random().toString(16).slice(2, 8) + '@internal.experterphub.local';
+}
+
+function buildResourceCode(name) {
+  return String(name || 'Ressource').trim().replace(/\s+/g, '_').substring(0, 40) + '_' + Date.now().toString(36);
+}
+
 function normalizeRateUnit(raw) {
   const value = String(raw || '').trim().toLowerCase();
   if (value === 'heure' || value === 'horaire' || value === 'hour' || value === 'hourly' || value === 'h') return 'heure';
@@ -2625,7 +2633,7 @@ function renderConversationList(conversations) {
     var initials = otherName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
     var preview = (lastMsg || '').substring(0, 40) + ((lastMsg || '').length > 40 ? '...' : '');
 
-    return '<div class="conversation-item" data-email="' + safe(otherEmail) + '" onclick="openConversationInPanel(\'' + safe(otherEmail) + '\', \'' + safe(otherName) + '\')">' +
+    return '<div class="conversation-item" data-email="' + safe(otherEmail) + '" data-name="' + safe(otherName) + '">' +
       '<div class="conversation-avatar">' + initials + '</div>' +
       '<div class="conversation-details">' +
         '<div class="conversation-name">' + safe(otherName) + '</div>' +
@@ -2638,6 +2646,14 @@ function renderConversationList(conversations) {
     '</div>';
   }).join('');
 }
+
+/* Delegated click handler for conversation items (avoids inline onclick XSS) */
+document.addEventListener('click', function(e) {
+  var item = e.target.closest('.conversation-item');
+  if (item && item.dataset.email) {
+    openConversationInPanel(item.dataset.email, item.dataset.name || '');
+  }
+});
 
 function updateUnreadBadge(count) {
   var badge = document.getElementById('conv-unread-badge');

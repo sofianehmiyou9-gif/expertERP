@@ -2643,8 +2643,8 @@ function showAuthError(msg) {
 
 function openResetPage() {
   const email = document.getElementById('email-input').value.trim();
-  const target = '/reset-password' + (email ? ('?email=' + encodeURIComponent(email)) : '');
-  window.location.href = target;
+  if (email) sessionStorage.setItem('reset_email_hint', email);
+  window.location.href = '/reset-password';
 }
 
 function bindDashboardActions() {
