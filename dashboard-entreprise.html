@@ -1072,6 +1072,26 @@ body{background:#f7f9fb;}
         </div>
       </div>
 
+      <!-- Statut -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Statut de la ressource</label>
+        <select id="edit-statut" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);background:#fff;">
+          <option value="approuve">Disponible (publié)</option>
+          <option value="en_mission">En mission</option>
+          <option value="en_attente">En attente (non publié)</option>
+          <option value="refuse">Retiré du catalogue</option>
+        </select>
+      </div>
+
+      <!-- Visibilité -->
+      <div>
+        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Visibilité</label>
+        <select id="edit-visibility" style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.88rem;font-family:var(--font-main);background:#fff;">
+          <option value="b2b">Entreprises partenaires uniquement</option>
+          <option value="public">Visible par tous (freelances inclus)</option>
+        </select>
+      </div>
+
       <!-- Disponibilité -->
       <div>
         <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Disponibilité</label>
@@ -2795,6 +2815,8 @@ function openResourceEdit(resourceId) {
   document.getElementById('edit-tjm-min').value = r.tjm_min || '';
   document.getElementById('edit-tjm-max').value = r.tjm_max || '';
   document.getElementById('edit-disponibilite').value = notes.disponibilite || '';
+      document.getElementById('edit-statut').value = normalizeStatus(r.statut) || 'approuve';
+      document.getElementById('edit-visibility').value = (notes && notes.visibility) || 'b2b';
   document.getElementById('edit-titre').value = r.titre || '';
   document.getElementById('edit-resume').value = notes.resume_pro || '';
   document.getElementById('edit-experiences').value = notes.experiences_text || '';
@@ -2816,6 +2838,8 @@ async function saveResourceEdit() {
   var tjmMin = document.getElementById('edit-tjm-min').value.trim();
   var tjmMax = document.getElementById('edit-tjm-max').value.trim();
   var dispo = document.getElementById('edit-disponibilite').value;
+      var newStatut = document.getElementById('edit-statut').value;
+      var newVisibility = document.getElementById('edit-visibility').value;
   var titre = document.getElementById('edit-titre').value.trim();
   var resume = document.getElementById('edit-resume').value.trim();
   var experiences = document.getElementById('edit-experiences').value.trim();
@@ -2836,7 +2860,9 @@ async function saveResourceEdit() {
     notes.experience_years = expYears;
 
     /* Sauvegarder dans Supabase */
-    var payload = {
+          notes.visibility = newVisibility;
+      var payload = {
+        statut: newStatut,
       titre: titre || undefined,
       tjm_min: tjmMin ? Number(tjmMin) : null,
       tjm_max: tjmMax ? Number(tjmMax) : null,
