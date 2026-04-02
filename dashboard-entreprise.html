@@ -2558,8 +2558,22 @@ function stopMessagePolling() {
    - 2 colonnes: liste conversations + chat actif
    ═══════════════════════════════════════════════════════════════ */
 let _messagesConversations = [];
-let _messagesCurrentEmail = null;
 let _messagesCurrentName = null;
+
+/* Protected messaging state — prevents console manipulation */
+var _msgState = (function() {
+  var _email = null;
+  return {
+    get: function() { return _email; },
+    set: function(email) {
+      // Only allow setting if we have a valid session
+      var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+      if (!session || !session.email) { _email = null; return; }
+      _email = email;
+    },
+    clear: function() { _email = null; }
+  };
+})();
 
 async function loadMessagesTab() {
   if (!currentEmail) return;
@@ -2668,7 +2682,7 @@ function updateUnreadBadge(count) {
 }
 
 async function openConversationInPanel(email, name) {
-  _messagesCurrentEmail = email;
+  _msgState.set(email);
   _messagesCurrentName = name;
 
   // Afficher le panel actif
@@ -2756,7 +2770,7 @@ function renderChatMessages(messages) {
 async function sendChatMessage() {
   var input = document.getElementById('chat-message-input');
   var text = (input.value || '').trim();
-  if (!text || !_messagesCurrentEmail) return;
+  if (!text || !_msgState.get()) return;
 
   var btn = document.querySelector('.chat-send-btn');
   if (btn) btn.disabled = true;
@@ -2768,7 +2782,7 @@ async function sendChatMessage() {
         senderEmail: currentEmail,
         senderName: currentCompany ? currentCompany.company_name : currentEmail,
         senderRole: 'entreprise',
-        receiverEmail: _messagesCurrentEmail,
+        receiverEmail: _msgState.get(),
         receiverName: _messagesCurrentName,
         body: text
       });
@@ -2776,7 +2790,7 @@ async function sendChatMessage() {
       // Notifier le consultant
       if (window.ExpertEmailNotify) {
         await window.ExpertEmailNotify.notify({
-          to: _messagesCurrentEmail,
+          to: _msgState.get(),
           toName: _messagesCurrentName,
           fromName: currentCompany ? currentCompany.company_name : currentEmail,
           fromEmail: currentEmail,
@@ -2787,7 +2801,7 @@ async function sendChatMessage() {
       input.value = '';
 
       // Recharger les messages
-      const messages = await window.ExpertMessaging.getThread(currentEmail, _messagesCurrentEmail);
+      const messages = await window.ExpertMessaging.getThread(currentEmail, _msgState.get());
       renderChatMessages(messages || []);
 
       // Recharger la liste
@@ -3168,6 +3182,36 @@ document.getElementById('clear-btn').addEventListener('click', () => {
   applyAccessPermissions();
 });
 
+/* Parse a CSV line respecting quoted fields */
+function parseCsvLine(line) {
+  var result = [];
+  var current = '';
+  var inQuotes = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i + 1] === '"') { current += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { current += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { result.push(current.trim()); current = ''; }
+      else { current += ch; }
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+/* Validate CSV field (max 500 chars, non-empty, basic email check if email) */
+function validateCsvField(value, fieldName) {
+  if (value && value.length > 500) return false;
+  if (fieldName === 'email' && value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+  return true;
+}
+
 document.getElementById('import-btn').addEventListener('click', async () => {
   if (!canManageResourcesRole()) {
     alert('Acces lecture seule: vous ne pouvez pas importer de ressources.');
@@ -3177,15 +3221,26 @@ document.getElementById('import-btn').addEventListener('click', async () => {
 
   const reader = new FileReader();
   reader.onload = async (e) => {
-    const csv = e.target.result;
-    const lines = csv.split('\n').filter(line => line.trim());
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+    try {
+      const csv = e.target.result;
+      const lines = csv.split('\n').filter(line => line.trim());
+      const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
 
-    const consultants = [];
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',').map(v => v.trim());
-      const row = {};
-      headers.forEach((h, idx) => row[h] = values[idx] || null);
+      const consultants = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = parseCsvLine(lines[i]);
+
+        /* Skip rows where all fields are empty */
+        if (!values.some(v => v && v.trim())) continue;
+
+        const row = {};
+        headers.forEach((h, idx) => {
+          const val = values[idx] || null;
+          if (val && !validateCsvField(val, h)) {
+            throw new Error(`Ligne ${i + 1}: champ '${h}' invalide ou trop long.`);
+          }
+          row[h] = val;
+        });
 
       const internalName = String(row.nom || '').trim() || ('Ressource importée ' + i);
       const resourceCode = buildResourceCode(internalName);
@@ -3216,21 +3271,24 @@ document.getElementById('import-btn').addEventListener('click', async () => {
       });
     }
 
-    if (!canAddSlots(consultants.length)) {
-      const available = Math.max(currentPlanQty - currentUsedSlots, 0);
-      alert(`Quota depasse: il vous reste ${available} place(s) sur votre plan.`);
-      return;
-    }
+      if (!canAddSlots(consultants.length)) {
+        const available = Math.max(currentPlanQty - currentUsedSlots, 0);
+        alert(`Quota depasse: il vous reste ${available} place(s) sur votre plan.`);
+        return;
+      }
 
-    for (const consultant of consultants) {
-      await sbInsert('consultants', consultant);
-    }
+      for (const consultant of consultants) {
+        await sbInsert('consultants', consultant);
+      }
 
-    uploadedFile = null;
-    document.getElementById('file-input').value = '';
-    applyAccessPermissions();
-    loadResources();
-    alert(ExpertI18n.t('dashboardCompany.successImport'));
+      uploadedFile = null;
+      document.getElementById('file-input').value = '';
+      applyAccessPermissions();
+      loadResources();
+      alert(ExpertI18n.t('dashboardCompany.successImport'));
+    } catch (err) {
+      alert('Erreur lors du parsing CSV: ' + err.message);
+    }
   };
   reader.readAsText(uploadedFile);
 });

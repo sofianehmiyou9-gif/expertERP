@@ -15,6 +15,12 @@
     return 'n_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
   }
 
+  // -- Sanitize user-provided string fields to prevent XSS --
+  function sanitizeField(val) {
+    if (typeof val !== 'string') return val;
+    return val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   // -- localStorage fallback --
   function lsGet() {
     try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
@@ -101,12 +107,12 @@
       consultantEmail: row.consultant_email || row.consultantEmail || '',
       recipientType: row.recipient_type || row.recipientType || 'consultant',
       recipientEmail: row.recipient_email || row.recipientEmail || '',
-      companyName: row.company_name || row.companyName || '',
+      companyName: sanitizeField(row.company_name || row.companyName || ''),
       companyEmail: row.company_email || row.companyEmail || '',
       companyPhone: row.company_phone || row.companyPhone || null,
       companyId: row.company_id || row.companyId || '',
-      message: row.message || '',
-      reply: row.reply || '',
+      message: sanitizeField(row.message || ''),
+      reply: sanitizeField(row.reply || ''),
       reply_at: row.reply_at || null,
       createdAt: row.created_at || row.createdAt || new Date().toISOString(),
       read: row.read !== undefined ? !!row.read : (row.status === 'lu' || row.status === 'repondu'),

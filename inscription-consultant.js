@@ -105,9 +105,26 @@
 
   function saveDraft(payload) {
     try {
-      localStorage.setItem('inscription_consultant_draft', JSON.stringify(payload));
+      var wrapper = { data: payload, savedAt: Date.now() };
+      localStorage.setItem('inscription_consultant_draft', JSON.stringify(wrapper));
     } catch (err) {
       // If storage is unavailable, keep UX functional without persistence.
+    }
+  }
+
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem('inscription_consultant_draft');
+      if (!raw) return null;
+      var wrapper = JSON.parse(raw);
+      // Expire after 24 hours
+      if (wrapper.savedAt && (Date.now() - wrapper.savedAt > 86400000)) {
+        localStorage.removeItem('inscription_consultant_draft');
+        return null;
+      }
+      return wrapper.data || wrapper; // backward compat with old format
+    } catch (e) {
+      return null;
     }
   }
 
@@ -154,4 +171,23 @@
   }
 
   addExperienceBlock();
+
+  /* Load draft on page load (with TTL check) */
+  var draftData = loadDraft();
+  if (draftData && form) {
+    if (draftData.nom) document.getElementById('nom').value = draftData.nom;
+    if (draftData.prenom) document.getElementById('prenom').value = draftData.prenom;
+    if (draftData.email) document.getElementById('email').value = draftData.email;
+    if (draftData.telephone) document.getElementById('telephone').value = draftData.telephone;
+    if (draftData.titre) document.getElementById('titre').value = draftData.titre;
+    if (draftData.resume) document.getElementById('resume').value = draftData.resume;
+    if (draftData.competences) document.getElementById('competences').value = draftData.competences.join(', ');
+    if (draftData.experiences && draftData.experiences.length) {
+      container.innerHTML = '';
+      experienceCount = 0;
+      draftData.experiences.forEach(function(exp) {
+        addExperienceBlock(exp);
+      });
+    }
+  }
 })();

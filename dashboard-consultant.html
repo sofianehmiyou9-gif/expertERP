@@ -813,6 +813,7 @@ img{max-width:100%;height:auto;}
                     <span style="margin-right:.3rem;">&#128161;</span> Utilisez ce mod&#232;le et remplacez les &#233;l&#233;ments entre crochets pour personnaliser votre profil. Ce texte sera visible sur votre profil public.
                   </div>
                   <textarea id="resume-pro-input" class="inline-textarea" rows="22" style="line-height:1.75;white-space:pre-wrap;font-size:.86rem;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
+                  <button type="button" id="resume-template-btn" onclick="if(!document.getElementById('resume-pro-input').value.trim()){document.getElementById('resume-pro-input').value='Consultant ERP avec [X] années d\'expérience en [ERP/module]. Spécialisé dans [domaine fonctionnel/technique], j\'ai accompagné des entreprises dans [type de projets : déploiement, migration, optimisation].\n\nCompétences clés : [compétence 1], [compétence 2], [compétence 3].\n\nSecteurs d\'intervention : [secteur 1], [secteur 2].';}" style="font-size:.72rem;padding:.3rem .7rem;margin-top:.3rem;background:none;border:1px dashed var(--border);color:var(--text-subtle);border-radius:6px;cursor:pointer;">Utiliser un modèle</button>
                 </div>
                 <!-- ═══ EXPÉRIENCES PROFESSIONNELLES — Liste structurée ═══ -->
                 <div class="info-card wide" id="project-exp-card">
