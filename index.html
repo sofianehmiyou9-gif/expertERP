@@ -3653,12 +3653,18 @@ async function updateAuthPasswordWithToken(token, password) {
 }
 
 async function syncLegacyHashesByEmail(email, passwordHash) {
+  /* ═══ CONSULTANTS: Stocker le hash dans password_hash ET notes_admin (compatibilité) ═══ */
   const consultants = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&email=ilike.' + encodeURIComponent(email) + '&limit=20');
   for (const c of consultants) {
-    // Store hash in dedicated password_hash column (secure, not in notes_admin)
+    /* Colonne dédiée password_hash (utilisée par verify_consultant_password RPC) */
     await sbUpdate('consultants', c.id, { password_hash: passwordHash });
+    /* [FIX] Garder aussi notes_admin.auth_password_sha256 pour compatibilité fallback */
+    var notes = safeJsonParse(c.notes_admin, {});
+    notes.auth_password_sha256 = passwordHash;
+    await sbUpdate('consultants', c.id, { notes_admin: JSON.stringify(notes) });
   }
 
+  /* ═══ ENTREPRISES: Stocker le hash dans description.auth_password_sha256 ═══ */
   const companies = await sbSelect('entreprises', 'email=ilike.' + encodeURIComponent(email) + '&limit=20');
   for (const e of companies) {
     const desc = safeJsonParse(e.description, {});

@@ -1336,32 +1336,34 @@ async function sendContactMessage() {
   alert(b2b
     ? 'Message envoyé à l\'administrateur de la ressource.'
     : ExpertI18n.t('consultant.messageSent'));
-  /* ═══ SECURITE: Générer et stocker un token de session après envoi ═══ */
-  var sentEmail = document.getElementById('company-email').value.trim();
+  /* ═══ NETTOYAGE: Réinitialiser les champs du formulaire après envoi ═══ */
   document.getElementById('company-name').value = '';
   document.getElementById('company-email').value = '';
   document.getElementById('company-phone').value = '';
   document.getElementById('contact-message').value = '';
-  /* Générer le token d'accès et le stocker dans localStorage */
-  if (sentEmail) {
-    generateAndStoreAccessToken(sentEmail);
-    var replyField = document.getElementById('check-reply-email');
-    if (replyField) replyField.value = sentEmail;
-    updateAuthStatus();
-  }
+  /* [SUPPRIMÉ] Ancien système de token localStorage pour "Suivre mes échanges"
+     — cette fonctionnalité est désormais gérée dans dashboard-entreprise.html
+     avec vérification de la session connectée (plus sécurisé). */
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SECURITE v2: Système de token pour "Suivre mes échanges"
+   [SUPPRIMÉ] Ancien système de token localStorage pour "Suivre mes échanges"
 
-   PRINCIPE: Quand un utilisateur envoie un message, on génère un
-   token unique (SHA-256 de email + consultantId + secret) stocké
-   dans localStorage. Pour voir ses échanges, ce token doit exister.
+   Ce bloc contenait ~130 lignes de code (token SHA-256, checkMyReplies, etc.)
+   qui référençaient des éléments HTML supprimés (check-reply-email,
+   reply-auth-status, reply-security-msg, my-replies-list).
 
-   RÉSULTAT: Impossible de voir les échanges d'un email sans avoir
-   envoyé un message depuis CE navigateur.
+   RAISON: La fonctionnalité de suivi des échanges est désormais gérée
+   dans dashboard-entreprise.html avec vérification de la session connectée,
+   ce qui est plus sécurisé que le système de token côté client.
+
+   Fonctions supprimées:
+   - generateAccessTokenHash(), getStoredTokens(), storeToken()
+   - generateAndStoreAccessToken(), hasValidAccessToken()
+   - getAuthorizedEmail(), updateAuthStatus(), checkMyReplies()
    ═══════════════════════════════════════════════════════════════ */
 
+/* --- DEBUT CODE OBSOLETE (commenté, ne pas réactiver) ---
 async function generateAccessTokenHash(email) {
   var raw = email.toLowerCase().trim() + ':' + ((currentConsultant && currentConsultant.id) || '') + ':' + (ExpertConfig && ExpertConfig.ACCESS_TOKEN_HASH || '');
   var bytes = new TextEncoder().encode(raw);
@@ -1493,6 +1495,7 @@ async function checkMyReplies() {
     container.innerHTML = '<div style="text-align:center;padding:16px;color:#dc2626;font-size:.85rem;">Erreur lors du chargement. Veuillez réessayer.</div>';
   }
 }
+--- FIN CODE OBSOLETE --- */
 
 document.addEventListener('DOMContentLoaded', () => {
   bindStaticActions();
@@ -1775,12 +1778,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { /* silencieux — champs restent éditables */ }
       })();
 
-      /* Pré-remplir le champ "Suivre mes échanges" */
-      var replyField = document.getElementById('check-reply-email');
-      if (replyField) {
-        replyField.value = session.email;
-        replyField.readOnly = true;
-      }
+      /* [SUPPRIMÉ] Pré-remplissage du champ "Suivre mes échanges" — élément HTML supprimé,
+         fonctionnalité migrée dans dashboard-entreprise.html */
 
     } else if (isVisiteurPro) {
       /* ── VISITEUR PRO CONNECTÉ: Afficher le formulaire avec quota ── */
