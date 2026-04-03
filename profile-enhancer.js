@@ -595,38 +595,16 @@
     var annees = formatAnneesExp(notes.annees_exp);
     var modules = notes.erp_modules || [];
 
-    // Pas de résumé ou résumé trop court → générer un résumé complet
-    if (!resume || resume.trim().length < 30) {
-      return generateFullResume(data);
-    }
+    // NE JAMAIS inventer de résumé — retourner tel quel ce que le consultant a saisi.
+    // Seul nettoyage autorisé : capitalisation + ponctuation finale.
+    if (!resume || !resume.trim()) return '';
 
     var text = resume.trim();
-
-    // Nettoyage basique
     text = text.charAt(0).toUpperCase() + text.slice(1);
     text = text.replace(/\n{3,}/g, '\n\n');
     if (!/[.!?]$/.test(text.trim())) {
       text = text.trim() + '.';
     }
-
-    // Enrichir un résumé court (30-120 chars) avec des infos concrètes
-    if (text.length < 120) {
-      var enrichParts = [];
-      if (modules.length) {
-        enrichParts.push(buildModulesPhrase(modules, erp));
-      }
-      if (annees) {
-        enrichParts.push('fort de ' + annees + " d'expérience");
-      }
-      if (enrichParts.length) {
-        // Injecter avant le point final
-        var lastDot = text.lastIndexOf('.');
-        if (lastDot > 0) {
-          text = text.substring(0, lastDot) + ', ' + enrichParts.join(' et ') + '.';
-        }
-      }
-    }
-
     return text;
   }
 
@@ -732,10 +710,8 @@
       if (enhanced.secteur) {
         enhanced.secteur = capitalizeWords(enhanced.secteur);
       }
-      // Générer une description si absente
-      if (!enhanced.description || enhanced.description.trim().length < 20) {
-        enhanced.description = generateExpDescription(exp, profileTitre, competences);
-      }
+      // NE JAMAIS inventer de description — on garde ce que le consultant a saisi
+      // Si pas de description, on laisse vide. Le consultant pourra la remplir plus tard.
       return enhanced;
     });
   }

@@ -1081,7 +1081,10 @@ input:focus, textarea:focus, select:focus {
                     <span style="margin-right:.3rem;">&#128161;</span> Utilisez ce mod&#232;le et remplacez les &#233;l&#233;ments entre crochets pour personnaliser votre profil. Ce texte sera visible sur votre profil public.
                   </div>
                   <textarea id="resume-pro-input" class="inline-textarea" rows="22" style="line-height:1.75;white-space:pre-wrap;font-size:.86rem;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
-                  <button type="button" id="resume-template-btn" onclick="var _inp=document.getElementById('resume-pro-input');if(!_inp.value.trim()||confirm('Remplacer le contenu actuel par un résumé généré automatiquement ?')){var _n=parseNotes(currentConsultant.notes_admin);_inp.value=generateSmartResume(currentConsultant,_n,experiencesList);}" style="font-size:.72rem;padding:.3rem .7rem;margin-top:.3rem;background:none;border:1px dashed var(--blue-border);color:var(--primary);border-radius:6px;cursor:pointer;">Générer mon résumé</button>
+                  <div style="display:flex;gap:.5rem;align-items:center;margin-top:.4rem;">
+                    <button type="button" id="resume-template-btn" onclick="var _inp=document.getElementById('resume-pro-input');if(!_inp.value.trim()||confirm('Remplacer le contenu actuel par un résumé basé sur vos données réelles ?')){var _n=parseNotes(currentConsultant.notes_admin);_inp.value=generateSmartResume(currentConsultant,_n,experiencesList);}" style="font-size:.72rem;padding:.45rem .9rem;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;">⟳ Générer mon résumé</button>
+                    <span style="font-size:.68rem;color:#94a3b8;">Utilise vos expériences et compétences réelles</span>
+                  </div>
                 </div>
                 <!-- ═══ EXPÉRIENCES PROFESSIONNELLES — Liste structurée ═══ -->
                 <div class="info-card wide" id="project-exp-card">
@@ -1113,8 +1116,12 @@ input:focus, textarea:focus, select:focus {
                       </div>
                     </div>
                     <div style="margin-bottom:.5rem;">
-                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Description / Réalisations</label>
-                      <textarea id="exp-description-input" class="inline-textarea" rows="3" placeholder="Décrivez vos réalisations clés, missions, résultats obtenus..." style="font-size:.82rem;"></textarea>
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Tâches réalisées <span style="font-weight:400;text-transform:none;letter-spacing:0;">(cochez ce qui s'applique)</span></label>
+                      <div id="exp-tasks-checkboxes" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.5rem;"></div>
+                    </div>
+                    <div style="margin-bottom:.5rem;">
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Description générée <span style="font-weight:400;text-transform:none;letter-spacing:0;">(modifiable)</span></label>
+                      <textarea id="exp-description-input" class="inline-textarea" rows="3" placeholder="Cochez les tâches ci-dessus ou saisissez librement vos réalisations..." style="font-size:.82rem;"></textarea>
                     </div>
                     <div style="display:flex;gap:.5rem;justify-content:flex-end;">
                       <button type="button" id="exp-cancel-btn" class="btn-ghost" style="font-size:.78rem;padding:.45rem .9rem;display:none;" onclick="cancelExpEdit()">Annuler</button>
@@ -1573,6 +1580,106 @@ function generateSmartResume(consultant, notes, exps) {
 
   return lines.join('\n');
 }
+
+/* ═══ TÂCHES TYPIQUES PAR TYPE DE CONSULTANT ═══ */
+var EXP_TASK_OPTIONS = {
+  'default': [
+    'Analyse des besoins métier',
+    'Configuration et paramétrage ERP',
+    'Rédaction des spécifications fonctionnelles',
+    'Tests et recette fonctionnelle',
+    'Formation des utilisateurs',
+    'Support post-déploiement',
+    'Migration de données',
+    'Gestion de projet',
+    'Coordination des équipes',
+    'Documentation technique'
+  ],
+  'SAP': [
+    'Paramétrage SAP',
+    'Migration vers S/4HANA',
+    'Configuration des modules',
+    'Développement ABAP',
+    'Tests unitaires et intégration',
+    'Formation key users SAP',
+    'Support go-live',
+    'Rédaction des specs fonctionnelles',
+    'Analyse des flux métier',
+    'Gestion des autorisations'
+  ],
+  'Oracle': [
+    'Configuration Oracle Cloud',
+    'Migration de données (FBDI/HDL)',
+    'Intégration Oracle OIC',
+    'Paramétrage des modules',
+    'Tests de bout en bout',
+    'Formation utilisateurs',
+    'Conception des rapports (OTBI)',
+    'Analyse des processus métier',
+    'Support post-déploiement'
+  ],
+  'Dynamics': [
+    'Configuration Dynamics 365',
+    'Développement Power Platform',
+    'Intégration avec Azure',
+    'Paramétrage des entités',
+    'Migration de données',
+    'Formation utilisateurs',
+    'Tests et recette',
+    'Analyse des processus',
+    'Support et maintenance'
+  ],
+  'Workday': [
+    'Configuration Workday HCM',
+    'Paramétrage des business processes',
+    'Intégration Workday (EIB/Studio)',
+    'Migration des données RH',
+    'Formation utilisateurs',
+    'Reporting et tableaux de bord',
+    'Tests de recette',
+    'Support post-déploiement'
+  ]
+};
+
+function getTaskOptionsForConsultant() {
+  var erps = Array.isArray(currentConsultant.competences) ? currentConsultant.competences : [];
+  var primaryErp = '';
+  ['SAP', 'Oracle', 'Dynamics', 'Workday'].forEach(function(e) {
+    if (!primaryErp && erps.some(function(c){ return c.toUpperCase().indexOf(e.toUpperCase()) !== -1; })) primaryErp = e;
+  });
+  return EXP_TASK_OPTIONS[primaryErp] || EXP_TASK_OPTIONS['default'];
+}
+
+function renderExpTaskCheckboxes() {
+  var container = document.getElementById('exp-tasks-checkboxes');
+  if (!container) return;
+  var tasks = getTaskOptionsForConsultant();
+  container.innerHTML = tasks.map(function(task, i) {
+    return '<label style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:#475569;background:#f1f5f9;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;transition:all .15s;user-select:none;" ' +
+      'onmouseover="this.style.borderColor=\'#93c5fd\'" onmouseout="this.style.borderColor=\'#e2e8f0\'">' +
+      '<input type="checkbox" data-exp-task="' + i + '" style="accent-color:#2563eb;width:14px;height:14px;" onchange="updateExpDescFromTasks()">' +
+      task + '</label>';
+  }).join('');
+}
+
+function updateExpDescFromTasks() {
+  var container = document.getElementById('exp-tasks-checkboxes');
+  var textarea = document.getElementById('exp-description-input');
+  if (!container || !textarea) return;
+  var checked = [];
+  container.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+    var label = cb.parentElement.textContent.trim();
+    checked.push(label);
+  });
+  if (checked.length) {
+    textarea.value = checked.join('. ') + '.';
+  }
+}
+
+/* Initialiser les checkboxes au chargement */
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(renderExpTaskCheckboxes, 500);
+});
 
 function syncExpLegacyField() {
   var f = document.getElementById("project-exp-input");
@@ -2819,14 +2926,18 @@ function renderBasicInfo() {
   renderSidebarExps();
   clearExpForm();
   syncExpLegacyField();
+  renderExpTaskCheckboxes();
   /* ═══ Resume professionnel ═══ */
     var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
-    if (notes.resume_pro || notes.resume) {
-      /* Le consultant a déjà un résumé sauvegardé — on le restaure */
-      resumeInput.value = notes.resume_pro || notes.resume;
+    var existingResume = notes.resume_pro || notes.resume || '';
+    /* Détection des anciens résumés génériques avec placeholders ou texte inventé */
+    var hasOldPlaceholders = /\[Module \d\]|\[ERP \/ domaine\]|\[X\]|\[industrie|\[logistique \/ finance|\[compétence \d\]|\[secteur \d\]|\[Projet \+|🔹 Présentation|🔹 Domaines|🔹 Expertise|🔹 Outils|🔹 Valeur|🔹 Disponibilit|Approche orientée résultats|j\u2019accompagne les entreprises dans l\u2019optimisation/.test(existingResume);
+    if (existingResume && !hasOldPlaceholders) {
+      /* Résumé valide existant — on le restaure */
+      resumeInput.value = existingResume;
     } else {
-      /* Première visite: générer un résumé professionnel personnalisé */
+      /* Pas de résumé ou ancien template générique → générer un résumé propre */
       resumeInput.value = generateSmartResume(currentConsultant, notes, experiencesList);
     }
   }
