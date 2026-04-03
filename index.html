@@ -1041,12 +1041,392 @@ footer{padding:3rem 2.5rem;border-top:1px solid rgba(25,28,30,.07);display:flex;
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:#32353c;border-radius:10px;}
 
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* PREMIUM VISUAL POLISH & ANIMATIONS (Added: 2026-04-02)                      */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Scroll Reveal Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+/* Stagger delays for child elements */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Enhanced Button Micro-interactions */
+.btn-solid, .btn-primary, [class*="bg-primary"] button, a[class*="bg-"] {
+  position: relative;
+  overflow: hidden;
+}
+.btn-solid::after, .btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-solid:hover::after, .btn-primary:hover::after {
+  opacity: 1;
+}
+.btn-solid:active, .btn-primary:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Enhanced Card Hover Effects */
+.plan-box, .feature-card, [class*="consultant-card"], .card-hover {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.plan-box:hover, .feature-card:hover, .card-hover:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(0,40,142,0.12), 0 4px 12px rgba(0,0,0,0.06) !important;
+}
+
+/* Smooth image/avatar hover */
+.consultant-avatar, .avatar-circle {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.consultant-avatar:hover, .avatar-circle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0,40,142,0.2);
+}
+
+/* Smooth Page Transitions */
+.page-section {
+  animation: none;
+}
+.page-section.active-section {
+  animation: sectionFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes sectionFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 480px) {
+  .hero-title, h1 { font-size: 1.75rem !important; line-height: 1.2 !important; }
+  .hero-subtitle { font-size: 0.95rem !important; }
+  .plan-box { padding: 1.25rem !important; }
+  .stats-strip-metrics { flex-wrap: wrap; }
+  nav { padding: 0.5rem 1rem !important; }
+}
+@media (max-width: 360px) {
+  body { font-size: 14px; }
+  .plan-box { padding: 1rem !important; }
+}
+/* Tablet refinements */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-cols-3, [class*="grid-cols-3"] { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Loading/Skeleton Enhancement */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ══════════════════════════════════════════════
+   WOW EFFECTS — Premium Visual Overhaul
+   ══════════════════════════════════════════════ */
+
+/* ── ANIMATED GRADIENT BACKGROUND FOR HERO ── */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 0%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── FLOATING PARTICLES ── */
+@keyframes floatParticle1 { 0%,100% { transform: translate(0,0) scale(1); opacity:.4; } 50% { transform: translate(80px,-120px) scale(1.3); opacity:.7; } }
+@keyframes floatParticle2 { 0%,100% { transform: translate(0,0) scale(1.1); opacity:.3; } 50% { transform: translate(-60px,100px) scale(.8); opacity:.6; } }
+@keyframes floatParticle3 { 0%,100% { transform: translate(0,0) scale(.9); opacity:.5; } 50% { transform: translate(100px,60px) scale(1.2); opacity:.3; } }
+
+.hero-particles {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+}
+.hero-particle {
+  position: absolute; border-radius: 50%; filter: blur(40px);
+}
+.hero-particle:nth-child(1) {
+  width: 300px; height: 300px; top: -50px; left: -50px;
+  background: radial-gradient(circle, rgba(37,99,235,.15) 0%, transparent 70%);
+  animation: floatParticle1 8s ease-in-out infinite;
+}
+.hero-particle:nth-child(2) {
+  width: 250px; height: 250px; top: 30%; right: 5%;
+  background: radial-gradient(circle, rgba(124,58,237,.12) 0%, transparent 70%);
+  animation: floatParticle2 10s ease-in-out infinite;
+}
+.hero-particle:nth-child(3) {
+  width: 200px; height: 200px; bottom: 10%; left: 30%;
+  background: radial-gradient(circle, rgba(6,182,212,.1) 0%, transparent 70%);
+  animation: floatParticle3 12s ease-in-out infinite;
+}
+.hero-particle:nth-child(4) {
+  width: 150px; height: 150px; top: 50%; right: 25%;
+  background: radial-gradient(circle, rgba(37,99,235,.1) 0%, transparent 70%);
+  animation: floatParticle1 14s ease-in-out infinite reverse;
+}
+
+/* ── GRADIENT ANIMATED TEXT ── */
+@keyframes textGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 25%, #06b6d4 50%, #2563eb 75%, #7c3aed 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGradientFlow 4s ease infinite;
+}
+
+/* ── GLOWING ORBS BEHIND SECTIONS ── */
+.glow-orb {
+  position: absolute; border-radius: 50%; pointer-events: none; filter: blur(80px); z-index: 0;
+}
+.glow-orb-blue { background: rgba(37,99,235,.08); width: 400px; height: 400px; }
+.glow-orb-purple { background: rgba(124,58,237,.06); width: 350px; height: 350px; }
+.glow-orb-cyan { background: rgba(6,182,212,.06); width: 300px; height: 300px; }
+
+/* ── ANIMATED COUNTER NUMBERS ── */
+@keyframes counterPop {
+  0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+  60% { transform: translateY(-4px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.counter-animated {
+  display: inline-block;
+  animation: counterPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── STATS BAND WOW ── */
+.stats-band {
+  position: relative; overflow: hidden;
+}
+.stats-band::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  z-index: 0;
+}
+.stats-band > * { position: relative; z-index: 1; }
+
+.stat-n {
+  font-family: var(--font-serif); font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #22d3ee);
+  background-size: 200% 200%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGradientFlow 3s ease infinite;
+}
+
+/* ── CARD 3D TILT ON HOVER ── */
+.tilt-card {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+}
+.tilt-card:hover {
+  box-shadow: 0 20px 60px rgba(37,99,235,.15), 0 8px 24px rgba(0,0,0,.08) !important;
+}
+
+/* ── GLOWING BORDER ON HOVER ── */
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(37,99,235,.15); box-shadow: 0 0 0 rgba(37,99,235,0); }
+  50% { border-color: rgba(37,99,235,.4); box-shadow: 0 0 20px rgba(37,99,235,.1); }
+}
+.glow-border:hover {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* ── MAGNETIC BUTTON EFFECT ── */
+.btn-magnetic {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.btn-magnetic:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 12px 40px rgba(37,99,235,.25), 0 4px 12px rgba(37,99,235,.15);
+}
+.btn-magnetic:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(37,99,235,.15);
+}
+
+/* ── HERO CTA GLOW PULSE ── */
+@keyframes ctaGlowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,.4), var(--shadow-md); }
+  50% { box-shadow: 0 0 30px 8px rgba(37,99,235,.15), var(--shadow-lg); }
+}
+.btn-hero-gold, .btn-hero-blue {
+  animation: ctaGlowPulse 3s ease-in-out infinite;
+}
+.btn-hero-gold:hover, .btn-hero-blue:hover {
+  animation: none;
+}
+
+/* ── SECTION DIVIDER GRADIENT LINE ── */
+.section-divider {
+  height: 2px; border: none; margin: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(37,99,235,.3) 20%, rgba(124,58,237,.3) 50%, rgba(6,182,212,.3) 80%, transparent 100%);
+}
+
+/* ── SCROLL PROGRESS BAR ── */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4);
+  transition: width 0.1s ease;
+  box-shadow: 0 0 10px rgba(37,99,235,.5);
+}
+
+/* ── KPI CARDS WOW HOVER ── */
+.kpi-card {
+  position: relative; overflow: hidden;
+}
+.kpi-card::after {
+  content: ''; position: absolute; top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(37,99,235,.06) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.kpi-card:hover::after { opacity: 1; }
+.kpi-card:hover .kpi-value {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── ENHANCED PROFIL CARDS ── */
+.profil-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(37,99,235,.2), rgba(124,58,237,.2), rgba(6,182,212,.2));
+  opacity: 0; transition: opacity 0.4s ease; z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor; -webkit-mask-composite: xor;
+  padding: 2px;
+}
+.profil-card:hover::after { opacity: 1; }
+
+/* ── OBSIDIAN CARD GLOW ── */
+.obsidian-card { position: relative; overflow: hidden; }
+.obsidian-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(37,99,235,.06), transparent 40%);
+  opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 0;
+}
+.obsidian-card:hover::before { opacity: 1; }
+
+/* ── TYPING CURSOR EFFECT ── */
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.typing-cursor {
+  display: inline-block; width: 2px; height: 1em; background: var(--primary);
+  margin-left: 4px; animation: blink 1s step-end infinite; vertical-align: text-bottom;
+}
+
+/* ── TRUST RAIL ENHANCED ── */
+.trust-logo-wrap {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.trust-logo-wrap:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 24px rgba(37,99,235,.12);
+}
+
+/* ── SMOOTH NUMBER MORPHING ── */
+@keyframes numberMorph {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.morph-number {
+  display: inline-block;
+  overflow: hidden;
+}
+.morph-number span {
+  display: inline-block;
+  animation: numberMorph 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── DARK MODE ENHANCEMENTS ── */
+[data-theme="dark"] .hero-particle:nth-child(1) { background: radial-gradient(circle, rgba(96,165,250,.2) 0%, transparent 70%); }
+[data-theme="dark"] .hero-particle:nth-child(2) { background: radial-gradient(circle, rgba(167,139,250,.15) 0%, transparent 70%); }
+[data-theme="dark"] .hero-particle:nth-child(3) { background: radial-gradient(circle, rgba(34,211,238,.12) 0%, transparent 70%); }
+[data-theme="dark"] .gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 25%, #22d3ee 50%, #60a5fa 75%, #a78bfa 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text; background-clip: text;
+  animation: textGradientFlow 4s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-particle, .gradient-text, .stat-n, .btn-hero-gold, .btn-hero-blue { animation: none !important; }
+  .gradient-text { -webkit-text-fill-color: var(--primary); }
+  .stat-n { -webkit-text-fill-color: #60a5fa; }
+}
+
 </style>
 
 </style>
 <!-- saas-overrides.css removed -->
 </head>
 <body>
+
+<div class="scroll-progress" id="scroll-progress" style="width:0%"></div>
 
 <script>
 
@@ -1568,13 +1948,20 @@ function toggleTheme() {
 
   <!-- ═══ HERO SECTION — Premium B2B ═══ -->
   <section class="relative px-6 md:px-12 pt-28 pb-16 md:pt-36 md:pb-20 max-w-screen-2xl mx-auto overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="hero-particles">
+      <div class="hero-particle"></div>
+      <div class="hero-particle"></div>
+      <div class="hero-particle"></div>
+      <div class="hero-particle"></div>
+    </div>
     <!-- Ambient background -->
     <div class="absolute top-20 left-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style="background:rgba(37,99,235,.04);filter:blur(120px);z-index:0;"></div>
     <div class="absolute bottom-0 right-10 w-[400px] h-[400px] rounded-full pointer-events-none" style="background:rgba(0,74,198,.06);filter:blur(100px);z-index:0;"></div>
 
     <div class="relative z-10 grid md:grid-cols-2 gap-10 items-center">
       <!-- LEFT: Text + Search -->
-      <div>
+      <div class="reveal-left">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6" style="background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.15);">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background:#16a34a;"></span>
@@ -1584,7 +1971,7 @@ function toggleTheme() {
         </div>
 
         <h1 class="font-newsreader font-extrabold leading-[1.08] tracking-tight mb-5" style="color:var(--ink);font-size:clamp(2.4rem,4.5vw,3.6rem);" data-i18n="hero.title">
-          Trouvez votre <span style="background:linear-gradient(135deg,#2563eb,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">expert ERP</span><br>en 48 heures.
+          Trouvez votre <span class="gradient-text">expert ERP</span><br>en 48 heures.
         </h1>
 
         <p class="font-manrope text-base max-w-xl mb-8 leading-relaxed" style="color:var(--ink);opacity:.7;" data-i18n="hero.subtitle">
@@ -1609,11 +1996,11 @@ function toggleTheme() {
 
         <!-- Dual CTA -->
         <div class="flex flex-wrap gap-3 mb-8">
-          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.25);" data-action="show-page" data-page="consultants">
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2 btn-magnetic" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.25);" data-action="show-page" data-page="consultants">
             <span class="material-symbols-outlined" style="font-size:18px;">business</span>
             Je cherche un consultant
           </button>
-          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2" style="background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.04);" onclick="window.location.href='/inscription-consultant.html'">
+          <button class="px-6 py-3 rounded-xl font-manrope font-bold text-sm transition-all duration-200 flex items-center gap-2 btn-magnetic" style="background:#fff;color:#1e293b;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.04);" onclick="window.location.href='/inscription-consultant.html'">
             <span class="material-symbols-outlined" style="font-size:18px;">person_add</span>
             Je suis consultant
           </button>
@@ -1628,7 +2015,7 @@ function toggleTheme() {
       </div>
 
       <!-- RIGHT: Visual illustration card -->
-      <div class="hidden md:block">
+      <div class="hidden md:block reveal-right">
         <div class="relative" style="perspective:1000px;">
           <!-- Floating consultant card mockup -->
           <div class="rounded-2xl p-6 relative" style="background:#fff;border:1px solid #e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);transform:rotateY(-2deg) rotateX(1deg);">
@@ -1690,19 +2077,19 @@ function toggleTheme() {
       </div>
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Step 1 -->
-        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+        <div class="reveal-scale reveal-delay-1 relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
           <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">1</div>
           <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Décrivez votre besoin</h3>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Indiquez l'ERP, les modules, la localisation et la durée de mission souhaitée.</p>
         </div>
         <!-- Step 2 -->
-        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+        <div class="reveal-scale reveal-delay-2 relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
           <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">2</div>
           <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Recevez des profils qualifiés</h3>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Notre équipe vous propose des consultants vérifiés, disponibles et adaptés à votre projet.</p>
         </div>
         <!-- Step 3 -->
-        <div class="relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
+        <div class="reveal-scale reveal-delay-3 relative text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#f8fafc;border:1px solid #f1f5f9;">
           <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 font-manrope font-bold text-lg text-white" style="background:linear-gradient(135deg,#16a34a,#15803d);">3</div>
           <h3 class="font-newsreader text-xl font-bold mb-3" style="color:var(--ink);">Démarrez la mission</h3>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;">Validez le profil, signez le contrat et votre consultant démarre sous 48h.</p>
@@ -1770,7 +2157,7 @@ function toggleTheme() {
         <div class="h-1 w-20 mx-auto mt-4 rounded-full" style="background:linear-gradient(to right,#00f4fe,transparent);"></div>
       </div>
       <div class="grid md:grid-cols-3 gap-8">
-        <div class="group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--border);">
+        <div class="reveal-scale reveal-delay-1 group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card tilt-card glow-border" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--border);">
           <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:rgba(37,99,235,.03);pointer-events:none;"></div>
           <div class="relative z-10">
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.15);">
@@ -1784,7 +2171,7 @@ function toggleTheme() {
             </div>
           </div>
         </div>
-        <div class="group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid rgba(0,244,254,.08);">
+        <div class="reveal-scale reveal-delay-2 group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card tilt-card glow-border" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid rgba(0,244,254,.08);">
           <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:rgba(0,244,254,.03);pointer-events:none;"></div>
           <div class="relative z-10">
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(0,244,254,.1);border:1px solid rgba(0,244,254,.2);">
@@ -1798,7 +2185,7 @@ function toggleTheme() {
             </div>
           </div>
         </div>
-        <div class="group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid rgba(216,185,255,.08);">
+        <div class="reveal-scale reveal-delay-3 group relative p-10 rounded-2xl transition-all duration-500 hover:-translate-y-2 obsidian-card tilt-card glow-border" style="background:var(--surface);backdrop-filter:blur(24px);border:1px solid rgba(216,185,255,.08);">
           <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background:rgba(216,185,255,.03);pointer-events:none;"></div>
           <div class="relative z-10">
             <div class="w-14 h-14 rounded-xl flex items-center justify-center mb-8" style="background:rgba(216,185,255,.1);border:1px solid rgba(216,185,255,.2);">
@@ -2049,7 +2436,7 @@ function toggleTheme() {
         <p class="font-manrope text-sm mt-4 max-w-lg mx-auto" style="color:#64748b;" data-i18n="value.subtitle">Accédez aux mêmes experts sans les marges d'un cabinet. Direct, transparent, efficace.</p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+        <div class="reveal-scale reveal-delay-1 group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
           <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#2563eb,#1d4ed8);margin-bottom:1.5rem;width:40px;"></div>
           <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#eff6ff;border:1px solid #dbeafe;">
             <span class="material-symbols-outlined" style="color:#2563eb;font-size:22px;">handshake</span>
@@ -2057,7 +2444,7 @@ function toggleTheme() {
           <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.direct">Sans intermédiaire</h4>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.direct_desc">Contact direct entre l'expert et l'entreprise. Pas de couche de gestion qui dilue la valeur.</p>
         </div>
-        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+        <div class="reveal-scale reveal-delay-2 group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
           <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#7c3aed,#6d28d9);margin-bottom:1.5rem;width:40px;"></div>
           <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#f5f3ff;border:1px solid #ede9fe;">
             <span class="material-symbols-outlined" style="color:#7c3aed;font-size:22px;">payments</span>
@@ -2065,7 +2452,7 @@ function toggleTheme() {
           <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.transparent">Tarifs transparents</h4>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.transparent_desc">Vous voyez le tarif journalier réel de l'expert. Pas de surcoût de 40–60% d'un cabinet.</p>
         </div>
-        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+        <div class="reveal-scale reveal-delay-3 group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
           <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#16a34a,#15803d);margin-bottom:1.5rem;width:40px;"></div>
           <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#f0fdf4;border:1px solid #dcfce7;">
             <span class="material-symbols-outlined" style="color:#16a34a;font-size:22px;">verified</span>
@@ -2073,7 +2460,7 @@ function toggleTheme() {
           <h4 class="font-newsreader text-lg font-bold mb-2" style="color:#1e293b;" data-i18n="value.verified">Experts vérifiés</h4>
           <p class="font-manrope text-sm leading-relaxed" style="color:#64748b;" data-i18n="value.verified_desc">Chaque profil est validé par notre équipe. Certifications vérifiées, expériences confirmées.</p>
         </div>
-        <div class="group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+        <div class="reveal-scale reveal-delay-4 group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1" style="background:#fff;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
           <div style="height:3px;border-radius:3px;background:linear-gradient(135deg,#f59e0b,#d97706);margin-bottom:1.5rem;width:40px;"></div>
           <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:#fffbeb;border:1px solid #fef3c7;">
             <span class="material-symbols-outlined" style="color:#d97706;font-size:22px;">rocket_launch</span>
@@ -6030,5 +6417,101 @@ function mapErrorToCode(error) {
   });
 })();
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- SCROLL REVEAL OBSERVER (Added: 2026-04-02)                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+    obs.observe(el);
+  });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- WOW EFFECTS — Premium Visual Enhancements (Added: 2026-04-02)              -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<script>
+/* ══ WOW Effects JS ══ */
+(function(){
+  /* Scroll Progress Bar */
+  var progressBar = document.getElementById('scroll-progress');
+  if (progressBar) {
+    window.addEventListener('scroll', function() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+    }, { passive: true });
+  }
+
+  /* Obsidian Card Mouse Tracking */
+  document.querySelectorAll('.obsidian-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+    });
+  });
+
+  /* 3D Tilt Effect for Cards */
+  document.querySelectorAll('.tilt-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var centerX = rect.width / 2;
+      var centerY = rect.height / 2;
+      var rotateX = ((y - centerY) / centerY) * -8;
+      var rotateY = ((x - centerX) / centerX) * 8;
+      card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px) scale(1.02)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+    });
+  });
+
+  /* Animated Counter on Scroll */
+  var countersAnimated = false;
+  function animateCounters() {
+    if (countersAnimated) return;
+    var statBand = document.querySelector('.stats-band');
+    if (!statBand) return;
+    var rect = statBand.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85) {
+      countersAnimated = true;
+      statBand.querySelectorAll('.stat-n').forEach(function(el, i) {
+        el.classList.add('counter-animated');
+        el.style.animationDelay = (i * 0.12) + 's';
+      });
+    }
+  }
+  window.addEventListener('scroll', animateCounters, { passive: true });
+  animateCounters();
+
+  /* Parallax floating elements */
+  var heroParticles = document.querySelectorAll('.hero-particle');
+  if (heroParticles.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('scroll', function() {
+      var scrolled = window.pageYOffset;
+      heroParticles.forEach(function(p, i) {
+        var speed = 0.03 + (i * 0.015);
+        p.style.transform = 'translateY(' + (scrolled * speed) + 'px)';
+      });
+    }, { passive: true });
+  }
+})();
+</script>
+
 </body>
 </html>

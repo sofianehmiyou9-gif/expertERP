@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>ExpertERPHub — Audit Complet</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; background: #f4f6fa; line-height: 1.6; }
+  .container { max-width: 1060px; margin: 0 auto; padding: 2rem; }
+
+  /* HEADER */
+  .report-header { background: linear-gradient(135deg, #1B2A4A 0%, #2E5090 100%); color: white; padding: 3rem 2.5rem; border-radius: 12px; margin-bottom: 2rem; text-align: center; }
+  .report-header h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; }
+  .report-header .subtitle { font-size: 1.1rem; opacity: 0.85; margin-top: 0.5rem; }
+  .report-header .date { font-size: 0.9rem; opacity: 0.65; margin-top: 0.8rem; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { border-radius: 10px; padding: 1.2rem; text-align: center; font-weight: 700; font-size: 1.1rem; }
+  .stat-critique { background: #FFD5D5; color: #CC0000; }
+  .stat-haute { background: #FFE8CC; color: #CC6600; }
+  .stat-moyenne { background: #FFF3CC; color: #996600; }
+  .stat-basse { background: #E8F5E9; color: #2E7D32; }
+
+  /* SECTIONS */
+  .section { background: white; border-radius: 10px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  h2 { font-size: 1.5rem; color: #1B2A4A; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #E8ECF4; }
+  h3 { font-size: 1.15rem; color: #2E5090; margin: 1.2rem 0 0.6rem; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: #1B2A4A; color: white; padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; }
+  td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #E8ECF4; vertical-align: top; }
+  tr:hover td { background: #F8F9FC; }
+  .sev { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 4px; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; }
+  .sev-critique { background: #FFD5D5; color: #CC0000; }
+  .sev-haute { background: #FFE8CC; color: #CC6600; }
+  .sev-moyenne { background: #FFF3CC; color: #996600; }
+  .sev-basse { background: #E8F5E9; color: #2E7D32; }
+  .sev-nettoyage { background: #E3F2FD; color: #1565C0; }
+
+  /* DETAIL CARDS */
+  .issue-detail { border-left: 4px solid #CC0000; background: #FFF8F8; padding: 1rem 1.2rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+  .issue-detail.haute { border-left-color: #CC6600; background: #FFFAF5; }
+  .issue-detail p { margin: 0.4rem 0; }
+  .issue-detail .impact { font-weight: 700; color: #CC0000; }
+  .issue-detail.haute .impact { color: #CC6600; }
+  .issue-detail .fix { color: #2E7D32; }
+  code { background: #F0F2F6; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.85em; font-family: 'Cascadia Code', 'Fira Code', monospace; }
+
+  /* ACTION PLAN */
+  .action-list { counter-reset: action; list-style: none; padding: 0; }
+  .action-list li { padding: 0.6rem 0 0.6rem 2.5rem; border-bottom: 1px solid #F0F2F6; position: relative; }
+  .action-list li::before { counter-increment: action; content: counter(action); position: absolute; left: 0; width: 1.8rem; height: 1.8rem; background: #2E5090; color: white; border-radius: 50%; text-align: center; line-height: 1.8rem; font-weight: 700; font-size: 0.8rem; }
+
+  .files-list { columns: 2; column-gap: 2rem; font-size: 0.9rem; }
+  .files-list li { margin-bottom: 0.3rem; }
+
+  @media print { body { background: white; } .container { padding: 0; } .section { box-shadow: none; break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="report-header">
+  <h1>AUDIT COMPLET</h1>
+  <div class="subtitle">ExpertERPHub — Sécurité · Code · Architecture · Performance</div>
+  <div class="date">2 avril 2026 · Plateforme B2B de staffing ERP</div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-critique">6 Critiques</div>
+  <div class="stat-card stat-haute">5 Hautes</div>
+  <div class="stat-card stat-moyenne">8 Moyennes</div>
+  <div class="stat-card stat-basse">4 Basses + 3 Nettoyage</div>
+</div>
+
+<!-- SCOPE -->
+<div class="section">
+  <h2>1. Périmètre de l'audit</h2>
+  <p>Cet audit couvre l'ensemble du code source d'ExpertERPHub déployé sur Vercel avec backend Supabase : 15+ fichiers HTML/JS, les scripts partagés, la configuration, et l'API serverless. Total analysé : <strong>~22 800 lignes de code</strong>.</p>
+  <h3>Fichiers audités</h3>
+  <ul class="files-list">
+    <li><strong>index.html</strong> (6039 lignes) — SPA principale</li>
+    <li><strong>consultant.html</strong> (1704 lignes) — Profil public</li>
+    <li><strong>dashboard-consultant.html</strong> (2936 lignes)</li>
+    <li><strong>dashboard-entreprise.html</strong> (3640 lignes)</li>
+    <li><strong>dashboard-admin.html</strong> (1478 lignes)</li>
+    <li><strong>config.js, supabase-helpers.js, portal-auth.js</strong></li>
+    <li><strong>messaging.js, notifications.js, utils.js</strong></li>
+    <li><strong>email-notify.js, supabase-auth-client.js</strong></li>
+    <li><strong>vercel.json, api/send-email.js</strong></li>
+    <li><strong>inscription-consultant.html/js, reset-password.html</strong></li>
+  </ul>
+</div>
+
+<!-- FULL TABLE -->
+<div class="section">
+  <h2>2. Tableau complet des problèmes (26 items)</h2>
+  <table>
+    <thead><tr><th>#</th><th>Fichier</th><th>Sévérité</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>portal-auth.js</td><td><span class="sev sev-critique">Critique</span></td><td>Forge de session via localStorage : aucun signing cryptographique. Un attaquant peut créer une session admin via la console.</td></tr>
+      <tr><td>2</td><td>messaging.js</td><td><span class="sev sev-critique">Critique</span></td><td>Aucune validation serveur de l'email expéditeur. Un utilisateur peut envoyer des messages en usurpant l'identité d'un autre.</td></tr>
+      <tr><td>3</td><td>utils.js</td><td><span class="sev sev-critique">Critique</span></td><td><code>isAdminEmail()</code> retourne toujours false (bug async). La version synchrone est cassée.</td></tr>
+      <tr><td>4</td><td>consultant.html</td><td><span class="sev sev-critique">Critique</span></td><td>Filtre B2B non appliqué : un visiteur peut voir un profil B2B privé via URL directe (<code>?id=xxx</code>).</td></tr>
+      <tr><td>5</td><td>index.html</td><td><span class="sev sev-critique">Critique</span></td><td><code>CONSULTANT_COLS</code> non défini : variable utilisée dans 4 fonctions async mais jamais déclarée. Crash runtime.</td></tr>
+      <tr><td>6</td><td>dashboard-entreprise.html</td><td><span class="sev sev-critique">Critique</span></td><td><code>buildResourceCode()</code> et <code>generateInternalResourceEmail()</code> appelées mais jamais définies. Import de ressources cassé.</td></tr>
+      <tr><td>7</td><td>dashboard-entreprise.html</td><td><span class="sev sev-haute">Haute</span></td><td>XSS via onclick avec interpolation de string (email/nom). Utiliser data-attributes + addEventListener.</td></tr>
+      <tr><td>8</td><td>dashboard-consultant.html</td><td><span class="sev sev-haute">Haute</span></td><td>Email en clair dans l'URL (<code>?email=...</code>) pour le reset password. Visible dans l'historique et les logs.</td></tr>
+      <tr><td>9</td><td>config.js</td><td><span class="sev sev-haute">Haute</span></td><td>Hash admin email visible publiquement. Vulnérable au reverse-lookup par rainbow tables.</td></tr>
+      <tr><td>10</td><td>dashboard-admin.html</td><td><span class="sev sev-haute">Haute</span></td><td>Aucun token CSRF sur les actions admin (changement de statut, approbation).</td></tr>
+      <tr><td>11</td><td>api/send-email.js</td><td><span class="sev sev-haute">Haute</span></td><td>Clé RESEND_API_KEY potentiellement exposée dans les logs d'erreur Vercel.</td></tr>
+      <tr><td>12</td><td>dashboard-entreprise.html</td><td><span class="sev sev-moyenne">Moyenne</span></td><td><code>_messagesCurrentEmail</code> manipulable via console. Aucune validation session.</td></tr>
+      <tr><td>13</td><td>dashboard-entreprise.html</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>Parsing CSV avec <code>split(',')</code> basique. Pas de validation de schéma.</td></tr>
+      <tr><td>14</td><td>messaging.js</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>Race condition dans <code>syncFromNotifications()</code>. Messages dupliqués possibles.</td></tr>
+      <tr><td>15</td><td>supabase-helpers.js</td><td><span class="sev sev-moyenne">Moyenne</span></td><td><code>encodeURIComponent()</code> non utilisé de manière consistante dans les URLs.</td></tr>
+      <tr><td>16</td><td>vercel.json</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>CSP trop permissif : <code>unsafe-inline</code> et <code>unsafe-eval</code> autorisés.</td></tr>
+      <tr><td>17</td><td>inscription-consultant.js</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>Données PII stockées en clair dans localStorage sans TTL ni chiffrement.</td></tr>
+      <tr><td>18</td><td>notifications.js</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>Notifications en localStorage sans sanitisation. Vecteur XSS potentiel.</td></tr>
+      <tr><td>19</td><td>index.html</td><td><span class="sev sev-moyenne">Moyenne</span></td><td>Bouton "Je suis consultant" référence un <code>data-page</code> inexistant. Échoue silencieusement.</td></tr>
+      <tr><td>20</td><td>consultant.html</td><td><span class="sev sev-basse">Basse</span></td><td>Fonctions <code>detectErpBrand()</code> et <code>extractErpBrands()</code> définies mais jamais appelées.</td></tr>
+      <tr><td>21</td><td>index.html</td><td><span class="sev sev-basse">Basse</span></td><td><code>switchHowTab2()</code> définie mais aucun élément ne déclenche l'action.</td></tr>
+      <tr><td>22</td><td>supabase-auth-client.js</td><td><span class="sev sev-basse">Basse</span></td><td>Fichier potentiellement inutilisé (doublon avec portal-auth.js).</td></tr>
+      <tr><td>23</td><td>config.js</td><td><span class="sev sev-basse">Basse</span></td><td><code>ACCESS_TOKEN_HASH</code> = placeholder, pas un vrai SHA-256.</td></tr>
+      <tr><td>24</td><td>sovereign-authority.css</td><td><span class="sev sev-nettoyage">Nettoyage</span></td><td>Fichier vide (0 octets). À supprimer.</td></tr>
+      <tr><td>25</td><td>sync_test.txt</td><td><span class="sev sev-nettoyage">Nettoyage</span></td><td>Fichier de test. À supprimer avant production.</td></tr>
+      <tr><td>26</td><td>netlify.toml</td><td><span class="sev sev-nettoyage">Nettoyage</span></td><td>Configuration Netlify inutile (déploiement sur Vercel).</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CRITICAL DETAILS -->
+<div class="section">
+  <h2>3. Détails des problèmes critiques</h2>
+
+  <h3>#1 — Forge de session (portal-auth.js)</h3>
+  <div class="issue-detail">
+    <p>Le système de session utilise <code>localStorage</code> sans aucun signing cryptographique. N'importe qui peut exécuter dans la console :</p>
+    <p><code>localStorage.setItem('experterphub_portal_session', JSON.stringify({role:'admin', email:'fake@admin.com', expiresAt:'2026-12-31'}))</code></p>
+    <p class="impact">Impact : accès complet au dashboard admin, modification de statuts consultants/entreprises.</p>
+    <p class="fix">✓ Fix : utiliser les sessions natives Supabase Auth avec JWT signé côté serveur.</p>
+  </div>
+
+  <h3>#2 — Spoofing email messagerie (messaging.js)</h3>
+  <div class="issue-detail">
+    <p>La fonction <code>send()</code> accepte <code>senderEmail</code> du client sans vérification serveur. Un utilisateur malveillant peut envoyer des messages en se faisant passer pour n'importe qui.</p>
+    <p class="impact">Impact : usurpation d'identité, phishing interne, fraude.</p>
+    <p class="fix">✓ Fix : ajouter une politique RLS vérifiant que sender_email = auth.email() sur la table messages.</p>
+  </div>
+
+  <h3>#3 — isAdminEmail() cassée (utils.js)</h3>
+  <div class="issue-detail">
+    <p>La version synchrone utilise <code>crypto.subtle.digest</code> (async) mais retourne le résultat avant la résolution de la Promise. Elle retourne <strong>toujours false</strong>.</p>
+    <p class="impact">Impact : tout code utilisant la version synchrone ne détecte jamais un admin.</p>
+    <p class="fix">✓ Fix : supprimer la version synchrone, utiliser exclusivement <code>isAdminEmailAsync()</code>.</p>
+  </div>
+
+  <h3>#4 — Filtre B2B absent (consultant.html)</h3>
+  <div class="issue-detail">
+    <p>La page profil charge et affiche les ressources B2B (<code>import_b2b</code>) sans vérifier si l'utilisateur est une entreprise. Un visiteur peut accéder à un profil B2B privé via URL directe.</p>
+    <p class="impact">Impact : violation de la règle business — les ressources B2B doivent être totalement cachées aux non-entreprises.</p>
+    <p class="fix">✓ Fix : ajouter un check <code>isB2BResource() + isEnterprise</code> avant <code>renderConsultant()</code>. Rediriger sinon.</p>
+  </div>
+
+  <h3>#5 — CONSULTANT_COLS non défini (index.html)</h3>
+  <div class="issue-detail">
+    <p>La variable <code>CONSULTANT_COLS</code> est utilisée dans 4 fonctions async mais n'est jamais déclarée dans index.html. Ces fonctions crashent avec <code>ReferenceError</code>.</p>
+    <p class="impact">Impact : loadConsultants(), submitPortalAccess(), validateInviteCode(), syncLegacyHashesByEmail() sont cassées.</p>
+    <p class="fix">✓ Fix : définir <code>CONSULTANT_COLS</code> en haut du script, ou utiliser <code>window.CONSULTANT_COLS</code> avec fallback.</p>
+  </div>
+
+  <h3>#6 — Fonctions manquantes (dashboard-entreprise.html)</h3>
+  <div class="issue-detail">
+    <p><code>buildResourceCode()</code> et <code>generateInternalResourceEmail()</code> sont appelées lors de l'import CSV/Excel et de l'ajout manuel de ressources, mais ne sont définies nulle part dans ce fichier.</p>
+    <p class="impact">Impact : l'import de ressources et l'ajout manuel sont complètement cassés.</p>
+    <p class="fix">✓ Fix : copier ces fonctions depuis index.html ou créer un fichier utils partagé.</p>
+  </div>
+</div>
+
+<!-- DETAILS HAUTES -->
+<div class="section">
+  <h2>4. Détails des problèmes de sévérité haute</h2>
+
+  <h3>#7 — XSS via onclick (dashboard-entreprise.html)</h3>
+  <div class="issue-detail haute">
+    <p>L'attribut <code>onclick</code> utilise une interpolation de string avec des données utilisateur (email, nom). Un email malicieux comme <code>'); alert('xss'); //</code> pourrait exécuter du JavaScript.</p>
+    <p class="fix">✓ Fix : utiliser <code>data-</code> attributes et <code>addEventListener</code> au lieu de <code>onclick</code> inline.</p>
+  </div>
+
+  <h3>#8 — Email dans l'URL (dashboard-consultant.html)</h3>
+  <div class="issue-detail haute">
+    <p>L'email est passé en paramètre URL (<code>?email=...</code>) pour le reset password. Cela expose l'email dans l'historique du navigateur, les logs serveur, et les headers Referer.</p>
+    <p class="fix">✓ Fix : utiliser <code>sessionStorage</code> ou POST au lieu d'un paramètre URL.</p>
+  </div>
+
+  <h3>#9 — Hash admin email public (config.js)</h3>
+  <div class="issue-detail haute">
+    <p>Le hash SHA-256 de l'email admin est visible dans le code source public. Un attaquant peut faire un reverse-lookup via rainbow tables pour découvrir l'email admin.</p>
+    <p class="fix">✓ Fix : vérifier le statut admin côté serveur via Supabase RLS, pas côté client.</p>
+  </div>
+
+  <h3>#10 — Pas de CSRF (dashboard-admin.html)</h3>
+  <div class="issue-detail haute">
+    <p>Les actions admin (changement de statut, approbation) n'ont aucun token CSRF. Une page malveillante pourrait déclencher ces actions.</p>
+    <p class="fix">✓ Fix : ajouter une validation CSRF sur toutes les actions qui modifient des données.</p>
+  </div>
+
+  <h3>#11 — Clé API dans les logs (api/send-email.js)</h3>
+  <div class="issue-detail haute">
+    <p>En cas d'erreur, <code>console.error(data)</code> pourrait exposer la clé RESEND_API_KEY dans les logs Vercel, accessibles à toute l'équipe.</p>
+    <p class="fix">✓ Fix : masquer les données sensibles dans les logs d'erreur.</p>
+  </div>
+</div>
+
+<!-- ACTION PLAN -->
+<div class="section">
+  <h2>5. Plan d'action recommandé</h2>
+
+  <h3>🔴 Immédiat (avant mise en production)</h3>
+  <ol class="action-list">
+    <li>Définir <code>CONSULTANT_COLS</code> dans index.html (#5)</li>
+    <li>Ajouter <code>buildResourceCode()</code> et <code>generateInternalResourceEmail()</code> dans dashboard-entreprise.html (#6)</li>
+    <li>Ajouter le filtre B2B dans consultant.html avant <code>renderConsultant()</code> (#4)</li>
+    <li>Fixer le bouton "Je suis consultant" dans index.html (#19)</li>
+  </ol>
+
+  <h3>🟠 Court terme (sécurité)</h3>
+  <ol class="action-list">
+    <li>Migrer vers Supabase Auth JWT pour les sessions (#1)</li>
+    <li>Ajouter validation serveur (RLS) sur l'email expéditeur des messages (#2)</li>
+    <li>Supprimer <code>isAdminEmail()</code> synchrone, garder uniquement async (#3)</li>
+    <li>Remplacer onclick par addEventListener pour éviter XSS (#7)</li>
+    <li>Arrêter de passer l'email dans les URLs (#8)</li>
+    <li>Protéger <code>_messagesCurrentEmail</code> (#12)</li>
+  </ol>
+
+  <h3>🟡 Moyen terme (qualité)</h3>
+  <ol class="action-list">
+    <li>Durcir les headers CSP dans vercel.json (#16)</li>
+    <li>Ajouter rate limiting côté client sur reset password</li>
+    <li>Nettoyer les fichiers inutiles : sovereign-authority.css, sync_test.txt, netlify.toml (#24-26)</li>
+    <li>Supprimer le code mort : switchHowTab2, detectErpBrand, extractErpBrands (#20-21)</li>
+    <li>Clarifier le rôle de supabase-auth-client.js vs portal-auth.js (#22)</li>
+  </ol>
+</div>
+
+<div style="text-align:center; color:#999; font-size:0.85rem; padding: 1.5rem 0;">
+  Fin du rapport — Généré le 2 avril 2026
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpertERPHub — Cartographie Complète des Processus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #1B2A4A;
+      --gold: #D4AF37;
+      --light-navy: #2C3E50;
+      --light-bg: #F5F7FA;
+      --border-color: #E0E6ED;
+      --text-dark: #1B2A4A;
+      --text-light: #5A6B7D;
+      --accent-blue: #2563EB;
+      --success: #16A34A;
+      --warning: #F59E0B;
+      --danger: #DC2626;
+    }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* === HEADER === */
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--light-navy) 100%);
+      color: white;
+      padding: 60px 40px;
+      margin-bottom: 60px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(27, 42, 74, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    header h1 {
+      font-family: 'Newsreader', serif;
+      font-size: 3em;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === TABLE OF CONTENTS === */
+    .toc {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      margin-bottom: 50px;
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .toc h2 {
+      color: var(--navy);
+      margin-bottom: 20px;
+      font-size: 1.5em;
+    }
+
+    .toc ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .toc li {
+      padding: 10px;
+      background: var(--light-bg);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .toc a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .toc a:hover {
+      color: var(--gold);
+    }
+
+    /* === ACTOR SECTION === */
+    .actor-section {
+      margin-bottom: 80px;
+      scroll-margin-top: 100px;
+    }
+
+    .actor-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .actor-icon {
+      font-size: 3.5em;
+      line-height: 1;
+    }
+
+    .actor-header h2 {
+      font-size: 2.2em;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+
+    .actor-header p {
+      color: var(--text-light);
+      font-size: 1.05em;
+    }
+
+    /* === PROCESS CARD === */
+    .process-card {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border-top: 4px solid var(--accent-blue);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .process-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .process-card h3 {
+      color: var(--navy);
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .process-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--accent-blue);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .process-badge.optional {
+      background: var(--warning);
+    }
+
+    .process-badge.restricted {
+      background: var(--danger);
+    }
+
+    /* === FLOWCHART === */
+    .flowchart {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      align-items: stretch;
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .flow-step {
+      position: relative;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--light-bg) 0%, #FAFBFC 100%);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-dark);
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .flow-step:hover {
+      border-color: var(--gold);
+      background: white;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+    }
+
+    .flow-step.decision {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FEF9E7 100%);
+      border-color: var(--warning);
+      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+      padding: 25px;
+    }
+
+    .flow-step.success {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+      border-color: var(--success);
+      border-radius: 0;
+      clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    }
+
+    .flow-step.action {
+      background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%);
+      border-color: var(--accent-blue);
+    }
+
+    .flow-step.danger {
+      background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);
+      border-color: var(--danger);
+    }
+
+    .flow-step.num {
+      position: absolute;
+      top: -12px;
+      left: 10px;
+      width: 28px;
+      height: 28px;
+      background: var(--navy);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+
+    /* === ARROW === */
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+      font-size: 1.8em;
+      color: var(--gold);
+      user-select: none;
+    }
+
+    .flow-arrow::before {
+      content: '→';
+    }
+
+    @media (max-width: 768px) {
+      .flow-arrow::before {
+        content: '↓';
+      }
+    }
+
+    /* === DATA TABLE === */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .data-table thead {
+      background: var(--navy);
+      color: white;
+    }
+
+    .data-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.85em;
+    }
+
+    .data-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--light-bg);
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* === SPECIFICATIONS === */
+    .specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .spec-item {
+      padding: 12px;
+      background: var(--light-bg);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .spec-label {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.85em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+
+    .spec-value {
+      color: var(--text-light);
+      font-size: 0.95em;
+    }
+
+    /* === ACTIONS LIST === */
+    .actions-list {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .actions-list li {
+      padding: 12px 15px;
+      background: var(--light-bg);
+      border-left: 3px solid var(--accent-blue);
+      margin-bottom: 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .actions-list li:hover {
+      background: white;
+      border-left-color: var(--gold);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .action-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 1.1em;
+    }
+
+    /* === NOTES & WARNINGS === */
+    .note {
+      background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%);
+      border-left: 4px solid var(--accent-blue);
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      color: var(--text-dark);
+    }
+
+    .note strong {
+      color: var(--navy);
+    }
+
+    .warning {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FEF9E7 100%);
+      border-left-color: var(--warning);
+    }
+
+    .danger-note {
+      background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);
+      border-left-color: var(--danger);
+    }
+
+    .success-note {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+      border-left-color: var(--success);
+    }
+
+    /* === LEGEND === */
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8em;
+      flex-shrink: 0;
+    }
+
+    .legend-box.action {
+      background: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .legend-box.decision {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FEF9E7 100%);
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .legend-box.success {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .legend-box.danger {
+      background: linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* === PRINT STYLES === */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .process-card,
+      .process-card:hover {
+        page-break-inside: avoid;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      header {
+        page-break-after: always;
+      }
+
+      .toc {
+        page-break-after: always;
+      }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .toc ul {
+        grid-template-columns: 1fr;
+      }
+
+      .actor-icon {
+        font-size: 2.5em;
+      }
+
+      .actor-header h2 {
+        font-size: 1.6em;
+      }
+
+      .data-table {
+        font-size: 0.9em;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ============================================ HEADER ============================================ -->
+    <header>
+      <h1>ExpertERPHub <em>Processus</em></h1>
+      <p>Cartographie complète de tous les flux, parcours utilisateurs et workflows de la plateforme B2B</p>
+    </header>
+
+    <!-- ============================================ TABLE OF CONTENTS ============================================ -->
+    <section class="toc">
+      <h2>📋 Navigation rapide</h2>
+      <ul>
+        <li><a href="#visiteur-anonyme">Visiteur Anonyme</a></li>
+        <li><a href="#visiteur-pro">Visiteur Professionnel</a></li>
+        <li><a href="#consultant">Consultant Freelance</a></li>
+        <li><a href="#entreprise">Entreprise Partenaire</a></li>
+        <li><a href="#administrateur">Administrateur</a></li>
+      </ul>
+    </section>
+
+    <!-- ============================================ LEGEND ============================================ -->
+    <section class="legend">
+      <div class="legend-item">
+        <div class="legend-box action">A</div>
+        <span><strong>Action:</strong> Étape d'action utilisateur</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box decision">D</div>
+        <span><strong>Décision:</strong> Point de branchement</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box success">S</div>
+        <span><strong>Succès:</strong> Résultat positif</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box danger">E</div>
+        <span><strong>Erreur:</strong> Blocage/Rejet</span>
+      </div>
+    </section>
+
+    <!-- ============================================ VISITEUR ANONYME ============================================ -->
+    <section id="visiteur-anonyme" class="actor-section">
+      <div class="actor-header">
+        <div class="actor-icon">👤</div>
+        <div>
+          <h2>Visiteur Anonyme</h2>
+          <p>Utilisateur non connecté explorant la plateforme</p>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 1: ACCÈS À L'ACCUEIL === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès initial</span> Arrivée sur la page d'accueil</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Charger index.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Config Supabase chargée (config.js)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Portal Auth vérifiée (localStorage)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">4</span>Page HOME affichée</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Page</div>
+            <div class="spec-value">index.html</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Data-page</div>
+            <div class="spec-value">home</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Session</div>
+            <div class="spec-value">Aucune</div>
+          </div>
+        </div>
+        <div class="note">
+          <strong>Contenu visible:</strong>
+          <ul class="actions-list">
+            <li><span class="action-icon">🎯</span>Hero banner avec call-to-action</li>
+            <li><span class="action-icon">📊</span>KPIs (nombre consultants, entreprises, etc.)</li>
+            <li><span class="action-icon">🏢</span>Logos des partenaires ERP (SAP, Oracle, Dynamics, etc.)</li>
+            <li><span class="action-icon">❓</span>Onglet "Comment ça marche?" avec 2 sections</li>
+            <li><span class="action-icon">🔗</span>Liens de navigation vers Consultants, Entreprises, Tarifs</li>
+            <li><span class="action-icon">⚙️</span>Sélecteur de langue (FR/EN)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 2: PARCOURIR LES CONSULTANTS === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Lecture</span> Consulter l'annuaire des freelances</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Consultants"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-page="consultants"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Requête Supabase (SELECT)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">4</span>B2B visible?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Afficher freelances uniquement</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Grille de profils</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Rôle visible</div>
+            <div class="spec-value">Tous</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Filtres</div>
+            <div class="spec-value">Modules ERP, titre, TJM</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Données B2B</div>
+            <div class="spec-value">Masquées</div>
+          </div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">🔍</span><strong>Filtrer par:</strong> Module ERP (SAP FI/CO, Oracle Cloud, etc.), disponibilité, TJM min/max</li>
+          <li><span class="action-icon">🏷️</span><strong>Tags visibles:</strong> Compétences, année d'expérience, localisation</li>
+          <li><span class="action-icon">👁️</span><strong>Visibilité:</strong> Consultants avec statut "approuvé" UNIQUEMENT</li>
+          <li><span class="action-icon">💬</span><strong>Contacter:</strong> Bouton "Contacter" → Overlay GATE si non connecté</li>
+        </ul>
+        <div class="warning" style="margin-top: 20px;">
+          <strong>⚠️ Filtre critique B2B:</strong> Les ressources importées (notes.source = "import_b2b") sont <strong>totalement masquées</strong> pour les visiteurs non-entreprise
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 3: PAGE PROFIL CONSULTANT === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Détail</span> Consulter le profil détaillé d'un freelance</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer sur une carte consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Construire URL: consultant.html?id=UUID</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Charger consultant.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Requête Supabase (SELECT by id)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Enrichir profil (profile-enhancer.js)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Afficher profil complet</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">URL</div>
+            <div class="spec-value">consultant.html?id=...</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Donnéesvisibles</div>
+            <div class="spec-value">CV, expérience, modules ERP</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Actions CTA</div>
+            <div class="spec-value">Contacter</div>
+          </div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">📄</span>Vue complète: CV, expériences professionnelles, certification</li>
+          <li><span class="action-icon">🛠️</span>Détails techniques: modules ERP, langues, mode de travail</li>
+          <li><span class="action-icon">💼</span>Résumé professionnel: biographie enrichie, secteurs</li>
+          <li><span class="action-icon">📞</span>Bouton "Prendre contact" → Overlay GATE messagerie</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 4: PAGE ENTREPRISES (GATE) === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès limité</span> Explorer les ressources B2B (PAGE GATE)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Entreprises"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-page="entreprises"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">3</span>Session.role == 'entreprise'?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step danger"><span class="flow-step num">4</span>NON → Afficher PAGE GATE</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Options d'accès proposées</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Accès</div>
+            <div class="spec-value">Non authentifiés</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Options</div>
+            <div class="spec-value">2 chemins</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Données visibles</div>
+            <div class="spec-value">Aucune (gate)</div>
+          </div>
+        </div>
+        <div class="warning">
+          <strong>🚪 PAGE GATE avec 2 options d'accès:</strong>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Rôle</th>
+              <th>Inscription</th>
+              <th>Accès aux ressources</th>
+              <th>Messagerie</th>
+              <th>Pricing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Option A (Recommandé)</strong></td>
+              <td>Entreprise partenaire</td>
+              <td>Formulaire complet (10 champs)</td>
+              <td>✅ Freelances + B2B (10 ressources)</td>
+              <td>✅ Messagerie directe (plan payant)</td>
+              <td>Starter (1 mes) → Growth (illimité)</td>
+            </tr>
+            <tr>
+              <td><strong>Option B</strong></td>
+              <td>Visiteur professionnel</td>
+              <td>Aucune (pseudo accès)</td>
+              <td>✅ Freelances UNIQUEMENT</td>
+              <td>❌ Bloquée</td>
+              <td>N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- === PROCESSUS 5: OVERLAY GATE MESSAGERIE === -->
+      <div class="process-card">
+        <h3><span class="process-badge danger">Rejet</span> Tentative de contact sans connexion</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Contacter" sans session</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">2</span>Session active?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>showContactGateOverlay()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">4</span>Modal overlay affichée</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">📢</span>Message: "La messagerie directe nécessite une inscription entreprise + plan actif"</li>
+          <li><span class="action-icon">🔗</span>2 boutons CTA: "S'inscrire" ou "Continuer en visiteur"</li>
+          <li><span class="action-icon">❌</span>Impossible de bypasser: soumission bloquée côté client + API</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 6: SÉLECTEUR DE LANGUE === -->
+      <div class="process-card">
+        <h3><span class="process-badge optional">Configuration</span> Changer la langue (FR ↔ EN)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer sur FR/EN (nav)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="set-language"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Mettre à jour localStorage</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Appel i18n.js + translate-content.js</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Page retraduite</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Langues</div>
+            <div class="spec-value">FR (défaut), EN</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Persist</div>
+            <div class="spec-value">localStorage</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Couverture</div>
+            <div class="spec-value">100% de l'UI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 7: SÉLECTEUR DE THÈME === -->
+      <div class="process-card">
+        <h3><span class="process-badge optional">Configuration</span> Basculer light/dark mode</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer toggle theme</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="toggle-theme"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Ajouter/retirer classe .dark</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Sauvegarder en localStorage</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Tailwind recompile CSS</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ VISITEUR PROFESSIONNEL ============================================ -->
+    <section id="visiteur-pro" class="actor-section">
+      <div class="actor-header">
+        <div class="actor-icon">👨‍💼</div>
+        <div>
+          <h2>Visiteur Professionnel</h2>
+          <p>Accès limité aux freelances, pas d'accès B2B</p>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 1: ACCÈS VISITEUR PRO === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès</span> Activation du rôle visiteur_pro</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Sur page GATE entreprises</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Cliquer "Option B - Visiteur"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="select-portal-role"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>ExpertPortalAuth.setSession({role: 'visiteur_pro'})</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>localStorage + TTL 8h</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Redirection automatique</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Rôle</div>
+            <div class="spec-value">visiteur_pro</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Email</div>
+            <div class="spec-value">N/A</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">TTL</div>
+            <div class="spec-value">8 heures</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 2: PARCOURIR FREELANCES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Lecture</span> Consulter les consultants freelances</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Aller à "Consultants"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">2</span>Vérifier _isEnterprise</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>_isEnterprise = false</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Filtrer: B2B = masqué</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Afficher 12+ freelances</div>
+        </div>
+        <div class="note">
+          <strong>✅ Visible:</strong> Tous les consultants freelances (notes.source ≠ "import_b2b")
+        </div>
+        <div class="danger-note">
+          <strong>❌ Masqué:</strong> Les 10 ressources B2B des 2 entreprises
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 3: TENTATIVE CONTACT VISITEUR PRO === -->
+      <div class="process-card">
+        <h3><span class="process-badge danger">Rejet</span> Tentative d'envoi de message</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Contacter"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">2</span>Session role?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Role = visiteur_pro</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step danger"><span class="flow-step num">4</span>showContactGateOverlay()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step danger"><span class="flow-step num">5</span>Message "Inscription entreprise requise"</div>
+        </div>
+        <div class="warning">
+          <strong>⚠️ Limitation intentionnelle:</strong> Les visiteurs pro n'ont accès qu'à la consultation, pas à la messagerie
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 4: DÉCONNEXION VISITEUR PRO === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Déconnexion / fin de session</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Déconnecter" (nav)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="disconnect-portal-session"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>ExpertPortalAuth.clearSession()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>localStorage.removeItem()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Retour accueil anonyme</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ CONSULTANT FREELANCE ============================================ -->
+    <section id="consultant" class="actor-section">
+      <div class="actor-header">
+        <div class="actor-icon">🎯</div>
+        <div>
+          <h2>Consultant Freelance</h2>
+          <p>Expert ERP indépendant inscrit publiquement</p>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 1: INSCRIPTION CONSULTANT === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Inscription</span> Création de profil freelance (avec invitation optionnelle)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Accéder à inscription-consultant.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Charger formulaire + Script JS</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Remplir 10+ champs (voir tableau)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">4</span>Code invitation fourni?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>OUI: Valider via RPC consume_invitation_code()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">6</span>Soumettre à Supabase (INSERT consultants)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">7</span>Statut = "en_attente" (approuvé par admin)</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Champs requis</div>
+            <div class="spec-value">11 (nom, email, etc.)</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Expériences</div>
+            <div class="spec-value">Blocs dynamiques (add/remove)</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Modules ERP</div>
+            <div class="spec-value">Multi-select (toggle)</div>
+          </div>
+        </div>
+
+        <table class="data-table" style="margin-top: 20px;">
+          <thead>
+            <tr>
+              <th>Champ</th>
+              <th>Type</th>
+              <th>Requis?</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Prénom</td>
+              <td>Text</td>
+              <td>✅</td>
+              <td>Min 2 caractères</td>
+            </tr>
+            <tr>
+              <td>Nom</td>
+              <td>Text</td>
+              <td>✅</td>
+              <td>Min 2 caractères</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>Email</td>
+              <td>✅</td>
+              <td>Format valide + unique</td>
+            </tr>
+            <tr>
+              <td>Téléphone</td>
+              <td>Tel</td>
+              <td>✅</td>
+              <td>Format international (ex: +1-514-)</td>
+            </tr>
+            <tr>
+              <td>Titre professionnel</td>
+              <td>Text</td>
+              <td>✅</td>
+              <td>Ex: "Consultant SAP FI/CO"</td>
+            </tr>
+            <tr>
+              <td>Années d'expérience</td>
+              <td>Number</td>
+              <td>✅</td>
+              <td>0 à 60 ans</td>
+            </tr>
+            <tr>
+              <td>Compétences</td>
+              <td>CSV</td>
+              <td>✅</td>
+              <td>Tags séparées par virgule</td>
+            </tr>
+            <tr>
+              <td>Disponibilité</td>
+              <td>Select</td>
+              <td>✅</td>
+              <td>Immédiate, 2 semaines, 1 mois</td>
+            </tr>
+            <tr>
+              <td>TJM Min</td>
+              <td>Number</td>
+              <td>✅</td>
+              <td>CAD (ex: 600)</td>
+            </tr>
+            <tr>
+              <td>TJM Max</td>
+              <td>Number</td>
+              <td>✅</td>
+              <td>CAD (ex: 1200)</td>
+            </tr>
+            <tr>
+              <td>Modules ERP</td>
+              <td>Multi-check</td>
+              <td>✅</td>
+              <td>Toggle data-action="toggle-module"</td>
+            </tr>
+            <tr>
+              <td>Code invitation</td>
+              <td>Text</td>
+              <td>❌</td>
+              <td>Optionnel - Validation RPC</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note" style="margin-top: 20px;">
+          <strong>📌 Processus d'approbation:</strong>
+          <ul class="actions-list">
+            <li><span class="action-icon">1️⃣</span>Consultant remplit et soumet le formulaire</li>
+            <li><span class="action-icon">2️⃣</span>Statut initial = "en_attente"</li>
+            <li><span class="action-icon">3️⃣</span>Admin révise et approuve/refuse via dashboard</li>
+            <li><span class="action-icon">4️⃣</span>Profil visible publiquement si approuvé</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 2: AJOUT EXPÉRIENCES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Formulaire</span> Gestion dynamique des expériences professionnelles</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "+ Ajouter expérience"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="cs-add-exp" ou ajouterExperience()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Créer bloc expérience (ID unique)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Remplir: Titre, Entreprise, Période, Description</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Bouton "Supprimer" pour retirer le bloc</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Toutes les exp. collectées à la soumission</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">➕</span>Illimité: Ajouter autant d'expériences que nécessaire</li>
+          <li><span class="action-icon">❌</span>Retirer: Bouton "Supprimer" sur chaque bloc</li>
+          <li><span class="action-icon">📝</span>Données collectées: collectExperiences() → Array d'objets</li>
+          <li><span class="action-icon">💾</span>Sauvegarde locale: saveDraft() et loadDraft() pour persistance</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 3: VALIDATION INVITATION === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Validation</span> Contrôle du code d'invitation (optionnel)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Fournir code invitation</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="cs-validate-invite"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>RPC: consume_invitation_code(code, email)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">4</span>Code valide et actif?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>OUI → Marquer used_at + used_by_email</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step danger"><span class="flow-step num">6</span>NON → Message d'erreur</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Utilité</div>
+            <div class="spec-value">Contrôle d'accès optionnel</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Statut codes</div>
+            <div class="spec-value">active, used, expired</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Table</div>
+            <div class="spec-value">invitation_codes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 4: SÉLECTION MODULES ERP === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Formulaire</span> Sélection des modules ERP/compétences</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Section "Modules ERP" visible</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Checkboxes pour chaque ERP (SAP, Oracle, etc.)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="toggle-erp" ou "toggle-module"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Pour SAP: Afficher sous-modules (FI/CO, MM/SD, etc.)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Tableau collectExperiences() → notes_admin.erp_modules</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">🔘</span><strong>ERPs proposés:</strong> SAP, Oracle, Dynamics, Workday, NetSuite, Salesforce, ServiceNow</li>
+          <li><span class="action-icon">🏷️</span><strong>Modules SAP:</strong> FI/CO, MM/SD, ABAP, S/4HANA, Logistics, etc.</li>
+          <li><span class="action-icon">✅</span><strong>Multi-sélection:</strong> Cocher autant que nécessaire</li>
+          <li><span class="action-icon">💾</span><strong>Stockage:</strong> JSON string dans notes_admin.erp_modules</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 5: DASHBOARD CONSULTANT === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès</span> Connexion et consultation du dashboard consultant</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Admin approuve consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Email de notification envoyé</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Consultant accède dashboard-consultant.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Authentification: email + vérification Supabase</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Dashboard personnalisé chargé</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">URL</div>
+            <div class="spec-value">dashboard-consultant.html?email=...</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Rôle</div>
+            <div class="spec-value">consultant</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Durée session</div>
+            <div class="spec-value">8 heures (TTL)</div>
+          </div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">👤</span>Vue profil: Affichage des données enregistrées</li>
+          <li><span class="action-icon">✏️</span>Édition: Mettre à jour titre, TJM, modules ERP, disponibilité</li>
+          <li><span class="action-icon">💬</span>Messagerie: Voir les conversations avec les entreprises</li>
+          <li><span class="action-icon">📊</span>Statistiques: Vues de profil, demandes de contact</li>
+          <li><span class="action-icon">⏰</span>Notifications: Nouvelles demandes en temps réel</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 6: MODIFICATION PROFIL === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Mise à jour du profil consultant</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dans dashboard, cliquer "Éditer profil"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Formulaire pré-rempli avec données actuelles</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Modifier: titre, TJM, disponibilité, modules</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Soumettre → sbUpdate(consultants, id, {nouvelles données})</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Profil public mis à jour immédiatement</div>
+        </div>
+        <div class="note">
+          <strong>⚠️ Restrictions:</strong>
+          <ul class="actions-list">
+            <li><span class="action-icon">🔒</span>Email non modifiable (clé unique)</li>
+            <li><span class="action-icon">📋</span>Historique conservé en notes_admin</li>
+            <li><span class="action-icon">⏰</span>Modification visible instantanément publiquement</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 7: RÉCEPTION DE MESSAGES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Communication</span> Recevoir et répondre aux messages</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Entreprise envoie message via messaging.js</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>INSERT table: messages (to, from, content, timestamp)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Email-notify.js: Notification envoyée au consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Consultant voit badge/notification dans dashboard</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Cliquer pour ouvrir conversation</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Rédiger réponse + UPDATE messages</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Table</div>
+            <div class="spec-value">messages</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Notification</div>
+            <div class="spec-value">Email + Dashboard</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Chiffrement</div>
+            <div class="spec-value">HTTPS TLS only</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 8: DÉCONNEXION === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Déconnexion du dashboard consultant</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Déconnecter" (nav)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="nav-logout"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>ExpertPortalAuth.clearSession()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Supprimer localStorage</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Redirection index.html</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ ENTREPRISE PARTENAIRE ============================================ -->
+    <section id="entreprise" class="actor-section">
+      <div class="actor-header">
+        <div class="actor-icon">🏢</div>
+        <div>
+          <h2>Entreprise Partenaire</h2>
+          <p>Firme de conseil/ESN avec accès B2B et messagerie (plan payant)</p>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 1: INSCRIPTION ENTREPRISE === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Inscription</span> Création de compte entreprise (2 chemins: Placer ou Chercher)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Sur page GATE entreprises</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">2</span>Intention: Placer ou Chercher?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="open-entreprise-modal" (mode=...)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Formulaire modal: 10 champs (voir tableau)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Soumettre → INSERT table entreprises</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Statut initial = "en_attente" (approbation admin)</div>
+        </div>
+
+        <table class="data-table" style="margin-top: 20px;">
+          <thead>
+            <tr>
+              <th>Champ</th>
+              <th>Type</th>
+              <th>Requis?</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nom entreprise</td>
+              <td>Text</td>
+              <td>✅</td>
+              <td>Ex: "Nexia Conseil"</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>Email</td>
+              <td>✅</td>
+              <td>Adresse unique (clé)</td>
+            </tr>
+            <tr>
+              <td>Téléphone</td>
+              <td>Tel</td>
+              <td>✅</td>
+              <td>Format international</td>
+            </tr>
+            <tr>
+              <td>Site web</td>
+              <td>URL</td>
+              <td>❌</td>
+              <td>Ex: https://nexiaconseil.ca</td>
+            </tr>
+            <tr>
+              <td>Secteur</td>
+              <td>Select</td>
+              <td>✅</td>
+              <td>Finance, Assurance, etc.</td>
+            </tr>
+            <tr>
+              <td>Taille</td>
+              <td>Select</td>
+              <td>✅</td>
+              <td>&lt;10, 10-50, 50-200, &gt;200</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>Textarea</td>
+              <td>❌</td>
+              <td>Présentation de l'entreprise</td>
+            </tr>
+            <tr>
+              <td>Mot de passe</td>
+              <td>Password</td>
+              <td>✅</td>
+              <td>Hashé en SHA-256</td>
+            </tr>
+            <tr>
+              <td>Intention</td>
+              <td>Hidden</td>
+              <td>✅</td>
+              <td>placer ou chercher</td>
+            </tr>
+            <tr>
+              <td>Conditions d'usage</td>
+              <td>Checkbox</td>
+              <td>✅</td>
+              <td>Acceptation obligatoire</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note" style="margin-top: 20px;">
+          <strong>🔐 Sécurité des mots de passe:</strong>
+          <ul class="actions-list">
+            <li><span class="action-icon">🔒</span>Hashage SHA-256 côté client dans supabase-helpers.js</li>
+            <li><span class="action-icon">🔐</span>HTTPS/TLS obligatoire en transit</li>
+            <li><span class="action-icon">⚠️</span>Admin: Hash immutable de production (ne jamais modifier)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 2: NAVIGATION ENTREPRISE === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Navigation</span> Workflow d'inscription multi-étapes (Forward/Back)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Étape 1: Sélection intention</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="select-ent-type" (placer/chercher)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="ent-next" → Étape 2</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Formulaire informations de base</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Data-action="ent-next" → Confirmation</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Soumettre et recevoir confirmation</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">➡️</span><strong>ent-next:</strong> Valider et passer à l'étape suivante</li>
+          <li><span class="action-icon">⬅️</span><strong>ent-back:</strong> Revenir à l'étape précédente (données conservées)</li>
+          <li><span class="action-icon">🎯</span><strong>Champs remontés:</strong> LocalStorage pour persistance</li>
+          <li><span class="action-icon">✅</span><strong>Validation client:</strong> Avant chaque transition</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 3: SÉLECTION DU PLAN BILLING === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Billing</span> Choix du plan Stripe (Starter vs Growth)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Page "Tarifs" visible après inscription validation</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>2 cartes plans: Starter (1 mois) + Growth (illimité)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="select-plan" (starter/growth)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Redirection Stripe checkout</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Webhooks Stripe: webhook-events inscrit en DB</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Abonnement actif → Accès messagerie</div>
+        </div>
+
+        <table class="data-table" style="margin-top: 20px;">
+          <thead>
+            <tr>
+              <th>Plan</th>
+              <th>Prix</th>
+              <th>Durée</th>
+              <th>Consultants</th>
+              <th>Messagerie</th>
+              <th>Support</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Starter</strong></td>
+              <td>99 CAD</td>
+              <td>1 mois</td>
+              <td>Tous</td>
+              <td>✅ Illimitée</td>
+              <td>Email</td>
+            </tr>
+            <tr>
+              <td><strong>Growth</strong></td>
+              <td>299 CAD/mois</td>
+              <td>Récurrent</td>
+              <td>Tous</td>
+              <td>✅ Illimitée</td>
+              <td>Prioritaire</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="specs" style="margin-top: 20px;">
+          <div class="spec-item">
+            <div class="spec-label">Provider</div>
+            <div class="spec-value">Stripe</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Table</div>
+            <div class="spec-value">billing_subscriptions</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Fonction RPC</div>
+            <div class="spec-value">is_subscription_active()</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 4: DASHBOARD ENTREPRISE === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès</span> Connexion et tableau de bord entreprise</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Admin approuve entreprise</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Email de confirmation envoyé</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Accéder dashboard-entreprise.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Authentification email + mot de passe SHA-256</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">5</span>Abonnement actif?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Dashboard personnalisé + Messagerie activée</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">URL</div>
+            <div class="spec-value">dashboard-entreprise.html?email=...</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Rôle</div>
+            <div class="spec-value">entreprise</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">TTL</div>
+            <div class="spec-value">8 heures</div>
+          </div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">🔎</span>Recherche avancée: Filtrer par modules ERP, TJM, disponibilité</li>
+          <li><span class="action-icon">👥</span>Annuaire B2B: Voir les 10 ressources des partenaires + tous les freelances</li>
+          <li><span class="action-icon">💬</span>Messagerie: Conversations avec consultants (si plan actif)</li>
+          <li><span class="action-icon">📊</span>Statistiques: Messages envoyés, consultants favoris, historique</li>
+          <li><span class="action-icon">📤</span>Import de ressources: Template Excel pour placer ses consultants</li>
+          <li><span class="action-icon">⚙️</span>Paramètres: Profil, plan de facturation, notifications</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 5: RECHERCHE ET FILTRAGE === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Recherche</span> Filtrer et chercher des consultants qualifiés</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dans dashboard, ouvrir "Recherche"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Afficher filtres: Module ERP, Titre, TJM, Dispon.</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action="toggle-erp" ou "toggle-module"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Construire requête Supabase dynamique</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Appliquer filtre B2B: Visible = true OU source != "import_b2b"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Afficher résultats filtrés avec pagination</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">🔢</span><strong>Filtres disponibles:</strong></li>
+          <li style="margin-left: 30px;"><span class="action-icon">🏷️</span>Module ERP (SAP FI/CO, Oracle Cloud, etc.)</li>
+          <li style="margin-left: 30px;"><span class="action-icon">💰</span>Gamme TJM (slider ou range input)</li>
+          <li style="margin-left: 30px;"><span class="action-icon">⏰</span>Disponibilité (Immédiate, 2 semaines, 1 mois)</li>
+          <li style="margin-left: 30px;"><span class="action-icon">📍</span>Localisation (Canada, province)</li>
+          <li style="margin-left: 30px;"><span class="action-icon">🎯</span>Titre/Mots-clés (recherche texte)</li>
+          <li style="margin-left: 30px;"><span class="action-icon">🔐</span>Type: Afficher/Masquer B2B</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 6: IMPORT DE RESSOURCES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Données</span> Importer les ressources de l'entreprise (Excel)</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard → "Import en lot (Excel)"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="download-offer-template"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Télécharger Template Excel (base64)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Remplir les lignes avec consultants</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Data-action="open-file-dialog" → Upload fichier</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">6</span>handleFileSelect() → Parsing SheetJS</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">7</span>parseXlsxRows(json) → Mapping colonnes</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">8</span>Insérer dans Supabase (boucle INSERT)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">9</span>Consultants ajoutés avec statut "en_attente"</div>
+        </div>
+
+        <table class="data-table" style="margin-top: 20px;">
+          <thead>
+            <tr>
+              <th>Colonne Excel</th>
+              <th>Champ consultant</th>
+              <th>Type</th>
+              <th>Requis?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Prénom</td>
+              <td>prenom</td>
+              <td>Text</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Nom</td>
+              <td>nom</td>
+              <td>Text</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>email</td>
+              <td>Email</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Titre professionnel</td>
+              <td>titre</td>
+              <td>Text</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Module ERP principal</td>
+              <td>competences[0]</td>
+              <td>Text</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>TJM Min</td>
+              <td>tjm_min</td>
+              <td>Number</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>TJM Max</td>
+              <td>tjm_max</td>
+              <td>Number</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Disponibilité</td>
+              <td>disponibilite</td>
+              <td>Select</td>
+              <td>✅</td>
+            </tr>
+            <tr>
+              <td>Années d'expérience</td>
+              <td>experience_annees</td>
+              <td>Number</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Résumé</td>
+              <td>notes_admin.resume</td>
+              <td>Text</td>
+              <td>❌</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note" style="margin-top: 20px;">
+          <strong>📝 Données automatiquement injectées:</strong>
+          <ul class="actions-list">
+            <li><span class="action-icon">🔐</span>notes_admin.source = "import_b2b"</li>
+            <li><span class="action-icon">🏢</span>notes_admin.entreprise_nom = Votre nom d'entreprise</li>
+            <li><span class="action-icon">📧</span>notes_admin.entreprise_email = Votre email</li>
+            <li><span class="action-icon">👁️</span>notes_admin.visibility = "private"</li>
+            <li><span class="action-icon">📊</span>statut = "en_attente" (approbation admin nécessaire)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 7: ENVOI DE MESSAGES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Communication</span> Contacter un consultant via messagerie directe</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer sur un consultant (profil)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Bouton "Contacter" visible</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">3</span>Abonnement actif?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>OUI → Ouvrir modal message</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Saisir message (textarea)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">6</span>Soumettre → messaging.js</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">7</span>INSERT table: messages (from_email, to_email, content)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">8</span>Trigger email-notify.js → Notification consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">9</span>Confirmation "Message envoyé"</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Requis</div>
+            <div class="spec-value">Plan Stripe actif</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">API</div>
+            <div class="spec-value">messaging.js</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Limite</div>
+            <div class="spec-value">Aucune (illimitée)</div>
+          </div>
+        </div>
+        <div class="danger-note">
+          <strong>❌ Si abonnement inactif:</strong> showContactGateOverlay() → Modal "Mettez à jour votre plan"
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 8: GESTION DES FAVORIS === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Ajouter/Retirer des favoris</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Sur profil consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Cliquer sur icône cœur/étoile</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Data-action ou fonction locale</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Ajouter/Retirer de localStorage (favoris)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Icône changée (filled/outline)</div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 9: GESTION DU PLAN BILLING === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Billing</span> Mettre à jour le plan ou gérer l'abonnement</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard → "Paramètres" / "Facturation"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Afficher plan actuel + Stripe subscription ID</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">3</span>Vouloir changer de plan?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Redirection portail client Stripe</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Gérer plan, moyen de paiement, annuler</div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 10: DÉCONNEXION === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Déconnexion du dashboard entreprise</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Déconnecter" (nav)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="nav-logout"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>ExpertPortalAuth.clearSession()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">4</span>Redirection index.html</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ ADMINISTRATEUR ============================================ -->
+    <section id="administrateur" class="actor-section">
+      <div class="actor-header">
+        <div class="actor-icon">👨‍💼</div>
+        <div>
+          <h2>Administrateur</h2>
+          <p>Gestionnaire de la plateforme avec pouvoirs étendus</p>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 1: AUTHENTIFICATION ADMIN === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Accès</span> Connexion sécurisée dashboard admin</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Accéder dashboard-admin.html</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Modal login: Email + Mot de passe</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Vérifier email dans ADMIN_EMAIL_HASHES (config.js)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">4</span>Email reconnu?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>SHA-256(mot de passe) vs hash stock</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">6</span>Hash correspond?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">7</span>OUI → Accès dashboard admin complet</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step danger"><span class="flow-step num">8</span>NON → Rejet + message erreur</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Rôle</div>
+            <div class="spec-value">admin</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">URL</div>
+            <div class="spec-value">dashboard-admin.html</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">TTL</div>
+            <div class="spec-value">8 heures</div>
+          </div>
+        </div>
+        <div class="warning">
+          <strong>⚠️ Hash admin IMMUABLE:</strong> Ne JAMAIS modifier le hash du mot de passe admin en production. Hash: dc7e5959782f36f7f99fa7f893d693262581aeb21b87a822a23c66b98e63fc0d
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 2: GESTION DES CONSULTANTS === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Modération</span> Approuver/Refuser les consultants en attente</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard Admin → Section "Consultants"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Afficher table: Tous les consultants avec statut</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Filtrer par: en_attente, approuve, refuse</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Cliquer sur un consultant → Voir profil complet</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">5</span>Approuver ou Refuser?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">6</span>UPDATE consultants SET statut = 'approuve' ou 'refuse'</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">7</span>Ajouter note dans notes_admin (motif)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">8</span>Envoyer email de notification au consultant</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">9</span>Statut mis à jour publiquement</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">📋</span><strong>Colonnes visibles:</strong> Nom, Email, Titre, Experience, Modules ERP, TJM, Statut</li>
+          <li><span class="action-icon">✅</span><strong>Actions:</strong> Approuver (statut → approuve), Refuser (statut → refuse), Modifier</li>
+          <li><span class="action-icon">📝</span><strong>Notes admin:</strong> Remplir motif approbation/rejet dans notes_admin JSON</li>
+          <li><span class="action-icon">📧</span><strong>Notifications:</strong> Email automatique envoyée au consultant</li>
+          <li><span class="action-icon">❌</span><strong>Suppression:</strong> Utiliser Supabase SQL Editor (API anon bloquée)</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 3: GESTION DES ENTREPRISES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Modération</span> Approuver/Refuser les entreprises en attente</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard Admin → Section "Entreprises"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Table: Nom, Email, Secteur, Taille, Intention, Statut</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Filtrer: en_attente, approuve, refuse</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Cliquer → Voir détails complets</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">5</span>Valider intention + qualité?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">6</span>UPDATE entreprises SET statut = 'approuve' ou 'refuse'</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">7</span>Email de confirmation + accès au billing (Starter 1 mois inclus)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">8</span>Entreprise peut utiliser la plateforme</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">✅</span><strong>Approbation:</strong> Accès immédiat à l'annuaire + offre Starter 1 mois (Stripe)</li>
+          <li><span class="action-icon">❌</span><strong>Rejet:</strong> Email motif du rejet, profil non visible</li>
+          <li><span class="action-icon">📧</span><strong>Notifications:</strong> Email automatique + accès au portail Stripe (si approuvée)</li>
+          <li><span class="action-icon">🔐</span><strong>Accès Supabase SQL Editor:</strong> Utiliser pour INSERTs/DELETEs (RLS bloque API anon)</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 4: CODES D'INVITATION === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Configuration</span> Créer et gérer les codes d'invitation consultant</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard Admin → Section "Codes d'invitation"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Table: Code, Label, Créé par, Utilisé par, Expire, Actif</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Bouton "+ Nouveau code"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Générer UUID → INSERT invitation_codes</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Définir expires_at (ex: +30j)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Code actif et prêt à distribuer</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Table</div>
+            <div class="spec-value">invitation_codes</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">RPC validation</div>
+            <div class="spec-value">consume_invitation_code()</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Durée</div>
+            <div class="spec-value">Configurable (ex: 30j)</div>
+          </div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">🔑</span>Créer/Éditer/Supprimer codes d'invitation</li>
+          <li><span class="action-icon">⏰</span>Voir expiration et date d'utilisation</li>
+          <li><span class="action-icon">👤</span>Voir email du consultant qui a utilisé le code</li>
+          <li><span class="action-icon">🔄</span>Réactiver ou revoquer les codes</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 5: PLANS DE FACTURATION === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Billing</span> Gérer les abonnements Stripe</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard Admin → Section "Facturation"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Table: Email entreprise, Plan, Status, Date création, Date renouvellement</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step decision"><span class="flow-step num">3</span>Status abonnement?</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Options: active, trialing, past_due, canceled, unpaid</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>Voir webhook_events (synchronisation Stripe)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Monétisation visible + revenus</div>
+        </div>
+        <div class="specs">
+          <div class="spec-item">
+            <div class="spec-label">Table</div>
+            <div class="spec-value">billing_subscriptions</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Webhooks</div>
+            <div class="spec-value">Stripe → DB</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">RPC</div>
+            <div class="spec-value">is_subscription_active()</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 6: ANALYTIQUES === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Données</span> Consulter les statistiques et KPIs de la plateforme</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Dashboard Admin → Section "Analytiques"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Afficher KPIs: Total consultants, Entreprises, Mensages</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Graphiques: Inscriptions/mois, Revenus, Activité</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>Filtrer: Date range, par module ERP, par secteur</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Exporter rapport (CSV/PDF optionnel)</div>
+        </div>
+        <ul class="actions-list">
+          <li><span class="action-icon">📊</span>Total consultants: approuvés, en attente, refusés, actifs</li>
+          <li><span class="action-icon">🏢</span>Total entreprises: approuvées, en attente, refusées</li>
+          <li><span class="action-icon">💬</span>Messages: Nombre total, conversation moyenne, utilisateurs actifs</li>
+          <li><span class="action-icon">💰</span>Revenus: MRR (Monthly Recurring Revenue), plans actifs, churn</li>
+          <li><span class="action-icon">🔥</span>Module ERP le plus populaire: Statistiques par module</li>
+          <li><span class="action-icon">📈</span>Tendances: Croissance, rétention, engagement</li>
+        </ul>
+      </div>
+
+      <!-- === PROCESSUS 7: GESTION DES NOTES ADMIN === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Annotation</span> Ajouter/Modifier les notes administrateur</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Sur une fiche consultant ou entreprise</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Cliquer "Ajouter une note"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>Écrire note (motif, observation, flag)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>UPDATE → notes_admin JSON string</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">5</span>parseNotes(raw) → Parser JSON au chargement</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">6</span>Note enregistrée + historique visible</li>
+        </div>
+        <div class="note">
+          <strong>📝 Format notes_admin JSON:</strong> Contient source, entreprise_nom, resume, certifications, erp_modules, etc. Tous les métadonnées enrichies.
+        </div>
+      </div>
+
+      <!-- === PROCESSUS 8: DÉCONNEXION ADMIN === -->
+      <div class="process-card">
+        <h3><span class="process-badge">Gestion</span> Déconnexion sécurisée dashboard admin</h3>
+        <div class="flowchart">
+          <div class="flow-step action"><span class="flow-step num">1</span>Cliquer "Déconnecter" (nav)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">2</span>Data-action="nav-logout"</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">3</span>ExpertPortalAuth.clearSession()</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step action"><span class="flow-step num">4</span>localStorage.removeItem(KEY)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-step success"><span class="flow-step num">5</span>Redirection login admin</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================ FOOTER ============================================ -->
+    <footer style="margin-top: 100px; padding: 40px 20px; background: var(--navy); color: white; text-align: center; border-radius: 10px;">
+      <p style="opacity: 0.9;">ExpertERPHub — Cartographie des Processus | Document généré le 2 avril 2026</p>
+      <p style="font-size: 0.9em; opacity: 0.75; margin-top: 10px;">
+        Ce document couvre <strong>tous les flux utilisateurs</strong> : Visiteur anonyme, Visiteur professionnel, Consultant freelance, Entreprise partenaire, Administrateur
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

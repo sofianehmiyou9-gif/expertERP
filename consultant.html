@@ -228,6 +228,235 @@ body { font-family: 'Manrope', sans-serif; }
   /* Lang buttons */
   .lang-btn { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #444653; background: transparent; border: none; cursor: pointer; transition: all .2s; }
   .lang-btn.active { background: linear-gradient(135deg,#00288e,#0058be); color: #fff; box-shadow: 0 2px 8px rgba(0,40,142,.2); }
+
+  /* === VISUAL POLISH ADDITIONS === */
+
+  /* Smooth page load animation */
+  @keyframes pageLoad {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .profile-main {
+    animation: pageLoad 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Enhanced card hover effects */
+  .info-card, .detail-card, .section-card, [class*="rounded-"][class*="shadow"] {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease !important;
+  }
+  .info-card:hover, .detail-card:hover, .section-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,40,142,0.1), 0 4px 12px rgba(0,0,0,0.05) !important;
+  }
+
+  /* Skill/competence tag animations */
+  .skill-tag, .competence-tag, .tag, [class*="badge"] {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .skill-tag:hover, .competence-tag:hover, .tag:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,40,142,0.15);
+  }
+
+  /* Avatar enhancement */
+  .profile-avatar, .consultant-avatar, .avatar-main {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  }
+  .profile-avatar:hover, .consultant-avatar:hover, .avatar-main:hover {
+    transform: scale(1.06);
+    box-shadow: 0 8px 30px rgba(0,40,142,0.2);
+  }
+
+  /* Staggered section reveal */
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-section.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Button micro-interactions */
+  .btn-contact, .btn-primary, .contact-btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease !important;
+  }
+  .btn-contact:hover, .btn-primary:hover, .contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,40,142,0.2) !important;
+  }
+  .btn-contact:active, .btn-primary:active, .contact-btn:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  /* Enhanced availability badge */
+  @keyframes availPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+  }
+  .availability-badge.available, .badge-available {
+    animation: availPulse 2s ease-in-out infinite;
+  }
+
+  /* Skeleton loading */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,40,142,0.15); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(0,40,142,0.3); }
+
+  /* Better mobile responsive */
+  @media (max-width: 480px) {
+    .profile-main { padding: 0.75rem !important; }
+    .profile-header { flex-direction: column; text-align: center; }
+    .profile-avatar, .consultant-avatar, .avatar-main { width: 80px !important; height: 80px !important; }
+    h1 { font-size: 1.5rem !important; }
+    .info-card, .detail-card { padding: 1rem !important; }
+  }
+  @media (min-width: 481px) and (max-width: 768px) {
+    .profile-main { padding: 1rem !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-section, .profile-main { animation: none; opacity: 1; transform: none; }
+    .skill-tag:hover, .info-card:hover { transform: none; }
+  }
+
+  /* ══ WOW VISUAL EFFECTS ══ */
+
+  /* Animated gradient accent line at top */
+  @keyframes accentGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;
+    background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4, #2563eb);
+    background-size: 300% 100%;
+    animation: accentGradient 4s linear infinite;
+  }
+
+  /* Card spotlight follow effect */
+  .spotlight-card { position: relative; overflow: hidden; }
+  .spotlight-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(600px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(37,99,235,.04), transparent 40%);
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 0;
+  }
+  .spotlight-card:hover::before { opacity: 1; }
+
+  /* Stat cards — number glow */
+  .stat-glow {
+    text-shadow: 0 0 20px rgba(37,99,235,.2);
+    transition: text-shadow 0.3s ease;
+  }
+  .stat-glow:hover {
+    text-shadow: 0 0 30px rgba(37,99,235,.35), 0 0 60px rgba(37,99,235,.15);
+  }
+
+  /* Section fade-slide on tab switch */
+  @keyframes sectionReveal {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .section-animated {
+    animation: sectionReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Button ripple on click */
+  @keyframes btnRipple {
+    0% { transform: scale(0); opacity: 0.6; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  /* Sidebar hover glow */
+  .nav-link:hover, .sidebar-link:hover {
+    text-shadow: 0 0 12px rgba(37,99,235,.15);
+  }
+
+  /* Enhanced table hover with left accent */
+  tbody tr { position: relative; }
+  tbody tr::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    transform: scaleY(0); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 0 2px 2px 0;
+  }
+  tbody tr:hover::before { transform: scaleY(1); }
+
+  /* Modal backdrop blur enhancement */
+  .modal-overlay, [class*="modal-backdrop"], .overlay {
+    backdrop-filter: blur(12px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+  }
+
+  /* Floating action button glow */
+  .fab, .float-btn {
+    box-shadow: 0 4px 20px rgba(37,99,235,.3);
+    transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .fab:hover, .float-btn:hover {
+    box-shadow: 0 8px 40px rgba(37,99,235,.4);
+    transform: translateY(-4px) scale(1.05);
+  }
+
+  /* Badge/pill shimmer */
+  @keyframes pillShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  .status-badge-active, [class*="badge-success"], [class*="badge-active"] {
+    background-size: 200% 100%;
+    animation: pillShimmer 3s linear infinite;
+  }
+
+  /* Smooth number transitions */
+  .metric-number, .stat-value, .bento-number {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+  .metric-number:hover, .stat-value:hover, .bento-number:hover {
+    color: #2563eb;
+    text-shadow: 0 0 20px rgba(37,99,235,.2);
+  }
+
+  /* Input focus glow ring */
+  input:focus, textarea:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12), 0 0 20px rgba(37,99,235,.06) !important;
+    transition: box-shadow 0.3s ease !important;
+  }
+
+  /* Card border gradient on hover */
+  .card-gradient-border { position: relative; }
+  .card-gradient-border::after {
+    content: ''; position: absolute; inset: -1px; border-radius: inherit; z-index: -1;
+    background: linear-gradient(135deg, rgba(37,99,235,.25), rgba(124,58,237,.25), rgba(6,182,212,.25));
+    opacity: 0; transition: opacity 0.4s ease;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor; -webkit-mask-composite: xor;
+    padding: 2px;
+  }
+  .card-gradient-border:hover::after { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+    .spotlight-card::before { display: none; }
+    tbody tr::before { transition: none; }
+  }
 </style>
 <!-- saas-overrides.css removed -->
 </head>
@@ -339,12 +568,12 @@ body { font-family: 'Manrope', sans-serif; }
     <div class="max-w-screen-2xl mx-auto px-6 lg:px-10 flex flex-col gap-5">
 
       <!-- ROW 1: Resume (2/3) + Certifications (1/3) side by side -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div class="lg:col-span-2 p-5 lg:p-6 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 reveal-section">
+        <div class="lg:col-span-2 p-5 lg:p-6 rounded-2xl spotlight-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
           <h2 id="resume-heading" class="text-lg font-headline font-bold mb-3" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Résumé Professionnel</h2>
           <p id="profile-resume" class="section-text"></p>
         </div>
-        <div id="certif-section" class="p-5 rounded-2xl text-on-primary" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 12px 36px rgba(0,40,142,.2);">
+        <div id="certif-section" class="p-5 rounded-2xl text-on-primary spotlight-card" style="background:linear-gradient(145deg,#001d6e 0%,#00288e 50%,#0046a8 100%);box-shadow:0 12px 36px rgba(0,40,142,.2);">
           <h2 class="text-lg font-headline font-bold mb-3">Certifications</h2>
           <div id="profile-certifs" class="flex flex-col gap-2">
             <div class="certif-badge">
@@ -356,12 +585,12 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- ROW 2: Experiences (3/4) + Skill XP (1/4) side by side -->
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
-        <div class="lg:col-span-3 p-5 lg:p-6 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 reveal-section">
+        <div class="lg:col-span-3 p-5 lg:p-6 rounded-2xl spotlight-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
           <h2 id="experiences-heading" class="text-lg font-headline font-bold mb-4" style="background:linear-gradient(135deg,#191c1e,#00288e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Expériences</h2>
           <div id="profile-experiences"></div>
         </div>
-        <div class="p-4 rounded-2xl" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
+        <div class="p-4 rounded-2xl spotlight-card" style="background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.02);border:1px solid rgba(0,0,0,.03);">
           <h3 class="text-xs font-bold tracking-widest uppercase text-primary mb-3">Expérience par compétence</h3>
           <div id="profile-skill-experience" class="space-y-0"></div>
         </div>
@@ -375,7 +604,7 @@ body { font-family: 'Manrope', sans-serif; }
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
       <!-- LEFT 3/5: Projets -->
-      <div id="projets-section" class="lg:col-span-3">
+      <div id="projets-section" class="lg:col-span-3 reveal-section">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 mb-4">
           <div>
             <h2 id="projets-heading" class="text-lg font-headline font-bold mb-1">Projets &amp; Missions</h2>
@@ -386,7 +615,7 @@ body { font-family: 'Manrope', sans-serif; }
       </div>
 
       <!-- RIGHT 2/5: Contact -->
-      <div id="contact-section" class="lg:col-span-2" style="background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);border-radius:1.25rem;padding:1.75rem;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
+      <div id="contact-section" class="lg:col-span-2 reveal-section" style="background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);border-radius:1.25rem;padding:1.75rem;border:1px solid #f1f5f9;box-shadow:0 4px 24px rgba(0,0,0,.04);">
     <div class="mx-auto">
       <div class="text-center mb-4">
         <span class="font-manrope font-bold tracking-[0.15em] uppercase block mb-1" style="font-size:.65rem;background:linear-gradient(135deg,#0058be,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Prise de contact</span>
@@ -1695,6 +1924,33 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 });
 </script>
+
+<!-- Section Reveal Observer -->
+<script>
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal-section').forEach(function(el) { obs.observe(el); });
+})();
+</script>
+
+/* Spotlight Card Mouse Tracking */
+<script>
+(function(){
+  document.querySelectorAll('.spotlight-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty('--spotlight-x', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--spotlight-y', (e.clientY - rect.top) + 'px');
+    });
+  });
+})();
+</script>
+
 <script src="cookie-consent.js"></script>
 </body>
 </html>

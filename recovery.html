@@ -65,6 +65,69 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
+
+/* === PAGE VISUAL POLISH === */
+
+/* Page load animation */
+@keyframes pageLoad {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+body {
+  animation: pageLoad 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Form card animation */
+.card {
+  transition: box-shadow 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.08), 0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* Button interactions */
+.btn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease !important;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+}
+.btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Text animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+p {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(37, 99, 235, 0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(37, 99, 235, 0.3); }
+
+/* Better mobile */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem !important;
+  }
+  .card {
+    padding: 1.25rem !important;
+    border-radius: 16px !important;
+    margin: 0.5rem !important;
+  }
+  h1 { font-size: 1.35rem !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body, .card, p { animation: none !important; transition: none !important; }
+}
 </style>
 <!-- saas-overrides.css removed -->
 </head>
