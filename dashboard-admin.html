@@ -1038,9 +1038,55 @@ input:focus, textarea:focus, select:focus {
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         Voir comme client
       </a>
+      <button class="adm-btn" id="pm-edit" style="background:#2563eb;color:#fff;border:none;">✎ Modifier</button>
       <button class="adm-btn adm-btn-approve" id="pm-approve">✓ Approuver</button>
       <button class="adm-btn adm-btn-refuse" id="pm-refuse">✕ Refuser</button>
       <button class="adm-btn" id="pm-delete" style="background:#dc2626;color:#fff;border:none;margin-left:auto;">🗑 Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL EDIT CONSULTANT (Admin) ══ -->
+<div id="edit-modal" class="modal-overlay modal-hidden">
+  <div class="profile-modal-box" style="max-width:680px;">
+    <div class="modal-head" style="display:flex;justify-content:space-between;align-items:center;">
+      <h3 id="edit-modal-title" style="margin:0;font-size:15px;">Modifier le profil</h3>
+      <button class="modal-close" id="edit-modal-close">✕</button>
+    </div>
+    <div style="padding:20px;max-height:70vh;overflow-y:auto;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Titre professionnel</label>
+          <input type="text" id="edit-titre" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;"></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Ville</label>
+          <input type="text" id="edit-ville" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Mode de travail</label>
+          <select id="edit-mode" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+            <option value="">—</option><option>Remote</option><option>Hybride</option><option>Sur site</option><option>Flexible</option>
+          </select></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Langues</label>
+          <input type="text" id="edit-langues" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;" placeholder="Français, Anglais"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Années d'expérience</label>
+          <input type="text" id="edit-annees" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;" placeholder="ex: 8"></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Compétences ERP (virgules)</label>
+          <input type="text" id="edit-competences" style="width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;" placeholder="SAP, Oracle, Dynamics"></div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:4px;">Résumé professionnel</label>
+        <textarea id="edit-resume" rows="8" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;line-height:1.6;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Expériences professionnelles</label>
+        <div id="edit-exps-list"></div>
+        <button type="button" id="edit-add-exp" style="font-size:12px;color:#2563eb;background:none;border:1px dashed #2563eb;padding:6px 12px;border-radius:6px;cursor:pointer;margin-top:6px;">+ Ajouter une expérience</button>
+      </div>
+    </div>
+    <div style="padding:12px 20px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:10px;">
+      <button type="button" id="edit-cancel" style="padding:8px 18px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#64748b;font-size:13px;cursor:pointer;">Annuler</button>
+      <button type="button" id="edit-save" style="padding:8px 18px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -1381,7 +1427,7 @@ function openProfileModal(id) {
   let leftHtml = '';
 
   /* Résumé */
-  const resume = notes.resume || '';
+  const resume = notes.resume_pro || notes.resume || '';
   if (resume) {
     leftHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Résumé</h4><div class="profile-resume-text">'+safe(resume).replace(/\n/g,'<br>')+'</div></div>';
   }
@@ -1405,11 +1451,11 @@ function openProfileModal(id) {
   let rightHtml = '';
 
   /* Expériences */
-  const exps = Array.isArray(notes.experiences) ? notes.experiences.filter(e => e.titre) : [];
+  const exps = Array.isArray(notes.experiences) ? notes.experiences.filter(e => e.poste || e.titre) : [];
   if (exps.length) {
     rightHtml += '<div class="profile-section"><h4><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Expériences</h4>';
     exps.forEach(e => {
-      let expHtml = '<div class="profile-exp-item"><div class="profile-exp-title">'+safe(e.titre||'')+'</div>';
+      let expHtml = '<div class="profile-exp-item"><div class="profile-exp-title">'+safe(e.poste||e.titre||'')+'</div>';
       expHtml += '<div class="profile-exp-sub">'+[safe(e.entreprise||''),safe(e.periode||''),safe(e.secteur||'')].filter(Boolean).join(' · ')+'</div>';
       if (e.description) expHtml += '<div class="profile-exp-desc">'+safe(e.description)+'</div>';
       expHtml += '</div>';
@@ -1460,6 +1506,7 @@ function openProfileModal(id) {
   const stBadge = '<span class="badge '+statusClass(st)+'" style="font-size:13px">'+(stLabels[st]||st)+'</span>';
   document.getElementById('pm-status').innerHTML = stBadge;
   document.getElementById('pm-client-view').href = 'consultant.html?id=' + id;
+  document.getElementById('pm-edit').onclick = () => { openEditModal(id); };
   document.getElementById('pm-approve').onclick = async () => { await setConsultantStatus(id, 'approuve'); closeProfileModal(); };
   document.getElementById('pm-refuse').onclick  = async () => { await setConsultantStatus(id, 'refuse'); closeProfileModal(); };
   document.getElementById('pm-delete').onclick  = async () => { await deleteConsultant(id); };
@@ -1474,6 +1521,133 @@ function openProfileModal(id) {
 document.getElementById('profile-modal-close').addEventListener('click', closeProfileModal);
 document.getElementById('profile-modal').addEventListener('click', (e) => {
   if (e.target === document.getElementById('profile-modal')) closeProfileModal();
+});
+
+/* ═══════════════════════════════════════════════
+   ADMIN EDIT CONSULTANT MODAL
+   ═══════════════════════════════════════════════ */
+var editModalExps = [];
+
+function openEditModal(id) {
+  const c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return;
+  const notes = parseNotes(c.notes_admin);
+  const name = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || 'Consultant';
+
+  document.getElementById('edit-modal-title').textContent = 'Modifier — ' + name;
+  document.getElementById('edit-titre').value = c.titre || '';
+  document.getElementById('edit-ville').value = notes.ville || '';
+  document.getElementById('edit-mode').value = notes.mode_travail || '';
+  document.getElementById('edit-langues').value = notes.langues || '';
+  document.getElementById('edit-annees').value = notes.annees_exp || '';
+  var erps = Array.isArray(c.competences) ? c.competences.join(', ') : String(c.competences || '');
+  document.getElementById('edit-competences').value = erps;
+  document.getElementById('edit-resume').value = notes.resume_pro || notes.resume || '';
+
+  /* Charger expériences */
+  editModalExps = (Array.isArray(notes.experiences) ? notes.experiences : []).map(function(e) {
+    return { poste: e.poste || e.titre || '', entreprise: e.entreprise || '', secteur: e.secteur || '', periode: e.periode || '', description: e.description || '' };
+  });
+  renderEditExps();
+
+  document.getElementById('edit-modal').dataset.consultantId = id;
+  document.getElementById('profile-modal').classList.add('modal-hidden');
+  document.getElementById('edit-modal').classList.remove('modal-hidden');
+}
+
+function renderEditExps() {
+  var container = document.getElementById('edit-exps-list');
+  if (!editModalExps.length) { container.innerHTML = '<p style="font-size:12px;color:#94a3b8;font-style:italic;">Aucune expérience enregistrée.</p>'; return; }
+  container.innerHTML = editModalExps.map(function(e, i) {
+    return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px;" data-exp-idx="'+i+'">' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">' +
+        '<input type="text" value="'+safe(e.poste)+'" data-field="poste" placeholder="Poste / Titre" style="padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;">' +
+        '<input type="text" value="'+safe(e.entreprise)+'" data-field="entreprise" placeholder="Entreprise" style="padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;">' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">' +
+        '<input type="text" value="'+safe(e.periode)+'" data-field="periode" placeholder="Période (ex: 2020 – 2023)" style="padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;">' +
+        '<input type="text" value="'+safe(e.secteur)+'" data-field="secteur" placeholder="Secteur" style="padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;">' +
+      '</div>' +
+      '<textarea data-field="description" rows="2" placeholder="Description des missions..." style="width:100%;padding:6px 8px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;resize:vertical;font-family:inherit;">'+safe(e.description)+'</textarea>' +
+      '<button type="button" onclick="editModalExps.splice('+i+',1);renderEditExps();" style="font-size:11px;color:#dc2626;background:none;border:none;cursor:pointer;margin-top:4px;padding:2px 0;">✕ Supprimer</button>' +
+    '</div>';
+  }).join('');
+}
+
+document.getElementById('edit-add-exp').addEventListener('click', function() {
+  editModalExps.push({ poste:'', entreprise:'', secteur:'', periode:'', description:'' });
+  renderEditExps();
+});
+
+document.getElementById('edit-cancel').addEventListener('click', function() {
+  document.getElementById('edit-modal').classList.add('modal-hidden');
+  document.getElementById('profile-modal').classList.remove('modal-hidden');
+});
+document.getElementById('edit-modal-close').addEventListener('click', function() {
+  document.getElementById('edit-modal').classList.add('modal-hidden');
+});
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('edit-modal')) {
+    document.getElementById('edit-modal').classList.add('modal-hidden');
+  }
+});
+
+document.getElementById('edit-save').addEventListener('click', async function() {
+  var id = document.getElementById('edit-modal').dataset.consultantId;
+  var c = state.consultants.find(x => String(x.id) === String(id));
+  if (!c) return alert('Consultant introuvable.');
+
+  /* Collecter les expériences éditées depuis le DOM */
+  var expBlocks = document.querySelectorAll('#edit-exps-list [data-exp-idx]');
+  var finalExps = [];
+  expBlocks.forEach(function(block) {
+    finalExps.push({
+      poste: (block.querySelector('[data-field="poste"]').value || '').trim(),
+      entreprise: (block.querySelector('[data-field="entreprise"]').value || '').trim(),
+      secteur: (block.querySelector('[data-field="secteur"]').value || '').trim(),
+      periode: (block.querySelector('[data-field="periode"]').value || '').trim(),
+      description: (block.querySelector('[data-field="description"]').value || '').trim()
+    });
+  });
+
+  var notes = parseNotes(c.notes_admin);
+  notes.ville = document.getElementById('edit-ville').value.trim();
+  notes.mode_travail = document.getElementById('edit-mode').value;
+  notes.langues = document.getElementById('edit-langues').value.trim();
+  notes.annees_exp = document.getElementById('edit-annees').value.trim();
+  var resumeVal = document.getElementById('edit-resume').value.trim();
+  notes.resume_pro = resumeVal;
+  notes.resume = resumeVal;
+  notes.experiences = finalExps;
+  notes.experiences_text = finalExps.map(function(e) {
+    return (e.poste||'') + ' @ ' + (e.entreprise||'') + (e.periode ? ' (' + e.periode + ')' : '');
+  }).join('\n');
+  notes.admin_last_edit = new Date().toISOString();
+
+  var competencesRaw = document.getElementById('edit-competences').value.trim();
+  var competences = competencesRaw ? competencesRaw.split(',').map(function(s){return s.trim();}).filter(Boolean) : (c.competences || []);
+
+  var payload = {
+    titre: document.getElementById('edit-titre').value.trim() || c.titre,
+    competences: competences,
+    notes_admin: JSON.stringify(notes)
+  };
+
+  var btn = document.getElementById('edit-save');
+  btn.disabled = true; btn.textContent = 'Enregistrement...';
+  var ok = await sbUpdate('consultants', id, payload);
+  btn.disabled = false; btn.textContent = 'Enregistrer';
+
+  if (!ok) return alert('Erreur lors de la sauvegarde.');
+
+  /* Mettre à jour le state local */
+  c.titre = payload.titre;
+  c.competences = payload.competences;
+  c.notes_admin = payload.notes_admin;
+
+  document.getElementById('edit-modal').classList.add('modal-hidden');
+  openProfileModal(id); /* Rafraîchir la vue profil */
+  renderConsultants(); /* Rafraîchir la liste */
 });
 
 function openCertifModal(id) {

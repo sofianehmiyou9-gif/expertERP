@@ -412,25 +412,35 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .stat-l{font-size:.8rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;font-weight:500;}
 
 /* ── PLAN SELECTOR ── */
-.plan-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-top:.5rem;}
-.plan-card{position:relative;border:1.5px solid var(--border);border-radius:12px;padding:1.2rem .8rem 1rem;cursor:pointer;text-align:center;transition:all .3s ease;background:#fff;}
-.plan-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,40,142,.1);}
-.plan-card.selected{border-color:var(--blue);background:linear-gradient(135deg,rgba(0,40,142,.03),rgba(0,40,142,.07));box-shadow:0 0 0 3px rgba(0,40,142,.12),0 8px 24px rgba(0,40,142,.08);}
+.plan-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:.65rem;}
+.plan-card{position:relative;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.4rem 1rem 1.2rem;cursor:pointer;text-align:center;transition:all .3s cubic-bezier(.16,1,.3,1);background:#fff;}
+.plan-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,40,142,.1);}
+.plan-card.selected{border-color:var(--blue);background:linear-gradient(135deg,#f0f5ff,#e8f0fe);box-shadow:0 0 0 3px rgba(37,99,235,.15),0 8px 24px rgba(0,40,142,.1);}
 .plan-card.popular{border-color:var(--blue);border-width:2px;}
-.plan-name{font-family:var(--font-main);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.15rem;font-weight:600;}
-.plan-qty{font-family:var(--font-serif);font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:0;}
+.plan-card .plan-save{display:none;font-size:.62rem;font-weight:700;color:#16a34a;letter-spacing:.04em;margin-top:.35rem;}
+.plan-card.selected .plan-save{display:block;}
+.plan-name{font-family:var(--font-main);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem;font-weight:700;}
+.plan-qty{font-family:var(--font-serif);font-size:1.65rem;font-weight:700;color:var(--ink);line-height:1.1;margin-bottom:.3rem;}
 .plan-qty-label{font-size:.7rem;color:var(--muted);margin-bottom:.5rem;}
-.plan-price{font-family:var(--font-serif);font-size:1.15rem;font-weight:700;color:var(--blue);margin-bottom:.1rem;line-height:1;}
+.plan-price{font-family:var(--font-serif);font-size:1.25rem;font-weight:700;color:var(--blue);margin-bottom:.05rem;line-height:1.1;}
+.plan-price span{font-size:.7rem;font-weight:500;color:#64748b;}
 .plan-price-unit{font-size:.6rem;color:var(--muted);letter-spacing:.04em;margin-bottom:.5rem;}
 .plan-features{list-style:none;padding:0;margin:0;text-align:left;}
 .plan-features li{font-size:.68rem;color:var(--ink);padding:.2rem 0;display:flex;align-items:baseline;gap:.35rem;line-height:1.4;}
 .plan-features li::before{content:'✓';color:var(--blue);font-weight:700;font-size:.6rem;flex-shrink:0;}
-.plan-desc{font-size:.68rem;color:var(--muted);margin-top:.4rem;line-height:1.4;}
+.plan-desc{font-size:.68rem;color:#94a3b8;margin-top:.3rem;line-height:1.4;}
 .plan-card.selected .plan-qty{color:var(--blue);}
 .plan-card.selected .plan-price{color:var(--blue);}
-.plan-badge{position:absolute;top:-.55rem;left:50%;transform:translateX(-50%);white-space:nowrap;padding:.2rem .7rem;border-radius:999px;font-family:var(--font-main);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;background:var(--blue);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(0,40,142,.2);}
+.plan-card.selected .plan-desc{color:#64748b;}
+.plan-badge{position:absolute;top:-.6rem;left:50%;transform:translateX(-50%);white-space:nowrap;padding:.25rem .8rem;border-radius:999px;font-family:var(--font-main);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(37,99,235,.25);}
+.plan-badge.green{background:linear-gradient(135deg,#16a34a,#15803d);box-shadow:0 3px 10px rgba(22,163,74,.25);}
+.step4-avail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.25rem;}
+.step4-tarif-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.step4-pricing-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.15rem;}
+.step4-pricing-header .form-label{margin-bottom:0;}
+.step4-pricing-sub{font-size:.78rem;color:#64748b;margin:0 0 .85rem;font-weight:400;line-height:1.5;}
 .plan-saving{display:inline-block;margin-top:.25rem;padding:.15rem .45rem;border-radius:4px;font-size:.55rem;font-weight:600;color:#059669;background:#ecfdf5;letter-spacing:.02em;}
-@media(max-width:780px){.plan-selector{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:780px){.plan-selector{grid-template-columns:repeat(2,1fr);} .step4-avail-grid,.step4-tarif-grid{grid-template-columns:1fr;}}
 
 .offer-mode-toggle{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:.75rem;}
 .offer-mode-card{border:1.5px solid var(--border);border-radius:8px;padding:1rem;background:var(--card);cursor:pointer;transition:all .25s ease;}
@@ -2102,7 +2112,7 @@ function toggleTheme() {
   <div class="py-12 reveal-up" style="background:linear-gradient(135deg,#00288e 0%,#1e40af 50%,#2563eb 100%);">
     <div class="px-6 md:px-12 max-w-screen-xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
       <div>
-        <div class="font-newsreader text-4xl font-bold">380+</div>
+        <div class="font-newsreader text-4xl font-bold" data-live-count="consultants">380+</div>
         <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Consultants ERP</div>
       </div>
       <div>
@@ -2314,7 +2324,7 @@ function toggleTheme() {
   <!-- STATS BAND -->
   <!-- Stats band -->
   <div class="stats-band">
-    <div class="stat-item"><div class="stat-n">380+</div><div class="stat-l" data-i18n="stat.consultants">Consultants certifiés</div></div>
+    <div class="stat-item"><div class="stat-n" data-live-count="consultants">380+</div><div class="stat-l" data-i18n="stat.consultants">Consultants certifiés</div></div>
     <div class="stat-item"><div class="stat-n">18</div><div class="stat-l" data-i18n="stat.countries">Pays couverts</div></div>
     <div class="stat-item"><div class="stat-n">Top 10</div><div class="stat-l" data-i18n="stat.erps">ERP supportés</div></div>
     <div class="stat-item"><div class="stat-n">Direct</div><div class="stat-l" data-i18n="stat.transactions">Transactions directes</div></div>
@@ -2415,7 +2425,7 @@ function toggleTheme() {
                 </div>
                 <div class="bg-white/5 p-4 rounded-lg">
                   <div class="text-xs font-manrope text-on-primary-container mb-1">Experts actifs</div>
-                  <div class="font-newsreader text-xl font-bold">380+</div>
+                  <div class="font-newsreader text-xl font-bold" data-live-count="consultants">380+</div>
                 </div>
               </div>
             </div>
@@ -3140,7 +3150,30 @@ function toggleTheme() {
           <div id="cs-exp-rows">
             <div class="exp-row" id="cs-exp-0">
               <div class="form-row" style="margin-bottom:.5rem"><input class="form-input" placeholder="Poste" data-exp="title"><input class="form-input" placeholder="Entreprise" data-exp="company"></div>
-              <div class="form-row"><input class="form-input" placeholder="Période (ex: 2020–2024)" data-exp="period"><input class="form-input" placeholder="Secteur" data-exp="sector"></div>
+              <div class="form-row" style="margin-bottom:.5rem">
+                <select class="form-input" data-exp="year-start"><option value="">Année début</option></select>
+                <select class="form-input" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
+              </div>
+              <div class="form-row">
+                <select class="form-input" data-exp="sector">
+                  <option value="">Secteur d'activité</option>
+                  <option value="Public / Municipal">Public / Municipal</option>
+                  <option value="Agroalimentaire">Agroalimentaire</option>
+                  <option value="Pharmaceutique">Pharmaceutique</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Banque / Finance">Banque / Finance</option>
+                  <option value="Manufacturier">Manufacturier</option>
+                  <option value="Énergie">Énergie</option>
+                  <option value="Télécommunications">Télécommunications</option>
+                  <option value="Commerce / Retail">Commerce / Retail</option>
+                  <option value="Assurance">Assurance</option>
+                  <option value="Technologie / IT">Technologie / IT</option>
+                  <option value="Santé">Santé</option>
+                  <option value="Immobilier">Immobilier</option>
+                  <option value="Autre">Autre</option>
+                </select>
+                <input class="form-input" data-exp="sector-other" placeholder="Précisez le secteur…" style="display:none">
+              </div>
             </div>
           </div>
           <button type="button" data-action="cs-add-exp" style="font-size:.75rem;color:var(--blue);background:none;border:1px dashed var(--blue-border);padding:.35rem .8rem;border-radius:3px;cursor:pointer;margin-top:.5rem;">+ Ajouter une expérience</button>
@@ -3150,20 +3183,24 @@ function toggleTheme() {
       <!-- ── Étape 4 — Disponibilité + CGU ── -->
       <div class="mi-step" id="cs-step-4">
         <div class="cs-step-section-label">Disponibilité &amp; tarif</div>
-        <div class="form-group"><label class="form-label">Disponibilité <span>*</span></label>
-          <select class="form-select" id="cs-dispo">
-            <option value="">— Sélectionner —</option>
-            <option>Immédiate</option><option>Sous 15 jours</option>
-            <option>Sous 30 jours</option><option>Sous 60 jours</option>
-          </select>
+
+        <div class="step4-avail-grid">
+          <div class="form-group"><label class="form-label">Disponibilité <span>*</span></label>
+            <select class="form-select" id="cs-dispo">
+              <option value="">— Sélectionner —</option>
+              <option>Immédiate</option><option>Sous 15 jours</option>
+              <option>Sous 30 jours</option><option>Sous 60 jours</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Mode de travail préféré <span>*</span></label>
+            <select class="form-select" id="cs-mode">
+              <option value="">— Sélectionner —</option>
+              <option>Remote</option><option>Hybride</option><option>Sur site</option><option>Flexible</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group"><label class="form-label">Mode de travail préféré <span>*</span></label>
-          <select class="form-select" id="cs-mode">
-            <option value="">— Sélectionner —</option>
-            <option>Remote</option><option>Hybride</option><option>Sur site</option><option>Flexible</option>
-          </select>
-        </div>
-        <div class="form-row">
+
+        <div class="step4-tarif-grid">
           <div class="form-group"><label class="form-label">Tarif journalier ($/jour) <span>*</span></label>
             <select class="form-select" id="cs-tjm">
               <option value="">— Sélectionner —</option>
@@ -3174,44 +3211,44 @@ function toggleTheme() {
             <select class="form-select" id="cs-duree"><option value="">— Sélectionner —</option><option>1 mois</option><option>3 mois</option><option>6 mois</option><option>12 mois+</option></select>
           </div>
         </div>
+
         <!-- ── Abonnement / Pricing ── -->
-        <div class="form-group" style="margin-top:.75rem;padding-top:.75rem;border-top:1px dashed var(--border);">
-          <label class="form-label">Abonnement plateforme <span>*</span></label>
-          <p style="font-size:.75rem;color:var(--muted);margin:-.1rem 0 .75rem;font-weight:400;text-transform:none;letter-spacing:0;">Choisissez la durée de votre abonnement. Plus vous vous engagez, moins vous payez.</p>
-          <div class="plan-selector" id="cs-plan-selector" style="grid-template-columns:repeat(4,1fr);">
+        <div class="form-group" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1.5px solid #e2e8f0;">
+          <label class="form-label" style="font-size:.72rem;">Abonnement plateforme <span>*</span></label>
+          <p class="step4-pricing-sub">Choisissez la durée de votre visibilité. Plus vous vous engagez, plus vous économisez.</p>
+          <div class="plan-selector" id="cs-plan-selector">
             <div class="plan-card" id="cs-plan-1" data-months="1" data-price="99" onclick="selectConsultantPlan(this)">
               <div class="plan-name">Mensuel</div>
-              <div class="plan-qty" style="font-size:1.3rem;">1 mois</div>
-              <div class="plan-price" style="font-size:.8rem;font-weight:700;color:var(--blue);">99 $ / mois</div>
+              <div class="plan-price">99 $<span> / mois</span></div>
               <div class="plan-desc">Sans engagement</div>
             </div>
             <div class="plan-card" id="cs-plan-3" data-months="3" data-price="89" onclick="selectConsultantPlan(this)">
               <div class="plan-name">Trimestriel</div>
-              <div class="plan-qty" style="font-size:1.3rem;">3 mois</div>
-              <div class="plan-price" style="font-size:.8rem;font-weight:700;color:var(--blue);">89 $ / mois</div>
+              <div class="plan-price">89 $<span> / mois</span></div>
               <div class="plan-desc">Total 267 $</div>
+              <div class="plan-save">Économie 30 $</div>
             </div>
             <div class="plan-card" id="cs-plan-6" data-months="6" data-price="79" onclick="selectConsultantPlan(this)">
-              <div class="plan-badge">− 20 %</div>
+              <div class="plan-badge green">− 20 %</div>
               <div class="plan-name">Semestriel</div>
-              <div class="plan-qty" style="font-size:1.3rem;">6 mois</div>
-              <div class="plan-price" style="font-size:.8rem;font-weight:700;color:var(--blue);">79 $ / mois</div>
+              <div class="plan-price">79 $<span> / mois</span></div>
               <div class="plan-desc">Total 474 $</div>
+              <div class="plan-save">Économie 120 $</div>
             </div>
-            <div class="plan-card" id="cs-plan-12" data-months="12" data-price="69" onclick="selectConsultantPlan(this)">
+            <div class="plan-card popular" id="cs-plan-12" data-months="12" data-price="69" onclick="selectConsultantPlan(this)">
               <div class="plan-badge">Meilleur prix</div>
               <div class="plan-name">Annuel</div>
-              <div class="plan-qty" style="font-size:1.3rem;">12 mois</div>
-              <div class="plan-price" style="font-size:.8rem;font-weight:700;color:var(--blue);">69 $ / mois</div>
+              <div class="plan-price">69 $<span> / mois</span></div>
               <div class="plan-desc">Total 828 $</div>
+              <div class="plan-save">Économie 360 $</div>
             </div>
           </div>
           <input type="hidden" id="cs-plan-months" value="">
           <input type="hidden" id="cs-plan-price" value="">
-          <div id="cs-plan-feedback" style="font-size:.75rem;margin-top:.4rem;color:var(--danger);display:none;">Veuillez sélectionner un abonnement.</div>
+          <div id="cs-plan-feedback" style="font-size:.75rem;margin-top:.5rem;color:var(--danger);display:none;">Veuillez sélectionner un abonnement.</div>
         </div>
 
-        <div class="form-group" style="margin-top:.75rem;padding-top:.75rem;border-top:1px dashed var(--border);">
+        <div class="form-group" style="margin-top:.85rem;padding-top:.85rem;border-top:1px dashed #e2e8f0;">
           <label class="form-label">Code promo <span style="color:var(--muted);font-weight:300;text-transform:none;letter-spacing:0;">(optionnel)</span></label>
           <div class="promo-wrap">
             <input class="form-input" id="cs-promo" placeholder="Ex: LAUNCH30" style="text-transform:uppercase;letter-spacing:.08em;" data-uppercase="true">
@@ -4990,14 +5027,42 @@ function csNext() {
   else { submitConsultant(); }
 }
 
+var CS_SECTOR_OPTIONS = '<option value="">Secteur d\'activité</option><option value="Public / Municipal">Public / Municipal</option><option value="Agroalimentaire">Agroalimentaire</option><option value="Pharmaceutique">Pharmaceutique</option><option value="Transport">Transport</option><option value="Banque / Finance">Banque / Finance</option><option value="Manufacturier">Manufacturier</option><option value="Énergie">Énergie</option><option value="Télécommunications">Télécommunications</option><option value="Commerce / Retail">Commerce / Retail</option><option value="Assurance">Assurance</option><option value="Technologie / IT">Technologie / IT</option><option value="Santé">Santé</option><option value="Immobilier">Immobilier</option><option value="Autre">Autre</option>';
+
+function csPopulateYearSelects(container) {
+  var currentYear = new Date().getFullYear();
+  container.querySelectorAll('select[data-exp="year-start"], select[data-exp="year-end"]').forEach(function(sel) {
+    if (sel.querySelectorAll('option').length > 2) return; // already populated
+    for (var y = currentYear; y >= 1990; y--) {
+      sel.insertAdjacentHTML('beforeend', '<option value="' + y + '">' + y + '</option>');
+    }
+  });
+  // Sector "Autre" toggle
+  container.querySelectorAll('select[data-exp="sector"]').forEach(function(sel) {
+    sel.addEventListener('change', function() {
+      var otherInput = sel.closest('.exp-row').querySelector('[data-exp="sector-other"]');
+      if (otherInput) otherInput.style.display = sel.value === 'Autre' ? '' : 'none';
+    });
+  });
+}
+
 function csAddExp() {
   const idx = document.querySelectorAll('#cs-exp-rows .exp-row').length;
   document.getElementById('cs-exp-rows').insertAdjacentHTML('beforeend',
     `<div class="exp-row" id="cs-exp-${idx}" style="margin-top:.5rem">
       <button type="button" class="exp-del" data-action="remove-exp-row">×</button>
       <div class="form-row" style="margin-bottom:.5rem"><input class="form-input" placeholder="Poste" data-exp="title"><input class="form-input" placeholder="Entreprise" data-exp="company"></div>
-      <div class="form-row"><input class="form-input" placeholder="Période" data-exp="period"><input class="form-input" placeholder="Secteur" data-exp="sector"></div>
+      <div class="form-row" style="margin-bottom:.5rem">
+        <select class="form-input" data-exp="year-start"><option value="">Année début</option></select>
+        <select class="form-input" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
+      </div>
+      <div class="form-row">
+        <select class="form-input" data-exp="sector">${CS_SECTOR_OPTIONS}</select>
+        <input class="form-input" data-exp="sector-other" placeholder="Précisez le secteur…" style="display:none">
+      </div>
     </div>`);
+  var newRow = document.getElementById('cs-exp-' + idx);
+  csPopulateYearSelects(newRow);
 }
 
 function updateModePill() {
@@ -5030,12 +5095,22 @@ async function submitConsultant() {
     const passwordHash = await sha256Hex(password);
     const erps = [...document.querySelectorAll('#cs-erp-chips .erp-chip.selected')].map(c => c.textContent);
     const mode = document.getElementById('cs-mode').value || '';
-    const exps = [...document.querySelectorAll('#cs-exp-rows .exp-row')].map(r => ({
-      titre: r.querySelector('[data-exp="title"]')?.value.trim() || '',
-      entreprise: r.querySelector('[data-exp="company"]')?.value.trim() || '',
-      periode: r.querySelector('[data-exp="period"]')?.value.trim() || '',
-      secteur: r.querySelector('[data-exp="sector"]')?.value.trim() || ''
-    })).filter(e => e.titre);
+    const exps = [...document.querySelectorAll('#cs-exp-rows .exp-row')].map(r => {
+      var yStart = r.querySelector('[data-exp="year-start"]')?.value || '';
+      var yEnd = r.querySelector('[data-exp="year-end"]')?.value || '';
+      var periodStr = yStart ? (yStart + ' – ' + (yEnd === 'en_cours' ? 'Présent' : (yEnd || '?'))) : (r.querySelector('[data-exp="period"]')?.value.trim() || '');
+      var sectorSel = r.querySelector('[data-exp="sector"]');
+      var sectorVal = sectorSel ? sectorSel.value : '';
+      if (sectorVal === 'Autre') sectorVal = r.querySelector('[data-exp="sector-other"]')?.value.trim() || 'Autre';
+      var _titleVal = r.querySelector('[data-exp="title"]')?.value.trim() || '';
+      return {
+        poste: _titleVal,
+        titre: _titleVal,
+        entreprise: r.querySelector('[data-exp="company"]')?.value.trim() || '',
+        periode: periodStr,
+        secteur: sectorVal
+      };
+    }).filter(e => e.titre);
     const data = {
       prenom: document.getElementById('cs-prenom').value.trim(),
       nom: document.getElementById('cs-nom').value.trim(),
@@ -5052,12 +5127,14 @@ async function submitConsultant() {
         annees_exp: document.getElementById('cs-annees').value,
         photo_url: getConsultantPhotoValue() || '',
         resume: document.getElementById('cs-resume').value.trim(),
+        resume_pro: document.getElementById('cs-resume').value.trim(),
         experiences: exps,
         mode_travail: mode,
         duree_min: document.getElementById('cs-duree').value,
         promo_code: appliedPromo ? appliedPromo.code : null,
         promo_reduction: appliedPromo ? appliedPromo.pct : null,
         erp_modules: getSelectedModules(),
+        modules: (function(){ var m = getSelectedModules(); return m ? m.split(',').map(function(s){return s.trim();}).filter(Boolean) : []; })(),
         subscription_plan_months: parseInt(document.getElementById('cs-plan-months').value) || null,
         subscription_plan_price: parseInt(document.getElementById('cs-plan-price').value) || null,
         invitation_code: csInviteCode || null
@@ -6280,7 +6357,27 @@ function resetPhotoField() {
   switchPhotoTab('upload');
 }
 
+/* ═══ LIVE CONSULTANT COUNT ═══ */
+async function refreshLiveConsultantCount() {
+  try {
+    var data = await sbSelect('consultants', 'select=id,statut,notes_admin');
+    var count = data.filter(function(c) {
+      var s = String(c.statut || '').toLowerCase();
+      return s === 'approuve' || s === 'approuvé';
+    }).length;
+    if (count > 0) {
+      document.querySelectorAll('[data-live-count="consultants"]').forEach(function(el) {
+        el.textContent = count + '+';
+      });
+    }
+  } catch(e) { /* keep fallback 380+ */ }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  refreshLiveConsultantCount();
+  /* Populate year dropdowns in first experience row */
+  var expRows = document.getElementById('cs-exp-rows');
+  if (expRows) csPopulateYearSelects(expRows);
   redirectRecoveryLinkToResetPageIfNeeded();
   bindStaticActionHandlers();
   refreshAdminPortalVisibility();

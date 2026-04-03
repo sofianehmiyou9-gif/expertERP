@@ -1081,7 +1081,7 @@ input:focus, textarea:focus, select:focus {
                     <span style="margin-right:.3rem;">&#128161;</span> Utilisez ce mod&#232;le et remplacez les &#233;l&#233;ments entre crochets pour personnaliser votre profil. Ce texte sera visible sur votre profil public.
                   </div>
                   <textarea id="resume-pro-input" class="inline-textarea" rows="22" style="line-height:1.75;white-space:pre-wrap;font-size:.86rem;" placeholder="Compl&#233;tez votre r&#233;sum&#233; professionnel..."></textarea>
-                  <button type="button" id="resume-template-btn" onclick="if(!document.getElementById('resume-pro-input').value.trim()){document.getElementById('resume-pro-input').value='Consultant ERP avec [X] années d\'expérience en [ERP/module]. Spécialisé dans [domaine fonctionnel/technique], j\'ai accompagné des entreprises dans [type de projets : déploiement, migration, optimisation].\n\nCompétences clés : [compétence 1], [compétence 2], [compétence 3].\n\nSecteurs d\'intervention : [secteur 1], [secteur 2].';}" style="font-size:.72rem;padding:.3rem .7rem;margin-top:.3rem;background:none;border:1px dashed var(--border);color:var(--text-subtle);border-radius:6px;cursor:pointer;">Utiliser un modèle</button>
+                  <button type="button" id="resume-template-btn" onclick="var _inp=document.getElementById('resume-pro-input');if(!_inp.value.trim()||confirm('Remplacer le contenu actuel par un résumé généré automatiquement ?')){var _n=parseNotes(currentConsultant.notes_admin);_inp.value=generateSmartResume(currentConsultant,_n,experiencesList);}" style="font-size:.72rem;padding:.3rem .7rem;margin-top:.3rem;background:none;border:1px dashed var(--blue-border);color:var(--primary);border-radius:6px;cursor:pointer;">Générer mon résumé</button>
                 </div>
                 <!-- ═══ EXPÉRIENCES PROFESSIONNELLES — Liste structurée ═══ -->
                 <div class="info-card wide" id="project-exp-card">
@@ -1482,6 +1482,83 @@ function removeExpEntry(idx) {
 }
 
 function cancelExpEdit() { clearExpForm(); }
+
+/* ═══ SMART RESUME GENERATOR ═══ */
+function generateSmartResume(consultant, notes, exps) {
+  var titre = consultant.titre || 'Consultant ERP';
+  var erps = Array.isArray(consultant.competences) ? consultant.competences : [];
+  var erpsStr = erps.length ? erps.join(', ') : 'ERP';
+  var annees = notes.annees_exp || notes.experience_years || '';
+  var ville = notes.ville || '';
+  var langues = notes.langues || '';
+  var mode = notes.mode_travail || '';
+  var dispo = notes.disponibilite || '';
+  var modules = notes.erp_modules || '';
+  var certifs = Array.isArray(notes.certifications_v2) ? notes.certifications_v2 : [];
+  var certifLegacy = Array.isArray(notes.certifications) ? notes.certifications : [];
+
+  /* Collecter les secteurs uniques depuis les expériences */
+  var secteurs = [];
+  var entreprises = [];
+  (exps || []).forEach(function(e) {
+    if (e.secteur && secteurs.indexOf(e.secteur) === -1) secteurs.push(e.secteur);
+    if (e.entreprise && entreprises.indexOf(e.entreprise) === -1) entreprises.push(e.entreprise);
+  });
+  var secteursStr = secteurs.length ? secteurs.join(', ') : '';
+
+  /* ── Présentation ── */
+  var lines = [];
+  var intro = titre;
+  if (annees) intro += ' avec ' + annees + " ans d\u2019exp\u00e9rience";
+  if (secteursStr) intro += ' dans les secteurs ' + secteursStr;
+  else intro += ' en environnement ERP';
+  intro += ". Sp\u00e9cialis\u00e9 en " + erpsStr + ", j\u2019accompagne les entreprises dans l\u2019optimisation de leurs processus et la mise en place de solutions adapt\u00e9es.";
+  lines.push(intro);
+  lines.push('');
+
+  /* ── Expériences clés ── */
+  if (exps && exps.length) {
+    lines.push("Exp\u00e9riences cl\u00e9s :");
+    exps.forEach(function(e) {
+      var line = '- ' + (e.poste || e.titre || 'Mission ERP');
+      if (e.entreprise) line += ' chez ' + e.entreprise;
+      if (e.periode) line += ' (' + e.periode + ')';
+      if (e.secteur) line += ' \u2014 Secteur ' + e.secteur;
+      lines.push(line);
+      if (e.description) {
+        var descLines = e.description.split('\n').map(function(d){ return d.trim(); }).filter(Boolean);
+        descLines.forEach(function(d) {
+          lines.push('  \u2022 ' + d);
+        });
+      }
+    });
+    lines.push('');
+  }
+
+  /* ── Expertise technique ── */
+  lines.push("Expertise technique :");
+  lines.push('- ERP : ' + erpsStr);
+  if (modules) lines.push('- Modules : ' + modules);
+  if (certifs.length) {
+    var certNames = certifs.map(function(c){ return (c.erp || '') + (c.module ? ' ' + c.module : '') + (c.level ? ' (' + c.level + ')' : ''); }).filter(Boolean);
+    if (certNames.length) lines.push('- Certifications : ' + certNames.join(', '));
+  } else if (certifLegacy.length) {
+    lines.push('- Certifications : ' + certifLegacy.join(', '));
+  }
+  lines.push('');
+
+  /* ── Infos complémentaires ── */
+  var infos = [];
+  if (langues) infos.push('Langues : ' + langues);
+  if (ville) infos.push('Localisation : ' + ville);
+  if (mode) infos.push('Mode de travail : ' + mode);
+  if (dispo) infos.push("Disponibilit\u00e9 : " + dispo);
+  if (infos.length) {
+    infos.forEach(function(i) { lines.push('- ' + i); });
+  }
+
+  return lines.join('\n');
+}
 
 function syncExpLegacyField() {
   var f = document.getElementById("project-exp-input");
@@ -2731,36 +2808,12 @@ function renderBasicInfo() {
   /* ═══ Resume professionnel ═══ */
     var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
-    if (notes.resume_pro) {
+    if (notes.resume_pro || notes.resume) {
       /* Le consultant a déjà un résumé sauvegardé — on le restaure */
-      resumeInput.value = notes.resume_pro;
+      resumeInput.value = notes.resume_pro || notes.resume;
     } else {
-      /* Première visite: générer le template standardisé pré-rempli */
-      var _titre = currentConsultant.titre || '[ERP / domaine]';
-      var _erps = Array.isArray(currentConsultant.competences)
-        ? currentConsultant.competences.join(', ')
-        : String(currentConsultant.competences || '[ERP / outils]');
-      var _annees = notes.annees_exp || notes.experience_years || '[X]';
-      var _dispo = notes.disponibilite || '[date / d\u00e9lai]';
-      resumeInput.value = '\u{1F539} Pr\u00e9sentation\n' +
-        'Consultant en ' + _titre + ', avec ' + _annees + ' ann\u00e9es d\u2019exp\u00e9rience dans le secteur [industrie / domaine]. J\u2019accompagne les entreprises dans l\u2019optimisation de leurs processus et la mise en place de solutions adapt\u00e9es \u00e0 leurs besoins op\u00e9rationnels.\n\n' +
-        'Au cours de mes exp\u00e9riences, j\u2019ai contribu\u00e9 \u00e0 des projets d\u2019implantation, d\u2019\u00e9volution et d\u2019am\u00e9lioration de syst\u00e8mes ERP, en intervenant sur des enjeux li\u00e9s \u00e0 [logistique / finance / production / distribution / etc.]. Je poss\u00e8de une bonne compr\u00e9hension des processus m\u00e9tiers ainsi que des interactions entre les diff\u00e9rents modules.\n\n' +
-        '\u{1F539} Domaines d\u2019intervention\n' +
-        '- Analyse des besoins d\u2019affaires\n' +
-        '- Optimisation des processus\n' +
-        '- Configuration ERP\n' +
-        '- Support utilisateurs\n\n' +
-        '\u{1F539} Expertise fonctionnelle / technique\n' +
-        '- [Module 1]\n' +
-        '- [Module 2]\n\n' +
-        '\u{1F539} Exp\u00e9riences significatives\n' +
-        '- [Projet + contribution + r\u00e9sultat]\n\n' +
-        '\u{1F539} Outils & technologies\n' +
-        '- ' + _erps + '\n\n' +
-        '\u{1F539} Valeur ajout\u00e9e\n' +
-        'Approche orient\u00e9e r\u00e9sultats et solutions adapt\u00e9es au contexte client.\n\n' +
-        '\u{1F539} Disponibilit\u00e9\n' +
-        'Disponible \u00e0 partir de ' + _dispo + '.';
+      /* Première visite: générer un résumé professionnel personnalisé */
+      resumeInput.value = generateSmartResume(currentConsultant, notes, experiencesList);
     }
   }
   renderCertifChecklist();
@@ -2865,6 +2918,8 @@ document.getElementById('profile-save-btn').addEventListener('click', async () =
   });
   var _modVal = (document.getElementById('erp-modules-input').value || '').trim();
   notes.erp_modules = (typeof _modVal === 'string') ? _modVal : '';
+  /* Sync: les cartes publiques et consultant.html lisent notes.modules */
+  notes.modules = _modVal ? _modVal.split(',').map(function(s){ return s.trim(); }).filter(Boolean) : [];
 
   const payload = {
     notes_admin: JSON.stringify(notes),
