@@ -5144,7 +5144,7 @@ async function submitConsultant() {
         promo_code: appliedPromo ? appliedPromo.code : null,
         promo_reduction: appliedPromo ? appliedPromo.pct : null,
         erp_modules: getSelectedModules(),
-        modules: (function(){ var m = getSelectedModules(); return m ? m.split(',').map(function(s){return s.trim();}).filter(Boolean) : []; })(),
+        modules: (function(){ var m = getSelectedModules(); if (!m || typeof m !== 'object') return []; var arr = []; for (var erp in m) { if (m[erp] && m[erp].modules) m[erp].modules.forEach(function(mod){ arr.push(erp + ' ' + mod); }); } return arr; })(),
         subscription_plan_months: parseInt(document.getElementById('cs-plan-months').value) || null,
         subscription_plan_price: parseInt(document.getElementById('cs-plan-price').value) || null,
         invitation_code: csInviteCode || null
