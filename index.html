@@ -5688,10 +5688,49 @@ async function submitEntreprise() {
 }
 // CONSULTANTS LISTING
 let allConsultants = [];
+let _consultantsCache = { data: null, timestamp: 0 };
+const CONSULTANTS_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-async function loadConsultants() {
+function buildSkeletonCards(count) {
+  const cards = [];
+  for (let i = 0; i < count; i++) {
+    cards.push(`<article class="consultant-card" style="pointer-events:none;opacity:.65">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="skeleton" style="width:48px;height:48px;border-radius:50%;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div class="skeleton" style="height:16px;width:${60 + Math.random()*30}%;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:12px;width:${40 + Math.random()*25}%"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <div class="skeleton" style="height:24px;width:60px;border-radius:12px"></div>
+        <div class="skeleton" style="height:24px;width:75px;border-radius:12px"></div>
+        <div class="skeleton" style="height:24px;width:50px;border-radius:12px"></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:10px">
+        <div class="skeleton" style="height:12px;width:35%"></div>
+        <div class="skeleton" style="height:12px;width:25%"></div>
+      </div>
+      <div class="skeleton" style="height:36px;width:100%;border-radius:8px;margin-top:auto"></div>
+    </article>`);
+  }
+  return cards.join('');
+}
+
+async function loadConsultants(forceRefresh) {
   const grid = document.getElementById('consultants-grid');
-  grid.innerHTML = '<div class="empty-state"><p>Chargement…</p></div>';
+
+  // Serve from cache if fresh
+  const now = Date.now();
+  if (!forceRefresh && _consultantsCache.data && (now - _consultantsCache.timestamp < CONSULTANTS_CACHE_TTL)) {
+    allConsultants = _consultantsCache.data;
+    runConsultantsFilter();
+    return;
+  }
+
+  // Show skeleton cards while loading
+  grid.innerHTML = buildSkeletonCards(8);
+
   try {
     const data = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&order=created_at.desc');
     const today = new Date();
@@ -5738,6 +5777,7 @@ async function loadConsultants() {
       ).join(' ').toLowerCase();
     });
     allConsultants = visible;
+    _consultantsCache = { data: visible, timestamp: Date.now() };
     runConsultantsFilter();
   } catch(e) {
     grid.innerHTML = '<div class="empty-state"><p>Impossible de charger les consultants. Vérifiez votre connexion.</p></div>';
