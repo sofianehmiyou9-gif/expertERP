@@ -1484,10 +1484,13 @@ function removeExpEntry(idx) {
 function cancelExpEdit() { clearExpForm(); }
 
 /* ═══ SMART RESUME GENERATOR ═══ */
+/* ═══ SMART RESUME GENERATOR ═══
+   RÈGLE ABSOLUE : ne JAMAIS inventer d'information.
+   Utiliser UNIQUEMENT les données saisies par le consultant.
+   Aucun texte générique, aucune supposition. */
 function generateSmartResume(consultant, notes, exps) {
-  var titre = consultant.titre || 'Consultant ERP';
-  var erps = Array.isArray(consultant.competences) ? consultant.competences : [];
-  var erpsStr = erps.length ? erps.join(', ') : 'ERP';
+  var titre = consultant.titre || '';
+  var erps = Array.isArray(consultant.competences) ? consultant.competences.filter(Boolean) : [];
   var annees = notes.annees_exp || notes.experience_years || '';
   var ville = notes.ville || '';
   var langues = notes.langues || '';
@@ -1497,37 +1500,39 @@ function generateSmartResume(consultant, notes, exps) {
   var certifs = Array.isArray(notes.certifications_v2) ? notes.certifications_v2 : [];
   var certifLegacy = Array.isArray(notes.certifications) ? notes.certifications : [];
 
-  /* Collecter les secteurs uniques depuis les expériences */
+  /* Collecter secteurs et postes uniques depuis les expériences réelles */
   var secteurs = [];
-  var entreprises = [];
+  var postes = [];
   (exps || []).forEach(function(e) {
     if (e.secteur && secteurs.indexOf(e.secteur) === -1) secteurs.push(e.secteur);
-    if (e.entreprise && entreprises.indexOf(e.entreprise) === -1) entreprises.push(e.entreprise);
+    if ((e.poste || e.titre) && postes.indexOf(e.poste || e.titre) === -1) postes.push(e.poste || e.titre);
   });
-  var secteursStr = secteurs.length ? secteurs.join(', ') : '';
 
-  /* ── Présentation ── */
   var lines = [];
-  var intro = titre;
-  if (annees) intro += ' avec ' + annees + " ans d\u2019exp\u00e9rience";
-  if (secteursStr) intro += ' dans les secteurs ' + secteursStr;
-  else intro += ' en environnement ERP';
-  intro += ". Sp\u00e9cialis\u00e9 en " + erpsStr + ", j\u2019accompagne les entreprises dans l\u2019optimisation de leurs processus et la mise en place de solutions adapt\u00e9es.";
-  lines.push(intro);
-  lines.push('');
 
-  /* ── Expériences clés ── */
+  /* ── Présentation (uniquement données réelles) ── */
+  var parts = [];
+  if (titre) parts.push(titre);
+  if (annees) parts.push(annees + " ans d\u2019exp\u00e9rience");
+  if (erps.length) parts.push("sp\u00e9cialis\u00e9 en " + erps.join(', '));
+  if (secteurs.length) parts.push("secteurs : " + secteurs.join(', '));
+  if (parts.length) {
+    lines.push(parts.join(' \u2014 ') + '.');
+    lines.push('');
+  }
+
+  /* ── Parcours professionnel (données réelles uniquement) ── */
   if (exps && exps.length) {
-    lines.push("Exp\u00e9riences cl\u00e9s :");
+    lines.push("Parcours professionnel :");
     exps.forEach(function(e) {
-      var line = '- ' + (e.poste || e.titre || 'Mission ERP');
-      if (e.entreprise) line += ' chez ' + e.entreprise;
-      if (e.periode) line += ' (' + e.periode + ')';
-      if (e.secteur) line += ' \u2014 Secteur ' + e.secteur;
-      lines.push(line);
+      var expParts = [];
+      if (e.poste || e.titre) expParts.push(e.poste || e.titre);
+      if (e.entreprise) expParts.push(e.entreprise);
+      if (e.periode) expParts.push(e.periode);
+      if (e.secteur) expParts.push('Secteur ' + e.secteur);
+      if (expParts.length) lines.push('- ' + expParts.join(' | '));
       if (e.description) {
-        var descLines = e.description.split('\n').map(function(d){ return d.trim(); }).filter(Boolean);
-        descLines.forEach(function(d) {
+        e.description.split('\n').map(function(d){ return d.trim(); }).filter(Boolean).forEach(function(d) {
           lines.push('  \u2022 ' + d);
         });
       }
@@ -1535,19 +1540,23 @@ function generateSmartResume(consultant, notes, exps) {
     lines.push('');
   }
 
-  /* ── Expertise technique ── */
-  lines.push("Expertise technique :");
-  lines.push('- ERP : ' + erpsStr);
-  if (modules) lines.push('- Modules : ' + modules);
+  /* ── Compétences techniques (uniquement si renseignées) ── */
+  var techLines = [];
+  if (erps.length) techLines.push('ERP : ' + erps.join(', '));
+  if (modules) techLines.push('Modules : ' + modules);
   if (certifs.length) {
-    var certNames = certifs.map(function(c){ return (c.erp || '') + (c.module ? ' ' + c.module : '') + (c.level ? ' (' + c.level + ')' : ''); }).filter(Boolean);
-    if (certNames.length) lines.push('- Certifications : ' + certNames.join(', '));
+    var certNames = certifs.map(function(c){ return [(c.erp||''), (c.module||''), c.level ? '('+c.level+')' : ''].filter(Boolean).join(' '); }).filter(Boolean);
+    if (certNames.length) techLines.push('Certifications : ' + certNames.join(', '));
   } else if (certifLegacy.length) {
-    lines.push('- Certifications : ' + certifLegacy.join(', '));
+    techLines.push('Certifications : ' + certifLegacy.join(', '));
   }
-  lines.push('');
+  if (techLines.length) {
+    lines.push("Comp\u00e9tences techniques :");
+    techLines.forEach(function(t) { lines.push('- ' + t); });
+    lines.push('');
+  }
 
-  /* ── Infos complémentaires ── */
+  /* ── Informations pratiques (uniquement si renseignées) ── */
   var infos = [];
   if (langues) infos.push('Langues : ' + langues);
   if (ville) infos.push('Localisation : ' + ville);
@@ -1555,6 +1564,11 @@ function generateSmartResume(consultant, notes, exps) {
   if (dispo) infos.push("Disponibilit\u00e9 : " + dispo);
   if (infos.length) {
     infos.forEach(function(i) { lines.push('- ' + i); });
+  }
+
+  /* Si aucune donnée du tout → message explicite */
+  if (!lines.length) {
+    return "Compl\u00e9tez les sections ci-dessus (exp\u00e9riences, comp\u00e9tences, informations) puis cliquez sur \u00ab G\u00e9n\u00e9rer mon r\u00e9sum\u00e9 \u00bb pour obtenir un r\u00e9sum\u00e9 personnalis\u00e9.";
   }
 
   return lines.join('\n');

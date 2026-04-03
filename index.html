@@ -412,7 +412,7 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .stat-l{font-size:.8rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;font-weight:500;}
 
 /* ── PLAN SELECTOR ── */
-.plan-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:.65rem;}
+.plan-selector{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:.65rem;}
 .plan-card{position:relative;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.4rem 1rem 1.2rem;cursor:pointer;text-align:center;transition:all .3s cubic-bezier(.16,1,.3,1);background:#fff;}
 .plan-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,40,142,.1);}
 .plan-card.selected{border-color:var(--blue);background:linear-gradient(135deg,#f0f5ff,#e8f0fe);box-shadow:0 0 0 3px rgba(37,99,235,.15),0 8px 24px rgba(0,40,142,.1);}
@@ -440,7 +440,7 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .step4-pricing-header .form-label{margin-bottom:0;}
 .step4-pricing-sub{font-size:.78rem;color:#64748b;margin:0 0 .85rem;font-weight:400;line-height:1.5;}
 .plan-saving{display:inline-block;margin-top:.25rem;padding:.15rem .45rem;border-radius:4px;font-size:.55rem;font-weight:600;color:#059669;background:#ecfdf5;letter-spacing:.02em;}
-@media(max-width:780px){.plan-selector{grid-template-columns:repeat(2,1fr);} .step4-avail-grid,.step4-tarif-grid{grid-template-columns:1fr;}}
+@media(max-width:480px){.plan-selector{grid-template-columns:1fr;} .step4-avail-grid,.step4-tarif-grid{grid-template-columns:1fr;}}
 
 .offer-mode-toggle{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:.75rem;}
 .offer-mode-card{border:1.5px solid var(--border);border-radius:8px;padding:1rem;background:var(--card);cursor:pointer;transition:all .25s ease;}
@@ -933,8 +933,12 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 .erp-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem;}
 .erp-chip{font-size:.78rem;padding:.25rem .7rem;border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all .15s;background:var(--card);}
 .erp-chip.selected{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-.exp-row{background:var(--paper);border:1px solid var(--border);border-radius:4px;padding:.9rem;margin-bottom:.6rem;position:relative;}
-.exp-del{position:absolute;top:.5rem;right:.6rem;background:none;border:none;font-size:1rem;cursor:pointer;color:var(--muted);}
+.exp-row{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:1rem 1.1rem;margin-bottom:.75rem;position:relative;transition:border-color .2s;}
+.exp-row:hover{border-color:#cbd5e1;}
+.exp-row .form-row{gap:.75rem;}
+.exp-row .form-input,.exp-row .form-select{font-size:.82rem;padding:.7rem .9rem;border-radius:8px;background:#fff;}
+.exp-del{position:absolute;top:.6rem;right:.7rem;background:none;border:none;font-size:1.1rem;cursor:pointer;color:#94a3b8;transition:color .15s;}
+.exp-del:hover{color:#dc2626;}
 
 .mode-pill{padding:.4rem 1rem;border:1.5px solid var(--border);border-radius:6px;font-size:.8rem;cursor:pointer;transition:all .2s ease;background:transparent;color:var(--ink);font-weight:500;}
 .mode-pill:hover{border-color:var(--accent);}
@@ -2112,7 +2116,7 @@ function toggleTheme() {
   <div class="py-12 reveal-up" style="background:linear-gradient(135deg,#00288e 0%,#1e40af 50%,#2563eb 100%);">
     <div class="px-6 md:px-12 max-w-screen-xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
       <div>
-        <div class="font-newsreader text-4xl font-bold" data-live-count="consultants">380+</div>
+        <div class="font-newsreader text-4xl font-bold" data-live-count="consultants" style="min-width:3ch;">…</div>
         <div class="font-manrope text-xs mt-1 uppercase tracking-wider" style="color:rgba(255,255,255,.7);">Consultants ERP</div>
       </div>
       <div>
@@ -2324,7 +2328,7 @@ function toggleTheme() {
   <!-- STATS BAND -->
   <!-- Stats band -->
   <div class="stats-band">
-    <div class="stat-item"><div class="stat-n" data-live-count="consultants">380+</div><div class="stat-l" data-i18n="stat.consultants">Consultants certifiés</div></div>
+    <div class="stat-item"><div class="stat-n" data-live-count="consultants" style="min-width:3ch;">…</div><div class="stat-l" data-i18n="stat.consultants">Consultants certifiés</div></div>
     <div class="stat-item"><div class="stat-n">18</div><div class="stat-l" data-i18n="stat.countries">Pays couverts</div></div>
     <div class="stat-item"><div class="stat-n">Top 10</div><div class="stat-l" data-i18n="stat.erps">ERP supportés</div></div>
     <div class="stat-item"><div class="stat-n">Direct</div><div class="stat-l" data-i18n="stat.transactions">Transactions directes</div></div>
@@ -2425,7 +2429,7 @@ function toggleTheme() {
                 </div>
                 <div class="bg-white/5 p-4 rounded-lg">
                   <div class="text-xs font-manrope text-on-primary-container mb-1">Experts actifs</div>
-                  <div class="font-newsreader text-xl font-bold" data-live-count="consultants">380+</div>
+                  <div class="font-newsreader text-xl font-bold" data-live-count="consultants" style="min-width:3ch;">…</div>
                 </div>
               </div>
             </div>
@@ -3149,13 +3153,14 @@ function toggleTheme() {
           <label class="form-label">Expérience récente</label>
           <div id="cs-exp-rows">
             <div class="exp-row" id="cs-exp-0">
-              <div class="form-row" style="margin-bottom:.5rem"><input class="form-input" placeholder="Poste" data-exp="title"><input class="form-input" placeholder="Entreprise" data-exp="company"></div>
-              <div class="form-row" style="margin-bottom:.5rem">
-                <select class="form-input" data-exp="year-start"><option value="">Année début</option></select>
-                <select class="form-input" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
+              <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:.5rem;">Expérience 1</div>
+              <div class="form-row" style="margin-bottom:.55rem"><input class="form-input" placeholder="Poste / Titre du rôle" data-exp="title"><input class="form-input" placeholder="Nom de l'entreprise" data-exp="company"></div>
+              <div class="form-row" style="margin-bottom:.55rem">
+                <select class="form-select" data-exp="year-start"><option value="">Année début</option></select>
+                <select class="form-select" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
               </div>
               <div class="form-row">
-                <select class="form-input" data-exp="sector">
+                <select class="form-select" data-exp="sector">
                   <option value="">Secteur d'activité</option>
                   <option value="Public / Municipal">Public / Municipal</option>
                   <option value="Agroalimentaire">Agroalimentaire</option>
@@ -3176,7 +3181,7 @@ function toggleTheme() {
               </div>
             </div>
           </div>
-          <button type="button" data-action="cs-add-exp" style="font-size:.75rem;color:var(--blue);background:none;border:1px dashed var(--blue-border);padding:.35rem .8rem;border-radius:3px;cursor:pointer;margin-top:.5rem;">+ Ajouter une expérience</button>
+          <button type="button" data-action="cs-add-exp" style="font-size:.72rem;color:#2563eb;background:#eff6ff;border:1.5px dashed #93c5fd;padding:.5rem 1rem;border-radius:8px;cursor:pointer;margin-top:.4rem;font-weight:600;transition:all .2s;">+ Ajouter une expérience</button>
         </div>
       </div>
 
@@ -4570,23 +4575,27 @@ function bindOverlayDismissals() {
     });
     window.__modalEscListenerBound = true;
   }
-  // Ajout de la fermeture sur clic sur l'overlay (extérieur de la modale)
+  // Fermeture sur vrai clic extérieur (mousedown + mouseup TOUS DEUX sur l'overlay)
   ['overlay-consultant', 'overlay-entreprise', 'overlay-portal'].forEach((id) => {
     const overlay = document.getElementById(id);
     if (!overlay || overlay.dataset.bound === 'true') return;
     overlay.dataset.bound = 'true';
-    let mouseDownOnOverlay = false;
+    let _mdTarget = null;
     overlay.addEventListener('mousedown', function (event) {
-      if (event.target === overlay) mouseDownOnOverlay = true;
-      else mouseDownOnOverlay = false;
-    });
-    overlay.addEventListener('mouseup', function (event) {
-      if (event.target === overlay && mouseDownOnOverlay) {
-        if (id === 'overlay-consultant' && typeof closeConsultantModal === 'function') closeConsultantModal();
-        if (id === 'overlay-entreprise' && typeof closeEntrepriseModal === 'function') closeEntrepriseModal();
-        if (id === 'overlay-portal' && typeof closePortalModal === 'function') closePortalModal();
+      _mdTarget = event.target;
+    }, true);
+    overlay.addEventListener('click', function (event) {
+      // Vrai clic extérieur = mousedown ET click sur l'overlay lui-même
+      if (event.target !== overlay || _mdTarget !== overlay) { _mdTarget = null; return; }
+      _mdTarget = null;
+      // Pour le formulaire consultant: confirmation si des données saisies
+      if (id === 'overlay-consultant') {
+        var hasData = !!(document.getElementById('cs-prenom')?.value || document.getElementById('cs-nom')?.value || document.getElementById('cs-email')?.value);
+        if (hasData && !confirm('Vous avez des données en cours de saisie. Voulez-vous vraiment fermer ?')) return;
+        if (typeof closeConsultantModal === 'function') closeConsultantModal();
       }
-      mouseDownOnOverlay = false;
+      if (id === 'overlay-entreprise' && typeof closeEntrepriseModal === 'function') closeEntrepriseModal();
+      if (id === 'overlay-portal' && typeof closePortalModal === 'function') closePortalModal();
     });
   });
 }
@@ -5049,15 +5058,16 @@ function csPopulateYearSelects(container) {
 function csAddExp() {
   const idx = document.querySelectorAll('#cs-exp-rows .exp-row').length;
   document.getElementById('cs-exp-rows').insertAdjacentHTML('beforeend',
-    `<div class="exp-row" id="cs-exp-${idx}" style="margin-top:.5rem">
+    `<div class="exp-row" id="cs-exp-${idx}">
       <button type="button" class="exp-del" data-action="remove-exp-row">×</button>
-      <div class="form-row" style="margin-bottom:.5rem"><input class="form-input" placeholder="Poste" data-exp="title"><input class="form-input" placeholder="Entreprise" data-exp="company"></div>
-      <div class="form-row" style="margin-bottom:.5rem">
-        <select class="form-input" data-exp="year-start"><option value="">Année début</option></select>
-        <select class="form-input" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin-bottom:.5rem;">Expérience ${idx + 1}</div>
+      <div class="form-row" style="margin-bottom:.55rem"><input class="form-input" placeholder="Poste / Titre du rôle" data-exp="title"><input class="form-input" placeholder="Nom de l'entreprise" data-exp="company"></div>
+      <div class="form-row" style="margin-bottom:.55rem">
+        <select class="form-select" data-exp="year-start"><option value="">Année début</option></select>
+        <select class="form-select" data-exp="year-end"><option value="">Année fin</option><option value="en_cours">En cours</option></select>
       </div>
       <div class="form-row">
-        <select class="form-input" data-exp="sector">${CS_SECTOR_OPTIONS}</select>
+        <select class="form-select" data-exp="sector">${CS_SECTOR_OPTIONS}</select>
         <input class="form-input" data-exp="sector-other" placeholder="Précisez le secteur…" style="display:none">
       </div>
     </div>`);
@@ -6370,7 +6380,7 @@ async function refreshLiveConsultantCount() {
         el.textContent = count + '+';
       });
     }
-  } catch(e) { /* keep fallback 380+ */ }
+  } catch(e) { /* erreur silencieuse — le "…" reste affiché */ }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
