@@ -1116,8 +1116,8 @@ input:focus, textarea:focus, select:focus {
                       </div>
                     </div>
                     <div style="margin-bottom:.5rem;">
-                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Tâches réalisées <span style="font-weight:400;text-transform:none;letter-spacing:0;">(cochez ce qui s'applique)</span></label>
-                      <div id="exp-tasks-checkboxes" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.5rem;"></div>
+                      <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Tâches réalisées</label>
+                      <div id="exp-tasks-checkboxes" style="margin-bottom:.5rem;"></div>
                     </div>
                     <div style="margin-bottom:.5rem;">
                       <label style="font-size:.68rem;font-weight:600;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.25rem;">Description générée <span style="font-weight:400;text-transform:none;letter-spacing:0;">(modifiable)</span></label>
@@ -1650,33 +1650,55 @@ function getTaskOptionsForConsultant() {
   return EXP_TASK_OPTIONS[primaryErp] || EXP_TASK_OPTIONS['default'];
 }
 
-function renderExpTaskCheckboxes() {
+function renderExpTaskDropdown() {
   var container = document.getElementById('exp-tasks-checkboxes');
   if (!container) return;
   var tasks = getTaskOptionsForConsultant();
-  container.innerHTML = tasks.map(function(task, i) {
-    return '<label style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:#475569;background:#f1f5f9;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;transition:all .15s;user-select:none;" ' +
-      'onmouseover="this.style.borderColor=\'#93c5fd\'" onmouseout="this.style.borderColor=\'#e2e8f0\'">' +
-      '<input type="checkbox" data-exp-task="' + i + '" style="accent-color:#2563eb;width:14px;height:14px;" onchange="updateExpDescFromTasks()">' +
-      task + '</label>';
-  }).join('');
+  container.innerHTML =
+    '<div id="dash-task-tags" style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem;"></div>' +
+    '<select id="dash-task-dropdown" style="width:100%;padding:.45rem .6rem;font-size:.8rem;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#475569;cursor:pointer;">' +
+      '<option value="">+ Ajouter une tâche réalisée...</option>' +
+      tasks.map(function(t) { return '<option value="' + t.replace(/"/g,'&quot;') + '">' + t + '</option>'; }).join('') +
+    '</select>';
+  var dd = document.getElementById('dash-task-dropdown');
+  dd.addEventListener('change', function() {
+    if (!dd.value) return;
+    dashAddTaskTag(dd.value);
+    dd.value = '';
+    updateExpDescFromTasks();
+  });
+}
+
+function dashAddTaskTag(taskLabel) {
+  var tagsContainer = document.getElementById('dash-task-tags');
+  if (!tagsContainer) return;
+  var existing = tagsContainer.querySelectorAll('.dash-tag');
+  for (var i = 0; i < existing.length; i++) {
+    if (existing[i].dataset.task === taskLabel) return;
+  }
+  var tag = document.createElement('span');
+  tag.className = 'dash-tag';
+  tag.dataset.task = taskLabel;
+  tag.style.cssText = 'display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:#1e40af;background:#dbeafe;padding:3px 8px;border-radius:6px;border:1px solid #93c5fd;';
+  tag.innerHTML = taskLabel + ' <button type="button" style="background:none;border:none;color:#1e40af;cursor:pointer;font-size:.85rem;padding:0;line-height:1;" onclick="this.parentElement.remove();updateExpDescFromTasks();">&times;</button>';
+  tagsContainer.appendChild(tag);
+}
+
+function dashGetSelectedTasks() {
+  var tags = document.querySelectorAll('#dash-task-tags .dash-tag');
+  var tasks = [];
+  tags.forEach(function(t) { tasks.push(t.dataset.task); });
+  return tasks;
 }
 
 function updateExpDescFromTasks() {
-  var container = document.getElementById('exp-tasks-checkboxes');
   var textarea = document.getElementById('exp-description-input');
-  if (!container || !textarea) return;
-  var checked = [];
-  container.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
-    var label = cb.parentElement.textContent.trim();
-    checked.push(label);
-  });
-  if (!checked.length) { textarea.value = ''; return; }
+  if (!textarea) return;
+  var tasks = dashGetSelectedTasks();
+  if (!tasks.length) { textarea.value = ''; return; }
 
   var poste = (document.getElementById('exp-poste-input') || {}).value || '';
   var entreprise = (document.getElementById('exp-entreprise-input') || {}).value || '';
-  var secteur = (document.getElementById('exp-secteur-input') || {}).value || '';
-  /* Détecter l'ERP principal du consultant */
   var erps = Array.isArray(currentConsultant.competences) ? currentConsultant.competences : [];
   var erp = '';
   ['SAP','Oracle','Dynamics','Workday'].forEach(function(e) {
@@ -1684,76 +1706,59 @@ function updateExpDescFromTasks() {
   });
   erp = erp || 'ERP';
 
-  textarea.value = dashGenerateNarrative(checked, erp, poste, entreprise, secteur);
+  textarea.value = dashGenerateExpDescription(tasks, erp, poste, entreprise);
 }
 
-/* ── Générateur de texte narratif professionnel (dashboard) ── */
+/* ── Helpers ── */
 function dashJoinList(arr) {
   if (arr.length === 1) return arr[0];
   return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1];
 }
 
-function dashGenerateNarrative(tasks, erp, poste, entreprise, secteur) {
+/* ── Description par mission (courte, spécifique au client) ── */
+function dashGenerateExpDescription(tasks, erp, poste, entreprise) {
   var catDefs = [
-    { key:'config',    kw:['paramétrage','configuration','paramétrer','configur','autorisations'],
+    { key:'config', kw:['paramétrage','configuration','configur','autorisations','entités','business processes'],
       tpl: function(items){ return 'prise en charge des activités de ' + dashJoinList(items); } },
-    { key:'dev',       kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
+    { key:'dev', kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
       tpl: function(items){ return 'réalisation des travaux de ' + dashJoinList(items); } },
-    { key:'analyse',   kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
+    { key:'analyse', kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
       tpl: function(items){ return 'contribution aux activités d\u2019' + dashJoinList(items); } },
     { key:'migration', kw:['migration','reprise de données'],
       tpl: function(items){ return 'conduite de la ' + dashJoinList(items); } },
-    { key:'test',      kw:['test','recette','bout en bout','unitaire'],
+    { key:'test', kw:['test','recette','bout en bout','unitaire'],
       tpl: function(items){ return 'participation aux phases de ' + dashJoinList(items); } },
     { key:'formation', kw:['formation','key users','utilisateurs'],
       tpl: function(items){ return 'animation des sessions de ' + dashJoinList(items); } },
-    { key:'support',   kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
+    { key:'support', kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
       tpl: function(items){ return 'assurance du ' + dashJoinList(items); } }
   ];
   var cats = {}; catDefs.forEach(function(c){ cats[c.key] = []; });
-  var other = [];
   tasks.forEach(function(t) {
-    var tl = t.toLowerCase(), placed = false;
+    var tl = t.toLowerCase();
     for (var i = 0; i < catDefs.length; i++) {
       if (catDefs[i].kw.some(function(k){ return tl.indexOf(k) !== -1; })) {
         cats[catDefs[i].key].push(t.charAt(0).toLowerCase() + t.slice(1));
-        placed = true; break;
+        return;
       }
     }
-    if (!placed) other.push(t.charAt(0).toLowerCase() + t.slice(1));
   });
-
   var intro = '';
-  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise;
-  else if (poste) intro = 'En tant que ' + poste;
-  else if (entreprise) intro = 'Au sein de ' + entreprise;
-  if (secteur) intro += (intro ? ', dans le secteur ' : 'Dans le secteur ') + secteur;
-  if (intro) intro += ', intervention sur un environnement ' + erp + ' couvrant plusieurs axes. ';
-  else intro = 'Intervention sur un environnement ' + erp + ' couvrant les axes suivants. ';
-
-  var transitions = ['', 'En parallèle, ', 'Par ailleurs, ', 'Également, ', 'De plus, ', 'Enfin, '];
-  var phrases = [], tIdx = 0;
+  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise + ', ';
+  else if (entreprise) intro = 'Au sein de ' + entreprise + ', ';
+  var phrases = [];
   catDefs.forEach(function(c) {
     if (!cats[c.key].length) return;
-    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
-    var sentence = pfx + c.tpl(cats[c.key]);
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
-    phrases.push(sentence);
-    tIdx++;
+    phrases.push(c.tpl(cats[c.key]));
   });
-  if (other.length) {
-    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
-    var sentence = pfx + dashJoinList(other);
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
-    phrases.push(sentence);
-  }
   if (!phrases.length) return '';
-  return intro + phrases.join('. ') + '.';
+  var text = intro + phrases.join(', ') + '.';
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/* Initialiser les checkboxes au chargement */
+/* Initialiser le dropdown au chargement */
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(renderExpTaskCheckboxes, 500);
+  setTimeout(renderExpTaskDropdown, 500);
 });
 
 function syncExpLegacyField() {

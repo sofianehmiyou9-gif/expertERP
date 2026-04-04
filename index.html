@@ -3181,7 +3181,7 @@ function toggleTheme() {
               </div>
               <div style="margin-top:.55rem;">
                 <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.4rem;">Tâches réalisées <span style="font-weight:400;text-transform:none;letter-spacing:0;">(cochez ce qui s'applique)</span></div>
-                <div class="exp-tasks-wrap" data-exp="tasks" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.45rem;"></div>
+                <div class="exp-tasks-wrap" data-exp="tasks" style="margin-bottom:.45rem;"></div>
               </div>
               <textarea class="form-input" data-exp="description" rows="2" placeholder="Description générée ou saisissez librement…" style="font-size:.8rem;line-height:1.5;resize:vertical;margin-top:.3rem;"></textarea>
             </div>
@@ -5108,95 +5108,98 @@ function csPopulateExpTasks(expRow) {
   if (!wrap) return;
   var erp = csGetSelectedErpName();
   var tasks = CS_TASK_BANK[erp] || CS_TASK_BANK['_default'];
-  wrap.innerHTML = tasks.map(function(t) {
-    return '<label style="display:inline-flex;align-items:center;gap:3px;font-size:.72rem;color:#475569;background:#f1f5f9;padding:3px 8px;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;user-select:none;transition:all .15s;">' +
-      '<input type="checkbox" data-task-label="'+t.replace(/"/g,'&quot;')+'" style="accent-color:#2563eb;width:13px;height:13px;">' + t + '</label>';
-  }).join('');
-  /* Listener : quand on coche → mettre à jour la description */
-  wrap.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
-    cb.addEventListener('change', function() { csUpdateExpDescription(expRow); });
+  var idx = expRow.dataset.expIdx || '0';
+  wrap.innerHTML =
+    '<div class="cs-task-tags" style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem;"></div>' +
+    '<select class="cs-task-dropdown" style="width:100%;padding:.45rem .6rem;font-size:.8rem;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#475569;cursor:pointer;">' +
+      '<option value="">+ Ajouter une tâche réalisée...</option>' +
+      tasks.map(function(t) { return '<option value="' + t.replace(/"/g,'&quot;') + '">' + t + '</option>'; }).join('') +
+    '</select>';
+  var dd = wrap.querySelector('.cs-task-dropdown');
+  dd.addEventListener('change', function() {
+    if (!dd.value) return;
+    csAddTaskTag(expRow, dd.value);
+    dd.value = '';
+    csUpdateExpDescription(expRow);
   });
+}
+
+function csAddTaskTag(expRow, taskLabel) {
+  var tagsContainer = expRow.querySelector('.cs-task-tags');
+  if (!tagsContainer) return;
+  var existing = tagsContainer.querySelectorAll('.cs-tag');
+  for (var i = 0; i < existing.length; i++) {
+    if (existing[i].dataset.task === taskLabel) return;
+  }
+  var tag = document.createElement('span');
+  tag.className = 'cs-tag';
+  tag.dataset.task = taskLabel;
+  tag.style.cssText = 'display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:#1e40af;background:#dbeafe;padding:3px 8px;border-radius:6px;border:1px solid #93c5fd;';
+  tag.innerHTML = taskLabel + ' <button type="button" style="background:none;border:none;color:#1e40af;cursor:pointer;font-size:.85rem;padding:0;line-height:1;">&times;</button>';
+  tag.querySelector('button').addEventListener('click', function() {
+    tag.remove();
+    csUpdateExpDescription(expRow);
+  });
+  tagsContainer.appendChild(tag);
+}
+
+function csGetExpTasks(expRow) {
+  var tags = expRow.querySelectorAll('.cs-tag');
+  var tasks = [];
+  tags.forEach(function(t) { tasks.push(t.dataset.task); });
+  return tasks;
 }
 
 function csUpdateExpDescription(expRow) {
-  var wrap = expRow.querySelector('[data-exp="tasks"]');
   var textarea = expRow.querySelector('[data-exp="description"]');
-  if (!wrap || !textarea) return;
-  var checked = [];
-  wrap.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
-    checked.push(cb.dataset.taskLabel);
-  });
-  if (!checked.length) { textarea.value = ''; return; }
-
+  if (!textarea) return;
+  var tasks = csGetExpTasks(expRow);
+  if (!tasks.length) { textarea.value = ''; return; }
   var poste = (expRow.querySelector('[data-exp="title"]') || {}).value || '';
   var entreprise = (expRow.querySelector('[data-exp="company"]') || {}).value || '';
-  var secteur = (expRow.querySelector('[data-exp="sector"]') || {}).value || '';
   var erp = csGetSelectedErpName() || 'ERP';
-
-  textarea.value = csGenerateNarrative(checked, erp, poste, entreprise, secteur);
+  textarea.value = csGenerateExpDescription(tasks, erp, poste, entreprise);
 }
 
-/* ── Générateur de texte narratif professionnel ── */
-function csGenerateNarrative(tasks, erp, poste, entreprise, secteur) {
-  /* Catégoriser les tâches par famille */
+/* ── Description par mission (courte, spécifique) ── */
+function csGenerateExpDescription(tasks, erp, poste, entreprise) {
   var catDefs = [
-    { key:'config',    kw:['paramétrage','configuration','paramétrer','configur','autorisations'],
+    { key:'config', kw:['paramétrage','configuration','configur','autorisations','entités','business processes'],
       tpl: function(items){ return 'prise en charge des activités de ' + csJoinList(items); } },
-    { key:'dev',       kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
+    { key:'dev', kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
       tpl: function(items){ return 'réalisation des travaux de ' + csJoinList(items); } },
-    { key:'analyse',   kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
+    { key:'analyse', kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
       tpl: function(items){ return 'contribution aux activités d\u2019' + csJoinList(items); } },
     { key:'migration', kw:['migration','reprise de données'],
       tpl: function(items){ return 'conduite de la ' + csJoinList(items); } },
-    { key:'test',      kw:['test','recette','bout en bout','unitaire'],
+    { key:'test', kw:['test','recette','bout en bout','unitaire'],
       tpl: function(items){ return 'participation aux phases de ' + csJoinList(items); } },
     { key:'formation', kw:['formation','key users','utilisateurs'],
       tpl: function(items){ return 'animation des sessions de ' + csJoinList(items); } },
-    { key:'support',   kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
+    { key:'support', kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
       tpl: function(items){ return 'assurance du ' + csJoinList(items); } }
   ];
   var cats = {}; catDefs.forEach(function(c){ cats[c.key] = []; });
-  var other = [];
   tasks.forEach(function(t) {
-    var tl = t.toLowerCase(), placed = false;
+    var tl = t.toLowerCase();
     for (var i = 0; i < catDefs.length; i++) {
       if (catDefs[i].kw.some(function(k){ return tl.indexOf(k) !== -1; })) {
         cats[catDefs[i].key].push(t.charAt(0).toLowerCase() + t.slice(1));
-        placed = true; break;
+        return;
       }
     }
-    if (!placed) other.push(t.charAt(0).toLowerCase() + t.slice(1));
   });
-
-  /* Intro contextuelle */
   var intro = '';
-  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise;
-  else if (poste) intro = 'En tant que ' + poste;
-  else if (entreprise) intro = 'Au sein de ' + entreprise;
-  if (secteur) intro += (intro ? ', dans le secteur ' : 'Dans le secteur ') + secteur;
-  if (intro) intro += ', intervention sur un environnement ' + erp + ' couvrant plusieurs axes. ';
-  else intro = 'Intervention sur un environnement ' + erp + ' couvrant les axes suivants. ';
-
-  /* Phrases par catégorie avec transitions */
-  var transitions = ['', 'En parallèle, ', 'Par ailleurs, ', 'Également, ', 'De plus, ', 'Enfin, '];
-  var phrases = [], tIdx = 0;
+  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise + ', ';
+  else if (entreprise) intro = 'Au sein de ' + entreprise + ', ';
+  var phrases = [];
   catDefs.forEach(function(c) {
     if (!cats[c.key].length) return;
-    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
-    var sentence = pfx + c.tpl(cats[c.key]);
-    /* Capitaliser la première lettre de chaque phrase */
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
-    phrases.push(sentence);
-    tIdx++;
+    phrases.push(c.tpl(cats[c.key]));
   });
-  if (other.length) {
-    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
-    var sentence = pfx + csJoinList(other);
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
-    phrases.push(sentence);
-  }
   if (!phrases.length) return '';
-  return intro + phrases.join('. ') + '.';
+  var text = intro + phrases.join(', ') + '.';
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function csJoinList(arr) {
@@ -5227,7 +5230,7 @@ function csAddExp() {
       </div>
       <div style="margin-top:.55rem;">
         <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.4rem;">Tâches réalisées</div>
-        <div class="exp-tasks-wrap" data-exp="tasks" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.45rem;"></div>
+        <div class="exp-tasks-wrap" data-exp="tasks" style="margin-bottom:.45rem;"></div>
       </div>
       <textarea class="form-input" data-exp="description" rows="2" placeholder="Description générée ou saisissez librement…" style="font-size:.8rem;line-height:1.5;resize:vertical;margin-top:.3rem;"></textarea>
     </div>`);
