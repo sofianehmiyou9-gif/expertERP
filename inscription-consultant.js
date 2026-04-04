@@ -27,6 +27,160 @@
     messageEl.textContent = '';
   }
 
+  /* ═══ ERP TASK BANK ═══ */
+  var TASK_BANK = {
+    'SAP': [
+      'Paramétrage SAP', 'Migration vers S/4HANA', 'Configuration des modules', 'Développement ABAP',
+      'Tests unitaires et intégration', 'Formation key users', 'Support go-live',
+      'Rédaction des spécifications', 'Analyse des flux métier', 'Gestion des autorisations',
+      'Optimisation des processus', 'Reprise de données'
+    ],
+    'Oracle': [
+      'Configuration Oracle Cloud', 'Migration de données', 'Intégration OIC',
+      'Paramétrage des modules', 'Tests de bout en bout', 'Formation utilisateurs',
+      'Conception des rapports', 'Analyse des processus', 'Support post-déploiement'
+    ],
+    'Dynamics': [
+      'Configuration Dynamics 365', 'Développement Power Platform', 'Intégration Azure',
+      'Paramétrage des entités', 'Migration de données', 'Formation utilisateurs',
+      'Tests et recette', 'Analyse des processus', 'Support et maintenance'
+    ],
+    'Workday': [
+      'Configuration Workday HCM', 'Paramétrage des business processes', 'Intégration EIB/Studio',
+      'Migration des données RH', 'Formation utilisateurs', 'Reporting et dashboards',
+      'Tests de recette', 'Support post-déploiement'
+    ],
+    '_default': [
+      'Analyse des besoins métier', 'Configuration ERP', 'Rédaction des spécifications',
+      'Tests et recette', 'Formation des utilisateurs', 'Support post-déploiement',
+      'Migration de données', 'Gestion de projet', 'Coordination des équipes', 'Documentation'
+    ]
+  };
+
+  var selectedErp = '';
+
+  /* ═══ ERP SELECTOR ═══ */
+  window.selectErpChip = function(btn) {
+    document.querySelectorAll('#erpSelector .erp-chip').forEach(function(c) {
+      c.style.background = '#f8fafc';
+      c.style.borderColor = '#e2e8f0';
+      c.style.color = '#0e0e0e';
+    });
+    btn.style.background = '#2563eb';
+    btn.style.borderColor = '#2563eb';
+    btn.style.color = '#fff';
+    selectedErp = btn.dataset.erp;
+    /* Refresh task checkboxes in all experience blocks */
+    refreshAllTaskCheckboxes();
+  };
+
+  function getSelectedErp() {
+    return selectedErp || '';
+  }
+
+  function getTasksForErp() {
+    var erp = getSelectedErp();
+    return TASK_BANK[erp] || TASK_BANK['_default'];
+  }
+
+  function refreshAllTaskCheckboxes() {
+    container.querySelectorAll('.experience-block').forEach(function(block) {
+      populateTaskCheckboxes(block);
+    });
+  }
+
+  function populateTaskCheckboxes(block) {
+    var wrap = block.querySelector('.exp-tasks-wrap');
+    if (!wrap) return;
+    var tasks = getTasksForErp();
+    wrap.innerHTML = tasks.map(function(t) {
+      return '<label style="display:inline-flex;align-items:center;gap:3px;font-size:.72rem;color:#475569;background:#f1f5f9;padding:3px 8px;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;user-select:none;transition:all .15s;">' +
+        '<input type="checkbox" data-task-label="' + t.replace(/"/g, '&quot;') + '" style="accent-color:#2563eb;width:13px;height:13px;">' + t + '</label>';
+    }).join('');
+    wrap.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener('change', function() { updateExpNarrative(block); });
+    });
+  }
+
+  /* ═══ NARRATIVE TEXT GENERATOR ═══ */
+  function joinList(arr) {
+    if (arr.length === 1) return arr[0];
+    return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1];
+  }
+
+  function generateNarrative(tasks, erp, poste, entreprise) {
+    var catDefs = [
+      { key:'config', kw:['paramétrage','configuration','configur','autorisations'],
+        tpl: function(items){ return 'prise en charge des activités de ' + joinList(items); } },
+      { key:'dev', kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
+        tpl: function(items){ return 'réalisation des travaux de ' + joinList(items); } },
+      { key:'analyse', kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
+        tpl: function(items){ return 'contribution aux activités d\u2019' + joinList(items); } },
+      { key:'migration', kw:['migration','reprise de données'],
+        tpl: function(items){ return 'conduite de la ' + joinList(items); } },
+      { key:'test', kw:['test','recette','bout en bout','unitaire'],
+        tpl: function(items){ return 'participation aux phases de ' + joinList(items); } },
+      { key:'formation', kw:['formation','key users','utilisateurs'],
+        tpl: function(items){ return 'animation des sessions de ' + joinList(items); } },
+      { key:'support', kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
+        tpl: function(items){ return 'assurance du ' + joinList(items); } }
+    ];
+    var cats = {}; catDefs.forEach(function(c){ cats[c.key] = []; });
+    var other = [];
+    tasks.forEach(function(t) {
+      var tl = t.toLowerCase(), placed = false;
+      for (var i = 0; i < catDefs.length; i++) {
+        if (catDefs[i].kw.some(function(k){ return tl.indexOf(k) !== -1; })) {
+          cats[catDefs[i].key].push(t.charAt(0).toLowerCase() + t.slice(1));
+          placed = true; break;
+        }
+      }
+      if (!placed) other.push(t.charAt(0).toLowerCase() + t.slice(1));
+    });
+
+    var intro = '';
+    if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise;
+    else if (poste) intro = 'En tant que ' + poste;
+    else if (entreprise) intro = 'Au sein de ' + entreprise;
+    if (intro) intro += ', intervention sur un environnement ' + (erp || 'ERP') + ' couvrant plusieurs axes. ';
+    else intro = 'Intervention sur un environnement ' + (erp || 'ERP') + ' couvrant les axes suivants. ';
+
+    var transitions = ['', 'En parallèle, ', 'Par ailleurs, ', 'Également, ', 'De plus, ', 'Enfin, '];
+    var phrases = [], tIdx = 0;
+    catDefs.forEach(function(c) {
+      if (!cats[c.key].length) return;
+      var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+      var sentence = pfx + c.tpl(cats[c.key]);
+      sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+      phrases.push(sentence);
+      tIdx++;
+    });
+    if (other.length) {
+      var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+      var sentence = pfx + joinList(other);
+      sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+      phrases.push(sentence);
+    }
+    if (!phrases.length) return '';
+    return intro + phrases.join('. ') + '.';
+  }
+
+  function updateExpNarrative(block) {
+    var wrap = block.querySelector('.exp-tasks-wrap');
+    var textarea = block.querySelector('textarea[name^="exp_description_"]');
+    if (!wrap || !textarea) return;
+    var checked = [];
+    wrap.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+      checked.push(cb.dataset.taskLabel);
+    });
+    if (!checked.length) { textarea.value = ''; return; }
+    var poste = (block.querySelector('input[name^="exp_titre_"]') || {}).value || '';
+    var entreprise = (block.querySelector('input[name^="exp_entreprise_"]') || {}).value || '';
+    var erp = getSelectedErp() || 'ERP';
+    textarea.value = generateNarrative(checked, erp, poste, entreprise);
+  }
+
+  /* ═══ EXPERIENCE BLOCK ═══ */
   function addExperienceBlock(initialData) {
     experienceCount += 1;
 
@@ -40,7 +194,7 @@
     var description = initialData && initialData.description ? initialData.description : '';
 
     wrapper.innerHTML =
-      '<h3>Experience ' + experienceCount + '</h3>' +
+      '<h3>Expérience ' + experienceCount + '</h3>' +
       '<button type="button" class="btn btn-remove" data-remove="1">Supprimer</button>' +
       '<div class="form-group">' +
         '<label>Titre du poste *</label>' +
@@ -51,15 +205,20 @@
         '<input type="text" name="exp_entreprise_' + experienceCount + '" value="' + escapeHtml(entreprise) + '" required>' +
       '</div>' +
       '<div class="form-group">' +
-        '<label>Periode *</label>' +
+        '<label>Période *</label>' +
         '<input type="text" name="exp_periode_' + experienceCount + '" value="' + escapeHtml(periode) + '" placeholder="Ex: 2022 - 2025" required>' +
       '</div>' +
       '<div class="form-group">' +
-        '<label>Description</label>' +
-        '<textarea name="exp_description_' + experienceCount + '" placeholder="Missions, resultats, outils...">' + escapeHtml(description) + '</textarea>' +
+        '<label style="font-size:.78rem;color:#64748b;margin-bottom:.25rem;">Sélectionnez vos tâches réalisées :</label>' +
+        '<div class="exp-tasks-wrap" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem;"></div>' +
+        '<label>Description <span style="font-size:.72rem;color:#94a3b8;font-weight:400;">(générée automatiquement, modifiable)</span></label>' +
+        '<textarea name="exp_description_' + experienceCount + '" placeholder="Cochez les tâches ci-dessus ou saisissez librement...">' + escapeHtml(description) + '</textarea>' +
       '</div>';
 
     container.appendChild(wrapper);
+
+    /* Populate task checkboxes */
+    populateTaskCheckboxes(wrapper);
 
     wrapper.querySelector('[data-remove="1"]').addEventListener('click', function () {
       wrapper.remove();

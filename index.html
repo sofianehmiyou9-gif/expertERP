@@ -3179,6 +3179,11 @@ function toggleTheme() {
                 </select>
                 <input class="form-input" data-exp="sector-other" placeholder="Précisez le secteur…" style="display:none">
               </div>
+              <div style="margin-top:.55rem;">
+                <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.4rem;">Tâches réalisées <span style="font-weight:400;text-transform:none;letter-spacing:0;">(cochez ce qui s'applique)</span></div>
+                <div class="exp-tasks-wrap" data-exp="tasks" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.45rem;"></div>
+              </div>
+              <textarea class="form-input" data-exp="description" rows="2" placeholder="Description générée ou saisissez librement…" style="font-size:.8rem;line-height:1.5;resize:vertical;margin-top:.3rem;"></textarea>
             </div>
           </div>
           <button type="button" data-action="cs-add-exp" style="font-size:.72rem;color:#2563eb;background:#eff6ff;border:1.5px dashed #93c5fd;padding:.5rem 1rem;border-radius:8px;cursor:pointer;margin-top:.4rem;font-weight:600;transition:all .2s;">+ Ajouter une expérience</button>
@@ -4905,6 +4910,8 @@ function toggleErp(el, val) {
     if (!selectedModules[val]) selectedModules[val] = {};
   }
   renderAllModules();
+  /* Rafraîchir les tâches dans les exp-rows quand l'ERP change */
+  csInitAllExpTasks();
 }
 
 function renderAllModules() {
@@ -5055,6 +5062,154 @@ function csPopulateYearSelects(container) {
   });
 }
 
+/* ═══ TÂCHES TYPIQUES PAR ERP (inscription) ═══ */
+var CS_TASK_BANK = {
+  'SAP': [
+    'Paramétrage SAP', 'Migration vers S/4HANA', 'Configuration des modules', 'Développement ABAP',
+    'Tests unitaires et intégration', 'Formation key users', 'Support go-live',
+    'Rédaction des spécifications', 'Analyse des flux métier', 'Gestion des autorisations',
+    'Optimisation des processus', 'Reprise de données'
+  ],
+  'Oracle': [
+    'Configuration Oracle Cloud', 'Migration de données', 'Intégration OIC',
+    'Paramétrage des modules', 'Tests de bout en bout', 'Formation utilisateurs',
+    'Conception des rapports', 'Analyse des processus', 'Support post-déploiement'
+  ],
+  'Dynamics': [
+    'Configuration Dynamics 365', 'Développement Power Platform', 'Intégration Azure',
+    'Paramétrage des entités', 'Migration de données', 'Formation utilisateurs',
+    'Tests et recette', 'Analyse des processus', 'Support et maintenance'
+  ],
+  'Workday': [
+    'Configuration Workday HCM', 'Paramétrage des business processes', 'Intégration EIB/Studio',
+    'Migration des données RH', 'Formation utilisateurs', 'Reporting et dashboards',
+    'Tests de recette', 'Support post-déploiement'
+  ],
+  '_default': [
+    'Analyse des besoins métier', 'Configuration ERP', 'Rédaction des spécifications',
+    'Tests et recette', 'Formation des utilisateurs', 'Support post-déploiement',
+    'Migration de données', 'Gestion de projet', 'Coordination des équipes', 'Documentation'
+  ]
+};
+
+function csGetSelectedErpName() {
+  var chips = document.querySelectorAll('#cs-erp-chips .erp-chip.selected');
+  var names = [];
+  chips.forEach(function(c){ names.push(c.textContent.trim()); });
+  var primary = '';
+  ['SAP','Oracle','Dynamics','Workday'].forEach(function(e) {
+    if (!primary && names.some(function(n){ return n.toUpperCase().indexOf(e.toUpperCase()) !== -1; })) primary = e;
+  });
+  return primary;
+}
+
+function csPopulateExpTasks(expRow) {
+  var wrap = expRow.querySelector('[data-exp="tasks"]');
+  if (!wrap) return;
+  var erp = csGetSelectedErpName();
+  var tasks = CS_TASK_BANK[erp] || CS_TASK_BANK['_default'];
+  wrap.innerHTML = tasks.map(function(t) {
+    return '<label style="display:inline-flex;align-items:center;gap:3px;font-size:.72rem;color:#475569;background:#f1f5f9;padding:3px 8px;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;user-select:none;transition:all .15s;">' +
+      '<input type="checkbox" data-task-label="'+t.replace(/"/g,'&quot;')+'" style="accent-color:#2563eb;width:13px;height:13px;">' + t + '</label>';
+  }).join('');
+  /* Listener : quand on coche → mettre à jour la description */
+  wrap.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+    cb.addEventListener('change', function() { csUpdateExpDescription(expRow); });
+  });
+}
+
+function csUpdateExpDescription(expRow) {
+  var wrap = expRow.querySelector('[data-exp="tasks"]');
+  var textarea = expRow.querySelector('[data-exp="description"]');
+  if (!wrap || !textarea) return;
+  var checked = [];
+  wrap.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+    checked.push(cb.dataset.taskLabel);
+  });
+  if (!checked.length) { textarea.value = ''; return; }
+
+  var poste = (expRow.querySelector('[data-exp="title"]') || {}).value || '';
+  var entreprise = (expRow.querySelector('[data-exp="company"]') || {}).value || '';
+  var secteur = (expRow.querySelector('[data-exp="sector"]') || {}).value || '';
+  var erp = csGetSelectedErpName() || 'ERP';
+
+  textarea.value = csGenerateNarrative(checked, erp, poste, entreprise, secteur);
+}
+
+/* ── Générateur de texte narratif professionnel ── */
+function csGenerateNarrative(tasks, erp, poste, entreprise, secteur) {
+  /* Catégoriser les tâches par famille */
+  var catDefs = [
+    { key:'config',    kw:['paramétrage','configuration','paramétrer','configur','autorisations'],
+      tpl: function(items){ return 'prise en charge des activités de ' + csJoinList(items); } },
+    { key:'dev',       kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
+      tpl: function(items){ return 'réalisation des travaux de ' + csJoinList(items); } },
+    { key:'analyse',   kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
+      tpl: function(items){ return 'contribution aux activités d\u2019' + csJoinList(items); } },
+    { key:'migration', kw:['migration','reprise de données'],
+      tpl: function(items){ return 'conduite de la ' + csJoinList(items); } },
+    { key:'test',      kw:['test','recette','bout en bout','unitaire'],
+      tpl: function(items){ return 'participation aux phases de ' + csJoinList(items); } },
+    { key:'formation', kw:['formation','key users','utilisateurs'],
+      tpl: function(items){ return 'animation des sessions de ' + csJoinList(items); } },
+    { key:'support',   kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
+      tpl: function(items){ return 'assurance du ' + csJoinList(items); } }
+  ];
+  var cats = {}; catDefs.forEach(function(c){ cats[c.key] = []; });
+  var other = [];
+  tasks.forEach(function(t) {
+    var tl = t.toLowerCase(), placed = false;
+    for (var i = 0; i < catDefs.length; i++) {
+      if (catDefs[i].kw.some(function(k){ return tl.indexOf(k) !== -1; })) {
+        cats[catDefs[i].key].push(t.charAt(0).toLowerCase() + t.slice(1));
+        placed = true; break;
+      }
+    }
+    if (!placed) other.push(t.charAt(0).toLowerCase() + t.slice(1));
+  });
+
+  /* Intro contextuelle */
+  var intro = '';
+  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise;
+  else if (poste) intro = 'En tant que ' + poste;
+  else if (entreprise) intro = 'Au sein de ' + entreprise;
+  if (secteur) intro += (intro ? ', dans le secteur ' : 'Dans le secteur ') + secteur;
+  if (intro) intro += ', intervention sur un environnement ' + erp + ' couvrant plusieurs axes. ';
+  else intro = 'Intervention sur un environnement ' + erp + ' couvrant les axes suivants. ';
+
+  /* Phrases par catégorie avec transitions */
+  var transitions = ['', 'En parallèle, ', 'Par ailleurs, ', 'Également, ', 'De plus, ', 'Enfin, '];
+  var phrases = [], tIdx = 0;
+  catDefs.forEach(function(c) {
+    if (!cats[c.key].length) return;
+    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+    var sentence = pfx + c.tpl(cats[c.key]);
+    /* Capitaliser la première lettre de chaque phrase */
+    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    phrases.push(sentence);
+    tIdx++;
+  });
+  if (other.length) {
+    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+    var sentence = pfx + csJoinList(other);
+    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    phrases.push(sentence);
+  }
+  if (!phrases.length) return '';
+  return intro + phrases.join('. ') + '.';
+}
+
+function csJoinList(arr) {
+  if (arr.length === 1) return arr[0];
+  return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1];
+}
+
+function csInitAllExpTasks() {
+  document.querySelectorAll('#cs-exp-rows .exp-row').forEach(function(row) {
+    csPopulateExpTasks(row);
+  });
+}
+
 function csAddExp() {
   const idx = document.querySelectorAll('#cs-exp-rows .exp-row').length;
   document.getElementById('cs-exp-rows').insertAdjacentHTML('beforeend',
@@ -5070,9 +5225,15 @@ function csAddExp() {
         <select class="form-select" data-exp="sector">${CS_SECTOR_OPTIONS}</select>
         <input class="form-input" data-exp="sector-other" placeholder="Précisez le secteur…" style="display:none">
       </div>
+      <div style="margin-top:.55rem;">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.4rem;">Tâches réalisées</div>
+        <div class="exp-tasks-wrap" data-exp="tasks" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.45rem;"></div>
+      </div>
+      <textarea class="form-input" data-exp="description" rows="2" placeholder="Description générée ou saisissez librement…" style="font-size:.8rem;line-height:1.5;resize:vertical;margin-top:.3rem;"></textarea>
     </div>`);
   var newRow = document.getElementById('cs-exp-' + idx);
   csPopulateYearSelects(newRow);
+  csPopulateExpTasks(newRow);
 }
 
 function updateModePill() {
@@ -5118,7 +5279,8 @@ async function submitConsultant() {
         titre: _titleVal,
         entreprise: r.querySelector('[data-exp="company"]')?.value.trim() || '',
         periode: periodStr,
-        secteur: sectorVal
+        secteur: sectorVal,
+        description: r.querySelector('[data-exp="description"]')?.value.trim() || ''
       };
     }).filter(e => e.titre);
     const data = {
@@ -6385,9 +6547,9 @@ async function refreshLiveConsultantCount() {
 
 document.addEventListener('DOMContentLoaded', () => {
   refreshLiveConsultantCount();
-  /* Populate year dropdowns in first experience row */
+  /* Populate year dropdowns + task checkboxes in first experience row */
   var expRows = document.getElementById('cs-exp-rows');
-  if (expRows) csPopulateYearSelects(expRows);
+  if (expRows) { csPopulateYearSelects(expRows); csInitAllExpTasks(); }
   redirectRecoveryLinkToResetPageIfNeeded();
   bindStaticActionHandlers();
   refreshAdminPortalVisibility();

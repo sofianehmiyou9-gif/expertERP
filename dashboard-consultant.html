@@ -1671,9 +1671,84 @@ function updateExpDescFromTasks() {
     var label = cb.parentElement.textContent.trim();
     checked.push(label);
   });
-  if (checked.length) {
-    textarea.value = checked.join('. ') + '.';
+  if (!checked.length) { textarea.value = ''; return; }
+
+  var poste = (document.getElementById('exp-poste-input') || {}).value || '';
+  var entreprise = (document.getElementById('exp-entreprise-input') || {}).value || '';
+  var secteur = (document.getElementById('exp-secteur-input') || {}).value || '';
+  /* Détecter l'ERP principal du consultant */
+  var erps = Array.isArray(currentConsultant.competences) ? currentConsultant.competences : [];
+  var erp = '';
+  ['SAP','Oracle','Dynamics','Workday'].forEach(function(e) {
+    if (!erp && erps.some(function(c){ return c.toUpperCase().indexOf(e.toUpperCase()) !== -1; })) erp = e;
+  });
+  erp = erp || 'ERP';
+
+  textarea.value = dashGenerateNarrative(checked, erp, poste, entreprise, secteur);
+}
+
+/* ── Générateur de texte narratif professionnel (dashboard) ── */
+function dashJoinList(arr) {
+  if (arr.length === 1) return arr[0];
+  return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1];
+}
+
+function dashGenerateNarrative(tasks, erp, poste, entreprise, secteur) {
+  var catDefs = [
+    { key:'config',    kw:['paramétrage','configuration','paramétrer','configur','autorisations'],
+      tpl: function(items){ return 'prise en charge des activités de ' + dashJoinList(items); } },
+    { key:'dev',       kw:['développement','abap','power platform','intégration','azure','oic','eib','studio'],
+      tpl: function(items){ return 'réalisation des travaux de ' + dashJoinList(items); } },
+    { key:'analyse',   kw:['analyse','spécification','specs','rédaction','conception','reporting','rapports','dashboards'],
+      tpl: function(items){ return 'contribution aux activités d\u2019' + dashJoinList(items); } },
+    { key:'migration', kw:['migration','reprise de données'],
+      tpl: function(items){ return 'conduite de la ' + dashJoinList(items); } },
+    { key:'test',      kw:['test','recette','bout en bout','unitaire'],
+      tpl: function(items){ return 'participation aux phases de ' + dashJoinList(items); } },
+    { key:'formation', kw:['formation','key users','utilisateurs'],
+      tpl: function(items){ return 'animation des sessions de ' + dashJoinList(items); } },
+    { key:'support',   kw:['support','go-live','maintenance','post-déploiement','documentation','coordination','gestion de projet','optimisation'],
+      tpl: function(items){ return 'assurance du ' + dashJoinList(items); } }
+  ];
+  var cats = {}; catDefs.forEach(function(c){ cats[c.key] = []; });
+  var other = [];
+  tasks.forEach(function(t) {
+    var tl = t.toLowerCase(), placed = false;
+    for (var i = 0; i < catDefs.length; i++) {
+      if (catDefs[i].kw.some(function(k){ return tl.indexOf(k) !== -1; })) {
+        cats[catDefs[i].key].push(t.charAt(0).toLowerCase() + t.slice(1));
+        placed = true; break;
+      }
+    }
+    if (!placed) other.push(t.charAt(0).toLowerCase() + t.slice(1));
+  });
+
+  var intro = '';
+  if (poste && entreprise) intro = 'En tant que ' + poste + ' chez ' + entreprise;
+  else if (poste) intro = 'En tant que ' + poste;
+  else if (entreprise) intro = 'Au sein de ' + entreprise;
+  if (secteur) intro += (intro ? ', dans le secteur ' : 'Dans le secteur ') + secteur;
+  if (intro) intro += ', intervention sur un environnement ' + erp + ' couvrant plusieurs axes. ';
+  else intro = 'Intervention sur un environnement ' + erp + ' couvrant les axes suivants. ';
+
+  var transitions = ['', 'En parallèle, ', 'Par ailleurs, ', 'Également, ', 'De plus, ', 'Enfin, '];
+  var phrases = [], tIdx = 0;
+  catDefs.forEach(function(c) {
+    if (!cats[c.key].length) return;
+    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+    var sentence = pfx + c.tpl(cats[c.key]);
+    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    phrases.push(sentence);
+    tIdx++;
+  });
+  if (other.length) {
+    var pfx = tIdx < transitions.length ? transitions[tIdx] : '';
+    var sentence = pfx + dashJoinList(other);
+    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    phrases.push(sentence);
   }
+  if (!phrases.length) return '';
+  return intro + phrases.join('. ') + '.';
 }
 
 /* Initialiser les checkboxes au chargement */
