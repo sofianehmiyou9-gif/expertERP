@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub — Helpers Supabase centralisés
+ * ExpertERP — Helpers Supabase centralisés
  * Depends on: config.js (window.ExpertConfig.SB_URL / SB_KEY)
  *
  * Fournit : sbFetch, sbInsert, sbUpdate, sbSelect, parseNotes, normalizeStatus, sha256Hex

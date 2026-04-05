@@ -221,7 +221,7 @@ def add_two_column_slide(title, left_title, left_items, right_title, right_items
 # ============================================
 # SLIDE 1: Title Slide
 # ============================================
-add_title_slide("ExpertERPHub", "La plateforme premium de staffing ERP")
+add_title_slide("ExpertERP", "La plateforme premium de staffing ERP")
 
 # ============================================
 # SLIDE 2: Le Problème
@@ -688,7 +688,7 @@ tf = txBox.text_frame
 tf.word_wrap = True
 tf.vertical_anchor = MSO_ANCHOR.MIDDLE
 p = tf.paragraphs[0]
-p.text = "Prêt à Découvrir ExpertERPHub?"
+p.text = "Prêt à Découvrir ExpertERP?"
 p.font.size = Pt(44)
 p.font.bold = True
 p.font.color.rgb = colors['textLight']
@@ -728,12 +728,12 @@ p.alignment = PP_ALIGN.CENTER
 txBox = slide.shapes.add_textbox(Inches(0.5), Inches(5), Inches(9), Inches(0.4))
 tf = txBox.text_frame
 p = tf.paragraphs[0]
-p.text = "ExpertERPHub - La plateforme de staffing ERP pour les professionnels"
+p.text = "ExpertERP - La plateforme de staffing ERP pour les professionnels"
 p.font.size = Pt(11)
 p.font.color.rgb = colors['textMuted']
 p.alignment = PP_ALIGN.CENTER
 
 # Save
-output_path = "/sessions/loving-happy-hopper/mnt/Projects--ExpertERPHUB/ExpertERPHub_Presentation_Entreprises_2026.pptx"
+output_path = "/sessions/loving-happy-hopper/mnt/Projects--ExpertERPHUB/ExpertERP_Presentation_Entreprises_2026.pptx"
 prs.save(output_path)
 print(f"Presentation created successfully at: {output_path}")

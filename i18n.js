@@ -175,7 +175,7 @@
         callBtn: "Appeler",
         closeBtn: "Fermer",
         writeReplyFirst: "Veuillez écrire une réponse avant d'envoyer.",
-        reSubject: "Re: Votre demande ExpertERPHub",
+        reSubject: "Re: Votre demande ExpertERP",
         months: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
       },
       dashboardCompany: {
@@ -252,7 +252,7 @@
         statusNew: "Nouveau",
         statusRead: "Lu",
         statusReplied: "Répondu",
-        profileSubtitle: "Informations de votre compte entreprise sur ExpertERPHub.",
+        profileSubtitle: "Informations de votre compte entreprise sur ExpertERP.",
         gdprTitle: "Données personnelles et conformité RGPD",
         dailyRateLabel: "Taux journalier (TJM)",
         availNotSpecified: "Non renseignée",
@@ -322,7 +322,7 @@
           response: "Première réponse sous 2h"
         },
         sections: {
-          whyTitle: "Pourquoi ExpertERPHub ?",
+          whyTitle: "Pourquoi ExpertERP ?",
           howTitle: "Comment ça marche ?",
           ctaTitle: "Prêt à transformer votre approche ERP ?",
           faqTitle: "Questions fréquentes"
@@ -554,7 +554,7 @@
         callBtn: "Call",
         closeBtn: "Close",
         writeReplyFirst: "Please write a reply before sending.",
-        reSubject: "Re: Your ExpertERPHub request",
+        reSubject: "Re: Your ExpertERP request",
         months: ["January","February","March","April","May","June","July","August","September","October","November","December"]
       },
       dashboardCompany: {
@@ -631,7 +631,7 @@
         statusNew: "New",
         statusRead: "Read",
         statusReplied: "Replied",
-        profileSubtitle: "Your company account information on ExpertERPHub.",
+        profileSubtitle: "Your company account information on ExpertERP.",
         gdprTitle: "Personal data and GDPR compliance",
         dailyRateLabel: "Daily rate",
         availNotSpecified: "Not specified",
@@ -701,7 +701,7 @@
           response: "First response under 2h"
         },
         sections: {
-          whyTitle: "Why ExpertERPHub?",
+          whyTitle: "Why ExpertERP?",
           howTitle: "How does it work?",
           ctaTitle: "Ready to transform your ERP approach?",
           faqTitle: "FAQ"

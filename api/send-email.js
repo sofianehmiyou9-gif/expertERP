@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'ExpertERPHub <onboarding@resend.dev>',
+        from: 'ExpertERP <onboarding@resend.dev>',
         to: [to],
         subject: subject,
         html: html

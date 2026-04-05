@@ -8,7 +8,7 @@ Bienvenue! Ce fichier vous guide à travers le rapport QA complet.
 RÉSUMÉ EN 30 SECONDES
 ================================================================================
 
-Système Testé:   ExpertERPHub Messaging & Email System
+Système Testé:   ExpertERP Messaging & Email System
 Date:            2026-03-25
 Résultat:        TOUS LES TESTS PASSÉS ✅
 Statut:          PRÊT POUR LA PRODUCTION
@@ -182,7 +182,7 @@ RECOMMANDATION FINALE
 
 STATUS: APPROUVÉ POUR PRODUCTION
 
-Le système de messagerie et notifications email d'ExpertERPHub est:
+Le système de messagerie et notifications email d'ExpertERP est:
   ✅ Entièrement fonctionnel
   ✅ Production-ready
   ✅ Sécurisé

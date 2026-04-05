@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub — Client-side content translator FR↔EN
+ * ExpertERP — Client-side content translator FR↔EN
  * Translates dynamic profile content (resume, experiences, projects, certifications)
  * Uses a comprehensive dictionary + regex patterns for ERP consulting domain.
  */

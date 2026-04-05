@@ -1,5 +1,5 @@
 (function () {
-  const KEY = 'experterphub_portal_session';
+  const KEY = 'experterp_portal_session';
   const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 
   function normalizeRole(role) {

@@ -242,7 +242,7 @@ COMMENT LIRE CE RAPPORT
 CONCLUSION FINALE
 ================================================================================
 
-Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERPHub est:
+Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERP est:
 
 ✅ ENTIÈREMENT FONCTIONNEL
 ✅ PRODUCTION READY

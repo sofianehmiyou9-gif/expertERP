@@ -1,13 +1,13 @@
-# Prompt de maintenance — ExpertERPHub
+# Prompt de maintenance — ExpertERP
 
-> Copie-colle ce prompt au début d'une nouvelle conversation pour corriger des bugs, refactorer ou ajouter des fonctionnalités au site ExpertERPHub.
+> Copie-colle ce prompt au début d'une nouvelle conversation pour corriger des bugs, refactorer ou ajouter des fonctionnalités au site ExpertERP.
 
 ---
 
 ## PROMPT UNIVERSEL
 
 ```
-Tu travailles sur le projet ExpertERPHub — une plateforme SaaS de mise en relation entre consultants ERP et entreprises.
+Tu travailles sur le projet ExpertERP — une plateforme SaaS de mise en relation entre consultants ERP et entreprises.
 
 ## Stack technique
 

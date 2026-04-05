@@ -5,8 +5,8 @@ const pptxgen = require("pptxgenjs");
 // Initialize presentation
 const pres = new pptxgen();
 pres.layout = "LAYOUT_16x9";
-pres.author = "ExpertERPHub";
-pres.title = "ExpertERPHub - Presentation Entreprises";
+pres.author = "ExpertERP";
+pres.title = "ExpertERP - Presentation Entreprises";
 
 // Color palette - Midnight Executive
 const colors = {
@@ -284,7 +284,7 @@ function addTwoColumnSlide(title, leftTitle, leftItems, rightTitle, rightItems) 
 // ============================================
 // SLIDE 1: Title Slide
 // ============================================
-addTitleSlide("ExpertERPHub", "La plateforme premium de staffing ERP");
+addTitleSlide("ExpertERP", "La plateforme premium de staffing ERP");
 
 // ============================================
 // SLIDE 2: Le Problème
@@ -777,7 +777,7 @@ slide13.addShape(pres.shapes.RECTANGLE, {
   fill: { color: colors.secondary },
 });
 
-slide13.addText("Prêt à Découvrir ExpertERPHub?", {
+slide13.addText("Prêt à Découvrir ExpertERP?", {
   x: 0.5,
   y: 1.5,
   w: 9,
@@ -818,7 +818,7 @@ slide13.addText("contact@experterpbub.com\n+1 514 XXX-XXXX", {
   align: "center",
 });
 
-slide13.addText("ExpertERPHub - La plateforme de staffing ERP pour les professionnels", {
+slide13.addText("ExpertERP - La plateforme de staffing ERP pour les professionnels", {
   x: 0.5,
   y: 5,
   w: 9,
@@ -831,9 +831,9 @@ slide13.addText("ExpertERPHub - La plateforme de staffing ERP pour les professio
 // Save presentation
 pres.writeFile({
   fileName:
-    "/sessions/loving-happy-hopper/mnt/Projects--ExpertERPHUB/ExpertERPHub_Presentation_Entreprises_2026.pptx",
+    "/sessions/loving-happy-hopper/mnt/Projects--ExpertERPHUB/ExpertERP_Presentation_Entreprises_2026.pptx",
 });
 
 console.log(
-  "Presentation created successfully at: ExpertERPHub_Presentation_Entreprises_2026.pptx"
+  "Presentation created successfully at: ExpertERP_Presentation_Entreprises_2026.pptx"
 );

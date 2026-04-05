@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - Configuration centralisee
+ * ExpertERP - Configuration centralisee
  * Toutes les constantes Supabase et parametres globaux
  */
 (function () {

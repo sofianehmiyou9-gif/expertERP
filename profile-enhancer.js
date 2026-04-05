@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub — Profile Enhancer Bot
+ * ExpertERP — Profile Enhancer Bot
  * Professionnalise automatiquement les profils consultants à l'inscription.
  *
  * Mode 1 (défaut) : Templates intelligents — gratuit, côté client

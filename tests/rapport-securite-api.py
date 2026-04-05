@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ExpertERPHub — Rapport d'Audit Sécurité & Tests API
+ExpertERP — Rapport d'Audit Sécurité & Tests API
 Génère un PDF professionnel avec les résultats
 """
 
@@ -17,7 +17,7 @@ from reportlab.pdfgen import canvas
 import datetime
 
 # ── Config ──
-OUTPUT = "/sessions/loving-happy-hopper/mnt/ExpertERPHUB/tests/ExpertERPHub_Audit_Securite.pdf"
+OUTPUT = "/sessions/loving-happy-hopper/mnt/ExpertERPHUB/tests/ExpertERP_Audit_Securite.pdf"
 PRIMARY = HexColor("#00288e")
 SECONDARY = HexColor("#0058be")
 RED = HexColor("#dc2626")
@@ -70,7 +70,7 @@ def build_report():
 
     # ── TITLE PAGE ──
     story.append(Spacer(1, 1.5*inch))
-    story.append(Paragraph("ExpertERPHub", styles['DocTitle']))
+    story.append(Paragraph("ExpertERP", styles['DocTitle']))
     story.append(Paragraph("Rapport d'Audit Sécurité & Tests d'Intégration API", styles['DocSubtitle']))
     story.append(HRFlowable(width="100%", thickness=2, color=PRIMARY, spaceAfter=12))
     story.append(Paragraph(f"Date : {now}", styles['BodyTextCustom']))
@@ -278,7 +278,7 @@ def build_report():
     # ── FOOTER ──
     story.append(Spacer(1, 30))
     story.append(HRFlowable(width="100%", thickness=1, color=HexColor("#e2e8f0"), spaceAfter=8))
-    story.append(Paragraph("ExpertERPHub — Rapport d'Audit Sécurité — Confidentiel", styles['FooterStyle']))
+    story.append(Paragraph("ExpertERP — Rapport d'Audit Sécurité — Confidentiel", styles['FooterStyle']))
     story.append(Paragraph(f"Généré le {now} — 18 vulnérabilités identifiées — 12 tests API créés", styles['FooterStyle']))
 
     doc.build(story)

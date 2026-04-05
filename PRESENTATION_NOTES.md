@@ -1,7 +1,7 @@
-# ExpertERPHub - Notes de Présentation Entreprises 2026
+# ExpertERP - Notes de Présentation Entreprises 2026
 
 ## Fichier PowerPoint
-**ExpertERPHub_Presentation_Entreprises_2026.pptx** (46 KB)
+**ExpertERP_Presentation_Entreprises_2026.pptx** (46 KB)
 
 Format: 16:9 PowerPoint (compatible avec Microsoft Office, Google Slides, Apple Keynote)
 
@@ -9,11 +9,11 @@ Format: 16:9 PowerPoint (compatible avec Microsoft Office, Google Slides, Apple 
 
 ## Guide de Présentation - Notes Orales par Slide
 
-### SLIDE 1: Titre - ExpertERPHub
+### SLIDE 1: Titre - ExpertERP
 **Durée: 15-20 secondes**
 
 **Notes orales:**
-"Bonjour à tous. Je suis ravi de vous présenter ExpertERPHub, la plateforme premium de staffing ERP. En quelques minutes, vous allez découvrir comment nous transformons le recrutement de consultants ERP en rendant accessible et rapide ce qui était autrefois lent et fragmenté."
+"Bonjour à tous. Je suis ravi de vous présenter ExpertERP, la plateforme premium de staffing ERP. En quelques minutes, vous allez découvrir comment nous transformons le recrutement de consultants ERP en rendant accessible et rapide ce qui était autrefois lent et fragmenté."
 
 **Points clés à mémoriser:**
 - Premium positioning (pas une plateforme générique)
@@ -48,7 +48,7 @@ En résumé: le staffing ERP aujourd'hui est fragmenté, coûteux, et lent. C'es
 **Durée: 90-120 secondes**
 
 **Notes orales:**
-"Voilà notre réponse: ExpertERPHub. Une plateforme B2B qui connecte les entreprises partenaires - les ESN, les cabinets, les consultants - tout en un seul endroit.
+"Voilà notre réponse: ExpertERP. Une plateforme B2B qui connecte les entreprises partenaires - les ESN, les cabinets, les consultants - tout en un seul endroit.
 
 [Pointer la boîte or]
 'Une plateforme B2B qui connecte entreprises partenaires avec consultants ERP vérifiés.'
@@ -84,7 +84,7 @@ Vous êtes sur le dashboard. Vous avez besoin d'un consultant SAP FI/CO à Montr
 **Étape 3 - Contact & Mise en Relation**
 Vous trouvez quelqu'un que vous aimez? Vous cliquez sur 'Contacter'. Messagerie directe avec le consultant. Vous discutez des termes, de la dispo, du projet. Direct. Pas d'intermédiaires. Pas de délai.
 
-Trois étapes. Un processus fluide. C'est ça, ExpertERPHub."
+Trois étapes. Un processus fluide. C'est ça, ExpertERP."
 
 **Tone:** Pédagogique, step-by-step, positive
 
@@ -134,7 +134,7 @@ Mais c'est pas juste les systèmes principaux. Chaque profil a des modules spéc
 
 Et les certifications - nous vérifions que les gens ont les badges SAP, Oracle, Workday, etc.
 
-C'est hyper-spécialisé. Pas du générique. C'est ce qui fait la force d'ExpertERPHub."
+C'est hyper-spécialisé. Pas du générique. C'est ce qui fait la force d'ExpertERP."
 
 **Tone:** Technical credibility, specialized expertise
 
@@ -262,7 +262,7 @@ Ambitieux mais réaliste. Nous avons la roadmap, nous avons le momentum."
 **Durée: 60 secondes**
 
 **Notes orales:**
-"Pourquoi c'est le bon moment pour vous de rejoindre ExpertERPHub?
+"Pourquoi c'est le bon moment pour vous de rejoindre ExpertERP?
 
 1. **Avantage early adopter** - Vous êtes parmi les premiers. Vous pouvez façonner la plateforme avec nous. Vos feedbacks font les features futurs.
 
@@ -353,7 +353,7 @@ Si vous présentez à une audience spécifique:
 ---
 
 ## Fichiers associés
-- `ExpertERPHub_Presentation_Entreprises_2026.pptx` (cette présentation)
+- `ExpertERP_Presentation_Entreprises_2026.pptx` (cette présentation)
 - `generate-presentation.py` (source code, si modification nécessaire)
 - `CLAUDE.md` (architecture technique et business model)
 

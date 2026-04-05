@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - Fonctions utilitaires partagees
+ * ExpertERP - Fonctions utilitaires partagees
  * Depends on: config.js (must be loaded first)
  */
 (function () {

@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - Messaging Module
+ * ExpertERP - Messaging Module
  * Gere les conversations entre consultants et entreprises
  * via la table Supabase "messages".
  * Depend de config.js (ExpertConfig.SB_URL, ExpertConfig.SB_KEY)

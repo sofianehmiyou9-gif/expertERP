@@ -105,7 +105,7 @@ RECOMMANDATIONS
 CONCLUSION
 =============================================================================
 
-Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERPHub
+Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERP
 est ENTIÈREMENT FONCTIONNEL et PRÊT POUR LA PRODUCTION.
 
 Taux de réussite: 100% (8/8 tests PASS)

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>ExpertERPHub — Tests API</title>
+<title>ExpertERP — Tests API</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4ff; padding: 2rem; color: #191c1e; }
@@ -43,7 +43,7 @@ h1 { font-size: 1.6rem; color: #00288e; margin-bottom: .5rem; }
 </head>
 <body>
 
-<h1>ExpertERPHub — Tests d'Intégration API</h1>
+<h1>ExpertERP — Tests d'Intégration API</h1>
 <p class="subtitle">Vérifie que les endpoints Supabase fonctionnent correctement et que la sécurité est en place.</p>
 
 <div class="controls">
@@ -301,7 +301,7 @@ function setTestStatus(id, status, detail, timeMs) {
 async function runAllTests() {
   results = { pass: 0, fail: 0, total: tests.length };
   logEl.innerHTML = '';
-  log('═══ Démarrage des tests API ExpertERPHub ═══', 'info');
+  log('═══ Démarrage des tests API ExpertERP ═══', 'info');
   log(`URL: ${SB_URL}`, 'info');
   log(`Tests: ${tests.length}`, 'info');
   log('');

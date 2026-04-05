@@ -1,9 +1,9 @@
-# QA Checklist - ExpertERPHub Presentation
+# QA Checklist - ExpertERP Presentation
 
 ## Vérification du Contenu
 
 ### Slide 1 - Titre
-- [x] Titre: "ExpertERPHub" présent et visible
+- [x] Titre: "ExpertERP" présent et visible
 - [x] Sous-titre: "La plateforme premium de staffing ERP"
 - [x] Footer: "2026 - Confidential"
 - [x] Fond navy dark appliqué
@@ -111,7 +111,7 @@
 ## Vérification Technique
 
 ### Fichier
-- [x] Nom correct: ExpertERPHub_Presentation_Entreprises_2026.pptx
+- [x] Nom correct: ExpertERP_Presentation_Entreprises_2026.pptx
 - [x] Format: PPTX (Microsoft OOXML)
 - [x] Taille: ~46 KB (raisonnable)
 - [x] Créé avec python-pptx (compatible universel)
@@ -135,7 +135,7 @@
 
 ### Contenu aligné avec business model
 - [x] Problème représente pain points vrais (ESN, timing, coûts)
-- [x] Solution positionne ExpertERPHub comme unique
+- [x] Solution positionne ExpertERP comme unique
 - [x] Mention explicite de B2B et freelances
 - [x] Pool de compétences reflète la réalité (SAP, Oracle, Workday, etc.)
 - [x] Sécurité est couvertes (audit, RLS, RGPD)
@@ -161,7 +161,7 @@
 ## Points Vérifiés par Markitdown
 
 ```
-SLIDE 1: ExpertERPHub + subtitle ✓
+SLIDE 1: ExpertERP + subtitle ✓
 SLIDE 2: 5 problèmes listés ✓
 SLIDE 3: Solution box + 4 points ✓
 SLIDE 4: 3 étapes avec labels ✓
@@ -189,7 +189,7 @@ SLIDE 13: CTA + contact ✓
 
 ### Court terme
 1. [ ] Remplacer placeholder contact (XXX-XXXX) par vrai numéro
-2. [ ] Ajouter logo ExpertERPHub en haut des slides (optionnel)
+2. [ ] Ajouter logo ExpertERP en haut des slides (optionnel)
 3. [ ] Créer version backup (email à soi-même)
 4. [ ] Tester live demo ou screencast (optionnel)
 

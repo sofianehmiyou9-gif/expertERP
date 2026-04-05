@@ -1,5 +1,5 @@
 -- ══════════════════════════════════════════════════════════════
--- ExpertERPHub — Seed: 2 entreprises + 10 ressources B2B
+-- ExpertERP — Seed: 2 entreprises + 10 ressources B2B
 -- À exécuter dans Supabase SQL Editor
 -- ══════════════════════════════════════════════════════════════
 
@@ -36,7 +36,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Alexandre', 'Tremblay',
-  'res_nexia_001@internal.experterphub.local',
+  'res_nexia_001@internal.experterp.local',
   '+1 514 555 0201',
   'Consultant fonctionnel SAP',
   ARRAY['SAP', 'FI/CO', 'S/4HANA', 'Migration'],
@@ -48,7 +48,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Marie-Ève', 'Bouchard',
-  'res_nexia_002@internal.experterphub.local',
+  'res_nexia_002@internal.experterp.local',
   '+1 514 555 0202',
   'Chef de projet Oracle',
   ARRAY['Oracle', 'ERP Cloud', 'Financials', 'SCM'],
@@ -60,7 +60,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Jean-François', 'Côté',
-  'res_nexia_003@internal.experterphub.local',
+  'res_nexia_003@internal.experterp.local',
   '+1 418 555 0203',
   'Consultant technique SAP',
   ARRAY['SAP', 'ABAP', 'Basis', 'Integration', 'BTP'],
@@ -72,7 +72,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Nadia', 'El Fassi',
-  'res_nexia_004@internal.experterphub.local',
+  'res_nexia_004@internal.experterp.local',
   '+1 514 555 0204',
   'Consultante SAP MM/SD',
   ARRAY['SAP', 'MM', 'SD', 'S/4HANA', 'Logistique'],
@@ -84,7 +84,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Patrick', 'Nguyen',
-  'res_nexia_005@internal.experterphub.local',
+  'res_nexia_005@internal.experterp.local',
   '+1 514 555 0205',
   'Analyste fonctionnel Oracle HCM',
   ARRAY['Oracle', 'HCM', 'Payroll', 'Benefits', 'Cloud'],
@@ -98,7 +98,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Catherine', 'Lavoie',
-  'res_straterp_001@internal.experterphub.local',
+  'res_straterp_001@internal.experterp.local',
   '+1 438 555 0301',
   'Consultante Dynamics 365 Finance',
   ARRAY['Microsoft Dynamics', 'F&O', 'Finance', 'Power Platform'],
@@ -110,7 +110,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'David', 'Roy',
-  'res_straterp_002@internal.experterphub.local',
+  'res_straterp_002@internal.experterp.local',
   '+1 416 555 0302',
   'Architecte Dynamics 365 SCM',
   ARRAY['Microsoft Dynamics', 'F&O', 'Supply Chain', 'Azure', 'Power BI'],
@@ -122,7 +122,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Samira', 'Hassan',
-  'res_straterp_003@internal.experterphub.local',
+  'res_straterp_003@internal.experterp.local',
   '+1 438 555 0303',
   'Consultante Workday HCM',
   ARRAY['Workday', 'HCM', 'Compensation', 'Benefits', 'Recruiting'],
@@ -134,7 +134,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Marc-André', 'Pelletier',
-  'res_straterp_004@internal.experterphub.local',
+  'res_straterp_004@internal.experterp.local',
   '+1 438 555 0304',
   'Développeur Dynamics 365 X++',
   ARRAY['Microsoft Dynamics', 'X++', 'F&O', 'Azure DevOps', 'Power Automate'],
@@ -146,7 +146,7 @@ VALUES (
 INSERT INTO consultants (prenom, nom, email, telephone, titre, competences, tjm_min, tjm_max, statut, notes_admin)
 VALUES (
   'Émilie', 'Gagnon',
-  'res_straterp_005@internal.experterphub.local',
+  'res_straterp_005@internal.experterp.local',
   '+1 416 555 0305',
   'Chef de projet Workday Finance',
   ARRAY['Workday', 'Finance', 'Planning', 'Prism Analytics'],

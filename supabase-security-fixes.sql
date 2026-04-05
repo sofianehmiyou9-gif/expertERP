@@ -1,5 +1,5 @@
 -- =========================================================
--- ExpertERPHub - Security Fixes
+-- ExpertERP - Security Fixes
 -- Date: 2026-04-02
 --
 -- FIX #2: RLS Policy + Function to validate sender email in messages
@@ -320,7 +320,7 @@ COMMENT ON FUNCTION public.is_admin_email(TEXT) IS
 --    );
 --
 -- 2) Test is_admin_email() with a known admin email:
---    SELECT is_admin_email('admin@experterpHub.com');
+--    SELECT is_admin_email('admin@experterp.com');
 --    -- Should return true if email matches the known admin
 --
 -- 3) Verify that direct INSERT on messages is blocked:

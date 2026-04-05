@@ -1,4 +1,4 @@
-# DONNÉES TECHNIQUES - Tests QA ExpertERPHub
+# DONNÉES TECHNIQUES - Tests QA ExpertERP
 
 ## Configuration des Tests
 

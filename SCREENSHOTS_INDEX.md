@@ -1,4 +1,4 @@
-# Index des Screenshots - Tests QA ExpertERPHub
+# Index des Screenshots - Tests QA ExpertERP
 
 ## Vue d'ensemble des preuves visuelles
 

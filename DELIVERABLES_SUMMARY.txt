@@ -11,13 +11,13 @@ Status: PRÊTE POUR PRÉSENTATION
 1. FICHIER POWERPOINT PRINCIPAL
 ================================================================================
 
-Fichier: ExpertERPHub_Presentation_Entreprises_2026.pptx
+Fichier: ExpertERP_Presentation_Entreprises_2026.pptx
 Taille: 46 KB
 Format: 16:9 PowerPoint (Microsoft OOXML)
 Nombre de slides: 13
 
 Contenu:
-1. Titre - "ExpertERPHub - La plateforme premium de staffing ERP"
+1. Titre - "ExpertERP - La plateforme premium de staffing ERP"
 2. Le Problème - 5 pain points (consultants, timing, pool, accès, coûts)
 3. Notre Solution - Plateforme B2B + 4 valeurs uniques
 4. Comment Ça Marche - 3 étapes (Inscription → Recherche → Contact)
@@ -239,7 +239,7 @@ Validations complétées:
 ✓ Documentation: notes, checklist, FAQ, source code
 
 Prochaines étapes:
-1. Télécharger ExpertERPHub_Presentation_Entreprises_2026.pptx
+1. Télécharger ExpertERP_Presentation_Entreprises_2026.pptx
 2. Lire PRESENTATION_NOTES.md
 3. Passer QA_CHECKLIST.md avant présentation
 4. Présenter!
@@ -263,7 +263,7 @@ Support technique:
 FICHIERS LIVRÉS
 ================================================================================
 
-1. ExpertERPHub_Presentation_Entreprises_2026.pptx (46 KB)
+1. ExpertERP_Presentation_Entreprises_2026.pptx (46 KB)
    ↳ Présentation PowerPoint, prête à l'emploi
 
 2. PRESENTATION_NOTES.md (15 KB)

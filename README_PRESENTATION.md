@@ -1,10 +1,10 @@
-# ExpertERPHub - Présentation Professionnelle Entreprises 2026
+# ExpertERP - Présentation Professionnelle Entreprises 2026
 
 ## Vue d'ensemble
 
-Présentation PowerPoint professionnelle et premium pour ExpertERPHub, conçue pour les réunions avec des entreprises partenaires potentielles (ESN, cabinets ERP, sociétés de conseil).
+Présentation PowerPoint professionnelle et premium pour ExpertERP, conçue pour les réunions avec des entreprises partenaires potentielles (ESN, cabinets ERP, sociétés de conseil).
 
-- **Fichier principal:** `ExpertERPHub_Presentation_Entreprises_2026.pptx`
+- **Fichier principal:** `ExpertERP_Presentation_Entreprises_2026.pptx`
 - **Durée:** 12-15 minutes de présentation + 5-10 minutes de questions
 - **Nombre de slides:** 13
 - **Format:** 16:9 PowerPoint (compatible universel)
@@ -14,7 +14,7 @@ Présentation PowerPoint professionnelle et premium pour ExpertERPHub, conçue p
 
 ## Fichiers inclus
 
-### 1. ExpertERPHub_Presentation_Entreprises_2026.pptx
+### 1. ExpertERP_Presentation_Entreprises_2026.pptx
 La présentation PowerPoint finale, prête à l'emploi.
 
 **Comment l'utiliser:**
@@ -62,7 +62,7 @@ Script Python qui génère la présentation à partir de zéro.
 python3 generate-presentation.py
 ```
 
-Cela génère `ExpertERPHub_Presentation_Entreprises_2026.pptx`
+Cela génère `ExpertERP_Presentation_Entreprises_2026.pptx`
 
 ---
 
@@ -231,7 +231,7 @@ Si vous avez des questions:
 
 - `CLAUDE.md` - Architecture technique et business model (référence pour la présentation)
 - `EXECUTIVE_SUMMARY.txt` - Résumé exécutif du projet
-- `ExpertERPHub_AcquisitionStrategy_2026.docx` - Stratégie d'acquisition (contexte)
+- `ExpertERP_AcquisitionStrategy_2026.docx` - Stratégie d'acquisition (contexte)
 
 ---
 

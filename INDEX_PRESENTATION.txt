@@ -4,9 +4,9 @@ INDEX COMPLET DES FICHIERS
 ================================================================================
 
 STRUCTURE:
-/ExpertERPHub_Presentation_Entreprises_2026/
+/ExpertERP_Presentation_Entreprises_2026/
 │
-├── 📊 ExpertERPHub_Presentation_Entreprises_2026.pptx (46 KB)
+├── 📊 ExpertERP_Presentation_Entreprises_2026.pptx (46 KB)
 │   └── Présentation PowerPoint, 13 slides
 │       Format: 16:9, Microsoft OOXML, prête à projeter
 │       Audience: ESN, Cabinets ERP, Sociétés de conseil
@@ -59,7 +59,7 @@ GUIDE D'UTILISATION RAPIDE
 ================================================================================
 
 Vous présentez DEMAIN?
-└─ 1. Ouvrir ExpertERPHub_Presentation_Entreprises_2026.pptx
+└─ 1. Ouvrir ExpertERP_Presentation_Entreprises_2026.pptx
    2. Lire PRESENTATION_NOTES.md en entier
    3. Passer QA_CHECKLIST.md
    4. Pratiquer 2 fois
@@ -135,7 +135,7 @@ CONTENU DÉTAILLÉ DES 13 SLIDES
 ================================================================================
 
 SLIDE 1 - TITRE
-"ExpertERPHub - La plateforme premium de staffing ERP"
+"ExpertERP - La plateforme premium de staffing ERP"
 Fond navy dark, accent gold, footer confidential
 
 SLIDE 2 - LE PROBLÈME
@@ -292,7 +292,7 @@ Besoin de modifier?
 FICHIERS GÉNÉRÉS - RÉSUMÉ
 ================================================================================
 
-ExpertERPHub_Presentation_Entreprises_2026.pptx
+ExpertERP_Presentation_Entreprises_2026.pptx
 ├─ 13 slides professionnelles
 ├─ Format 16:9 widescreen
 ├─ Palette Midnight Executive premium
@@ -359,6 +359,6 @@ AUTEUR: Claude Code + Sofiane
 STATUS: PRÊTE POUR PRÉSENTATION
 ================================================================================
 
-Pour commencer: Ouvrir README_PRESENTATION.md ou ExpertERPHub_Presentation_Entreprises_2026.pptx
+Pour commencer: Ouvrir README_PRESENTATION.md ou ExpertERP_Presentation_Entreprises_2026.pptx
 Bonne présentation!
 

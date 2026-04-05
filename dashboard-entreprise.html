@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Espace Entreprise — ExpertERPHub</title>
+<title>Espace Entreprise — ExpertERP</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
@@ -797,7 +797,7 @@ input:focus, textarea:focus, select:focus {
 <!-- Auth Form -->
 <div id="auth-container" class="auth-container" style="display:none;">
   <div class="auth-card">
-    <div class="logo">Expert<span>ERP</span>Hub</div>
+    <div class="logo">Expert<span>ERP</span></div>
     <h2 id="auth-title" data-i18n="dashboardCompany.dashboardAccess">Accès à votre espace entreprise</h2>
     <input type="email" id="email-input" placeholder="Adresse email">
     <input type="password" id="password-input" placeholder="Mot de passe">
@@ -812,7 +812,7 @@ input:focus, textarea:focus, select:focus {
 <div id="dashboard" class="dashboard" style="display:none;">
   <nav class="navbar">
     <div class="nav-left">
-      <div class="logo-nav">Expert<span>ERP</span>Hub</div>
+      <div class="logo-nav">Expert<span>ERP</span></div>
       <div class="company-name" id="company-name"></div>
     </div>
     <div class="nav-right">
@@ -1189,7 +1189,7 @@ input:focus, textarea:focus, select:focus {
     <!-- Profile Tab -->
     <div class="tab-pane" id="profile-tab">
       <div class="section-title" id="profile-title">Mon Profil</div>
-      <div class="section-sub">Gérez les informations de votre compte entreprise sur ExpertERPHub.</div>
+      <div class="section-sub">Gérez les informations de votre compte entreprise sur ExpertERP.</div>
 
       <!-- Editable Company Profile Section -->
       <div class="profile-info" id="profile-info" style="padding:2rem;">
@@ -1952,7 +1952,7 @@ function getResourceInternalName(resource) {
 }
 
 function generateInternalResourceEmail() {
-  return 'res_' + Date.now() + '_' + Math.random().toString(16).slice(2, 8) + '@internal.experterphub.local';
+  return 'res_' + Date.now() + '_' + Math.random().toString(16).slice(2, 8) + '@internal.experterp.local';
 }
 
 function buildResourceCode(name) {

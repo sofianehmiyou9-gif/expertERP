@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub — Seed 10 profils consultants professionnels
+ * ExpertERP — Seed 10 profils consultants professionnels
  *
  * Usage : Ouvrir https://expert-erp.vercel.app/ dans le navigateur,
  *         ouvrir la console (F12 > Console), et coller ce script.
@@ -30,7 +30,7 @@
     {
       prenom: 'Karim',
       nom: 'BENALI',
-      email: 'k.benali.demo@experterphub.com',
+      email: 'k.benali.demo@experterp.com',
       telephone: '+33 6 12 34 56 78',
       titre: 'Consultant Fonctionnel SAP S/4HANA | FI/CO & MM',
       competences: ['SAP', 'S/4HANA', 'FI/CO', 'MM', 'SD'],
@@ -79,7 +79,7 @@
     {
       prenom: 'Sophie',
       nom: 'MARTIN',
-      email: 's.martin.demo@experterphub.com',
+      email: 's.martin.demo@experterp.com',
       telephone: '+33 6 23 45 67 89',
       titre: 'Chef de Projet Oracle ERP Cloud | Financials & HCM',
       competences: ['Oracle', 'ERP Cloud', 'Financials', 'HCM', 'Fusion'],
@@ -128,7 +128,7 @@
     {
       prenom: 'Thomas',
       nom: 'DURAND',
-      email: 't.durand.demo@experterphub.com',
+      email: 't.durand.demo@experterp.com',
       telephone: '+33 6 34 56 78 90',
       titre: 'Consultant Technique Dynamics 365 F&O | Azure & Power Platform',
       competences: ['Dynamics 365', 'F&O', 'Business Central', 'Power Platform', 'Azure'],
@@ -177,7 +177,7 @@
     {
       prenom: 'Amira',
       nom: 'CHAKROUN',
-      email: 'a.chakroun.demo@experterphub.com',
+      email: 'a.chakroun.demo@experterp.com',
       telephone: '+33 6 45 67 89 01',
       titre: 'Consultante Workday HCM & Payroll | Transformation RH',
       competences: ['Workday', 'HCM', 'Payroll', 'Recruiting', 'Prism Analytics'],
@@ -226,7 +226,7 @@
     {
       prenom: 'Nicolas',
       nom: 'LEROUX',
-      email: 'n.leroux.demo@experterphub.com',
+      email: 'n.leroux.demo@experterp.com',
       telephone: '+33 6 56 78 90 12',
       titre: 'Architecte Solution Salesforce | CRM & Revenue Cloud',
       competences: ['Salesforce', 'Sales Cloud', 'Service Cloud', 'Revenue Cloud', 'MuleSoft'],
@@ -275,7 +275,7 @@
     {
       prenom: 'Youssef',
       nom: 'EL AMRANI',
-      email: 'y.elamrani.demo@experterphub.com',
+      email: 'y.elamrani.demo@experterp.com',
       telephone: '+33 6 67 89 01 23',
       titre: 'Consultant ServiceNow ITSM & ITOM | Certified System Administrator',
       competences: ['ServiceNow', 'ITSM', 'ITOM', 'CMDB', 'SecOps'],
@@ -324,7 +324,7 @@
     {
       prenom: 'Claire',
       nom: 'DUPONT',
-      email: 'c.dupont.demo@experterphub.com',
+      email: 'c.dupont.demo@experterp.com',
       telephone: '+33 6 78 90 12 34',
       titre: 'Consultante Oracle NetSuite | Financial Management & SuiteCommerce',
       competences: ['NetSuite', 'SuiteScript', 'SuiteCommerce', 'Financial Management', 'SuiteAnalytics'],
@@ -373,7 +373,7 @@
     {
       prenom: 'Fatima',
       nom: 'ZAHRA',
-      email: 'f.zahra.demo@experterphub.com',
+      email: 'f.zahra.demo@experterp.com',
       telephone: '+33 6 89 01 23 45',
       titre: 'Consultante SAP SuccessFactors | Employee Central & Talent Management',
       competences: ['SuccessFactors', 'Employee Central', 'Performance & Goals', 'Recruiting', 'SAP HCM'],
@@ -422,7 +422,7 @@
     {
       prenom: 'Marc',
       nom: 'LEFEBVRE',
-      email: 'm.lefebvre.demo@experterphub.com',
+      email: 'm.lefebvre.demo@experterp.com',
       telephone: '+33 6 90 12 34 56',
       titre: 'Consultant Infor M3 | Supply Chain & Manufacturing',
       competences: ['Infor', 'M3', 'CloudSuite', 'Supply Chain', 'Manufacturing'],
@@ -471,7 +471,7 @@
     {
       prenom: 'Léa',
       nom: 'ROUSSEAU',
-      email: 'l.rousseau.demo@experterphub.com',
+      email: 'l.rousseau.demo@experterp.com',
       telephone: '+33 6 01 23 45 67',
       titre: 'Consultante Odoo ERP | Full Stack Python & Intégration',
       competences: ['Odoo', 'Python', 'CRM', 'Comptabilité', 'E-commerce'],
@@ -517,7 +517,7 @@
     }
   ];
 
-  console.log('%c=== ExpertERPHub — Insertion de 10 profils consultants ===', 'color:#00288e;font-weight:bold;font-size:14px;');
+  console.log('%c=== ExpertERP — Insertion de 10 profils consultants ===', 'color:#00288e;font-weight:bold;font-size:14px;');
   var success = 0;
   var errors = 0;
 

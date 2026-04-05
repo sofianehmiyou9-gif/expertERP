@@ -1,4 +1,4 @@
--- ExpertERPHub - Supabase RLS policies
+-- ExpertERP - Supabase RLS policies
 -- Date: 2026-03-17
 --
 -- HOW TO USE:
@@ -236,7 +236,7 @@ GRANT EXECUTE ON FUNCTION public.consume_invitation_code(TEXT, TEXT) TO anon, au
 -- HOW TO CREATE AN INVITATION CODE (run as admin):
 -- =========================================================
 -- INSERT INTO public.invitation_codes (code, label, created_by_email)
--- VALUES ('EXP-ABC1-2024', 'Invitation Jean Dupont', 'admin@expertERPhub.com');
+-- VALUES ('EXP-ABC1-2024', 'Invitation Jean Dupont', 'admin@experterp.com');
 --
 -- To create a batch quickly:
 -- INSERT INTO public.invitation_codes (code, label)

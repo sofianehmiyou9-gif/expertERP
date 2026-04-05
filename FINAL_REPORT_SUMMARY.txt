@@ -193,7 +193,7 @@ Tous les fichiers sont dans:
 APPROBATION
 ================================================================================
 
-Système:            ExpertERPHub v1.0
+Système:            ExpertERP v1.0
 Tests Exécutés:     8
 Tests Réussis:      8
 Couverture:         100%
@@ -284,7 +284,7 @@ Status rapport:     COMPLET ET SIGNÉ
 CONCLUSION FINALE
 ================================================================================
 
-Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERPHub a été
+Le système de MESSAGERIE ET NOTIFICATIONS EMAIL d'ExpertERP a été
 complètement testé et validé. Tous les tests ont réussi avec 100% de taux
 de succès. Aucun bug n'a été détecté. La sécurité a été vérifiée. Les
 performances sont excellentes.

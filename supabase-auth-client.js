@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - Supabase Auth Client (Sprint 1 v2)
+ * ExpertERP - Supabase Auth Client (Sprint 1 v2)
  * Utilise l'API REST Supabase Auth directement (zero dependance CDN).
  * Depend de config.js (ExpertConfig.SB_URL, ExpertConfig.SB_KEY)
  */

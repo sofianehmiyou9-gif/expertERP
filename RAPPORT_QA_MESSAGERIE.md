@@ -1,5 +1,5 @@
 # RAPPORT QA - SYSTÈME DE MESSAGERIE ET NOTIFICATIONS EMAIL
-## ExpertERPHub - Test Complet
+## ExpertERP - Test Complet
 
 **Date du Test:** 2026-03-25  
 **Heure:** 00:39-00:41 UTC  
@@ -119,7 +119,7 @@ Email notification envoyée avec succès.
 
 ## CONCLUSION
 
-Le système de **messagerie et notifications email** sur ExpertERPHub est **ENTIÈREMENT FONCTIONNEL**.
+Le système de **messagerie et notifications email** sur ExpertERP est **ENTIÈREMENT FONCTIONNEL**.
 
 **Taux de réussite: 100% (8/8 tests)**
 

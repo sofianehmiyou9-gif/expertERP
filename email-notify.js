@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - Email Notification Module
+ * ExpertERP - Email Notification Module
  * Envoie des notifications par email quand un message est recu.
  * Utilise Vercel Serverless Function /api/send-email (Resend).
  * Depend de config.js
@@ -28,7 +28,7 @@
   async function notify(opts) {
     var payload = {
       to: opts.to,
-      subject: 'Nouveau message de ' + (opts.fromName || opts.fromEmail) + ' — ExpertERPHub',
+      subject: 'Nouveau message de ' + (opts.fromName || opts.fromEmail) + ' — ExpertERP',
       html: buildEmailHtml(opts)
     };
 
@@ -58,7 +58,7 @@
   function buildEmailHtml(opts) {
     return '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">' +
       '<div style="background:#1a3a5c;color:white;padding:20px;text-align:center;">' +
-      '<h2 style="margin:0;">ExpertERPHub</h2>' +
+      '<h2 style="margin:0;">ExpertERP</h2>' +
       '</div>' +
       '<div style="padding:20px;background:#f9f9f9;">' +
       '<p>Bonjour' + (opts.toName ? ' ' + opts.toName : '') + ',</p>' +
@@ -72,7 +72,7 @@
       escapeHtml(opts.fromEmail) + '</p>' +
       '</div>' +
       '<div style="padding:10px;text-align:center;color:#aaa;font-size:11px;">' +
-      'ExpertERPHub — Plateforme B2B de Staff Augmentation ERP' +
+      'ExpertERP — Plateforme B2B de Staff Augmentation ERP' +
       '</div>' +
       '</div>';
   }

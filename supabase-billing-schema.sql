@@ -1,4 +1,4 @@
--- ExpertERPHub - Billing schema (Stripe-ready)
+-- ExpertERP - Billing schema (Stripe-ready)
 -- Run in Supabase SQL Editor
 
 create extension if not exists pgcrypto;

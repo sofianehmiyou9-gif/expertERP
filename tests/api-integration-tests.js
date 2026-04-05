@@ -1,5 +1,5 @@
 /**
- * ExpertERPHub - API Integration Tests
+ * ExpertERP - API Integration Tests
  * Tests the Supabase REST API with various endpoints and scenarios
  * Run with: node tests/api-integration-tests.js
  *
@@ -127,7 +127,7 @@ function printSection(title) {
 
 async function runTests() {
   console.log(`${colors.blue}${'═'.repeat(70)}${colors.reset}`);
-  console.log(`${colors.blue}ExpertERPHub - API Integration Test Suite${colors.reset}`);
+  console.log(`${colors.blue}ExpertERP - API Integration Test Suite${colors.reset}`);
   console.log(`${colors.blue}Supabase REST API Testing${colors.reset}`);
   console.log(`${colors.blue}${'═'.repeat(70)}${colors.reset}\n`);
 
