@@ -1,8 +1,63 @@
 # Fichiers a exclure du deploiement Vercel
+# ── Backups ──
 .backup_pre_optimization/
-index.html.bak
 *.bak
+
+# ── Documents internes (pas pour prod) ──
+ARCHITECTURE_AUDIT_REPORT.md
+DELIVERABLES_SUMMARY.txt
+DONNEES_TECHNIQUES.md
+EXECUTIVE_SUMMARY.txt
+FINAL_REPORT_SUMMARY.txt
+FINDINGS_SUMMARY.txt
+INDEX_COMPLET.txt
+INDEX_PRESENTATION.txt
+PRESENTATION_NOTES.md
 PROMPT_MAINTENANCE.md
+QA_CHECKLIST.md
+QA_TEST_REPORT_ENGLISH.md
+RAPPORT_QA_MESSAGERIE.md
+README_PRESENTATION.md
+README_QA_TESTS.md
+SCREENSHOTS_INDEX.md
+START_HERE.txt
+TEST_SUMMARY.txt
+CLAUDE.md
+
+# ── Fichiers Office / PDF internes ──
+Audit-ExpertERPHub.docx
+ExpertERP.pptx
+ExpertERPHub_AcquisitionStrategy_2026.docx
+ExpertERPHub_Audit_Complet_2026-04-02.html
+ExpertERPHub_Audit_Securite.pdf
+ExpertERPHub_Audit_Semaine_2026-04-05.docx
+ExpertERPHub_ComptesTest.xlsx
+ExpertERPHub_GoLive_Roadmap.docx
+ExpertERPHub_PitchDeck_2026.pptx
+ExpertERPHub_Presentation_Entreprises_2026.pptx
+ExpertERPHub_Processus_Cartographie.html
+ExpertERPHub_VideoScript_2026.docx
+
+# ── SQL (pas besoin en prod) ──
 supabase-billing-schema.sql
 supabase-rls-policies.sql
-Audit-ExpertERP.docx
+supabase-security-fixes.sql
+seed-entreprises.sql
+seed-consultants.js
+
+# ── Scripts de generation (one-shot) ──
+generate-presentation.js
+generate-presentation.py
+
+# ── Tests ──
+tests/
+
+# ── Fichiers vides / inutiles ──
+netlify.toml
+sovereign-authority.css
+sync_test.txt
+
+# ── Dev ──
+*.log
+.DS_Store
+Thumbs.db
