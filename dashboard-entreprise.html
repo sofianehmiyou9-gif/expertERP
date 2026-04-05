@@ -1835,7 +1835,7 @@ async function loadResources() {
       'en_mission': '<span class="badge badge-approved" style="background:#dbeafe;color:#1e40af;">En mission</span>',
       'refuse': '<span class="badge badge-rejected">' + _t('dashboardCompany.kpiRejected') + '</span>'
     };
-    const statusKey = normalizeStatus(r.statut);
+    const statusKey = typeof getEffectiveStatus === 'function' ? getEffectiveStatus(r) : normalizeStatus(r.statut);
     const resourceCode = formatResourceId(r);
     const internalName = getResourceInternalName(r);
     const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
@@ -1926,9 +1926,9 @@ function renderResourceCards(resources) {
     const tjm = formatRateRange(r);
     const visibility = notes.visibility || 'b2b';
     const visLabel = visibility === 'public' ? 'Public' : 'B2B';
-    const statusKey = normalizeStatus(r.statut);
-    const statusLabels = { 'approuve': 'Publié', 'en_attente': 'En attente', 'en_mission': 'En mission', 'refuse': 'Refusé' };
-    const statusDots = { 'approuve': '#10b981', 'en_attente': '#f59e0b', 'en_mission': '#3b82f6', 'refuse': '#ef4444' };
+    const statusKey = typeof getEffectiveStatus === 'function' ? getEffectiveStatus(r) : normalizeStatus(r.statut);
+    const statusLabels = { 'approuve': 'Publié', 'en_attente': 'En attente', 'en_mission': 'En mission', 'refuse': 'Refusé', 'inactif': 'Inactif' };
+    const statusDots = { 'approuve': '#10b981', 'en_attente': '#f59e0b', 'en_mission': '#3b82f6', 'refuse': '#ef4444', 'inactif': '#9ca3af' };
     const ville = r.ville || notes.ville || '';
     const cardUrl = 'consultant.html?id=' + encodeURIComponent(r.id);
 
@@ -3186,15 +3186,33 @@ function filterConversations() {
    ═══════════════════════════════════════════════════════════════ */
 let _allLoadedResources = [];
 
-/* Change resource status (Disponible, En mission, Inactif) from dropdown in card */
+/* Change resource status (Disponible, En mission, Inactif) from dropdown in card.
+   NOTE: La colonne statut en DB n'accepte que: approuve, en_attente, refuse, en_mission.
+   "Inactif" est géré via notes_admin.inactif_par_entreprise = true + statut DB = 'en_attente'. */
 async function changeResourceStatus(selectElement) {
   const resourceId = selectElement.getAttribute('data-resource-id');
   const newStatus = selectElement.value;
   if (!resourceId || !newStatus) return;
 
   try {
-    /* Update statut in Supabase */
-    const ok = await sbUpdate('consultants', resourceId, { statut: newStatus });
+    /* Trouver la ressource pour lire ses notes actuelles */
+    const resource = _allLoadedResources.find(r => String(r.id) === String(resourceId));
+    const notes = resource ? parseNotes(resource.notes_admin) : {};
+
+    /* Mapper le statut UI vers un statut DB valide */
+    let dbStatut = newStatus;
+    if (newStatus === 'inactif') {
+      dbStatut = 'en_attente';
+      notes.inactif_par_entreprise = true;
+    } else {
+      delete notes.inactif_par_entreprise;
+    }
+
+    /* Update statut + notes_admin in Supabase */
+    const ok = await sbUpdate('consultants', resourceId, {
+      statut: dbStatut,
+      notes_admin: JSON.stringify(notes)
+    });
     if (ok) {
       /* Show brief success feedback */
       const originalStyle = selectElement.style.cssText;
@@ -3205,15 +3223,20 @@ async function changeResourceStatus(selectElement) {
       loadResources();
     } else {
       alert('Erreur lors de la mise à jour du statut.');
-      /* Reset the dropdown to previous value on error */
-      const resource = _allLoadedResources.find(r => String(r.id) === String(resourceId));
-      if (resource) selectElement.value = normalizeStatus(resource.statut);
+      if (resource) selectElement.value = getEffectiveStatus(resource);
     }
   } catch(err) {
     alert('Erreur: ' + (err.message || 'Mise à jour impossible.'));
     const resource = _allLoadedResources.find(r => String(r.id) === String(resourceId));
-    if (resource) selectElement.value = normalizeStatus(resource.statut);
+    if (resource) selectElement.value = getEffectiveStatus(resource);
   }
+}
+
+/* Retourne le statut effectif d'une ressource (tenant compte du flag inactif) */
+function getEffectiveStatus(resource) {
+  const notes = parseNotes(resource.notes_admin);
+  if (notes.inactif_par_entreprise) return 'inactif';
+  return normalizeStatus(resource.statut);
 }
 
 function openResourceEdit(resourceId) {

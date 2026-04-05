@@ -137,6 +137,7 @@
     if (basic === 'refuse') return 'refuse';
     if (basic === 'en_attente') return 'en_attente';
     if (basic === 'en_mission') return 'en_mission';
+    if (basic === 'inactif') return 'inactif';
     return basic;
   }
 
