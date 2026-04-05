@@ -5984,10 +5984,14 @@ async function loadConsultants(forceRefresh) {
   grid.innerHTML = buildSkeletonCards(8);
 
   try {
-    const data = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&order=created_at.desc');
+    /* ═══ OPTIMISATION : filtre côté serveur ═══
+       On ne récupère QUE les consultants approuvés (statut=eq.approuve)
+       → réduit la taille de la réponse et le parsing client */
+    const data = await sbSelect('consultants', 'select=' + CONSULTANT_COLS + '&statut=eq.approuve&order=created_at.desc');
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    /* ═══ OPTIMISATION : un seul parsing JSON par consultant ═══ */
     for (const c of data) {
       const notes = (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
       const created = notes.date_creation || (c.created_at ? String(c.created_at).split('T')[0] : null);
@@ -6006,28 +6010,26 @@ async function loadConsultants(forceRefresh) {
         if (e < today) computedState = 'expire';
       }
       c.admin_state = computedState;
+      /* Stocker le notes parsé directement — évite le double parse */
+      c._parsedNotes = notes;
       c.notes_admin = JSON.stringify(notes);
     }
 
-    /* ═══ STRATÉGIE VISIBILITÉ PAR STATUT ═══
-       - Seuls les consultants 'approuve' sont visibles publiquement
-       - 'en_mission' → profil masqué (consultant en cours de mission)
-       - 'en_attente' → profil masqué (en attente de validation admin)
-       - 'refuse' → profil masqué
-       - admin_state 'desactive'/'expire'/'deleted' → masqué */
-    const visible = data.filter(c => {
-      const rawStatus = String(c.statut || '').toLowerCase();
-      const isApproved = rawStatus === 'approuve' || rawStatus === 'approuvé';
-      return isApproved && c.admin_state !== 'desactive' && c.admin_state !== 'expire' && c.admin_state !== 'deleted';
-    });
-    visible.forEach((consultant) => {
-      consultant._parsedNotes = (() => { try { return JSON.parse(consultant.notes_admin || '{}'); } catch(e) { return {}; } })();
-      consultant._fullNameLower = ((consultant.prenom || '') + ' ' + (consultant.nom || '')).toLowerCase();
-      consultant._skillsLower = (Array.isArray(consultant.competences)
-        ? consultant.competences
-        : String(consultant.competences || '').split(',').map(s => s.trim()).filter(Boolean)
+    /* Filtrer les admin_state masqués (expire, desactive, deleted) */
+    const visible = data.filter(c =>
+      c.admin_state !== 'desactive' && c.admin_state !== 'expire' && c.admin_state !== 'deleted'
+    );
+
+    /* Pré-calculer les champs de recherche pour chaque consultant */
+    for (let i = 0; i < visible.length; i++) {
+      const c = visible[i];
+      c._fullNameLower = ((c.prenom || '') + ' ' + (c.nom || '')).toLowerCase();
+      c._skillsLower = (Array.isArray(c.competences)
+        ? c.competences
+        : String(c.competences || '').split(',').map(s => s.trim()).filter(Boolean)
       ).join(' ').toLowerCase();
-    });
+    }
+
     allConsultants = visible;
     _consultantsCache = { data: visible, timestamp: Date.now() };
     runConsultantsFilter();
@@ -6207,7 +6209,7 @@ function renderConsultants(list) {
   if (!list.length) { grid.innerHTML = '<div class="empty-state"><p>Aucun consultant disponible pour le moment.</p></div>'; return; }
   var _canSeeFullName = isEnterpriseSession();
   grid.innerHTML = list.map(c => {
-    const notes = (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
+    const notes = c._parsedNotes || (() => { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
     const isB2BAnonymous = notes.source === 'import_b2b';
     const _rawName = isB2BAnonymous
       ? String(notes.resource_code || 'Ressource partenaire').trim()
