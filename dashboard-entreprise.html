@@ -3354,78 +3354,104 @@ function generateAIText(field) {
 }
 
 function buildAIResume(name, titre, erps, modules, years, certifs, secteurs, langues, ville, mode) {
+  /* RÈGLE : ne jamais inventer — utiliser UNIQUEMENT les données saisies par le client */
   var parts = [];
   var displayName = name || 'Ce consultant';
 
-  /* Intro */
+  /* Intro — basé sur titre + années si renseignés */
+  var intro = displayName + ' — ' + titre;
   if (years && parseInt(years) > 0) {
-    parts.push(displayName + ' est un(e) ' + titre.toLowerCase() + ' avec ' + years + ' années d\'expérience dans le domaine des ERP.');
-  } else {
-    parts.push(displayName + ' est un(e) ' + titre.toLowerCase() + ' spécialisé(e) dans le domaine des ERP.');
+    intro += ' | ' + years + ' ans d\'expérience';
   }
+  parts.push(intro + '.');
 
-  /* Compétences */
+  /* Compétences ERP + modules — seulement si renseignés */
   if (erps || modules) {
     var skills = [];
     if (erps) skills.push(erps);
     if (modules && modules !== erps) skills.push(modules);
-    parts.push('Expert(e) en ' + skills.join(', ') + ', ' + displayName.split(' ')[0] + ' accompagne les entreprises dans leurs projets de transformation digitale avec une approche rigoureuse et orientée résultats.');
+    parts.push('Compétences : ' + skills.join(', ') + '.');
   }
 
-  /* Certifications */
+  /* Certifications — seulement si renseignées */
   if (certifs) {
-    parts.push('Certifié(e) ' + certifs + ', garantissant un haut niveau de compétence technique et fonctionnelle.');
+    parts.push('Certifications : ' + certifs + '.');
   }
 
-  /* Secteurs */
+  /* Secteurs — seulement si renseignés */
   if (secteurs) {
-    parts.push('Intervient principalement dans les secteurs ' + secteurs + '.');
+    parts.push('Secteurs d\'intervention : ' + secteurs + '.');
   }
 
-  /* Langues & localisation */
+  /* Langues, ville, mode — seulement si renseignés */
   var locParts = [];
-  if (langues) locParts.push('Maîtrise linguistique : ' + langues);
-  if (ville) locParts.push('Basé(e) à ' + ville);
-  if (mode) locParts.push('Disponible en mode ' + mode.toLowerCase());
-  if (locParts.length) parts.push(locParts.join('. ') + '.');
+  if (langues) locParts.push('Langues : ' + langues);
+  if (ville) locParts.push('Localisation : ' + ville);
+  if (mode) locParts.push('Mode de travail : ' + mode);
+  if (locParts.length) parts.push(locParts.join(' | ') + '.');
+
+  if (parts.length <= 1) {
+    parts.push('\n⚠️ Peu d\'informations disponibles. Complétez les champs du profil (compétences, certifications, secteurs, etc.) pour obtenir un résumé plus complet.');
+  }
 
   return parts.join('\n\n');
 }
 
 function buildAIExperiences(name, titre, erps, modules, years, certifs, secteurs) {
-  var displayName = name ? name.split(' ')[0] : 'Le consultant';
+  /* RÈGLE : ne jamais inventer — structurer UNIQUEMENT les données existantes */
   var lines = [];
-  var erpList = erps ? erps.split(',').map(function(e) { return e.trim(); }) : ['ERP'];
-  var secteurList = secteurs ? secteurs.split(',').map(function(s) { return s.trim(); }) : ['Services', 'Industrie'];
-  var moduleList = modules ? modules.split(',').map(function(m) { return m.trim(); }) : [];
-  var yearsNum = parseInt(years) || 5;
+  var displayName = name || 'Ce consultant';
+  var hasAnyData = false;
 
-  /* Generate 2-3 fictional but realistic experience entries */
-  var expCount = Math.min(3, Math.max(2, Math.ceil(yearsNum / 3)));
-  var currentYear = new Date().getFullYear();
-  var templates = [
-    { role: titre || 'Consultant ERP', type: 'Implémentation', task: 'Déploiement et configuration' },
-    { role: 'Consultant senior ' + erpList[0], type: 'Migration', task: 'Migration et optimisation' },
-    { role: 'Lead fonctionnel ' + erpList[0], type: 'Transformation', task: 'Pilotage de la transformation digitale' }
-  ];
+  lines.push('PROFIL PROFESSIONNEL');
+  lines.push('');
 
-  for (var i = 0; i < expCount; i++) {
-    var tpl = templates[i % templates.length];
-    var endYear = currentYear - (i * Math.ceil(yearsNum / expCount));
-    var startYear = endYear - Math.ceil(yearsNum / expCount);
-    var secteur = secteurList[i % secteurList.length];
-    var mod = moduleList.length ? moduleList[i % moduleList.length] : erpList[0];
-
-    lines.push('--- ' + tpl.role + ' (' + startYear + ' - ' + (i === 0 ? 'Présent' : endYear) + ')');
-    lines.push('Client : Grand compte secteur ' + secteur);
-    lines.push('Projet : ' + tpl.type + ' ' + erpList[0] + (mod ? ' — Module ' + mod : ''));
-    lines.push('• ' + tpl.task + ' pour une équipe de ' + (10 + i * 5) + '+ utilisateurs');
-    lines.push('• Rédaction des spécifications fonctionnelles et accompagnement au changement');
-    if (certifs && i === 0) lines.push('• Mise en place des bonnes pratiques certifiées ' + certifs);
-    lines.push('');
+  /* Rôle actuel */
+  if (titre) {
+    lines.push('Rôle : ' + titre);
+    hasAnyData = true;
   }
 
-  return lines.join('\n').trim();
+  /* Expérience */
+  if (years && parseInt(years) > 0) {
+    lines.push('Expérience : ' + years + ' ans');
+    hasAnyData = true;
+  }
+
+  /* Compétences ERP */
+  if (erps) {
+    lines.push('ERP / Compétences : ' + erps);
+    hasAnyData = true;
+  }
+
+  /* Modules spécifiques */
+  if (modules && modules !== erps) {
+    lines.push('Modules : ' + modules);
+    hasAnyData = true;
+  }
+
+  /* Certifications */
+  if (certifs) {
+    lines.push('Certifications : ' + certifs);
+    hasAnyData = true;
+  }
+
+  /* Secteurs */
+  if (secteurs) {
+    lines.push('Secteurs : ' + secteurs);
+    hasAnyData = true;
+  }
+
+  if (!hasAnyData) {
+    lines.push('');
+    lines.push('⚠️ Aucune donnée suffisante pour générer un profil. Veuillez renseigner les compétences, certifications et secteurs de cette ressource.');
+  } else {
+    lines.push('');
+    lines.push('---');
+    lines.push('ℹ️ Ce texte est basé uniquement sur les informations saisies. Vous pouvez le compléter manuellement avec les expériences spécifiques de cette ressource.');
+  }
+
+  return lines.join('\n');
 }
 
 /* ═══════════════════════════════════════════════════════════════
