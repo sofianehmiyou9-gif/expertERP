@@ -3342,10 +3342,12 @@ function generateAIText(field) {
     } else {
       generated = buildAIExperiences(fullName, titre, erps, modules, expYears, certifs, secteurs);
     }
-    textarea.value = generated;
+    var result = typeof generated === 'object' ? generated : { text: generated, warning: '' };
+    textarea.value = result.text;
     textarea.style.borderColor = 'rgba(124,58,237,.4)';
     textarea.style.boxShadow = '0 0 0 3px rgba(124,58,237,.08)';
     setTimeout(function() { textarea.style.borderColor = ''; textarea.style.boxShadow = ''; }, 1500);
+    if (result.warning) showAIToast(result.warning);
 
     btn.disabled = false;
     btn.innerHTML = '<span style="font-size:.85rem;">&#9733;</span> Générer avec IA';
@@ -3390,11 +3392,14 @@ function buildAIResume(name, titre, erps, modules, years, certifs, secteurs, lan
   if (mode) locParts.push('Mode de travail : ' + mode);
   if (locParts.length) parts.push(locParts.join(' | ') + '.');
 
+  var warning = '';
   if (parts.length <= 1) {
-    parts.push('\n⚠️ Peu d\'informations disponibles. Complétez les champs du profil (compétences, certifications, secteurs, etc.) pour obtenir un résumé plus complet.');
+    warning = 'Peu d\'informations disponibles. Complétez les champs du profil (compétences, certifications, secteurs, etc.) pour obtenir un résumé plus complet.';
+  } else {
+    warning = 'Ce texte est basé uniquement sur les informations saisies. Vous pouvez le compléter manuellement.';
   }
 
-  return parts.join('\n\n');
+  return { text: parts.join('\n\n'), warning: warning };
 }
 
 function buildAIExperiences(name, titre, erps, modules, years, certifs, secteurs) {
@@ -3442,16 +3447,25 @@ function buildAIExperiences(name, titre, erps, modules, years, certifs, secteurs
     hasAnyData = true;
   }
 
+  var warning = '';
   if (!hasAnyData) {
-    lines.push('');
-    lines.push('⚠️ Aucune donnée suffisante pour générer un profil. Veuillez renseigner les compétences, certifications et secteurs de cette ressource.');
+    warning = 'Aucune donnée suffisante pour générer un profil. Veuillez renseigner les compétences, certifications et secteurs de cette ressource.';
   } else {
-    lines.push('');
-    lines.push('---');
-    lines.push('ℹ️ Ce texte est basé uniquement sur les informations saisies. Vous pouvez le compléter manuellement avec les expériences spécifiques de cette ressource.');
+    warning = 'Ce texte est basé uniquement sur les informations saisies. Vous pouvez le compléter manuellement avec les expériences spécifiques de cette ressource.';
   }
 
-  return lines.join('\n');
+  return { text: lines.join('\n'), warning: warning };
+}
+
+function showAIToast(msg) {
+  var existing = document.getElementById('ai-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'ai-toast';
+  toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1e1b4b;color:#fff;padding:.85rem 1.5rem;border-radius:14px;font-size:.82rem;font-weight:500;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:.6rem;max-width:500px;line-height:1.4;animation:aiToastIn .3s ease;';
+  toast.innerHTML = '<span style="font-size:1.1rem;">&#9733;</span>' + msg;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.style.opacity = '0'; toast.style.transition = 'opacity .4s'; setTimeout(function() { toast.remove(); }, 400); }, 4000);
 }
 
 /* ═══════════════════════════════════════════════════════════════
