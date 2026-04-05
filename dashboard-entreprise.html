@@ -3408,57 +3408,26 @@ function buildAIResume(name, titre, erps, modules, years, certifs, secteurs, lan
 }
 
 function buildAIExperiences(name, titre, erps, modules, years, certifs, secteurs) {
-  /* RÈGLE : ne jamais inventer — structurer UNIQUEMENT les données existantes */
+  /* RÈGLE : ne jamais inventer — proposer un gabarit structuré à remplir par le client */
   var lines = [];
-  var displayName = name || 'Ce consultant';
-  var hasAnyData = false;
+  var nbExp = 1;
+  var yearsNum = parseInt(years) || 0;
+  if (yearsNum > 6) nbExp = 2;
+  if (yearsNum > 12) nbExp = 3;
 
-  lines.push('PROFIL PROFESSIONNEL');
-  lines.push('');
-
-  /* Rôle actuel */
-  if (titre) {
-    lines.push('Rôle : ' + titre);
-    hasAnyData = true;
+  for (var i = 0; i < nbExp; i++) {
+    if (i > 0) lines.push('');
+    lines.push('--- Expérience ' + (i + 1) + ' ---');
+    lines.push('Poste : ' + (i === 0 && titre ? titre : '[À compléter]'));
+    lines.push('Client / Entreprise : [À compléter]');
+    lines.push('Période : [ex: 2022 - 2024]');
+    lines.push('Secteur : ' + (secteurs ? secteurs.split(',')[Math.min(i, secteurs.split(',').length - 1)].trim() : '[À compléter]'));
+    lines.push('Missions :');
+    lines.push('• [Décrire la mission principale]');
+    lines.push('• [Décrire une réalisation clé]');
   }
 
-  /* Expérience */
-  if (years && parseInt(years) > 0) {
-    lines.push('Expérience : ' + years + ' ans');
-    hasAnyData = true;
-  }
-
-  /* Compétences ERP */
-  if (erps) {
-    lines.push('ERP / Compétences : ' + erps);
-    hasAnyData = true;
-  }
-
-  /* Modules spécifiques */
-  if (modules && modules !== erps) {
-    lines.push('Modules : ' + modules);
-    hasAnyData = true;
-  }
-
-  /* Certifications */
-  if (certifs) {
-    lines.push('Certifications : ' + certifs);
-    hasAnyData = true;
-  }
-
-  /* Secteurs */
-  if (secteurs) {
-    lines.push('Secteurs : ' + secteurs);
-    hasAnyData = true;
-  }
-
-  var warning = '';
-  if (!hasAnyData) {
-    warning = 'Aucune donnée suffisante pour générer un profil. Veuillez renseigner les compétences, certifications et secteurs de cette ressource.';
-  } else {
-    warning = 'Ce texte est basé uniquement sur les informations saisies. Vous pouvez le compléter manuellement avec les expériences spécifiques de cette ressource.';
-  }
-
+  var warning = 'Un gabarit a été généré avec ' + nbExp + ' expérience(s). Complétez les champs [À compléter] avec les vraies informations de la ressource.';
   return { text: lines.join('\n'), warning: warning };
 }
 
