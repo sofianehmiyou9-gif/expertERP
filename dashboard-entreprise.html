@@ -293,13 +293,15 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
 .quick-add-grid select:focus,.quick-add-grid input[type=text]:focus,.quick-add-grid input[type=number]:focus,.quick-add-search:focus,.team-form select:focus,.team-form input:focus,.auth-card input:focus{outline:none;box-shadow:0 0 0 3px rgba(0,88,190,.1);border-color:#0058be;}
 
 /* ═══ SEARCH FILTERS PANEL — Premium card layout ═══ */
-.search-filters-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease;}
-.search-filters-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:rgba(0,40,142,.15);}
-.search-filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;align-items:flex-end;}
+.search-filters-card{background:linear-gradient(135deg,#ffffff 0%,#f8faff 100%);border:1px solid rgba(196,197,213,.2);border-radius:20px;padding:1.5rem 1.75rem;margin-bottom:1.75rem;box-shadow:0 1px 4px rgba(0,0,0,.03);transition:all .3s ease;}
+.search-filters-card:hover{box-shadow:0 4px 16px rgba(0,40,142,.06);border-color:rgba(0,40,142,.12);}
+.search-filter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:flex-end;}
+@media(max-width:900px){.search-filter-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.search-filter-grid{grid-template-columns:1fr;}}
 .search-filter-field{display:flex;flex-direction:column;gap:.35rem;}
-.search-filter-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;font-family:var(--font-main);}
-.search-filter-input,.search-filter-select{padding:.7rem .9rem;border:1px solid rgba(196,197,213,.4);border-radius:12px;font-size:.82rem;font-family:var(--font-main);background:#ffffff;color:#191c1e;transition:all .2s ease;cursor:pointer;}
-.search-filter-input:focus,.search-filter-select:focus{outline:none;border-color:#0058be;box-shadow:0 0 0 3px rgba(0,40,142,.08);}
+.search-filter-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;font-family:var(--font-main);}
+.search-filter-input,.search-filter-select{padding:.65rem .85rem;border:1px solid rgba(196,197,213,.35);border-radius:10px;font-size:.82rem;font-family:var(--font-main);background:#ffffff;color:#191c1e;transition:all .2s ease;cursor:pointer;}
+.search-filter-input:focus,.search-filter-select:focus{outline:none;border-color:#0058be;box-shadow:0 0 0 3px rgba(0,40,142,.08);background:#fff;}
 .search-filter-actions{display:flex;gap:.75rem;margin-top:1rem;justify-content:flex-end;flex-wrap:wrap;}
 .search-filter-btn{padding:.65rem 1.2rem;border:none;border-radius:12px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:var(--font-main);white-space:nowrap;transition:all .2s ease;}
 .search-filter-btn-primary{background:linear-gradient(135deg,#00288e,#0058be);color:#fff;}
@@ -307,30 +309,36 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
 .search-filter-btn-secondary{background:none;border:1px solid rgba(196,197,213,.4);color:#6b7280;}
 .search-filter-btn-secondary:hover{background:rgba(196,197,213,.1);border-color:rgba(196,197,213,.6);}
 
-/* ═══ SEARCH RESULT CARDS — Horizontal list layout ═══ */
-.search-results-container{display:flex;flex-direction:column;gap:.75rem;}
-.search-result-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1.25rem;display:flex;align-items:center;gap:1.25rem;transition:all .2s ease;position:relative;}
-.search-result-card:hover{box-shadow:0 4px 16px rgba(0,40,142,.12);border-color:rgba(0,40,142,.2);transform:translateY(-1px);}
-.search-result-avatar{width:48px;height:48px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid rgba(196,197,213,.3);}
-.search-result-avatar-fallback{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#00288e,#0058be);}
-.search-result-info{flex:1;min-width:0;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;}
-.search-result-name-role{display:flex;flex-direction:column;gap:.2rem;min-width:0;}
-.search-result-name{font-weight:700;font-size:.92rem;color:#191c1e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.search-result-role{font-size:.8rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.search-result-badges{display:flex;gap:.5rem;flex-wrap:wrap;}
-.search-result-badge{font-size:.7rem;padding:.35rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;border:1px solid rgba(0,40,142,.15);white-space:nowrap;}
-.search-result-badge.dispo-immediate{background:rgba(5,150,105,.08);color:#059669;border-color:rgba(5,150,105,.2);}
-.search-result-badge.dispo-pending{background:rgba(251,146,60,.08);color:#fb923c;border-color:rgba(251,146,60,.2);}
-.search-result-details{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}
-.search-result-meta-item{display:flex;flex-direction:column;gap:.2rem;align-items:center;text-align:center;}
-.search-result-meta-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;}
-.search-result-meta-value{font-size:.82rem;font-weight:600;color:#191c1e;}
-.search-result-actions{display:flex;gap:.65rem;flex-shrink:0;}
-.search-result-star-btn{width:36px;height:36px;border:1px solid rgba(245,158,11,.3);background:#fff;border-radius:10px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
-.search-result-star-btn.favorited{background:rgba(245,158,11,.15);}
-.search-result-star-btn:hover{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.5);}
-.search-result-contact-btn{padding:.7rem 1.2rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0;}
-.search-result-contact-btn:hover{opacity:.92;transform:translateY(-1px);}
+/* ═══ SEARCH RESULT CARDS — Premium recruiter layout ═══ */
+.search-results-container{display:flex;flex-direction:column;gap:1rem;}
+.search-result-card{background:#ffffff;border:1px solid rgba(196,197,213,.18);border-radius:20px;padding:1.5rem 1.75rem;display:grid;grid-template-columns:56px 1fr auto;gap:1.25rem;align-items:start;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.search-result-card:hover{box-shadow:0 8px 32px rgba(0,40,142,.1),0 2px 8px rgba(0,0,0,.04);border-color:rgba(0,40,142,.15);transform:translateY(-2px);}
+.search-result-card::before{content:'';position:absolute;left:0;top:20px;bottom:20px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#00288e,#0058be);opacity:0;transition:opacity .25s;}
+.search-result-card:hover::before{opacity:1;}
+.search-result-avatar{width:56px;height:56px;border-radius:14px;flex-shrink:0;object-fit:cover;border:2px solid rgba(196,197,213,.2);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.search-result-avatar-fallback{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;letter-spacing:.02em;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#00288e 0%,#0058be 50%,#3b82f6 100%);box-shadow:0 2px 8px rgba(0,40,142,.2);}
+.search-result-body{display:flex;flex-direction:column;gap:.65rem;min-width:0;}
+.search-result-header{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.search-result-name{font-weight:700;font-size:1rem;color:#191c1e;line-height:1.3;letter-spacing:-.01em;}
+.search-result-role{font-size:.82rem;color:#6b7280;line-height:1.4;margin-top:-.15rem;}
+.search-result-meta-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.search-result-chip{font-size:.68rem;padding:.3rem .65rem;border-radius:6px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:.3rem;letter-spacing:.01em;}
+.search-result-chip.chip-erp{background:rgba(0,40,142,.06);color:#00288e;border:1px solid rgba(0,40,142,.1);}
+.search-result-chip.chip-ville{background:rgba(107,114,128,.06);color:#4b5563;border:1px solid rgba(107,114,128,.1);}
+.search-result-chip.chip-dispo-green{background:rgba(5,150,105,.07);color:#047857;border:1px solid rgba(5,150,105,.15);}
+.search-result-chip.chip-dispo-orange{background:rgba(234,88,12,.06);color:#c2410c;border:1px solid rgba(234,88,12,.12);}
+.search-result-chip.chip-exp{background:rgba(124,58,237,.06);color:#6d28d9;border:1px solid rgba(124,58,237,.1);}
+.search-result-chip.chip-tarif{background:rgba(15,23,42,.04);color:#334155;border:1px solid rgba(15,23,42,.08);font-weight:700;font-size:.72rem;}
+.search-result-sep{width:1px;height:16px;background:rgba(196,197,213,.3);flex-shrink:0;margin:0 .15rem;}
+.search-result-actions{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;padding-top:.15rem;}
+.search-result-star-btn{width:34px;height:34px;border:1px solid rgba(196,197,213,.25);background:#fff;border-radius:10px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;color:#d1d5db;}
+.search-result-star-btn.favorited{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:#f59e0b;}
+.search-result-star-btn:hover{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.4);color:#f59e0b;}
+.search-result-contact-btn{padding:.6rem 1.1rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.04em;flex-shrink:0;box-shadow:0 2px 6px rgba(0,40,142,.2);}
+.search-result-contact-btn:hover{box-shadow:0 4px 12px rgba(0,40,142,.3);transform:translateY(-1px);}
+.search-result-view-btn{padding:.5rem .85rem;background:transparent;color:#00288e;border:1px solid rgba(0,40,142,.18);border-radius:10px;font-size:.7rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;}
+.search-result-view-btn:hover{background:rgba(0,40,142,.04);border-color:rgba(0,40,142,.3);}
+@media(max-width:768px){.search-result-card{grid-template-columns:1fr;gap:.75rem;padding:1.25rem;}.search-result-actions{flex-direction:row;align-items:center;}}
 
 /* ═══ MESSAGING TAB — 2-column layout ═══ */
 .messages-container{display:grid;grid-template-columns:40% 60%;gap:1.5rem;height:calc(100vh - 280px);min-height:500px;}
@@ -1095,15 +1103,24 @@ input:focus, textarea:focus, select:focus {
 
     <!-- ═══ Rechercher des consultants ═══ -->
     <div class="tab-pane" id="search-tab">
-      <div class="section-title">Rechercher des consultants</div>
-      <div class="section-sub">Trouvez les experts ERP disponibles sur la plateforme.</div>
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-title" style="display:flex;align-items:center;gap:.6rem;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(0,40,142,.08),rgba(0,88,190,.04));"><span style="font-size:1.1rem;">&#128269;</span></span>
+          Rechercher des consultants
+        </div>
+        <div class="section-sub">Trouvez les experts ERP disponibles sur la plateforme et ajoutez-les a vos favoris.</div>
+      </div>
 
       <!-- Filtres Panel (Premium Card Layout) -->
       <div class="search-filters-card">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;">
+          <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#00288e;">Filtres de recherche</span>
+          <span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(0,40,142,.12),transparent);"></span>
+        </div>
         <div class="search-filter-grid">
           <div class="search-filter-field">
-            <label class="search-filter-label">Mot-clé</label>
-            <input id="search-keyword" type="text" class="search-filter-input" placeholder="Nom, compétence..." onkeydown="if(event.key==='Enter')searchConsultants()">
+            <label class="search-filter-label">Mot-cle</label>
+            <input id="search-keyword" type="text" class="search-filter-input" placeholder="Nom, competence..." onkeydown="if(event.key==='Enter')searchConsultants()">
           </div>
           <div class="search-filter-field">
             <label class="search-filter-label">ERP</label>
@@ -1114,19 +1131,19 @@ input:focus, textarea:focus, select:focus {
             </select>
           </div>
           <div class="search-filter-field">
-            <label class="search-filter-label">Rôle</label>
+            <label class="search-filter-label">Role</label>
             <select id="search-role" class="search-filter-select">
               <option value="">Tous</option>
               <option>Consultant fonctionnel</option><option>Consultant technique</option>
               <option>Chef de projet / PM</option><option>Architecte solution</option>
-              <option>PMO</option><option>Expert métier</option><option>Analyste</option>
+              <option>PMO</option><option>Expert metier</option><option>Analyste</option>
             </select>
           </div>
           <div class="search-filter-field">
-            <label class="search-filter-label">Disponibilité</label>
+            <label class="search-filter-label">Disponibilite</label>
             <select id="search-dispo" class="search-filter-select">
               <option value="">Toutes</option>
-              <option>Immédiat</option><option>Sous 15 jours</option><option>Sous 1 mois</option>
+              <option>Immediat</option><option>Sous 15 jours</option><option>Sous 1 mois</option>
             </select>
           </div>
           <div class="search-filter-field">
@@ -1135,24 +1152,26 @@ input:focus, textarea:focus, select:focus {
           </div>
           <div class="search-filter-field">
             <label class="search-filter-label">Ville</label>
-            <input id="search-ville" type="text" class="search-filter-input" placeholder="ex: Montréal">
+            <input id="search-ville" type="text" class="search-filter-input" placeholder="ex: Montreal">
           </div>
         </div>
         <div class="search-filter-actions">
-          <button onclick="searchConsultants()" class="search-filter-btn search-filter-btn-primary">Rechercher</button>
-          <button onclick="resetSearchFilters()" class="search-filter-btn search-filter-btn-secondary">Réinitialiser</button>
+          <button onclick="resetSearchFilters()" class="search-filter-btn search-filter-btn-secondary">Reinitialiser</button>
+          <button onclick="searchConsultants()" class="search-filter-btn search-filter-btn-primary" style="padding:.7rem 2rem;box-shadow:0 2px 8px rgba(0,40,142,.18);">
+            Rechercher
+          </button>
         </div>
       </div>
 
-      <!-- Résultats (Horizontal List Layout) -->
-      <div id="search-count" style="font-size:.78rem;color:#6b7280;margin-bottom:1rem;display:none;"></div>
+      <!-- Resultats -->
+      <div id="search-count" style="font-size:.8rem;color:#444653;margin-bottom:.75rem;display:none;font-weight:600;"></div>
       <div id="search-results" class="search-results-container">
         <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>
       </div>
-      <div id="search-pagination" style="display:none;margin-top:1.25rem;display:none;justify-content:center;align-items:center;gap:.75rem;">
-        <button id="search-prev" onclick="searchChangePage(-1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">← Précédent</button>
-        <span id="search-page-info" style="font-size:.8rem;color:#6b7280;font-weight:500;"></span>
-        <button id="search-next" onclick="searchChangePage(1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">Suivant →</button>
+      <div id="search-pagination" style="display:none;margin-top:1.5rem;justify-content:center;align-items:center;gap:1rem;">
+        <button id="search-prev" onclick="searchChangePage(-1)" style="padding:.55rem 1.1rem;border:1px solid rgba(0,40,142,.15);background:#fff;color:#00288e;border-radius:10px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.04);">&#8592; Precedent</button>
+        <span id="search-page-info" style="font-size:.78rem;color:#444653;font-weight:600;background:rgba(0,40,142,.04);padding:.4rem .9rem;border-radius:8px;"></span>
+        <button id="search-next" onclick="searchChangePage(1)" style="padding:.55rem 1.1rem;border:1px solid rgba(0,40,142,.15);background:#fff;color:#00288e;border-radius:10px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.04);">Suivant &#8594;</button>
       </div>
     </div>
 
@@ -1427,13 +1446,23 @@ input:focus, textarea:focus, select:focus {
 
       <!-- Résumé professionnel -->
       <div>
-        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Résumé professionnel</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
+          <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;">Résumé professionnel</label>
+          <button type="button" onclick="generateAIText('resume')" id="ai-gen-resume-btn" style="font-size:.68rem;font-weight:600;color:#6d28d9;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.15);border-radius:8px;padding:.3rem .7rem;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;transition:all .2s;">
+            <span style="font-size:.85rem;">&#9733;</span> Générer avec IA
+          </button>
+        </div>
         <textarea id="edit-resume" rows="4" placeholder="Résumé visible sur le profil public..." style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.85rem;font-family:var(--font-main);resize:vertical;line-height:1.6;"></textarea>
       </div>
 
       <!-- Expériences professionnelles -->
       <div>
-        <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;display:block;margin-bottom:.35rem;">Expériences professionnelles</label>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
+          <label style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#444653;">Expériences professionnelles</label>
+          <button type="button" onclick="generateAIText('experiences')" id="ai-gen-exp-btn" style="font-size:.68rem;font-weight:600;color:#6d28d9;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.15);border-radius:8px;padding:.3rem .7rem;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;transition:all .2s;">
+            <span style="font-size:.85rem;">&#9733;</span> Générer avec IA
+          </button>
+        </div>
         <textarea id="edit-experiences" rows="5" placeholder="Décrivez les expériences clés de cette ressource..." style="width:100%;padding:.7rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.85rem;font-family:var(--font-main);resize:vertical;line-height:1.6;"></textarea>
       </div>
 
@@ -3264,6 +3293,142 @@ async function saveResourceEdit() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   GÉNÉRATION DE TEXTE IA — Résumé / Expériences depuis expertise
+   ═══════════════════════════════════════════════════════════════ */
+function generateAIText(field) {
+  var resourceId = document.getElementById('edit-resource-id').value;
+  if (!resourceId) { alert('Aucune ressource sélectionnée.'); return; }
+
+  var r = _allLoadedResources.find(function(x) { return String(x.id) === String(resourceId); });
+  if (!r) { alert('Ressource introuvable.'); return; }
+
+  var notes = parseNotes(r.notes_admin);
+  var titre = document.getElementById('edit-titre').value.trim() || r.titre || 'Consultant ERP';
+  var erps = Array.isArray(r.competences) ? r.competences.join(', ') : '';
+  var expYears = document.getElementById('edit-experience-years').value || notes.experience_years || notes.annees_exp || '';
+  var ville = notes.ville || '';
+  var langues = notes.langues || '';
+  var secteurs = Array.isArray(notes.secteurs) ? notes.secteurs.join(', ') : (notes.secteurs || '');
+  var certifs = Array.isArray(notes.certifications) ? notes.certifications.join(', ') : (notes.certifications || '');
+  var modules = Array.isArray(notes.erp_modules) ? notes.erp_modules.join(', ') : (notes.erp_modules || '');
+  var modeTravail = notes.mode_travail || '';
+  var fullName = ((r.prenom || '') + ' ' + (r.nom || '')).trim();
+
+  var btn = document.getElementById(field === 'resume' ? 'ai-gen-resume-btn' : 'ai-gen-exp-btn');
+  var textarea = document.getElementById(field === 'resume' ? 'edit-resume' : 'edit-experiences');
+
+  /* Build context string */
+  var context = 'Profil: ' + titre;
+  if (fullName) context += ' | Nom: ' + fullName;
+  if (erps) context += ' | ERP/Compétences: ' + erps;
+  if (modules) context += ' | Modules: ' + modules;
+  if (expYears) context += ' | Expérience: ' + expYears + ' ans';
+  if (certifs) context += ' | Certifications: ' + certifs;
+  if (secteurs) context += ' | Secteurs: ' + secteurs;
+  if (langues) context += ' | Langues: ' + langues;
+  if (ville) context += ' | Ville: ' + ville;
+  if (modeTravail) context += ' | Mode: ' + modeTravail;
+
+  /* Disable button during generation */
+  btn.disabled = true;
+  btn.innerHTML = '<span style="font-size:.85rem;">&#8987;</span> Génération...';
+  btn.style.opacity = '.6';
+
+  /* Generate locally (template-based, no external API needed) */
+  setTimeout(function() {
+    var generated = '';
+    if (field === 'resume') {
+      generated = buildAIResume(fullName, titre, erps, modules, expYears, certifs, secteurs, langues, ville, modeTravail);
+    } else {
+      generated = buildAIExperiences(fullName, titre, erps, modules, expYears, certifs, secteurs);
+    }
+    textarea.value = generated;
+    textarea.style.borderColor = 'rgba(124,58,237,.4)';
+    textarea.style.boxShadow = '0 0 0 3px rgba(124,58,237,.08)';
+    setTimeout(function() { textarea.style.borderColor = ''; textarea.style.boxShadow = ''; }, 1500);
+
+    btn.disabled = false;
+    btn.innerHTML = '<span style="font-size:.85rem;">&#9733;</span> Générer avec IA';
+    btn.style.opacity = '1';
+  }, 600);
+}
+
+function buildAIResume(name, titre, erps, modules, years, certifs, secteurs, langues, ville, mode) {
+  var parts = [];
+  var displayName = name || 'Ce consultant';
+
+  /* Intro */
+  if (years && parseInt(years) > 0) {
+    parts.push(displayName + ' est un(e) ' + titre.toLowerCase() + ' avec ' + years + ' années d\'expérience dans le domaine des ERP.');
+  } else {
+    parts.push(displayName + ' est un(e) ' + titre.toLowerCase() + ' spécialisé(e) dans le domaine des ERP.');
+  }
+
+  /* Compétences */
+  if (erps || modules) {
+    var skills = [];
+    if (erps) skills.push(erps);
+    if (modules && modules !== erps) skills.push(modules);
+    parts.push('Expert(e) en ' + skills.join(', ') + ', ' + displayName.split(' ')[0] + ' accompagne les entreprises dans leurs projets de transformation digitale avec une approche rigoureuse et orientée résultats.');
+  }
+
+  /* Certifications */
+  if (certifs) {
+    parts.push('Certifié(e) ' + certifs + ', garantissant un haut niveau de compétence technique et fonctionnelle.');
+  }
+
+  /* Secteurs */
+  if (secteurs) {
+    parts.push('Intervient principalement dans les secteurs ' + secteurs + '.');
+  }
+
+  /* Langues & localisation */
+  var locParts = [];
+  if (langues) locParts.push('Maîtrise linguistique : ' + langues);
+  if (ville) locParts.push('Basé(e) à ' + ville);
+  if (mode) locParts.push('Disponible en mode ' + mode.toLowerCase());
+  if (locParts.length) parts.push(locParts.join('. ') + '.');
+
+  return parts.join('\n\n');
+}
+
+function buildAIExperiences(name, titre, erps, modules, years, certifs, secteurs) {
+  var displayName = name ? name.split(' ')[0] : 'Le consultant';
+  var lines = [];
+  var erpList = erps ? erps.split(',').map(function(e) { return e.trim(); }) : ['ERP'];
+  var secteurList = secteurs ? secteurs.split(',').map(function(s) { return s.trim(); }) : ['Services', 'Industrie'];
+  var moduleList = modules ? modules.split(',').map(function(m) { return m.trim(); }) : [];
+  var yearsNum = parseInt(years) || 5;
+
+  /* Generate 2-3 fictional but realistic experience entries */
+  var expCount = Math.min(3, Math.max(2, Math.ceil(yearsNum / 3)));
+  var currentYear = new Date().getFullYear();
+  var templates = [
+    { role: titre || 'Consultant ERP', type: 'Implémentation', task: 'Déploiement et configuration' },
+    { role: 'Consultant senior ' + erpList[0], type: 'Migration', task: 'Migration et optimisation' },
+    { role: 'Lead fonctionnel ' + erpList[0], type: 'Transformation', task: 'Pilotage de la transformation digitale' }
+  ];
+
+  for (var i = 0; i < expCount; i++) {
+    var tpl = templates[i % templates.length];
+    var endYear = currentYear - (i * Math.ceil(yearsNum / expCount));
+    var startYear = endYear - Math.ceil(yearsNum / expCount);
+    var secteur = secteurList[i % secteurList.length];
+    var mod = moduleList.length ? moduleList[i % moduleList.length] : erpList[0];
+
+    lines.push('--- ' + tpl.role + ' (' + startYear + ' - ' + (i === 0 ? 'Présent' : endYear) + ')');
+    lines.push('Client : Grand compte secteur ' + secteur);
+    lines.push('Projet : ' + tpl.type + ' ' + erpList[0] + (mod ? ' — Module ' + mod : ''));
+    lines.push('• ' + tpl.task + ' pour une équipe de ' + (10 + i * 5) + '+ utilisateurs');
+    lines.push('• Rédaction des spécifications fonctionnelles et accompagnement au changement');
+    if (certifs && i === 0) lines.push('• Mise en place des bonnes pratiques certifiées ' + certifs);
+    lines.push('');
+  }
+
+  return lines.join('\n').trim();
+}
+
+/* ═══════════════════════════════════════════════════════════════
    RECHERCHE DE CONSULTANTS — Filtres ERP/rôle/dispo/TJM/ville
    ═══════════════════════════════════════════════════════════════ */
 let _searchCache = [];
@@ -3383,10 +3548,13 @@ function renderSearchPage() {
     const notes = (function() { try { return JSON.parse(c.notes_admin || '{}'); } catch(e) { return {}; } })();
     const fullName = ((c.prenom || '') + ' ' + (c.nom || '')).trim() || 'Consultant ERP';
     const photo = notes.photo || notes.photo_url || notes.avatar || '';
-    const erps = Array.isArray(c.competences) ? c.competences.slice(0, 3).join(', ') : '—';
-    const tjm = c.tjm_min ? (c.tjm_min + ' $/j') : '—';
-    const dispo = notes.disponibilite || c.disponibilite || '—';
-    const ville = notes.ville || '—';
+    const erps = Array.isArray(c.competences) ? c.competences.slice(0, 3) : [];
+    const tjmMin = c.tjm_min || 0;
+    const tjmMax = c.tjm_max || 0;
+    const tjmText = tjmMin && tjmMax ? (tjmMin + ' – ' + tjmMax + ' $/j') : (tjmMin ? (tjmMin + ' $/j') : '');
+    const dispo = notes.disponibilite || c.disponibilite || '';
+    const ville = notes.ville || '';
+    const expYears = notes.experience_years || notes.annees_exp || c.experience_annees || '';
     const initials = fullName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
 
     var avatarHtml = photo
@@ -3395,34 +3563,30 @@ function renderSearchPage() {
       : '<div class="search-result-avatar-fallback">' + initials + '</div>';
 
     const consultantEmail = c.email || c.consultant_email || '';
-    const dispoIsGreen = (dispo.toLowerCase().includes('immédiat') || dispo.toLowerCase().includes('immediate'));
-    const dispoBadgeClass = dispoIsGreen ? 'dispo-immediate' : 'dispo-pending';
+    const dispoIsGreen = dispo && (dispo.toLowerCase().includes('immédiat') || dispo.toLowerCase().includes('immediate'));
+    const dispoChipClass = dispoIsGreen ? 'chip-dispo-green' : 'chip-dispo-orange';
+
+    /* Build chips row */
+    var chipsHtml = '';
+    if (erps.length) chipsHtml += erps.map(function(e) { return '<span class="search-result-chip chip-erp">' + safe(e) + '</span>'; }).join('');
+    if (dispo) { if (chipsHtml) chipsHtml += '<span class="search-result-sep"></span>'; chipsHtml += '<span class="search-result-chip ' + dispoChipClass + '">' + safe(dispo) + '</span>'; }
+    if (ville) { if (chipsHtml) chipsHtml += '<span class="search-result-sep"></span>'; chipsHtml += '<span class="search-result-chip chip-ville">' + safe(ville) + '</span>'; }
+    if (expYears) { if (chipsHtml) chipsHtml += '<span class="search-result-sep"></span>'; chipsHtml += '<span class="search-result-chip chip-exp">' + safe(expYears) + ' ans</span>'; }
+    if (tjmText) { if (chipsHtml) chipsHtml += '<span class="search-result-sep"></span>'; chipsHtml += '<span class="search-result-chip chip-tarif">' + safe(tjmText) + '</span>'; }
 
     return '<div class="search-result-card">'
-      + '<div class="search-result-info">'
+      + avatarHtml
+      + '<div class="search-result-body">'
         + '<div>'
-          + avatarHtml
-        + '</div>'
-        + '<div class="search-result-name-role">'
           + '<div class="search-result-name">' + safe(fullName) + '</div>'
           + '<div class="search-result-role">' + safe(c.titre || 'Consultant ERP') + '</div>'
         + '</div>'
-        + '<div class="search-result-badges">'
-          + (erps !== '—' ? '<span class="search-result-badge">ERP: ' + safe(erps) + '</span>' : '')
-          + '<span class="search-result-badge ' + dispoBadgeClass + '">' + safe(dispo) + '</span>'
-          + (ville !== '—' ? '<span class="search-result-badge">' + safe(ville) + '</span>' : '')
-        + '</div>'
-        + '<div class="search-result-details">'
-          + '<div class="search-result-meta-item">'
-            + '<div class="search-result-meta-label">Tarif</div>'
-            + '<div class="search-result-meta-value">' + safe(tjm) + '</div>'
-          + '</div>'
-        + '</div>'
+        + '<div class="search-result-meta-row">' + chipsHtml + '</div>'
       + '</div>'
       + '<div class="search-result-actions">'
-        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
+        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps.join(', ')) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
         + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" class="search-result-contact-btn">Contacter</button>'
-        + '<a href="/consultant.html?id=' + safe(c.id) + '" target="_blank" class="search-result-contact-btn" style="padding:.7rem .85rem;font-size:.7rem;">Voir →</a>'
+        + '<a href="/consultant.html?id=' + safe(c.id) + '" target="_blank" class="search-result-view-btn">Profil <span style="font-size:.8em;">&#8599;</span></a>'
       + '</div>'
     + '</div>';
   }).join('');
