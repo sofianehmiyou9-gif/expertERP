@@ -3317,17 +3317,22 @@ function generateAIText(field) {
   var btn = document.getElementById(field === 'resume' ? 'ai-gen-resume-btn' : 'ai-gen-exp-btn');
   var textarea = document.getElementById(field === 'resume' ? 'edit-resume' : 'edit-experiences');
 
-  /* Build context string */
-  var context = 'Profil: ' + titre;
-  if (fullName) context += ' | Nom: ' + fullName;
-  if (erps) context += ' | ERP/Compétences: ' + erps;
-  if (modules) context += ' | Modules: ' + modules;
-  if (expYears) context += ' | Expérience: ' + expYears + ' ans';
-  if (certifs) context += ' | Certifications: ' + certifs;
-  if (secteurs) context += ' | Secteurs: ' + secteurs;
-  if (langues) context += ' | Langues: ' + langues;
-  if (ville) context += ' | Ville: ' + ville;
-  if (modeTravail) context += ' | Mode: ' + modeTravail;
+  /* ── Vérification : assez de données pour générer ? ── */
+  var filledFields = 0;
+  var missingFields = [];
+  if (expYears && parseInt(expYears) > 0) { filledFields++; } else { missingFields.push('Années d\'expérience'); }
+  if (erps) { filledFields++; } else { missingFields.push('Compétences ERP'); }
+  if (certifs) { filledFields++; } else { missingFields.push('Certifications'); }
+  if (secteurs) { filledFields++; } else { missingFields.push('Secteurs'); }
+  if (modules) { filledFields++; } else { missingFields.push('Modules ERP'); }
+  if (langues) { filledFields++; }
+  if (ville) { filledFields++; }
+
+  /* Minimum 3 champs remplis pour générer */
+  if (filledFields < 3) {
+    showAIToast('Informations insuffisantes pour générer. Veuillez d\'abord compléter : ' + missingFields.slice(0, 3).join(', ') + '.');
+    return;
+  }
 
   /* Disable button during generation */
   btn.disabled = true;
