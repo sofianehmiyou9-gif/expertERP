@@ -228,6 +228,9 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
 .resource-card-status{display:flex;align-items:center;gap:.35rem;flex-shrink:0;}
 .rc-status-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:600;color:#374151;padding:.2rem .55rem;border-radius:999px;background:rgba(0,0,0,.04);white-space:nowrap;}
 .rc-status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--dot,#9ca3af);flex-shrink:0;}
+.rc-status-dropdown{padding:.4rem .7rem;border:1px solid rgba(196,197,213,.4);border-radius:10px;font-size:.76rem;font-weight:600;background:#ffffff;color:#191c1e;cursor:pointer;transition:all .2s ease;font-family:var(--font-main);}
+.rc-status-dropdown:focus{outline:none;border-color:#0058be;box-shadow:0 0 0 3px rgba(0,40,142,.08);}
+.rc-status-dropdown:hover{border-color:rgba(0,88,190,.3);background:rgba(0,40,142,.02);}
 .rc-vis-pill{font-size:.52rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .4rem;border-radius:999px;white-space:nowrap;}
 .rc-vis-public{background:rgba(5,150,105,.08);color:#059669;border:1px solid rgba(5,150,105,.15);}
 .rc-vis-b2b{background:rgba(0,88,190,.06);color:#0058be;border:1px solid rgba(0,88,190,.12);}
@@ -288,6 +291,46 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
   border-radius:14px;
 }
 .quick-add-grid select:focus,.quick-add-grid input[type=text]:focus,.quick-add-grid input[type=number]:focus,.quick-add-search:focus,.team-form select:focus,.team-form input:focus,.auth-card input:focus{outline:none;box-shadow:0 0 0 3px rgba(0,88,190,.1);border-color:#0058be;}
+
+/* ═══ SEARCH FILTERS PANEL — Premium card layout ═══ */
+.search-filters-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease;}
+.search-filters-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);border-color:rgba(0,40,142,.15);}
+.search-filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;align-items:flex-end;}
+.search-filter-field{display:flex;flex-direction:column;gap:.35rem;}
+.search-filter-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;font-family:var(--font-main);}
+.search-filter-input,.search-filter-select{padding:.7rem .9rem;border:1px solid rgba(196,197,213,.4);border-radius:12px;font-size:.82rem;font-family:var(--font-main);background:#ffffff;color:#191c1e;transition:all .2s ease;cursor:pointer;}
+.search-filter-input:focus,.search-filter-select:focus{outline:none;border-color:#0058be;box-shadow:0 0 0 3px rgba(0,40,142,.08);}
+.search-filter-actions{display:flex;gap:.75rem;margin-top:1rem;justify-content:flex-end;flex-wrap:wrap;}
+.search-filter-btn{padding:.65rem 1.2rem;border:none;border-radius:12px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:var(--font-main);white-space:nowrap;transition:all .2s ease;}
+.search-filter-btn-primary{background:linear-gradient(135deg,#00288e,#0058be);color:#fff;}
+.search-filter-btn-primary:hover{opacity:.92;transform:translateY(-1px);}
+.search-filter-btn-secondary{background:none;border:1px solid rgba(196,197,213,.4);color:#6b7280;}
+.search-filter-btn-secondary:hover{background:rgba(196,197,213,.1);border-color:rgba(196,197,213,.6);}
+
+/* ═══ SEARCH RESULT CARDS — Horizontal list layout ═══ */
+.search-results-container{display:flex;flex-direction:column;gap:.75rem;}
+.search-result-card{background:#ffffff;border:1px solid rgba(196,197,213,.3);border-radius:16px;padding:1.25rem;display:flex;align-items:center;gap:1.25rem;transition:all .2s ease;position:relative;}
+.search-result-card:hover{box-shadow:0 4px 16px rgba(0,40,142,.12);border-color:rgba(0,40,142,.2);transform:translateY(-1px);}
+.search-result-avatar{width:48px;height:48px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid rgba(196,197,213,.3);}
+.search-result-avatar-fallback{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#00288e,#0058be);}
+.search-result-info{flex:1;min-width:0;display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;}
+.search-result-name-role{display:flex;flex-direction:column;gap:.2rem;min-width:0;}
+.search-result-name{font-weight:700;font-size:.92rem;color:#191c1e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.search-result-role{font-size:.8rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.search-result-badges{display:flex;gap:.5rem;flex-wrap:wrap;}
+.search-result-badge{font-size:.7rem;padding:.35rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;border:1px solid rgba(0,40,142,.15);white-space:nowrap;}
+.search-result-badge.dispo-immediate{background:rgba(5,150,105,.08);color:#059669;border-color:rgba(5,150,105,.2);}
+.search-result-badge.dispo-pending{background:rgba(251,146,60,.08);color:#fb923c;border-color:rgba(251,146,60,.2);}
+.search-result-details{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}
+.search-result-meta-item{display:flex;flex-direction:column;gap:.2rem;align-items:center;text-align:center;}
+.search-result-meta-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9ca3af;}
+.search-result-meta-value{font-size:.82rem;font-weight:600;color:#191c1e;}
+.search-result-actions{display:flex;gap:.65rem;flex-shrink:0;}
+.search-result-star-btn{width:36px;height:36px;border:1px solid rgba(245,158,11,.3);background:#fff;border-radius:10px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.search-result-star-btn.favorited{background:rgba(245,158,11,.15);}
+.search-result-star-btn:hover{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.5);}
+.search-result-contact-btn{padding:.7rem 1.2rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0;}
+.search-result-contact-btn:hover{opacity:.92;transform:translateY(-1px);}
 
 /* ═══ MESSAGING TAB — 2-column layout ═══ */
 .messages-container{display:grid;grid-template-columns:40% 60%;gap:1.5rem;height:calc(100vh - 280px);min-height:500px;}
@@ -1055,52 +1098,56 @@ input:focus, textarea:focus, select:focus {
       <div class="section-title">Rechercher des consultants</div>
       <div class="section-sub">Trouvez les experts ERP disponibles sur la plateforme.</div>
 
-      <!-- Filtres -->
-      <div style="display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:flex-end;">
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Mot-clé</label>
-          <input id="search-keyword" type="text" placeholder="Nom, compétence..." style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:160px;" onkeydown="if(event.key==='Enter')searchConsultants()">
+      <!-- Filtres Panel (Premium Card Layout) -->
+      <div class="search-filters-card">
+        <div class="search-filter-grid">
+          <div class="search-filter-field">
+            <label class="search-filter-label">Mot-clé</label>
+            <input id="search-keyword" type="text" class="search-filter-input" placeholder="Nom, compétence..." onkeydown="if(event.key==='Enter')searchConsultants()">
+          </div>
+          <div class="search-filter-field">
+            <label class="search-filter-label">ERP</label>
+            <select id="search-erp" class="search-filter-select">
+              <option value="">Tous</option>
+              <option>SAP</option><option>Oracle</option><option>Microsoft Dynamics</option>
+              <option>Workday</option><option>Salesforce</option><option>ServiceNow</option>
+            </select>
+          </div>
+          <div class="search-filter-field">
+            <label class="search-filter-label">Rôle</label>
+            <select id="search-role" class="search-filter-select">
+              <option value="">Tous</option>
+              <option>Consultant fonctionnel</option><option>Consultant technique</option>
+              <option>Chef de projet / PM</option><option>Architecte solution</option>
+              <option>PMO</option><option>Expert métier</option><option>Analyste</option>
+            </select>
+          </div>
+          <div class="search-filter-field">
+            <label class="search-filter-label">Disponibilité</label>
+            <select id="search-dispo" class="search-filter-select">
+              <option value="">Toutes</option>
+              <option>Immédiat</option><option>Sous 15 jours</option><option>Sous 1 mois</option>
+            </select>
+          </div>
+          <div class="search-filter-field">
+            <label class="search-filter-label">Tarif max ($)</label>
+            <input id="search-tjm" type="number" class="search-filter-input" placeholder="ex: 1200">
+          </div>
+          <div class="search-filter-field">
+            <label class="search-filter-label">Ville</label>
+            <input id="search-ville" type="text" class="search-filter-input" placeholder="ex: Montréal">
+          </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">ERP</label>
-          <select id="search-erp" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:140px;">
-            <option value="">Tous</option>
-            <option>SAP</option><option>Oracle</option><option>Microsoft Dynamics</option>
-            <option>Workday</option><option>Salesforce</option><option>ServiceNow</option>
-          </select>
+        <div class="search-filter-actions">
+          <button onclick="searchConsultants()" class="search-filter-btn search-filter-btn-primary">Rechercher</button>
+          <button onclick="resetSearchFilters()" class="search-filter-btn search-filter-btn-secondary">Réinitialiser</button>
         </div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Rôle</label>
-          <select id="search-role" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:160px;">
-            <option value="">Tous</option>
-            <option>Consultant fonctionnel</option><option>Consultant technique</option>
-            <option>Chef de projet / PM</option><option>Architecte solution</option>
-            <option>PMO</option><option>Expert métier</option><option>Analyste</option>
-          </select>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Disponibilité</label>
-          <select id="search-dispo" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;min-width:140px;">
-            <option value="">Toutes</option>
-            <option>Immédiat</option><option>Sous 15 jours</option><option>Sous 1 mois</option>
-          </select>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Tarif max ($)</label>
-          <input id="search-tjm" type="number" placeholder="ex: 1200" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:110px;">
-        </div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <label style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;">Ville</label>
-          <input id="search-ville" type="text" placeholder="ex: Montréal" style="padding:.6rem .9rem;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.82rem;font-family:var(--font-main);background:#fff;width:140px;">
-        </div>
-        <button onclick="searchConsultants()" style="padding:.65rem 1.25rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font-main);white-space:nowrap;">Rechercher</button>
-        <button onclick="resetSearchFilters()" style="padding:.65rem 1rem;background:none;border:1px solid rgba(196,197,213,.5);border-radius:14px;font-size:.78rem;cursor:pointer;font-family:var(--font-main);color:#6b7280;white-space:nowrap;">Réinitialiser</button>
       </div>
 
-      <!-- Résultats -->
+      <!-- Résultats (Horizontal List Layout) -->
       <div id="search-count" style="font-size:.78rem;color:#6b7280;margin-bottom:1rem;display:none;"></div>
-      <div id="search-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;">
-        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;grid-column:1/-1;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>
+      <div id="search-results" class="search-results-container">
+        <div style="text-align:center;padding:3rem;color:#6b7280;font-size:.88rem;">Utilisez les filtres ci-dessus pour trouver des consultants ERP.</div>
       </div>
       <div id="search-pagination" style="display:none;margin-top:1.25rem;display:none;justify-content:center;align-items:center;gap:.75rem;">
         <button id="search-prev" onclick="searchChangePage(-1)" style="padding:.5rem 1rem;border:1px solid rgba(0,40,142,.2);background:#fff;color:#00288e;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;">← Précédent</button>
@@ -1871,6 +1918,13 @@ function renderResourceCards(resources) {
     const villeHtml = ville ? '<span class="rc-meta-item">📍 ' + safe(ville) + '</span>' : '';
     const tjmHtml = tjm !== '-' ? '<span class="rc-meta-item">' + safe(tjm) + '</span>' : '';
 
+    /* Status dropdown HTML */
+    const statusDropdown = '<select class="rc-status-dropdown" data-resource-id="' + safe(String(r.id)) + '" onchange="changeResourceStatus(this)" title="Changer le statut">' +
+      '<option value="approuve" ' + (statusKey === 'approuve' ? 'selected' : '') + '>Disponible</option>' +
+      '<option value="en_mission" ' + (statusKey === 'en_mission' ? 'selected' : '') + '>En mission</option>' +
+      '<option value="inactif" ' + (statusKey === 'inactif' ? 'selected' : '') + '>Inactif</option>' +
+    '</select>';
+
     return '<div class="resource-card ' + typeClass + '" data-status="' + safe(statusKey) + '" data-visibility="' + safe(visibility) + '" data-search="' + safe((name + ' ' + erps + ' ' + role + ' ' + ville).toLowerCase()) + '">' +
       /* ── Avatar ── */
       '<div class="resource-card-header">' +
@@ -1886,9 +1940,9 @@ function renderResourceCards(resources) {
         (tjmHtml ? '<div class="resource-card-detail"><span class="resource-card-detail-label">Taux</span><span class="resource-card-detail-value">' + safe(tjm) + '</span></div>' : '') +
         (ville ? '<div class="resource-card-detail"><span class="resource-card-detail-label">Ville</span><span class="resource-card-detail-value">' + safe(ville) + '</span></div>' : '') +
       '</div>' +
-      /* ── Status + type badges ── */
+      /* ── Status dropdown + type badges ── */
       '<div class="resource-card-status">' +
-        '<span class="rc-status-pill" style="--dot:' + dotColor + ';">' + statusText + '</span>' +
+        statusDropdown +
         typeBadge +
         '<span class="rc-vis-pill ' + (visibility === 'public' ? 'rc-vis-public' : 'rc-vis-b2b') + '">' + visLabel + '</span>' +
       '</div>' +
@@ -3103,6 +3157,36 @@ function filterConversations() {
    ═══════════════════════════════════════════════════════════════ */
 let _allLoadedResources = [];
 
+/* Change resource status (Disponible, En mission, Inactif) from dropdown in card */
+async function changeResourceStatus(selectElement) {
+  const resourceId = selectElement.getAttribute('data-resource-id');
+  const newStatus = selectElement.value;
+  if (!resourceId || !newStatus) return;
+
+  try {
+    /* Update statut in Supabase */
+    const ok = await sbUpdate('consultants', resourceId, { statut: newStatus });
+    if (ok) {
+      /* Show brief success feedback */
+      const originalStyle = selectElement.style.cssText;
+      selectElement.style.boxShadow = '0 0 0 3px rgba(5,150,105,.2)';
+      setTimeout(() => { selectElement.style.cssText = originalStyle; }, 600);
+
+      /* Reload to refresh card display */
+      loadResources();
+    } else {
+      alert('Erreur lors de la mise à jour du statut.');
+      /* Reset the dropdown to previous value on error */
+      const resource = _allLoadedResources.find(r => String(r.id) === String(resourceId));
+      if (resource) selectElement.value = normalizeStatus(resource.statut);
+    }
+  } catch(err) {
+    alert('Erreur: ' + (err.message || 'Mise à jour impossible.'));
+    const resource = _allLoadedResources.find(r => String(r.id) === String(resourceId));
+    if (resource) selectElement.value = normalizeStatus(resource.statut);
+  }
+}
+
 function openResourceEdit(resourceId) {
   var r = _allLoadedResources.find(function(x) { return String(x.id) === String(resourceId); });
   if (!r) { alert(ExpertI18n.t('dashboardCompany.errorResourceNotFound')); return; }
@@ -3303,43 +3387,43 @@ function renderSearchPage() {
     const tjm = c.tjm_min ? (c.tjm_min + ' $/j') : '—';
     const dispo = notes.disponibilite || c.disponibilite || '—';
     const ville = notes.ville || '—';
-    const resume = (notes.resume_pro || notes.resume || c.resume || '').substring(0, 100);
     const initials = fullName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
 
     var avatarHtml = photo
-      ? '<img src="' + safe(photo) + '" style="width:44px;height:44px;border-radius:50%;object-fit:cover;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
-        + '<div style="display:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>'
-      : '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;">' + initials + '</div>';
+      ? '<img src="' + safe(photo) + '" alt="" class="search-result-avatar" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+        + '<div class="search-result-avatar-fallback" style="display:none;">' + initials + '</div>'
+      : '<div class="search-result-avatar-fallback">' + initials + '</div>';
 
     const consultantEmail = c.email || c.consultant_email || '';
     const dispoIsGreen = (dispo.toLowerCase().includes('immédiat') || dispo.toLowerCase().includes('immediate'));
-    const dispoColor = dispoIsGreen ? 'rgba(5,150,105,.08);color:#059669' : 'rgba(251,146,60,.08);color:#fb923c';
-    const dispoColorBorder = dispoIsGreen ? 'rgba(5,150,105,.2)' : 'rgba(251,146,60,.2)';
+    const dispoBadgeClass = dispoIsGreen ? 'dispo-immediate' : 'dispo-pending';
 
-    return '<div style="background:#fff;border:1px solid rgba(196,197,213,.4);border-radius:24px;padding:1.5rem;transition:all .2s;overflow:hidden;" onmouseenter="this.style.boxShadow=\'0 8px 24px rgba(0,0,0,.12)\';this.style.transform=\'translateY(-2px)\'" onmouseleave="this.style.boxShadow=\'none\';this.style.transform=\'none\'">'
-      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem;">'
-        + '<div style="display:flex;align-items:center;gap:.75rem;flex:1;min-width:0;">'
+    return '<div class="search-result-card">'
+      + '<div class="search-result-info">'
+        + '<div>'
           + avatarHtml
-          + '<div style="min-width:0;">'
-            + '<div style="font-size:.95rem;font-weight:700;color:#191c1e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + safe(fullName) + '</div>'
-            + '<div style="font-size:.78rem;color:#6b7280;margin-top:.15rem;">' + safe(c.titre || 'Consultant ERP') + '</div>'
+        + '</div>'
+        + '<div class="search-result-name-role">'
+          + '<div class="search-result-name">' + safe(fullName) + '</div>'
+          + '<div class="search-result-role">' + safe(c.titre || 'Consultant ERP') + '</div>'
+        + '</div>'
+        + '<div class="search-result-badges">'
+          + (erps !== '—' ? '<span class="search-result-badge">ERP: ' + safe(erps) + '</span>' : '')
+          + '<span class="search-result-badge ' + dispoBadgeClass + '">' + safe(dispo) + '</span>'
+          + (ville !== '—' ? '<span class="search-result-badge">' + safe(ville) + '</span>' : '')
+        + '</div>'
+        + '<div class="search-result-details">'
+          + '<div class="search-result-meta-item">'
+            + '<div class="search-result-meta-label">Tarif</div>'
+            + '<div class="search-result-meta-value">' + safe(tjm) + '</div>'
           + '</div>'
         + '</div>'
-        + '<div style="display:flex;gap:.5rem;align-items:center;">'
-          + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps) + '\', this)" style="width:36px;height:36px;border:1px solid rgba(245,158,11,.3);background:' + (isFavorite(c.id) ? 'rgba(245,158,11,.15)' : '#fff') + ';border-radius:10px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
-          + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" style="padding:.6rem 1rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.76rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;" onmouseenter="this.style.opacity=\'0.9\'" onmouseleave="this.style.opacity=\'1\'">Contacter</button>'
-        + '</div>'
       + '</div>'
-      + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">'
-        + '<span style="font-size:.7rem;padding:.35rem .7rem;background:rgba(0,40,142,.08);color:#00288e;border-radius:8px;font-weight:600;border:1px solid rgba(0,40,142,.15);">ERP: ' + safe(erps) + '</span>'
-        + '<span style="font-size:.7rem;padding:.35rem .7rem;background:' + dispoColor + ';border-radius:8px;font-weight:600;border:1px solid ' + dispoColorBorder + ';">' + safe(dispo) + '</span>'
-        + (ville !== '—' ? '<span style="font-size:.7rem;padding:.35rem .7rem;background:rgba(124,58,237,.08);color:#7c3aed;border-radius:8px;font-weight:600;border:1px solid rgba(124,58,237,.2);">' + safe(ville) + '</span>' : '')
+      + '<div class="search-result-actions">'
+        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
+        + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" class="search-result-contact-btn">Contacter</button>'
+        + '<a href="/consultant.html?id=' + safe(c.id) + '" target="_blank" class="search-result-contact-btn" style="padding:.7rem .85rem;font-size:.7rem;">Voir →</a>'
       + '</div>'
-      + '<div style="padding:1rem;background:#f2f4f6;border-radius:12px;margin-bottom:1rem;text-align:center;">'
-        + '<div style="font-size:.7rem;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">Tarif</div>'
-        + '<div style="font-size:1.2rem;font-weight:700;color:#00288e;">' + safe(tjm) + '</div>'
-      + '</div>'
-      + '<button onclick="window.open(\'/consultant.html?id=' + c.id + '\',\'_blank\')" style="width:100%;padding:.7rem;background:none;border:1px solid rgba(0,40,142,.2);color:#00288e;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;" onmouseenter="this.style.background=\'rgba(0,40,142,.04)\'" onmouseleave="this.style.background=\'none\'">Voir le profil complet →</button>'
     + '</div>';
   }).join('');
 
