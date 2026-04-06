@@ -3046,7 +3046,10 @@ async function openConversationInPanel(email, name) {
   var initials = name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
   document.getElementById('chat-avatar').textContent = initials;
   document.getElementById('chat-name').textContent = safe(name);
-  document.getElementById('chat-role').textContent = 'Consultant'; // Note: on pourrait enrichir ça avec le rôle réel
+  /* Detect if this is an enterprise-to-enterprise conversation */
+  var chatRole = 'Consultant';
+  if (name && (name.includes('(re:') || name.includes('Conseil') || name.includes('Solutions'))) chatRole = 'Entreprise partenaire';
+  document.getElementById('chat-role').textContent = chatRole;
 
   // Marquer la conversation comme sélectionnée
   document.querySelectorAll('.conversation-item').forEach(function(item) {
@@ -3131,19 +3134,19 @@ async function sendChatMessage() {
     if (window.ExpertMessaging) {
       await window.ExpertMessaging.send({
         senderEmail: currentEmail,
-        senderName: currentCompany ? currentCompany.company_name : currentEmail,
+        senderName: currentCompany ? (currentCompany.nom || currentCompany.company_name) : currentEmail,
         senderRole: 'entreprise',
         receiverEmail: _msgState.get(),
         receiverName: _messagesCurrentName,
         body: text
       });
 
-      // Notifier le consultant
+      // Notifier le destinataire
       if (window.ExpertEmailNotify) {
         await window.ExpertEmailNotify.notify({
           to: _msgState.get(),
           toName: _messagesCurrentName,
-          fromName: currentCompany ? currentCompany.company_name : currentEmail,
+          fromName: currentCompany ? (currentCompany.nom || currentCompany.company_name) : currentEmail,
           fromEmail: currentEmail,
           body: text
         });
@@ -3600,6 +3603,10 @@ function renderSearchPage() {
       : '<div class="search-result-avatar-fallback">' + initials + '</div>';
 
     const consultantEmail = c.email || c.consultant_email || '';
+    /* B2B resources: route contact to the owning enterprise email */
+    const isB2B = notes.source === 'import_b2b';
+    const contactEmail = (isB2B && notes.entreprise_email) ? notes.entreprise_email : consultantEmail;
+    const contactName = (isB2B && notes.entreprise_nom) ? notes.entreprise_nom + ' (re: ' + fullName + ')' : fullName;
     const dispoIsGreen = dispo && (dispo.toLowerCase().includes('immédiat') || dispo.toLowerCase().includes('immediate'));
     const dispoChipClass = dispoIsGreen ? 'chip-dispo-green' : 'chip-dispo-orange';
 
@@ -3621,8 +3628,8 @@ function renderSearchPage() {
         + '<div class="search-result-meta-row">' + chipsHtml + '</div>'
       + '</div>'
       + '<div class="search-result-actions">'
-        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps.join(', ')) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
-        + '<button onclick="contactConsultant(\'' + safe(consultantEmail) + '\', \'' + safe(fullName) + '\')" class="search-result-contact-btn">Contacter</button>'
+        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(contactEmail) + '\', \'' + safe(contactName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps.join(', ')) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
+        + '<button onclick="contactConsultant(\'' + safe(contactEmail) + '\', \'' + safe(contactName) + '\')" class="search-result-contact-btn">Contacter</button>'
         + '<a href="/consultant.html?id=' + safe(c.id) + '" target="_blank" class="search-result-view-btn">Profil <span style="font-size:.8em;">&#8599;</span></a>'
       + '</div>'
     + '</div>';

@@ -291,7 +291,9 @@ img{max-width:100%;height:auto;}
 .msg-conv-name{font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .msg-conv-preview{font-size:.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem;}
 .msg-conv-meta{font-size:.62rem;color:var(--text-subtle);margin-top:.15rem;}
-.msg-conv-unread{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;font-size:.6rem;font-weight:700;flex-shrink:0;float:right;}
+.msg-conv-unread{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 6px rgba(239,68,68,.3);}
+.msg-conv-item.unread-conv{background:rgba(239,68,68,.03);border-left:3px solid #ef4444;}
+.msg-conv-item.unread-conv .msg-conv-name{color:var(--text);}
 .msg-chat{display:flex;flex-direction:column;}
 .msg-chat-header{padding:.6rem .9rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:.5rem;}
 .msg-chat-header .msg-back-btn{display:none;border:none;background:none;cursor:pointer;font-size:1.1rem;padding:0;color:var(--brand);}
@@ -325,6 +327,13 @@ img{max-width:100%;height:auto;}
 .comm-tab.active .tab-count{background:var(--brand-light);color:var(--brand);}
 .comm-tab-content{display:none;}
 .comm-tab-content.active{display:block;}
+
+/* — Red notification badge — */
+.nav-badge{position:absolute;top:6px;right:6px;display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;line-height:1;box-shadow:0 2px 6px rgba(239,68,68,.35);animation:badge-pop .35s cubic-bezier(.4,0,.2,1);}
+.nav-badge:empty{display:none;}
+@keyframes badge-pop{0%{transform:scale(0);}60%{transform:scale(1.15);}100%{transform:scale(1);}}
+.comm-title-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#ef4444;color:#fff;font-size:.65rem;font-weight:800;margin-left:.5rem;box-shadow:0 2px 6px rgba(239,68,68,.3);animation:badge-pop .35s cubic-bezier(.4,0,.2,1);}
+.comm-title-badge:empty{display:none;}
 
 /* Profile completion guide */
 .profile-guide{background:linear-gradient(135deg,var(--brand) 0%,#1565c0 50%,var(--purple) 100%);border:none !important;position:relative;overflow:hidden;color:#fff;}
@@ -800,7 +809,7 @@ input:focus, textarea:focus, select:focus {
 
         <!-- NAV — Onglets fonctionnels (Dashboard / Profil) -->
         <nav class="aside-nav">
-          <div class="nav-link active" data-tab-target="tab-dashboard" onclick="switchMainTab('tab-dashboard',this)"><span class="nav-icon material-symbols-outlined">dashboard</span>Dashboard</div>
+          <div class="nav-link active" data-tab-target="tab-dashboard" onclick="switchMainTab('tab-dashboard',this)" style="position:relative;"><span class="nav-icon material-symbols-outlined">dashboard</span>Dashboard<span class="nav-badge" id="nav-badge-messages"></span></div>
           <div class="nav-link" data-tab-target="tab-profil" onclick="switchMainTab('tab-profil',this)"><span class="nav-icon material-symbols-outlined">person</span>Profil</div>
           <div class="nav-link" id="voir-carte-link" onclick="openMyPublicProfile()" style="margin-top:.25rem;border-top:1px solid rgba(13,71,161,.08);padding-top:.6rem;"><span class="nav-icon material-symbols-outlined">visibility</span>Voir ma carte</div>
         </nav>
@@ -919,12 +928,12 @@ input:focus, textarea:focus, select:focus {
             </div>
           </div>
 
-          <!-- CENTRE DE COMMUNICATION — full width -->
+          <!-- CENTRE DE COMMUNICATION UNIFIÉ — full width -->
           <div class="panel" id="comm-center-panel">
             <div class="panel-title">
-              <div>
-                <h3 id="notif-title">Demandes re&#231;ues</h3>
-                <div class="panel-sub">G&#233;rez vos demandes, messages et &#233;changes au m&#234;me endroit.</div>
+              <div style="display:flex;align-items:center;gap:.4rem;">
+                <h3 id="notif-title">Messagerie</h3>
+                <span class="comm-title-badge" id="comm-badge-total"></span>
               </div>
               <div class="request-stats">
                 <span class="request-pill new" id="count-new">0 nouveau</span>
@@ -934,33 +943,19 @@ input:focus, textarea:focus, select:focus {
             </div>
 
             <div class="comm-tabs">
-              <button class="comm-tab active" data-comm-tab="all" onclick="switchCommTab('all')">
-                Tout<span class="tab-count" id="tab-count-all">0</span>
+              <button class="comm-tab active" data-comm-tab="conversations" onclick="switchCommTab('conversations')">
+                <span class="material-symbols-outlined" style="font-size:.9rem;vertical-align:middle;margin-right:.2rem;">forum</span>Conversations<span class="tab-count" id="tab-count-all">0</span>
               </button>
-              <button class="comm-tab" data-comm-tab="nouveau" onclick="switchCommTab('nouveau')">
-                Nouvelles<span class="tab-count" id="tab-count-new">0</span>
-              </button>
-              <button class="comm-tab" data-comm-tab="repondu" onclick="switchCommTab('repondu')">
-                R&#233;pondues<span class="tab-count" id="tab-count-replied">0</span>
-              </button>
-              <button class="comm-tab" data-comm-tab="messages" onclick="switchCommTab('messages')">
-                Messages
+              <button class="comm-tab" data-comm-tab="demandes" onclick="switchCommTab('demandes')">
+                <span class="material-symbols-outlined" style="font-size:.9rem;vertical-align:middle;margin-right:.2rem;">mail</span>Demandes<span class="tab-count" id="tab-count-demandes">0</span>
               </button>
             </div>
 
-            <div class="comm-tab-content active" id="comm-content-all">
-              <div class="notif-list" id="notif-list"></div>
-            </div>
-            <div class="comm-tab-content" id="comm-content-nouveau">
-              <div class="notif-list" id="notif-list-new"></div>
-            </div>
-            <div class="comm-tab-content" id="comm-content-repondu">
-              <div class="notif-list" id="notif-list-replied"></div>
-            </div>
-            <div class="comm-tab-content" id="comm-content-messages">
+            <!-- Unified conversations view -->
+            <div class="comm-tab-content active" id="comm-content-conversations">
               <div class="msg-panel" id="msg-panel">
                 <div class="msg-conversations" id="msg-conv-list">
-                  <div class="empty-state">Chargement...</div>
+                  <div class="empty-state" style="padding:2rem 1rem;text-align:center;font-size:.82rem;color:var(--text-muted);">Chargement...</div>
                 </div>
                 <div class="msg-chat" id="msg-chat-panel" style="display:none;">
                   <div class="msg-chat-header" id="msg-chat-header"></div>
@@ -971,6 +966,11 @@ input:focus, textarea:focus, select:focus {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Demandes (notifications legacy) -->
+            <div class="comm-tab-content" id="comm-content-demandes">
+              <div class="notif-list" id="notif-list"></div>
             </div>
           </div>
 
@@ -1820,13 +1820,15 @@ function applyI18n() {
   const t = (k) => ExpertI18n.t(k);
   const lang = ExpertI18n.getLang();
 
-  /* ── Helper: set nav-link text keeping icon span ── */
+  /* ── Helper: set nav-link text keeping icon span + badge ── */
   function setNavText(el, text) {
     if (!el) return;
     const span = el.querySelector('.nav-icon');
+    const badge = el.querySelector('.nav-badge');
     el.textContent = '';
     if (span) el.appendChild(span);
     el.appendChild(document.createTextNode(text));
+    if (badge) el.appendChild(badge);
   }
 
   /* ══════════════ AUTH SCREEN ══════════════ */
@@ -1901,7 +1903,7 @@ function applyI18n() {
 
   /* ══════════════ COMMUNICATION CENTER ══════════════ */
   const notifTitle = document.getElementById('notif-title');
-  if (notifTitle) notifTitle.textContent = t('dashboardConsultant.requestsReceived');
+  if (notifTitle) notifTitle.textContent = lang === 'en' ? 'Messaging' : 'Messagerie';
   const panelSub = document.querySelector('#comm-center-panel .panel-sub');
   if (panelSub) panelSub.textContent = t('dashboardConsultant.manageRequests');
 
@@ -1910,11 +1912,11 @@ function applyI18n() {
   commTabs.forEach(function(tab) {
     var filter = tab.getAttribute('data-comm-tab');
     var countSpan = tab.querySelector('.tab-count');
+    var iconSpan = tab.querySelector('.material-symbols-outlined');
     var countHtml = countSpan ? countSpan.outerHTML : '';
-    if (filter === 'all') tab.innerHTML = t('dashboardConsultant.tabAll') + countHtml;
-    else if (filter === 'nouveau') tab.innerHTML = t('dashboardConsultant.tabNew') + countHtml;
-    else if (filter === 'repondu') tab.innerHTML = t('dashboardConsultant.tabReplied') + countHtml;
-    else if (filter === 'messages') tab.innerHTML = t('dashboardConsultant.tabMessages');
+    var iconHtml = iconSpan ? iconSpan.outerHTML : '';
+    if (filter === 'conversations') tab.innerHTML = iconHtml + (lang === 'en' ? 'Conversations' : 'Conversations') + countHtml;
+    else if (filter === 'demandes') tab.innerHTML = iconHtml + (lang === 'en' ? 'Requests' : 'Demandes') + countHtml;
   });
 
   /* ══════════════ PROFILE TAB ══════════════ */
@@ -2271,6 +2273,8 @@ async function renderDashboard() {
     await ExpertNotifications.loadFromSupabase(currentConsultant.id, currentConsultant.email);
   }
   renderNotifications();
+  // Charger le messenger unifié (conversations + badges)
+  loadUnifiedMessenger();
 }
 
 /* ── Centre de communication: onglets switchCommTab ── */
@@ -2315,11 +2319,11 @@ function switchCommTab(tabName) {
   });
   var target = document.getElementById('comm-content-' + tabName);
   if (target) target.classList.add('active');
-  /* Charger le panel messaging quand on clique sur Messages */
-  if (tabName === 'messages') loadMessagesPanel();
+  /* Charger les conversations quand on clique sur l'onglet */
+  if (tabName === 'conversations') loadUnifiedMessenger();
 }
 
-/* ── Generateur HTML d'un item de notification ── */
+/* ── Generateur HTML d'un item de notification (onglet Demandes) ── */
 function renderNotifItemHtml(n) {
   const when = new Date(n.createdAt).toLocaleString(ExpertI18n.getLang() === 'en' ? 'en-CA' : 'fr-CA');
   const s = n.status || (n.read ? 'lu' : 'nouveau');
@@ -2331,8 +2335,6 @@ function renderNotifItemHtml(n) {
 
 function renderNotifications() {
   const container = document.getElementById('notif-list');
-  const newContainer = document.getElementById('notif-list-new');
-  const repliedContainer = document.getElementById('notif-list-replied');
   if (!container || !currentConsultant) return;
   const list = ExpertNotifications.byConsultant(currentConsultant.id, currentConsultant.email);
   const counts = ExpertNotifications.countsByConsultant(currentConsultant.id, currentConsultant.email);
@@ -2353,42 +2355,129 @@ function renderNotifications() {
   if (bentoSubReq) bentoSubReq.textContent = counts.nouveau > 0 ? counts.nouveau + ' ' + _t('dashboardConsultant.unread') : _t('dashboardConsultant.noNewRequest');
   if (bentoBarReq) bentoBarReq.style.width = Math.min(100, totalNotifs * 10) + '%';
 
-  /* Sync tab counts */
-  var tabCountAll = document.getElementById('tab-count-all');
-  var tabCountNew = document.getElementById('tab-count-new');
-  var tabCountReplied = document.getElementById('tab-count-replied');
-  if (tabCountAll) tabCountAll.textContent = totalNotifs;
-  if (tabCountNew) tabCountNew.textContent = counts.nouveau || 0;
-  if (tabCountReplied) tabCountReplied.textContent = counts.repondu || 0;
+  /* Sync tab counts — Demandes tab */
+  var tabCountDemandes = document.getElementById('tab-count-demandes');
+  if (tabCountDemandes) tabCountDemandes.textContent = totalNotifs;
 
   const emptyHtml = '<div class="empty-state">' + _t('dashboardConsultant.emptyState') + '</div>';
 
   if (!list.length) {
     container.innerHTML = emptyHtml;
-    if (newContainer) newContainer.innerHTML = emptyHtml;
-    if (repliedContainer) repliedContainer.innerHTML = emptyHtml;
     return;
   }
 
-  /* Onglet "Tout" — toutes les demandes (max 10) */
-  container.innerHTML = list.slice(0, 10).map(renderNotifItemHtml).join('');
+  /* Onglet "Demandes" — toutes les demandes (max 15) */
+  container.innerHTML = list.slice(0, 15).map(renderNotifItemHtml).join('');
+}
 
-  /* Onglet "Nouvelles" — status nouveau ou non-lu */
-  if (newContainer) {
-    var newItems = list.filter(function(n) { var s = n.status || (n.read ? 'lu' : 'nouveau'); return s === 'nouveau'; });
-    newContainer.innerHTML = newItems.length
-      ? newItems.slice(0, 10).map(renderNotifItemHtml).join('')
-      : '<div class="empty-state">' + _t('dashboardConsultant.noNewRequestShort') + '</div>';
+/* ═══════════════════════════════════════════════════
+   UNIFIED MESSENGER — Conversations + Notifications fusionnées
+   ═══════════════════════════════════════════════════ */
+var _unifiedTotalUnread = 0;
+
+async function loadUnifiedMessenger() {
+  if (!currentEmail) return;
+  try {
+    // 1) Sync notifications → messages table
+    if (window.ExpertMessaging) {
+      await ExpertMessaging.syncFromNotifications(currentEmail);
+    }
+    // 2) Load all conversations from messages table
+    var convos = [];
+    if (window.ExpertMessaging) {
+      convos = await ExpertMessaging.getConversations(currentEmail) || [];
+    }
+    _msgConversations = convos;
+
+    // 3) Count total unread across all conversations
+    _unifiedTotalUnread = 0;
+    convos.forEach(function(c) { _unifiedTotalUnread += (c.unreadCount || 0); });
+
+    // Also add unread notifications not yet synced
+    if (window.ExpertNotifications && currentConsultant) {
+      var counts = ExpertNotifications.countsByConsultant(currentConsultant.id, currentConsultant.email);
+      var notifUnread = counts.nouveau || 0;
+      // Only add if no conversations exist yet (notifications not yet synced)
+      if (convos.length === 0 && notifUnread > 0) {
+        _unifiedTotalUnread = notifUnread;
+      }
+    }
+
+    // 4) Update tab count
+    var tabCountAll = document.getElementById('tab-count-all');
+    if (tabCountAll) tabCountAll.textContent = convos.length;
+
+    // 5) Update badges
+    updateUnreadBadges(_unifiedTotalUnread);
+
+    // 6) Render conversation list
+    renderUnifiedConvList(convos);
+  } catch(err) {
+    console.error('[UnifiedMessenger] Load error:', err);
+    var el = document.getElementById('msg-conv-list');
+    if (el) el.innerHTML = '<div class="empty-state" style="padding:2rem 1rem;text-align:center;font-size:.82rem;color:var(--text-muted);">Erreur de chargement.</div>';
+  }
+}
+
+function updateUnreadBadges(count) {
+  // Sidebar nav badge
+  var navBadge = document.getElementById('nav-badge-messages');
+  if (navBadge) navBadge.textContent = count > 0 ? count : '';
+  // Comm panel title badge
+  var commBadge = document.getElementById('comm-badge-total');
+  if (commBadge) commBadge.textContent = count > 0 ? count : '';
+}
+
+function renderUnifiedConvList(convos) {
+  var el = document.getElementById('msg-conv-list');
+  if (!el) return;
+
+  if (!convos || !convos.length) {
+    // Check if there are notifications to show as fallback
+    if (window.ExpertNotifications && currentConsultant) {
+      var notifList = ExpertNotifications.byConsultant(currentConsultant.id, currentConsultant.email);
+      if (notifList.length > 0) {
+        el.innerHTML = notifList.map(function(n) {
+          var when = new Date(n.createdAt).toLocaleDateString('fr-CA');
+          var isUnread = !n.read && n.status !== 'repondu';
+          return '<div class="msg-conv-item' + (isUnread ? ' unread-conv' : '') + '" onclick="openRequestDetail(\'' + n.id + '\')" style="cursor:pointer;">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+              '<span class="msg-conv-name">' + safe(n.companyName || 'Entreprise') + '</span>' +
+              (isUnread ? '<span class="msg-conv-unread" style="background:#ef4444;">1</span>' : '') +
+            '</div>' +
+            '<div class="msg-conv-preview">' + safe((n.message || '').slice(0, 60)) + '</div>' +
+            '<div class="msg-conv-meta">' + safe(when) + ' · Demande de contact</div>' +
+          '</div>';
+        }).join('');
+        return;
+      }
+    }
+    el.innerHTML = '<div class="empty-state" style="padding:2.5rem 1rem;text-align:center;">' +
+      '<span class="material-symbols-outlined" style="font-size:2.5rem;color:var(--text-subtle);opacity:.4;display:block;margin-bottom:.5rem;">forum</span>' +
+      '<div style="font-size:.82rem;color:var(--text-muted);font-weight:600;">Aucune conversation</div>' +
+      '<div style="font-size:.72rem;color:var(--text-subtle);margin-top:.25rem;">Les messages des entreprises apparaîtront ici.</div>' +
+    '</div>';
+    return;
   }
 
-  /* Onglet "Repondues" */
-  if (repliedContainer) {
-    var repliedItems = list.filter(function(n) { return n.status === 'repondu' || (n.reply && n.reply.trim()); });
-    repliedContainer.innerHTML = repliedItems.length
-      ? repliedItems.slice(0, 10).map(renderNotifItemHtml).join('')
-      : '<div class="empty-state">' + _t('dashboardConsultant.noRepliedRequest') + '</div>';
-  }
-
+  el.innerHTML = convos.map(function(c) {
+    var otherEmail = c.otherEmail || '';
+    var otherName = c.otherName || otherEmail;
+    var lastMsg = c.lastMessage;
+    var lastBody = (lastMsg && lastMsg.body) ? lastMsg.body : '';
+    var preview = lastBody.slice(0, 60) + (lastBody.length > 60 ? '...' : '');
+    var when = (lastMsg && lastMsg.created_at) ? new Date(lastMsg.created_at).toLocaleDateString('fr-CA') : '';
+    var unread = c.unreadCount || 0;
+    var activeClass = otherEmail === _msgCurrentConvEmail ? ' active' : '';
+    return '<div class="msg-conv-item' + activeClass + (unread > 0 ? ' unread-conv' : '') + '" onclick="openMsgConversation(\'' + safe(otherEmail) + '\',\'' + safe(otherName) + '\')">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+        '<span class="msg-conv-name">' + safe(otherName) + '</span>' +
+        (unread > 0 ? '<span class="msg-conv-unread" style="background:#ef4444;">' + unread + '</span>' : '') +
+      '</div>' +
+      '<div class="msg-conv-preview">' + safe(preview) + '</div>' +
+      '<div class="msg-conv-meta">' + safe(when) + ' · ' + c.messages.length + ' message' + (c.messages.length > 1 ? 's' : '') + '</div>' +
+    '</div>';
+  }).join('');
 }
 
 
@@ -2486,6 +2575,7 @@ async function sendReplyFromModal() {
     setTimeout(function() { statusEl.style.display = 'none'; }, 3000);
 
     renderNotifications();
+    loadUnifiedMessenger();
   } catch(err) {
     console.error('[Reply] Error:', err);
     alert('Erreur lors de l\'envoi de la réponse.');
@@ -2500,53 +2590,15 @@ function closeRequestDetail() {
 }
 
 /* ═══════════════════════════════════════════════════
-   BIDIRECTIONAL MESSAGING — Messages Tab
+   BIDIRECTIONAL MESSAGING — Chat Functions
    ═══════════════════════════════════════════════════ */
 var _msgCurrentConvEmail = null;
 var _msgCurrentConvName = null;
 var _msgConversations = [];
 
+/* Legacy alias — redirects to unified messenger */
 async function loadMessagesPanel() {
-  if (!window.ExpertMessaging || !currentEmail) return;
-  try {
-    // Sync old notifications into messages table first
-    await ExpertMessaging.syncFromNotifications(currentEmail);
-    // Load all conversations
-    var convos = await ExpertMessaging.getConversations(currentEmail);
-    _msgConversations = convos || [];
-    renderMsgConversationList(_msgConversations);
-  } catch(err) {
-    console.error('[Messages] Load error:', err);
-    var el = document.getElementById('msg-conv-list');
-    if (el) el.innerHTML = '<div class="empty-state">Erreur de chargement des messages.</div>';
-  }
-}
-
-function renderMsgConversationList(convos) {
-  var el = document.getElementById('msg-conv-list');
-  if (!el) return;
-  if (!convos || !convos.length) {
-    el.innerHTML = '<div class="empty-state" style="padding:2rem 1rem;text-align:center;font-size:.82rem;color:var(--text-muted);">Aucune conversation pour le moment.</div>';
-    return;
-  }
-  el.innerHTML = convos.map(function(c) {
-    var otherEmail = c.otherEmail || '';
-    var otherName = c.otherName || otherEmail;
-    var lastMsg = c.lastMessage;
-    var lastBody = (lastMsg && lastMsg.body) ? lastMsg.body : '';
-    var preview = lastBody.slice(0, 60) + (lastBody.length > 60 ? '...' : '');
-    var when = (lastMsg && lastMsg.created_at) ? new Date(lastMsg.created_at).toLocaleDateString('fr-CA') : '';
-    var unread = c.unreadCount || 0;
-    var activeClass = otherEmail === _msgCurrentConvEmail ? ' active' : '';
-    return '<div class="msg-conv-item' + activeClass + '" onclick="openMsgConversation(\'' + safe(otherEmail) + '\',\'' + safe(otherName) + '\')">' +
-      '<div style="display:flex;align-items:center;justify-content:space-between;">' +
-        '<span class="msg-conv-name">' + safe(otherName) + '</span>' +
-        (unread > 0 ? '<span class="msg-conv-unread">' + unread + '</span>' : '') +
-      '</div>' +
-      '<div class="msg-conv-preview">' + safe(preview) + '</div>' +
-      '<div class="msg-conv-meta">' + safe(when) + '</div>' +
-    '</div>';
-  }).join('');
+  return loadUnifiedMessenger();
 }
 
 async function openMsgConversation(email, name) {
@@ -2572,10 +2624,13 @@ async function openMsgConversation(email, name) {
     // Mark as read
     var threadId = ExpertMessaging.makeThreadId(currentEmail, email);
     await ExpertMessaging.markThreadRead(threadId, currentEmail);
-    // Refresh conv list to update unread counts
+    // Refresh conv list to update unread counts + badges
     var convos = await ExpertMessaging.getConversations(currentEmail);
     _msgConversations = convos || [];
-    renderMsgConversationList(_msgConversations);
+    _unifiedTotalUnread = 0;
+    convos.forEach(function(c) { _unifiedTotalUnread += (c.unreadCount || 0); });
+    updateUnreadBadges(_unifiedTotalUnread);
+    renderUnifiedConvList(_msgConversations);
   } catch(err) {
     console.error('[Messages] Thread load error:', err);
   }
@@ -2637,8 +2692,8 @@ async function sendConsultantMessage() {
     // Reload chat
     var messages = await ExpertMessaging.getThread(currentEmail, _msgCurrentConvEmail);
     renderMsgChat(messages || []);
-    // Refresh conversation list
-    loadMessagesPanel();
+    // Refresh unified conversation list
+    loadUnifiedMessenger();
   } catch(err) {
     console.error('[Messages] Send error:', err);
     alert('Erreur lors de l\'envoi du message.');
