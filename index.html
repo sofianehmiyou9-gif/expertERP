@@ -3810,6 +3810,12 @@ function acceptCguAndClose() {
 <script src="supabase-helpers.js"></script>
 <script src="profile-enhancer.js"></script>
 <script>
+// Utility: escape HTML to prevent XSS (alias for escapeHtml defined later)
+function safe(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 // ── CONSULTANT_COLS: Define column string for backward compatibility ──
 var CONSULTANT_COLS = window.CONSULTANT_COLS || 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut';
 

@@ -1638,6 +1638,12 @@ function safe(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+// Escape for JavaScript string context inside onclick attributes.
+// Unlike safe(), this uses backslash escaping which survives HTML entity decoding.
+function safeJSString(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n').replace(/\r/g,'\\r').replace(/</g,'\\x3c').replace(/>/g,'\\x3e');
+}
 
 let currentEmail = null;
 let currentCompany = null;
@@ -2028,7 +2034,7 @@ async function loadResources() {
       <td>${visToggle}</td>
       <td style="white-space:nowrap;">
         <a class="resource-card-link" href="${safe(cardUrl)}" target="_blank" rel="noopener">Voir</a>
-        <button onclick="openResourceEdit('${safe(String(r.id))}')" style="margin-left:6px;font-size:.7rem;font-weight:700;color:#1e40af;background:rgba(30,64,175,.06);border:1px solid rgba(37,99,235,.15);padding:4px 10px;border-radius:999px;cursor:pointer;">Modifier</button>
+        <button onclick="openResourceEdit('${safeJSString(String(r.id))}')" style="margin-left:6px;font-size:.7rem;font-weight:700;color:#1e40af;background:rgba(30,64,175,.06);border:1px solid rgba(37,99,235,.15);padding:4px 10px;border-radius:999px;cursor:pointer;">Modifier</button>
       </td>
       <td>${safe(formatDate(r.created_at))}</td>
     </tr>`;
@@ -2127,7 +2133,7 @@ function renderResourceCards(resources) {
       /* ── Actions ── */
       '<div class="resource-card-actions">' +
         '<a href="' + safe(cardUrl) + '" target="_blank" class="btn btn-primary rc-btn" title="Voir la fiche"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>' +
-        '<button onclick="openResourceEdit(\'' + safe(String(r.id)) + '\')" class="btn btn-secondary rc-btn" title="Modifier"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+        '<button onclick="openResourceEdit(\'' + safeJSString(String(r.id)) + '\')" class="btn btn-secondary rc-btn" title="Modifier"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3843,8 +3849,8 @@ function renderSearchPage() {
         + '<div class="search-result-meta-row">' + chipsHtml + '</div>'
       + '</div>'
       + '<div class="search-result-actions">'
-        + '<button onclick="toggleFavorite(\'' + safe(c.id) + '\', \'' + safe(contactEmail) + '\', \'' + safe(contactName) + '\', \'' + safe(c.titre || 'Consultant ERP') + '\', \'' + safe(erps.join(', ')) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
-        + '<button onclick="contactConsultant(\'' + safe(contactEmail) + '\', \'' + safe(contactName) + '\')" class="search-result-contact-btn">Contacter</button>'
+        + '<button onclick="toggleFavorite(\'' + safeJSString(c.id) + '\', \'' + safeJSString(contactEmail) + '\', \'' + safeJSString(contactName) + '\', \'' + safeJSString(c.titre || 'Consultant ERP') + '\', \'' + safeJSString(erps.join(', ')) + '\', this)" class="search-result-star-btn ' + (isFavorite(c.id) ? 'favorited' : '') + '" title="Ajouter aux favoris">' + (isFavorite(c.id) ? '★' : '☆') + '</button>'
+        + '<button onclick="contactConsultant(\'' + safeJSString(contactEmail) + '\', \'' + safeJSString(contactName) + '\')" class="search-result-contact-btn">Contacter</button>'
         + '<a href="/consultant.html?id=' + safe(c.id) + '" target="_blank" class="search-result-view-btn">Profil <span style="font-size:.8em;">&#8599;</span></a>'
       + '</div>'
     + '</div>';
@@ -4358,8 +4364,8 @@ function loadFavoritesTab() {
       + '</div>'
       + (f.erps ? '<div style="margin-bottom:.75rem;"><span style="font-size:.7rem;padding:.3rem .7rem;background:rgba(30,64,175,.08);color:#1e40af;border-radius:8px;font-weight:600;">ERP: ' + safe(f.erps) + '</span></div>' : '')
       + '<div style="display:flex;gap:.5rem;">'
-        + '<button onclick="contactConsultant(\'' + safe(f.email) + '\', \'' + safe(f.name) + '\')" style="flex:1;padding:.55rem;background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;">Contacter</button>'
-        + '<button onclick="removeFavorite(\'' + safe(f.id) + '\')" style="padding:.55rem .8rem;background:none;border:1px solid rgba(220,38,38,.2);color:#dc2626;border-radius:10px;font-size:.78rem;cursor:pointer;" title="Retirer des favoris">Retirer</button>'
+        + '<button onclick="contactConsultant(\'' + safeJSString(f.email) + '\', \'' + safeJSString(f.name) + '\')" style="flex:1;padding:.55rem;background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;">Contacter</button>'
+        + '<button onclick="removeFavorite(\'' + safeJSString(f.id) + '\')" style="padding:.55rem .8rem;background:none;border:1px solid rgba(220,38,38,.2);color:#dc2626;border-radius:10px;font-size:.78rem;cursor:pointer;" title="Retirer des favoris">Retirer</button>'
       + '</div>'
     + '</div>';
   }).join('');
@@ -4411,7 +4417,7 @@ async function loadHistoryTab() {
           + '<div style="font-size:.76rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + safe(preview) + '</div>'
           + '<div style="font-size:.65rem;color:#9ca3af;margin-top:.2rem;">Premier contact : ' + firstDate + ' — Dernier message : ' + lastDate + '</div>'
         + '</div>'
-        + '<button onclick="contactConsultant(\'' + safe(c.otherEmail) + '\', \'' + safe(name) + '\')" style="padding:.5rem .9rem;background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;border-radius:10px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">Ouvrir</button>'
+        + '<button onclick="contactConsultant(\'' + safeJSString(c.otherEmail) + '\', \'' + safeJSString(name) + '\')" style="padding:.5rem .9rem;background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;border-radius:10px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">Ouvrir</button>'
       + '</div>';
     }).join('');
   } catch(e) {

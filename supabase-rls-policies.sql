@@ -302,3 +302,23 @@ BEGIN
       WHERE email IS NOT NULL;
   END IF;
 END $$;
+
+-- =========================================================
+-- SECTION F - EXPLICIT DELETE DENY (SECURITY HARDENING)
+-- =========================================================
+-- By default, Supabase blocks DELETE when no policy exists,
+-- but this makes it explicit and protects against future changes.
+
+DROP POLICY IF EXISTS consultants_deny_anon_delete ON public.consultants;
+CREATE POLICY consultants_deny_anon_delete
+  ON public.consultants
+  FOR DELETE
+  TO anon, authenticated
+  USING (false);
+
+DROP POLICY IF EXISTS entreprises_deny_anon_delete ON public.entreprises;
+CREATE POLICY entreprises_deny_anon_delete
+  ON public.entreprises
+  FOR DELETE
+  TO anon, authenticated
+  USING (false);
