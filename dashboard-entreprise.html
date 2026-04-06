@@ -878,6 +878,7 @@ input:focus, textarea:focus, select:focus {
 
   /* Shift everything right when sidebar is visible */
   .dashboard .navbar{margin-left:240px;}
+  .dashboard .navbar .nav-left .logo-nav{display:none;} /* hide logo in navbar — sidebar has it */
   .dashboard .tab-buttons{display:none;} /* hide horizontal tabs on desktop — sidebar replaces them */
   #unread-banner{margin-left:240px !important;}
   .dashboard .content{margin-left:240px;}
@@ -4473,8 +4474,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-/* Spotlight Card Mouse Tracking */
 <script>
+/* Spotlight Card Mouse Tracking */
 (function(){
   document.querySelectorAll('.spotlight-card').forEach(function(card) {
     card.addEventListener('mousemove', function(e) {
