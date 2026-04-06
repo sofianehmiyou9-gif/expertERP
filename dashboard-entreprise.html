@@ -2861,8 +2861,12 @@ async function loadCompanyMessages() {
       const conversations = await window.ExpertMessaging.getConversations(currentEmail);
       const unreadCount = (conversations || []).reduce((sum, c) => sum + (c.unreadCount || 0), 0);
 
-      /* Badge dans l'onglet Messages */
-      const badge = document.getElementById('messages-badge');
+      /* Badge dans l'onglet Messages (créer dynamiquement si i18n l'a supprimé) */
+      var badge = document.getElementById('messages-badge');
+      if (!badge) {
+        var tabMsg = document.getElementById('tab-messages');
+        if (tabMsg) { badge = document.createElement('span'); badge.id = 'messages-badge'; badge.style.cssText = 'display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;'; tabMsg.appendChild(badge); }
+      }
       if (badge) {
         if (unreadCount > 0) { badge.textContent = unreadCount; badge.style.display = 'inline'; }
         else { badge.style.display = 'none'; }
@@ -2904,8 +2908,9 @@ function startMessagePolling() {
     if (!window.ExpertMessaging || !currentEmail) return;
     window.ExpertMessaging.getConversations(currentEmail).then(function(convos) {
       var unread = (convos || []).reduce(function(s, c) { return s + (c.unreadCount || 0); }, 0);
-      /* Badge onglet */
+      /* Badge onglet (créer si absent) */
       var badge = document.getElementById('messages-badge');
+      if (!badge) { var tabMsg = document.getElementById('tab-messages'); if (tabMsg) { badge = document.createElement('span'); badge.id = 'messages-badge'; badge.style.cssText = 'display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;'; tabMsg.appendChild(badge); } }
       if (badge) {
         if (unread > 0) { badge.textContent = String(unread); badge.style.display = 'inline'; }
         else { badge.style.display = 'none'; }
@@ -2993,8 +2998,9 @@ function updateMessagesBadge() {
   var unread = (_messagesConversations || []).reduce(function(sum, conv) {
     return sum + (conv.unreadCount || 0);
   }, 0);
-  /* Tab badge */
+  /* Tab badge (créer si absent — i18n peut le supprimer) */
   var badge = document.getElementById('messages-badge');
+  if (!badge) { var tabMsg = document.getElementById('tab-messages'); if (tabMsg) { badge = document.createElement('span'); badge.id = 'messages-badge'; badge.style.cssText = 'display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;'; tabMsg.appendChild(badge); } }
   if (badge) {
     if (unread > 0) { badge.textContent = String(unread); badge.style.display = 'inline'; }
     else { badge.style.display = 'none'; }
