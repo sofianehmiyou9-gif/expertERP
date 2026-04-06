@@ -3220,7 +3220,7 @@ function renderBasicInfo() {
   renderSidebarExps();
   clearExpForm();
   syncExpLegacyField();
-  renderExpTaskCheckboxes();
+  if (typeof renderExpTaskCheckboxes === 'function') renderExpTaskCheckboxes();
   /* ═══ Resume professionnel ═══ */
     var resumeInput = document.getElementById('resume-pro-input');
   if (resumeInput) {
