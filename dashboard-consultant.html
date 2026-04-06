@@ -1399,7 +1399,7 @@ let currentEmail = null;
 let currentConsultant = null;
 
 function normalizeToken(v) {
-  return String(v || '').trim().toLowerCase();
+  return String(v || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 function parseLangues(value) {
