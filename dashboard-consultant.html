@@ -936,7 +936,7 @@ input:focus, textarea:focus, select:focus {
           <div class="bento-stats">
             <div class="bento-stat spotlight-card">
               <div class="bento-stat-icon"><span class="material-symbols-outlined">mail</span></div>
-              <div class="bento-stat-label">Demandes re&#231;ues</div>
+              <div class="bento-stat-label">Demandes re&#231;ues <span id="kpi-unread-badge" style="display:none;background:#dc2626;color:#fff;font-size:.55rem;padding:1px 6px;border-radius:999px;margin-left:3px;font-weight:700;">0</span></div>
               <div class="bento-stat-num" id="bento-count-requests">0</div>
               <div class="bento-stat-sub" id="bento-sub-requests">Ce mois-ci</div>
               <div class="bento-stat-bar"><div class="bento-stat-bar-fill" id="bento-bar-requests" style="width:0%"></div></div>
@@ -1747,6 +1747,7 @@ var EXP_TASK_OPTIONS = {
 };
 
 function getTaskOptionsForConsultant() {
+  if (!currentConsultant) return EXP_TASK_OPTIONS['default'];
   var erps = Array.isArray(currentConsultant.competences) ? currentConsultant.competences : [];
   var primaryErp = '';
   ['SAP', 'Oracle', 'Dynamics', 'Workday'].forEach(function(e) {
@@ -2507,6 +2508,12 @@ function updateUnreadBadges(count) {
   if (convBadge) {
     if (count > 0) { convBadge.textContent = count; convBadge.style.display = 'inline'; }
     else { convBadge.style.display = 'none'; }
+  }
+  /* KPI badge on main dashboard */
+  var kpiBadge = document.getElementById('kpi-unread-badge');
+  if (kpiBadge) {
+    if (count > 0) { kpiBadge.textContent = count + ' non lu' + (count > 1 ? 's' : ''); kpiBadge.style.display = 'inline'; }
+    else { kpiBadge.style.display = 'none'; }
   }
 }
 

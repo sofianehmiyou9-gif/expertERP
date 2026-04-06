@@ -925,7 +925,7 @@ input:focus, textarea:focus, select:focus {
           <div class="stats-divider"></div>
           <div class="stats-metric"><span class="stats-metric-value" id="kpi-slots">--</span><span class="stats-metric-label">Slots libres</span></div>
           <div class="stats-divider"></div>
-          <div class="stats-metric"><span class="stats-metric-value" id="kpi-messages-sent">0</span><span class="stats-metric-label">Messages</span></div>
+          <div class="stats-metric" style="cursor:pointer;" onclick="document.querySelector('[data-tab-name=messages]').click();"><span class="stats-metric-value" id="kpi-messages-sent">0</span><span class="stats-metric-label">Messages</span><span id="kpi-unread-badge" style="display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:2px 7px;border-radius:999px;margin-left:2px;font-weight:700;position:relative;top:-8px;">0</span></div>
           <div class="stats-divider"></div>
           <div class="stats-metric"><span class="stats-metric-value" id="kpi-conversations">0</span><span class="stats-metric-label">Conversations</span></div>
           <div class="stats-divider"></div>
@@ -2858,21 +2858,32 @@ async function loadCompanyMessages() {
 
       /* Badge dans l'onglet Messages */
       const badge = document.getElementById('messages-badge');
-      if (badge && unreadCount > 0) {
-        badge.textContent = unreadCount;
-        badge.style.display = 'inline';
+      if (badge) {
+        if (unreadCount > 0) { badge.textContent = unreadCount; badge.style.display = 'inline'; }
+        else { badge.style.display = 'none'; }
+      }
+
+      /* Badge KPI sur la page principale */
+      var kpiBadge = document.getElementById('kpi-unread-badge');
+      if (kpiBadge) {
+        if (unreadCount > 0) { kpiBadge.textContent = unreadCount + ' non lu' + (unreadCount > 1 ? 's' : ''); kpiBadge.style.display = 'inline'; }
+        else { kpiBadge.style.display = 'none'; }
       }
 
       /* Bannière de notification en haut du dashboard */
       const banner = document.getElementById('unread-banner');
-      if (banner && unreadCount > 0) {
-        var bannerText = document.getElementById('unread-banner-text');
-        if (bannerText) {
-          bannerText.textContent = unreadCount === 1
-            ? 'Vous avez 1 message non lu'
-            : 'Vous avez ' + unreadCount + ' messages non lus';
+      if (banner) {
+        if (unreadCount > 0) {
+          var bannerText = document.getElementById('unread-banner-text');
+          if (bannerText) {
+            bannerText.textContent = unreadCount === 1
+              ? 'Vous avez 1 message non lu'
+              : 'Vous avez ' + unreadCount + ' messages non lus';
+          }
+          banner.style.display = 'flex';
+        } else {
+          banner.style.display = 'none';
         }
-        banner.style.display = 'flex';
       }
     } catch (e) {
       console.warn('Erreur chargement messages:', e);
@@ -2974,17 +2985,31 @@ async function loadMessagesTab() {
 }
 
 function updateMessagesBadge() {
-  var badge = document.getElementById('messages-badge');
-  if (!badge) return;
   var unread = (_messagesConversations || []).reduce(function(sum, conv) {
-    var unreadCount = conv.unreadCount || 0;
-    return sum + unreadCount;
+    return sum + (conv.unreadCount || 0);
   }, 0);
-  if (unread > 0) {
-    badge.textContent = String(unread);
-    badge.style.display = 'inline';
-  } else {
-    badge.style.display = 'none';
+  /* Tab badge */
+  var badge = document.getElementById('messages-badge');
+  if (badge) {
+    if (unread > 0) { badge.textContent = String(unread); badge.style.display = 'inline'; }
+    else { badge.style.display = 'none'; }
+  }
+  /* KPI badge on main dashboard */
+  var kpiBadge = document.getElementById('kpi-unread-badge');
+  if (kpiBadge) {
+    if (unread > 0) { kpiBadge.textContent = unread + ' non lu' + (unread > 1 ? 's' : ''); kpiBadge.style.display = 'inline'; }
+    else { kpiBadge.style.display = 'none'; }
+  }
+  /* Bannière */
+  var banner = document.getElementById('unread-banner');
+  if (banner) {
+    if (unread > 0) {
+      var txt = document.getElementById('unread-banner-text');
+      if (txt) txt.textContent = unread === 1 ? 'Vous avez 1 message non lu' : 'Vous avez ' + unread + ' messages non lus';
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
   }
 }
 
@@ -3094,6 +3119,11 @@ async function openConversationInPanel(email, name) {
       const messages = await window.ExpertMessaging.getThread(currentEmail, email);
       renderChatMessages(messages || []);
       await window.ExpertMessaging.markThreadRead(window.ExpertMessaging.makeThreadId(currentEmail, email), currentEmail);
+      /* Refresh badges + conversation list after marking as read */
+      var refreshedConvos = await window.ExpertMessaging.getConversations(currentEmail);
+      _messagesConversations = refreshedConvos || [];
+      renderConversationList(_messagesConversations);
+      updateMessagesBadge();
     } catch (e) {
       console.error('Error loading thread:', e);
       document.getElementById('chat-messages').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;">Erreur lors du chargement.</div>';
