@@ -1751,7 +1751,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('insert_failed');
 
       /* Créer la session et recharger */
-      ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
+      await ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
       window.location.reload();
     } catch (e) {
       console.error('[VisiteurPro] Registration error:', e);
@@ -1780,7 +1780,7 @@ document.addEventListener('DOMContentLoaded', () => {
       var vpNotes = (function() { try { return JSON.parse(data[0].description || '{}'); } catch(_e) { return {}; } })();
       if (!vpNotes.auth_password_sha256 || vpNotes.auth_password_sha256 !== hashHex) { showVpError(errEl, 'Mot de passe incorrect.'); return; }
 
-      ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
+      await ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
       window.location.reload();
     } catch (e) {
       showVpError(errEl, 'Erreur de connexion. Réessayez.');

@@ -2381,9 +2381,9 @@ function getPortalEmail() {
   return null;
 }
 
-function persistPortalSession(email) {
+async function persistPortalSession(email) {
   if (window.ExpertPortalAuth && email) {
-    ExpertPortalAuth.setSession({ role: 'consultant', email: email });
+    await ExpertPortalAuth.setSession({ role: 'consultant', email: email });
   }
 }
 
@@ -2399,7 +2399,7 @@ async function initAuth() {
         if (consultants.length > 0) {
           currentEmail = authEmail;
           currentConsultant = consultants[0];
-          persistPortalSession(authEmail);
+          await persistPortalSession(authEmail);
           showDashboard();
           return;
         }
@@ -2464,7 +2464,7 @@ async function authenticate() {
     }
     currentEmail = email;
     currentConsultant = consultants[0];
-    persistPortalSession(email);
+    await persistPortalSession(email);
     showDashboard();
     return;
   }
@@ -2485,7 +2485,7 @@ async function authenticateLegacy(email, password) {
 
   currentEmail = email;
   currentConsultant = result.consultant;
-  persistPortalSession(email);
+  await persistPortalSession(email);
   showDashboard();
 }
 

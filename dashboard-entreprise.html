@@ -2376,7 +2376,7 @@ async function initAuth() {
             currentCompany = found.company;
             currentAccessRole = access?.role || 'viewer';
             currentAccessStatus = access?.status || 'active';
-            persistPortalSession(authEmail);
+            await persistPortalSession(authEmail);
             showDashboard();
             loadResources();
             loadProfile();
@@ -2425,9 +2425,9 @@ async function initAuth() {
   showAuthForm();
 }
 
-function persistPortalSession(email) {
+async function persistPortalSession(email) {
   if (window.ExpertPortalAuth) {
-    ExpertPortalAuth.setSession({ role: 'entreprise', email: email });
+    await ExpertPortalAuth.setSession({ role: 'entreprise', email: email });
   }
 }
 
@@ -2467,7 +2467,7 @@ async function authenticate() {
     currentCompany = company;
     currentAccessRole = access?.role || 'viewer';
     currentAccessStatus = access?.status || 'active';
-    persistPortalSession(email);
+    await persistPortalSession(email);
     showDashboard();
     loadResources();
     loadProfile();
@@ -2513,7 +2513,7 @@ async function authenticateLegacy(email, password) {
   currentCompany = company;
   currentAccessRole = access?.role || 'viewer';
   currentAccessStatus = access?.status || 'active';
-  persistPortalSession(email);
+  await persistPortalSession(email);
   showDashboard();
   loadResources();
   loadProfile();

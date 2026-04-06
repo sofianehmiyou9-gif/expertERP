@@ -1812,7 +1812,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   const pwdHash = await sha256Hex(pwd);
   if (pwdHash === ADMIN_PWD_HASH) {
     sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
-    if (window.ExpertPortalAuth) ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
+    if (window.ExpertPortalAuth) await ExpertPortalAuth.setSession({ role: 'admin', adminGranted: true });
     openApp();
   } else {
     document.getElementById('auth-err').textContent = 'Mot de passe incorrect';

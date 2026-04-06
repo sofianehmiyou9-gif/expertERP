@@ -118,28 +118,15 @@ CREATE POLICY consultants_public_update
 -- DROP POLICY IF EXISTS consultants_public_insert ON public.consultants;
 -- DROP POLICY IF EXISTS entreprises_public_insert ON public.entreprises;
 
--- Create permissive policies for current app behavior
-DO $$
-BEGIN
-  CREATE POLICY entreprises_open_access
-    ON public.entreprises
-    FOR ALL
-    TO anon, authenticated
-    USING (true)
-    WITH CHECK (true);
-EXCEPTION WHEN duplicate_object THEN NULL;
-END $$;
+-- ⚠️  DO NOT recreate open_access FOR ALL policies here.
+-- They were removed in Section E (lines 55-56) to enforce fine-grained access.
+-- Re-adding them would negate all Section E hardening (PostgreSQL OR-based RLS).
 
-DO $$
-BEGIN
-  CREATE POLICY consultants_open_access
-    ON public.consultants
-    FOR ALL
-    TO anon, authenticated
-    USING (true)
-    WITH CHECK (true);
-EXCEPTION WHEN duplicate_object THEN NULL;
-END $$;
+-- ⚠️  NOTE: UPDATE policies (entreprises_public_update, consultants_public_update)
+-- are kept permissive (USING true) because the admin dashboard currently uses the
+-- anon API key for status changes. This is a known trade-off.
+-- TODO: Migrate admin operations to Supabase Edge Functions with service_role key,
+-- then restrict UPDATE policies to owner-only access.
 
 -- =========================================================
 -- SECTION B - STRICTER BASELINE (run later)

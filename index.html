@@ -4382,7 +4382,7 @@ async function submitPortalAccess() {
           return;
         }
       }
-      ExpertPortalAuth.goToDashboard('admin', adminEmail || '', { adminGranted: true });
+      await ExpertPortalAuth.goToDashboard('admin', adminEmail || '', { adminGranted: true });
       return;
     }
 
@@ -4447,7 +4447,7 @@ async function submitPortalAccess() {
       const passwordHash = await sha256Hex(newPassword);
       await syncLegacyHashesByEmail(email, passwordHash);
       if (window.ExpertPortalAuth) {
-        ExpertPortalAuth.goToDashboard(portalRole, email);
+        await ExpertPortalAuth.goToDashboard(portalRole, email);
         return;
       }
       setPortalResetMode(false);
@@ -4467,7 +4467,7 @@ async function submitPortalAccess() {
         setPortalFeedback(portalText('invalidCredentials'), 'error');
         return;
       }
-      ExpertPortalAuth.goToDashboard('consultant', email);
+      await ExpertPortalAuth.goToDashboard('consultant', email);
       return;
     }
 
@@ -4486,7 +4486,7 @@ async function submitPortalAccess() {
       setPortalFeedback(portalText('invalidCredentials'), 'error');
       return;
     }
-    ExpertPortalAuth.goToDashboard('entreprise', email);
+    await ExpertPortalAuth.goToDashboard('entreprise', email);
   } catch (err) {
     const rawMessage = String((err && err.message) || '').trim();
     if (rawMessage) {
