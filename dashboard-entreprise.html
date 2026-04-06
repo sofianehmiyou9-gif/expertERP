@@ -205,7 +205,7 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
 .tab-button:hover{color:#00288e;background:rgba(0,40,142,.04);}
 .tab-button.active{color:#00288e;border-bottom-color:#00288e;}
 .content{flex:1;padding:1.25rem 2rem;overflow-y:auto;background:transparent;}
-.section-title{font-family:var(--font-main);font-size:1.15rem;font-weight:700;letter-spacing:.05em;margin-bottom:.5rem;color:#0f172a;text-transform:uppercase;}
+.section-title{font-family:var(--font-main);font-size:1.15rem;font-weight:700;letter-spacing:.01em;margin-bottom:.5rem;color:#0f172a;}
 .section-sub{font-size:.78rem;color:#64748b;margin-bottom:1rem;letter-spacing:.02em;}
 
 /* ═══ RESOURCE LIST (Premium horizontal rows) ═══ */
@@ -416,9 +416,9 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
 /* Sender name for received */
 .chat-sender-name{font-size:.7rem;font-weight:600;color:#00288e;margin-bottom:.2rem;padding-left:.25rem;}
 
-/* B2B / Freelance conversation tags */
+/* Conversation tags */
 .conv-tag{display:inline-block;font-size:.58rem;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;letter-spacing:.02em;}
-.conv-tag-b2b{background:#dbeafe;color:#1e40af;}
+.conv-tag-b2b{background:#ede9fe;color:#5b21b6;}
 .conv-tag-freelance{background:#f0fdf4;color:#166534;}
 /* Read receipts */
 .chat-read-receipt{font-size:.65rem;color:#3b82f6;margin-left:4px;font-weight:600;letter-spacing:.01em;}
@@ -544,7 +544,7 @@ tbody tr{border-top:1px solid rgba(196,197,213,.3);}
 th { font-size:.72rem; letter-spacing:.1em; font-weight:700; font-family:var(--font-main); }
 .table-container { border-radius:28px; }
 /* Section title upgrade */
-.section-title { font-size:2.25rem; }
+.section-title { font-size:1.5rem; font-family:var(--font-serif); font-weight:600; letter-spacing:-.01em; }
 
 /* -- Obsidian dashboard extras -- */
 body{background:#f7f9fb;}
@@ -3056,10 +3056,19 @@ function renderConversationList(conversations) {
     var initials = otherName.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
     var preview = (lastMsg || '').substring(0, 40) + ((lastMsg || '').length > 40 ? '...' : '');
 
-    var isB2BConv = otherName.indexOf('(re:') > -1;
-    var convTag = isB2BConv
-      ? '<span class="conv-tag conv-tag-b2b">B2B</span>'
-      : '<span class="conv-tag conv-tag-freelance">Freelance</span>';
+    // Detect role from messages: check sender_role of messages sent by the other party
+    var otherRole = '';
+    if (conv.messages && conv.messages.length > 0) {
+      for (var ri = 0; ri < conv.messages.length; ri++) {
+        if (conv.messages[ri].sender_email === otherEmail && conv.messages[ri].sender_role) {
+          otherRole = conv.messages[ri].sender_role;
+          break;
+        }
+      }
+    }
+    var convTag = otherRole === 'entreprise'
+      ? '<span class="conv-tag conv-tag-b2b">Entreprise</span>'
+      : '<span class="conv-tag conv-tag-freelance">Consultant</span>';
 
     return '<div class="conversation-item" data-email="' + safe(otherEmail) + '" data-name="' + safe(otherName) + '">' +
       '<div class="conversation-avatar">' + initials + '</div>' +

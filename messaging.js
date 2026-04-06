@@ -179,14 +179,27 @@
    */
   async function markThreadRead(threadId, receiverEmail) {
     try {
-      var url = BASE + '?thread_id=eq.' + encodeURIComponent(threadId) +
-        '&receiver_email=eq.' + encodeURIComponent(receiverEmail.toLowerCase()) +
-        '&read=eq.false';
-      await fetch(url, {
-        method: 'PATCH',
-        headers: HEADERS,
-        body: JSON.stringify({ read: true })
+      // Use RPC function (SECURITY DEFINER) to bypass RLS
+      var rpcUrl = ExpertConfig.SB_URL + '/rest/v1/rpc/mark_thread_read';
+      var resp = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: {
+          'apikey': ExpertConfig.SB_KEY,
+          'Authorization': 'Bearer ' + ExpertConfig.SB_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          p_thread_id: threadId,
+          p_receiver_email: receiverEmail.toLowerCase()
+        })
       });
+      if (!resp.ok) {
+        var err = await resp.text();
+        console.warn('[Messaging] Erreur markRead RPC:', err);
+      } else {
+        var count = await resp.json();
+        console.log('[Messaging] markThreadRead:', count, 'messages marques lus');
+      }
     } catch (e) {
       console.warn('[Messaging] Erreur markRead:', e);
     }
