@@ -857,10 +857,10 @@ nav.nav-scrolled{height:68px;background:rgba(255,255,255,.9);box-shadow:var(--sh
 }
 .portal-role-card.selected{border-color:#16a34a;background:linear-gradient(165deg, #ecfdf5 0%, rgba(34,197,94,.08) 100%);box-shadow:0 0 0 3px rgba(22,163,74,.16), 0 12px 32px rgba(22,163,74,.14), inset 0 1px 0 rgba(255,255,255,.6);}
 .portal-role-card.hidden-admin{display:none;}
-.portal-role-icon{font-size:1.35rem;transition:transform .3s ease;line-height:1;}
+.portal-role-icon{font-size:1.35rem;transition:transform .3s ease;line-height:1;pointer-events:auto;}
 .portal-role-card:hover .portal-role-icon{transform:scale(1.15) rotate(8deg);}
-.portal-role-title{font-family:var(--font-main);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600;}
-.portal-role-desc{font-size:.76rem;color:var(--muted);line-height:1.55;}
+.portal-role-title{font-family:var(--font-main);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-weight:600;pointer-events:auto;}
+.portal-role-desc{font-size:.76rem;color:var(--muted);line-height:1.55;pointer-events:auto;}
 .portal-help{font-size:.82rem;color:#334155;line-height:1.65;margin-bottom:.25rem;padding:.75rem .95rem;background:linear-gradient(180deg,rgba(34,197,94,.08),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.18);border-left:3px solid #16a34a;border-radius:8px;}
 .portal-actions{display:flex;gap:.75rem;justify-content:flex-end;align-items:center;flex-wrap:nowrap;width:100%;}
 .portal-error{display:none;font-size:.78rem;color:var(--red);padding:.55rem .65rem;background:rgba(220,38,38,.08);border-left:2px solid var(--red);border-radius:6px;}
@@ -6192,6 +6192,15 @@ function buildConsultantSkills(c, notes) {
   return [...new Set(combined.filter(Boolean))];
 }
 
+/* ═══ NAME NORMALIZATION: Ensure consistent casing (First Last) ═══ */
+function normalizeName(first, last) {
+  var f = (first || '').trim();
+  var l = (last || '').trim();
+  if (f) f = f.charAt(0).toUpperCase() + f.slice(1).toLowerCase();
+  if (l) l = l.charAt(0).toUpperCase() + l.slice(1).toLowerCase();
+  return (f + ' ' + l).trim();
+}
+
 /* ═══ ANONYMISATION: Prénom + initiale pour les visiteurs non connectés ═══ */
 function anonymizeDisplayName(fullName) {
   if (!fullName) return 'Consultant ERP';
@@ -6213,7 +6222,7 @@ function renderConsultants(list) {
     const isB2BAnonymous = notes.source === 'import_b2b';
     const _rawName = isB2BAnonymous
       ? String(notes.resource_code || 'Ressource partenaire').trim()
-      : `${c.prenom || ''} ${c.nom || ''}`.trim() || c.full_name || 'Consultant ERP';
+      : normalizeName(c.prenom || '', c.nom || '') || c.full_name || 'Consultant ERP';
     const displayName = (_canSeeFullName || isB2BAnonymous) ? _rawName : anonymizeDisplayName(_rawName);
     const initials = isB2BAnonymous
       ? 'RP'
