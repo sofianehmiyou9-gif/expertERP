@@ -768,6 +768,7 @@ body { font-family: 'Manrope', sans-serif; }
 <script src="i18n.js"></script>
 <script src="translate-content.js"></script>
 <script src="notifications.js"></script>
+<script src="messaging.js"></script>
 <script>
 // Define SB_URL and SB_KEY for inline scripts that use them directly
 const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
@@ -1552,6 +1553,32 @@ async function sendContactMessage() {
 
   // Sauvegarder via le module notifications (Supabase + localStorage)
   await ExpertNotifications.push(notif);
+
+  /* ═══ AUSSI envoyer via le système de messagerie directe ═══
+     Cela crée un message dans la table "messages" pour que la conversation
+     apparaisse dans l'onglet Messages des deux dashboards. */
+  if (window.ExpertMessaging && companyEmail && recipientEmail) {
+    try {
+      var senderRole = 'entreprise';
+      var _portalSess = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+      if (_portalSess && _portalSess.role === 'visiteur_pro') senderRole = 'visiteur_pro';
+
+      var consultantFullName = (currentConsultant.prenom || '') + ' ' + (currentConsultant.nom || '');
+      consultantFullName = consultantFullName.trim() || recipientEmail;
+
+      await ExpertMessaging.send({
+        senderEmail: companyEmail,
+        senderName: entrepriseName,
+        senderRole: senderRole,
+        receiverEmail: recipientEmail,
+        receiverName: consultantFullName,
+        body: message
+      });
+      console.log('[Contact] Message aussi envoyé via messaging direct à', recipientEmail);
+    } catch (msgErr) {
+      console.warn('[Contact] Erreur envoi messaging direct (non bloquant):', msgErr);
+    }
+  }
 
   /* ═══ Incrémenter le compteur visiteur pro après envoi réussi ═══ */
   if (_vpSession && _vpSession.role === 'visiteur_pro' && _vpSession.email) {
