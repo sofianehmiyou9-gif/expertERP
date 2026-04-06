@@ -1644,7 +1644,12 @@ function applyI18n() {
   const tabSearch = document.getElementById('tab-search');
   if (tabSearch) tabSearch.textContent = t('dashboardCompany.search');
   const tabMessages = document.getElementById('tab-messages');
-  if (tabMessages) tabMessages.textContent = t('dashboardCompany.messages');
+  if (tabMessages) {
+    var msgBadge = tabMessages.querySelector('#messages-badge');
+    tabMessages.textContent = t('dashboardCompany.messages') + ' ';
+    if (!msgBadge) { msgBadge = document.createElement('span'); msgBadge.id = 'messages-badge'; msgBadge.style.cssText = 'display:none;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:999px;margin-left:4px;font-weight:700;'; }
+    tabMessages.appendChild(msgBadge);
+  }
   const tabTeam = document.getElementById('tab-team');
   if (tabTeam) tabTeam.textContent = t('dashboardCompany.team');
 

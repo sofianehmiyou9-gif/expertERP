@@ -1961,7 +1961,12 @@ function applyI18n() {
 
   /* ══════════════ 4 KPI CARDS ══════════════ */
   const bentoLabels = document.querySelectorAll('.bento-stat .bento-stat-label');
-  if (bentoLabels[0]) bentoLabels[0].textContent = t('dashboardConsultant.requestsReceived');
+  if (bentoLabels[0]) {
+    bentoLabels[0].textContent = t('dashboardConsultant.requestsReceived') + ' ';
+    var kpiBadge = document.getElementById('kpi-unread-badge');
+    if (!kpiBadge) { kpiBadge = document.createElement('span'); kpiBadge.id = 'kpi-unread-badge'; kpiBadge.style.cssText = 'display:none;background:#dc2626;color:#fff;font-size:.55rem;padding:1px 6px;border-radius:999px;margin-left:3px;font-weight:700;'; }
+    bentoLabels[0].appendChild(kpiBadge);
+  }
   if (bentoLabels[1]) bentoLabels[1].textContent = t('dashboardConsultant.profileCompleteness');
   if (bentoLabels[2]) bentoLabels[2].textContent = t('dashboardConsultant.status');
   if (bentoLabels[3]) bentoLabels[3].textContent = t('dashboardConsultant.availability');
