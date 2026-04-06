@@ -2772,6 +2772,8 @@ async function openMsgConversation(email, name) {
     // Mark as read
     var threadId = ExpertMessaging.makeThreadId(currentEmail, email);
     await ExpertMessaging.markThreadRead(threadId, currentEmail);
+    // Small delay for Supabase propagation
+    await new Promise(function(r) { setTimeout(r, 500); });
     // Refresh conv list to update unread counts + badges
     var convos = await ExpertMessaging.getConversations(currentEmail);
     _msgConversations = convos || [];

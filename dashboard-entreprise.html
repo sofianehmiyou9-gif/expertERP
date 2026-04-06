@@ -173,7 +173,7 @@ tr:hover td{background:#f7f9fb;transition:background .2s ease;}
   .stats-metric:hover{background:rgba(0,40,142,.03);}
   .stats-metric-value{font-size:1.35rem;font-weight:800;color:#0f172a;font-family:'Manrope',system-ui,sans-serif;}
   .stats-metric-value.stats-green{color:#059669;}
-  .stats-metric-label{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;}
+  .stats-metric-label { font-size:.58rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#94a3b8; }
   .stats-divider{width:1px;height:32px;background:rgba(0,0,0,.06);flex-shrink:0;}
   .stats-strip-plan{border-top:1px solid rgba(0,0,0,.06);margin-top:.75rem;padding-top:.65rem;display:flex;flex-direction:column;gap:.35rem;}
   .stats-plan-row{display:flex;justify-content:space-between;align-items:center;}
@@ -911,7 +911,7 @@ input:focus, textarea:focus, select:focus {
   <div class="content">
     <!-- Resources Tab -->
     <div class="tab-pane active" id="resources-tab">
-      <div class="section-title" id="resources-title">Mes Ressources</div>
+      <div class="section-title" id="resources-title" style="font-family:'Manrope',sans-serif;font-size:1.1rem;font-weight:700;color:#0f172a;letter-spacing:-.01em;text-transform:none;">Mes Ressources</div>
       <div class="section-sub">Gérez et suivez les consultants associés à votre compte.</div>
 
       <!-- ═══ STATS STRIP (condensed single panel) ═══ -->
@@ -1891,7 +1891,7 @@ async function loadResources() {
 
     return `<tr>
       <td style="text-align:center;">${photoHtml}</td>
-      <td><div style="font-weight:600;color:#191c1e;">${sanitizeHtml(getResourceDisplayName(r))}</div><div style="font-size:.7rem;color:#9ca3af;margin-top:2px;">${sanitizeHtml(resourceCode)}</div></td>
+      <td><div style="font-weight:600;color:#191c1e;">${sanitizeHtml(getResourceDisplayName(r))}</div><div style="font-size:.7rem;color:#9ca3af;margin-top:2px;">${sanitizeHtml(role)}</div></td>
       <td>${sanitizeHtml(erps)}</td>
       <td>${sanitizeHtml(role)}</td>
       <td>${sanitizeHtml(tjmLabel)}</td>
@@ -3131,10 +3131,17 @@ async function openConversationInPanel(email, name) {
       renderChatMessages(messages || []);
       await window.ExpertMessaging.markThreadRead(window.ExpertMessaging.makeThreadId(currentEmail, email), currentEmail);
       /* Refresh badges + conversation list after marking as read */
+      await new Promise(function(r) { setTimeout(r, 500); }); /* Small delay for Supabase to propagate */
       var refreshedConvos = await window.ExpertMessaging.getConversations(currentEmail);
       _messagesConversations = refreshedConvos || [];
       renderConversationList(_messagesConversations);
       updateMessagesBadge();
+      /* Also hide the banner since we just read messages */
+      var banner = document.getElementById('unread-banner');
+      if (banner) {
+        var totalUnread = (_messagesConversations || []).reduce(function(s, c) { return s + (c.unreadCount || 0); }, 0);
+        if (totalUnread === 0) banner.style.display = 'none';
+      }
     } catch (e) {
       console.error('Error loading thread:', e);
       document.getElementById('chat-messages').innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;">Erreur lors du chargement.</div>';
