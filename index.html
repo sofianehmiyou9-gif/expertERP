@@ -3469,7 +3469,7 @@ function acceptCguAndClose() {
           <div class="form-group"><label class="form-label">Email professionnel <span>*</span></label><input class="form-input blue" id="ent-email" type="email"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Mot de passe compte <span>*</span></label><input class="form-input blue" id="ent-password" type="password" placeholder="8 caracteres minimum"></div>
+          <div class="form-group"><label class="form-label">Mot de passe compte <span>*</span></label><input class="form-input blue" id="ent-password" type="password" placeholder="Min. 8 car., 1 majuscule, 1 chiffre"></div>
           <div class="form-group"><label class="form-label">Confirmer mot de passe <span>*</span></label><input class="form-input blue" id="ent-password-confirm" type="password" placeholder="Retapez le mot de passe"></div>
         </div>
         <div class="form-group"><label class="form-label">Téléphone</label><input class="form-input blue" id="ent-tel" placeholder="+1 514 000 0000"></div>
@@ -3814,6 +3814,15 @@ function acceptCguAndClose() {
 function safe(str) {
   if (str === null || str === undefined) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ── Password strength validation ──
+function validatePasswordStrength(pwd) {
+  if (!pwd || pwd.length < 8) return 'Le mot de passe doit contenir au moins 8 caractères.';
+  if (!/[A-Z]/.test(pwd)) return 'Le mot de passe doit contenir au moins une lettre majuscule.';
+  if (!/[a-z]/.test(pwd)) return 'Le mot de passe doit contenir au moins une lettre minuscule.';
+  if (!/[0-9]/.test(pwd)) return 'Le mot de passe doit contenir au moins un chiffre.';
+  return null; // OK
 }
 
 // ── CONSULTANT_COLS: Define column string for backward compatibility ──
@@ -5262,8 +5271,9 @@ async function submitConsultant() {
     }
     const password = document.getElementById('cs-password').value;
     const passwordConfirm = document.getElementById('cs-password-confirm').value;
-    if (!password || password.length < 8) {
-      alert('Veuillez créer un mot de passe de 8 caractères minimum.');
+    var pwdError = validatePasswordStrength(password);
+    if (pwdError) {
+      alert(pwdError);
       btn.disabled = false; btn.textContent = 'Envoyer ma candidature ✓';
       return;
     }
@@ -5498,18 +5508,52 @@ function escapeCsvValue(value) {
 
 // ── File import ──
 let importedFileData = null;
+var IMPORT_MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB max
+var IMPORT_MAX_ROWS = 100; // 100 ressources max par import
+
+function sanitizeCell(val) {
+  if (val === null || val === undefined) return '';
+  var s = String(val).trim();
+  // Remove potential formula injection (cells starting with =, +, -, @, tab, CR)
+  s = s.replace(/^[\t\r\n]*/, '');
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
+  // Limit cell length
+  if (s.length > 1000) s = s.substring(0, 1000);
+  // Strip HTML tags
+  s = s.replace(/<[^>]*>/g, '');
+  return s;
+}
+
 function handleFileSelect(input) {
   const file = input.files[0];
   if (!file) return;
   const nameEl = document.getElementById('import-file-name');
+  const preview = document.getElementById('import-preview');
+
+  // ── File size check ──
+  if (file.size > IMPORT_MAX_FILE_SIZE) {
+    nameEl.textContent = '📄 ' + file.name + ' (' + (file.size / 1024 / 1024).toFixed(1) + ' Mo)';
+    nameEl.style.display = 'block';
+    preview.innerHTML = '❌ Fichier trop volumineux (max ' + (IMPORT_MAX_FILE_SIZE / 1024 / 1024) + ' Mo). Réduisez le nombre de lignes.';
+    preview.style.display = 'block';
+    importedFileData = null;
+    input.value = '';
+    return;
+  }
+
   nameEl.textContent = '📄 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' Ko)';
   nameEl.style.display = 'block';
-  const preview = document.getElementById('import-preview');
   const ext = file.name.split('.').pop().toLowerCase();
   const reader = new FileReader();
   if (ext === 'csv') {
     reader.onload = e => {
       const rows = parseCSV(e.target.result);
+      if (rows.length > IMPORT_MAX_ROWS) {
+        preview.innerHTML = '❌ Trop de lignes (' + rows.length + '). Maximum ' + IMPORT_MAX_ROWS + ' ressources par import.';
+        preview.style.display = 'block';
+        importedFileData = null;
+        return;
+      }
       importedFileData = rows;
       preview.innerHTML = '✅ <strong>' + safe(String(rows.length)) + ' ressource(s) détectée(s)</strong> — Elles seront soumises à validation avant publication.';
       preview.style.display = 'block';
@@ -5523,6 +5567,12 @@ function handleFileSelect(input) {
         var sheet = workbook.Sheets[workbook.SheetNames[0]];
         var json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
         var rows = parseXlsxRows(json);
+        if (rows.length > IMPORT_MAX_ROWS) {
+          preview.innerHTML = '❌ Trop de lignes (' + rows.length + '). Maximum ' + IMPORT_MAX_ROWS + ' ressources par import.';
+          preview.style.display = 'block';
+          importedFileData = null;
+          return;
+        }
         importedFileData = rows;
         preview.innerHTML = '✅ <strong>' + safe(String(rows.length)) + ' ressource(s) détectée(s)</strong> — Elles seront soumises à validation avant publication.';
         preview.style.display = 'block';
@@ -5533,7 +5583,7 @@ function handleFileSelect(input) {
     };
     reader.readAsArrayBuffer(file);
   } else {
-    importedFileData = [{ _filename: file.name, _raw: true }];
+    importedFileData = null;
     preview.innerHTML = '⚠️ Format non supporté. Utilisez .xlsx ou .csv';
     preview.style.display = 'block';
   }
@@ -5573,7 +5623,7 @@ function parseXlsxRows(json) {
     if (!row || !row.length) continue;
     var obj = {};
     for (var c = 0; c < fieldKeys.length; c++) {
-      obj[fieldKeys[c]] = String(row[c] != null ? row[c] : '').trim();
+      obj[fieldKeys[c]] = sanitizeCell(row[c]);
     }
     /* Skip hint rows, instruction rows, and rows without email */
     if (!obj.email || obj.email.indexOf('@') === -1) continue;
@@ -5731,8 +5781,9 @@ function validateEntrepriseSubmission() {
     return false;
   }
 
-  if (!password || password.length < 8) {
-    alert('Veuillez créer un mot de passe entreprise de 8 caractères minimum.');
+  var pwdError = validatePasswordStrength(password);
+  if (pwdError) {
+    alert(pwdError);
     return false;
   }
 
@@ -5891,30 +5942,34 @@ async function submitEntreprise() {
         const prenom = parts.length > 1 ? parts.slice(0, -1).join(' ') : (fullName || 'Anonyme');
         const nom = parts.length > 1 ? parts.slice(-1).join(' ') : (fullName || null);
         const erps = row.erp ? row.erp.split(/[;,]/).map(e => e.trim()).filter(Boolean) : [];
-        await sbInsert('consultants', {
-          prenom: prenom,
-          nom: nom,
-          email: resourceEmail,
-          telephone: row.telephone || null,
-          titre: row.role || null,
-          competences: erps,
-          tjm_min: parseInt(row.tjm) || null,
-          tjm_max: parseInt(row.tjm) || null,
-          statut: 'en_attente',
-          notes_admin: JSON.stringify({
-            source: 'import_b2b',
-            entreprise_email: email,
-            entreprise_nom: company,
-            plan: selectedPlan,
-            modules: row.modules || '',
-            annees_exp: row.annees_exp || '',
-            disponibilite: row.disponibilite || '',
-            mode_travail: row.mode_travail || '',
-            ville: row.ville || '',
-            langues: row.langues || '',
-            resume: row.resume || ''
-          })
-        }).catch(() => {});
+        try {
+          await sbInsert('consultants', {
+            prenom: sanitizeCell(prenom),
+            nom: sanitizeCell(nom),
+            email: resourceEmail,
+            telephone: sanitizeCell(row.telephone) || null,
+            titre: sanitizeCell(row.role) || null,
+            competences: erps.map(function(e) { return sanitizeCell(e); }),
+            tjm_min: parseInt(row.tjm) || null,
+            tjm_max: parseInt(row.tjm) || null,
+            statut: 'en_attente',
+            notes_admin: JSON.stringify({
+              source: 'import_b2b',
+              entreprise_email: email,
+              entreprise_nom: company,
+              plan: selectedPlan,
+              modules: sanitizeCell(row.modules),
+              annees_exp: sanitizeCell(row.annees_exp),
+              disponibilite: sanitizeCell(row.disponibilite),
+              mode_travail: sanitizeCell(row.mode_travail),
+              ville: sanitizeCell(row.ville),
+              langues: sanitizeCell(row.langues),
+              resume: sanitizeCell(row.resume)
+            })
+          });
+        } catch (insertErr) {
+          console.warn('[Import] Échec insertion ressource #' + (rows.indexOf(row) + 1));
+        }
       }
     }
     document.getElementById('ent-success').style.display = 'block';

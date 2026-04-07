@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ExpertERPHub — Rapport d'Audit &amp; Tests</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">ExpertERPHub — Rapport d'Audit &amp; Tests</h1>
+</header>
+<h1 id="experterphub-rapport-daudit-complet-tests-fonctionnels">ExpertERPHub — Rapport d’Audit Complet &amp; Tests Fonctionnels</h1>
+<p><strong>Date :</strong> 6 avril 2026 <strong>Plateforme :</strong> https://expert-erp.vercel.app/ <strong>Auditeur :</strong> Claude (Audit automatisé) <strong>Version testée :</strong> Production (branche main)</p>
+<hr />
+<h2 id="résumé-exécutif">1. Résumé Exécutif</h2>
+<p>Ce rapport combine un <strong>audit de sécurité complet</strong> du code, des API et de l’infrastructure, ainsi que des <strong>tests fonctionnels end-to-end</strong> réalisés comme un vrai utilisateur via le navigateur Chrome sur le site en production.</p>
+<p><strong>Résultat global :</strong> La plateforme est fonctionnelle et opérationnelle. Les fonctionnalités principales marchent correctement. Cependant, <strong>15 vulnérabilités de sécurité</strong> ont été identifiées, dont 5 critiques qui nécessitent une attention prioritaire avant l’acquisition de vrais clients.</p>
+<hr />
+<h2 id="audit-de-sécurité">2. Audit de Sécurité</h2>
+<h3 id="synthèse-des-vulnérabilités">2.1 Synthèse des Vulnérabilités</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Sévérité</th>
+<th>Nombre</th>
+<th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CRITIQUE</td>
+<td>5</td>
+<td>À corriger en priorité</td>
+</tr>
+<tr class="even">
+<td>HAUTE</td>
+<td>3</td>
+<td>À corriger rapidement</td>
+</tr>
+<tr class="odd">
+<td>MOYENNE</td>
+<td>4</td>
+<td>À planifier</td>
+</tr>
+<tr class="even">
+<td>BASSE</td>
+<td>3</td>
+<td>Améliorations recommandées</td>
+</tr>
+<tr class="odd">
+<td><strong>Total</strong></td>
+<td><strong>15</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="vulnérabilités-critiques-5">2.2 Vulnérabilités CRITIQUES (5)</h3>
+<p><strong>C1 — XSS DOM dans la messagerie (messaging.js)</strong> Les noms d’utilisateur sont injectés via <code>innerHTML</code> sans échappement. Un attaquant peut injecter du HTML/JS malveillant via un nom de consultant contenant des balises <code>&lt;script&gt;</code> ou des attributs <code>onerror</code>. <em>Impact :</em> Vol de session, exfiltration de données. <em>Correction :</em> Remplacer <code>innerHTML</code> par <code>textContent</code> ou utiliser une fonction d’échappement HTML systématique.</p>
+<p><strong>C2 — Absence de politique RLS DELETE sur les consultants</strong> La table <code>consultants</code> n’a pas de politique RLS pour DELETE. Bien que cela bloque les suppressions via l’API anon (comportement par défaut de Supabase), ce n’est pas explicitement sécurisé. <em>Impact :</em> Risque si les politiques RLS changent ou si un accès non-anon est configuré. <em>Correction :</em> Ajouter une politique DELETE explicite : <code>CREATE POLICY "deny_anon_delete" ON consultants FOR DELETE USING (false);</code></p>
+<p><strong>C3 — Endpoint email sans authentification ni rate limiting (api/send-email.js)</strong> La fonction serverless Vercel <code>api/send-email.js</code> ne vérifie pas l’identité de l’appelant et n’a pas de limitation de débit. Peut être utilisé comme relais de spam. <em>Impact :</em> Abus de l’endpoint pour envoyer des emails de spam, dégradation de la réputation du domaine. <em>Correction :</em> Ajouter une vérification de session, un rate limiter (ex: Vercel Edge Config ou Redis), et un CAPTCHA côté client.</p>
+<p><strong>C4 — XSS via handlers onclick avec échappement insuffisant</strong> Certains gestionnaires <code>onclick</code> dans <code>index.html</code> et <code>dashboard-entreprise.html</code> construisent des chaînes JavaScript avec des valeurs non échappées pour le contexte JS. <em>Impact :</em> Injection de code JavaScript via des données de consultant malveillantes. <em>Correction :</em> Utiliser <code>data-*</code> attributs + <code>addEventListener</code> au lieu de <code>onclick</code> inline avec concaténation de chaînes.</p>
+<p><strong>C5 — Fonction safe() incomplète pour le contexte JavaScript</strong> La fonction <code>safe()</code> échappe les caractères HTML (<code>&lt;</code>, <code>&gt;</code>, <code>&amp;</code>, <code>"</code>, <code>'</code>) mais pas les caractères dangereux dans un contexte JavaScript (backtick, <code>\n</code>, <code>\r</code>). <em>Impact :</em> Contournement de l’échappement dans les attributs <code>onclick</code> et les template literals. <em>Correction :</em> Créer une fonction <code>safeJS()</code> dédiée qui échappe aussi les backticks, backslashes et caractères de contrôle.</p>
+<h3 id="vulnérabilités-hautes-3">2.3 Vulnérabilités HAUTES (3)</h3>
+<p><strong>H1 — Clé anon Supabase exposée côté client avec UPDATE permissif</strong> Les politiques RLS UPDATE sur <code>consultants</code> et <code>entreprises</code> utilisent <code>USING (true)</code>, permettant à n’importe qui avec la clé anon de modifier n’importe quel enregistrement. <em>Impact :</em> Modification malveillante de profils consultants ou entreprises. <em>Correction :</em> Migrer vers des Edge Functions Supabase avec <code>service_role</code> key pour les opérations admin.</p>
+<p><strong>H2 — Session forgeable côté client</strong> <code>portal-auth.js</code> utilise SHA-256 avec un sel côté client pour signer les sessions localStorage. Le sel étant dans le code source, un attaquant peut forger une session valide. <em>Impact :</em> Usurpation d’identité, accès non autorisé aux dashboards. <em>Correction :</em> Migrer vers Supabase Auth avec des JWT signés côté serveur.</p>
+<p><strong>H3 — Pas de validation CSRF sur les actions sensibles</strong> Les formulaires d’inscription, de modification de profil et d’import de ressources n’ont pas de protection CSRF. <em>Impact :</em> Un site malveillant peut soumettre des formulaires au nom d’un utilisateur connecté. <em>Correction :</em> Implémenter des tokens CSRF ou utiliser l’en-tête <code>SameSite=Strict</code> sur les cookies de session.</p>
+<h3 id="vulnérabilités-moyennes-4">2.4 Vulnérabilités MOYENNES (4)</h3>
+<p><strong>M1 — Absence de Content Security Policy stricte</strong> Le CSP utilise <code>unsafe-inline</code> pour <code>script-src</code> et <code>style-src</code>, ce qui réduit considérablement la protection contre les XSS. <em>Correction planifiée :</em> Migrer vers des fichiers JS externes avec des nonces CSP.</p>
+<p><strong>M2 — Pas de validation des entrées côté serveur</strong> Les données des formulaires (inscription consultant, import Excel) ne sont validées que côté client. Un attaquant peut envoyer des requêtes directes à l’API Supabase avec des données malformées. <em>Correction :</em> Ajouter des contraintes CHECK en base de données et/ou des Edge Functions de validation.</p>
+<p><strong>M3 — Import Excel sans sanitisation</strong> La fonction <code>parseXlsxRows()</code> parse les fichiers Excel uploadés sans vérifier la taille, le nombre de lignes, ou sanitiser les valeurs des cellules. <em>Correction :</em> Limiter la taille du fichier, le nombre de lignes, et échapper les valeurs avant insertion.</p>
+<p><strong>M4 — Logs d’erreur exposés en console</strong> Les erreurs Supabase sont affichées en console avec les détails de la requête, potentiellement utiles pour un attaquant. <em>Correction :</em> Supprimer les <code>console.error</code> détaillés en production.</p>
+<h3 id="vulnérabilités-basses-3">2.5 Vulnérabilités BASSES (3)</h3>
+<p><strong>B1 — Pas de politique de mot de passe pour les entreprises</strong> L’inscription entreprise ne vérifie pas la complexité du mot de passe.</p>
+<p><strong>B2 — Absence de headers de sécurité supplémentaires</strong> Manque de <code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>, <code>Permissions-Policy</code> dans la config Vercel.</p>
+<p><strong>B3 — Dépendances CDN sans intégrité (SRI)</strong> Les scripts CDN (Tailwind, SheetJS) sont chargés sans attribut <code>integrity</code>, vulnérables à une compromission CDN.</p>
+<hr />
+<h2 id="tests-fonctionnels-end-to-end-via-navigateur">3. Tests Fonctionnels (End-to-End via Navigateur)</h2>
+<h3 id="méthodologie">3.1 Méthodologie</h3>
+<p>Tests réalisés le 6 avril 2026 sur le site de production (https://expert-erp.vercel.app/) via Chrome, en tant qu’utilisateur réel connecté comme entreprise “StratERP Solutions” (p.gauthier@straterp.com).</p>
+<h3 id="pages-publiques">3.2 Pages Publiques</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 40%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Résultat</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Page d’accueil (Accueil)</td>
+<td>✅ PASS</td>
+<td>Hero section, carte consultant Sophie C., barre de recherche, CTAs, section “Comment ça marche” en 3 étapes</td>
+</tr>
+<tr class="even">
+<td>Page Consultants</td>
+<td>✅ PASS</td>
+<td>Grille de consultants en 2 colonnes, filtres (ERP, Rôle, Mode travail, Ville, Disponibilité, Tarif), pagination (3 pages), 8 consultants visibles par page</td>
+</tr>
+<tr class="odd">
+<td>Page Entreprises</td>
+<td>✅ PASS</td>
+<td>Hero bleu, 3 CTAs, section Placement + section Accès avec gate 2 chemins (Entreprise partenaire / Visiteur pro)</td>
+</tr>
+<tr class="even">
+<td>Profil Consultant (Claire Dupont)</td>
+<td>✅ PASS</td>
+<td>En-tête avec avatar, badges, compétences, stats (7+ ans, Bordeaux, 650-850$/jour), résumé, certifications, expériences, section contact</td>
+</tr>
+<tr class="odd">
+<td>Navigation SPA</td>
+<td>✅ PASS</td>
+<td>Navigation entre sections sans rechargement de page, boutons de navigation fonctionnels</td>
+</tr>
+<tr class="even">
+<td>Visibilité B2B</td>
+<td>✅ PASS</td>
+<td>Ressources B2B (“Ressource partenaire”) visibles car connecté en entreprise</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dashboard-entreprise-sidebar-navigation">3.3 Dashboard Entreprise — Sidebar Navigation</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 37%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Onglet</th>
+<th>Résultat</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mes Ressources</td>
+<td>✅ PASS</td>
+<td>5 ressources affichées (David Roy, Emilie Gagnon, Catherine Lavoie, Samira Hassan, Marc-André Pelletier), stats strip (5 ressources, 5 publiées, $1005), badges ENTREPRISE/B2B</td>
+</tr>
+<tr class="even">
+<td>Ajouter</td>
+<td>✅ PASS</td>
+<td>Zone drag &amp; drop CSV/Excel, formulaire d’ajout manuel avec tous les champs (Nom, ERP, Rôle, Module, Expérience, Taux, Mode travail, Ville, Langues)</td>
+</tr>
+<tr class="odd">
+<td>Rechercher</td>
+<td>✅ PASS</td>
+<td>Filtres de recherche (Mot-clé, ERP, Rôle, Disponibilité, Tarif max, Ville), 19 consultants trouvés, cartes de résultats avec tags et boutons Contacter/Profil</td>
+</tr>
+<tr class="even">
+<td>Messages</td>
+<td>✅ PASS</td>
+<td>Interface de messagerie avec panneau Conversations (gauche) et zone de chat (droite), état vide correct</td>
+</tr>
+<tr class="odd">
+<td>Favoris</td>
+<td>✅ PASS</td>
+<td>État vide avec message explicatif redirigeant vers l’onglet Rechercher</td>
+</tr>
+<tr class="even">
+<td>Historique</td>
+<td>✅ PASS</td>
+<td>“Historique des contacts” avec état vide correct</td>
+</tr>
+<tr class="odd">
+<td>Équipe</td>
+<td>✅ PASS</td>
+<td>Formulaire d’invitation (email + rôle Manager), table des membres avec p.gauthier@straterp.com / Owner / Actif</td>
+</tr>
+<tr class="even">
+<td>Mon Profil</td>
+<td>✅ PASS</td>
+<td>Formulaire éditable (nom, secteur, ville, site web, téléphone, taille, description), logo upload, barre de complétion 29%, infos plan (Growth, 5 slots)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dashboard-entreprise-fonctionnalités">3.4 Dashboard Entreprise — Fonctionnalités</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 40%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Résultat</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Toggle Vue cartes / Vue tableau</td>
+<td>✅ PASS</td>
+<td>Bascule fluide entre les deux vues. Vue tableau affiche PHOTO, NOM, ERP(S), TAUX, STATUT, VISIBILITÉ, CARTE LIÉE sans débordement horizontal</td>
+</tr>
+<tr class="even">
+<td>Colonnes masquées en tableau</td>
+<td>✅ PASS</td>
+<td>Colonnes Rôle (4e) et Date (9e) correctement masquées via CSS nth-child</td>
+</tr>
+<tr class="odd">
+<td>Filtres Mes Ressources</td>
+<td>✅ PASS</td>
+<td>Dropdowns statut et visibilité fonctionnels</td>
+</tr>
+<tr class="even">
+<td>Boutons Voir fiche / Modifier</td>
+<td>✅ PASS</td>
+<td>Liens “Voir” redirigent vers consultant.html, boutons “Modifier” présents</td>
+</tr>
+<tr class="odd">
+<td>Badges visibilité</td>
+<td>✅ PASS</td>
+<td>B2B UNIQUEMENT (bleu) et TOUT PUBLIC (vert) correctement affichés</td>
+</tr>
+<tr class="even">
+<td>Export CSV</td>
+<td>✅ PRÉSENT</td>
+<td>Bouton visible et cliquable (non testé pour le téléchargement effectif)</td>
+</tr>
+<tr class="odd">
+<td>Déconnexion</td>
+<td>✅ PRÉSENT</td>
+<td>Bouton visible dans la navbar</td>
+</tr>
+<tr class="even">
+<td>Sidebar active state</td>
+<td>✅ PASS</td>
+<td>L’onglet actif est correctement surligné avec un indicateur bleu à gauche</td>
+</tr>
+<tr class="odd">
+<td>User info sidebar</td>
+<td>✅ PASS</td>
+<td>“StratERP S… / Owner” affiché en bas de la sidebar</td>
+</tr>
+</tbody>
+</table>
+<h3 id="responsive-mobile">3.5 Responsive Mobile</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 40%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Résultat</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bottom nav mobile</td>
+<td>⚠️ NON TESTÉ</td>
+<td>La simulation de viewport mobile via l’outil de resize navigateur n’a pas produit de résultats exploitables dans l’environnement de test. Le CSS (<code>@media max-width:768px</code>) est en place dans le code.</td>
+</tr>
+<tr class="even">
+<td>Sidebar masquée sur mobile</td>
+<td>⚠️ NON TESTÉ</td>
+<td>Le CSS <code>@media max-width:768px { .sidebar-nav { display:none !important; } }</code> est en place dans le code.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="internationalisation">3.6 Internationalisation</h3>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 40%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Résultat</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Toggle FR/EN</td>
+<td>✅ PRÉSENT</td>
+<td>Boutons FR et EN visibles dans la navbar du dashboard</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="problèmes-visuels-ux-constatés">4. Problèmes Visuels &amp; UX Constatés</h2>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Problème</th>
+<th>Sévérité</th>
+<th>Détails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>V1</td>
+<td>Complétion profil entreprise basse</td>
+<td>Info</td>
+<td>Le profil StratERP Solutions est à 29% — certains champs (secteur, ville, site web, description) sont vides</td>
+</tr>
+<tr class="even">
+<td>V2</td>
+<td>Texte tronqué dans les cartes ressources</td>
+<td>Mineure</td>
+<td>Certains noms longs (Marc-André Pelleti…) et ERP (Microsoft Dynamics…) sont tronqués avec ellipsis</td>
+</tr>
+<tr class="odd">
+<td>V3</td>
+<td>Navbar desktop occupe beaucoup de place</td>
+<td>Info</td>
+<td>Avec sidebar + navbar, l’espace vertical pour le contenu est légèrement réduit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="recommandations-prioritaires">5. Recommandations Prioritaires</h2>
+<h3 id="priorité-1-avant-mise-en-production-avec-clients-1-2-semaines">Priorité 1 — Avant mise en production avec clients (1-2 semaines)</h3>
+<ol type="1">
+<li><strong>Corriger les XSS</strong> (C1, C4, C5) — Remplacer tous les <code>innerHTML</code> par <code>textContent</code>, utiliser <code>data-*</code> attributs au lieu de <code>onclick</code> inline</li>
+<li><strong>Sécuriser l’endpoint email</strong> (C3) — Ajouter auth + rate limiting</li>
+<li><strong>Ajouter la politique RLS DELETE</strong> (C2) — Une ligne de SQL</li>
+</ol>
+<h3 id="priorité-2-court-terme-1-mois">Priorité 2 — Court terme (1 mois)</h3>
+<ol start="4" type="1">
+<li><strong>Migrer vers Supabase Auth</strong> (H2) — Remplacer les sessions localStorage forgées</li>
+<li><strong>Sécuriser les UPDATE RLS</strong> (H1) — Edge Functions avec service_role key</li>
+<li><strong>Ajouter CSRF protection</strong> (H3)</li>
+</ol>
+<h3 id="priorité-3-moyen-terme-2-3-mois">Priorité 3 — Moyen terme (2-3 mois)</h3>
+<ol start="7" type="1">
+<li><strong>Renforcer le CSP</strong> (M1) — Migrer vers des fichiers JS externes + nonces</li>
+<li><strong>Validation côté serveur</strong> (M2, M3) — Contraintes DB + Edge Functions</li>
+<li><strong>Headers de sécurité</strong> (B2) — Ajouter dans vercel.json</li>
+<li><strong>SRI sur les CDN</strong> (B3) — Ajouter les attributs integrity</li>
+</ol>
+<hr />
+<h2 id="conclusion">6. Conclusion</h2>
+<p>La plateforme ExpertERPHub est <strong>fonctionnellement opérationnelle</strong>. Tous les parcours utilisateur testés (navigation publique, dashboard entreprise, gestion de ressources, recherche, messagerie, profil, équipe) fonctionnent correctement.</p>
+<p>Les <strong>5 vulnérabilités critiques</strong> identifiées doivent être adressées avant de recevoir de vrais clients, en particulier les failles XSS et l’endpoint email non sécurisé. Le plan de remédiation proposé est réaliste et peut être exécuté en 2-3 sprints.</p>
+<hr />
+<p><em>Rapport généré automatiquement le 6 avril 2026.</em></p>
+</body>
+</html>

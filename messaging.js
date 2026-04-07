@@ -63,11 +63,10 @@
       });
       if (!resp.ok) {
         var err = await resp.text();
-        console.error('[Messaging] Erreur envoi:', err);
-        return { data: null, error: err };
+        console.warn('[Messaging] Erreur envoi (status ' + resp.status + ')');
+        return { data: null, error: 'Erreur envoi message' };
       }
       var data = await resp.json();
-      console.log('[Messaging] Message envoye dans thread', threadId);
 
       // Envoyer notification email si configuree
       if (window.ExpertEmailNotify) {
@@ -82,8 +81,8 @@
 
       return { data: Array.isArray(data) ? data[0] : data, error: null };
     } catch (e) {
-      console.error('[Messaging] Erreur reseau:', e);
-      return { data: null, error: e.message };
+      console.warn('[Messaging] Erreur reseau');
+      return { data: null, error: 'Erreur réseau' };
     }
   }
 
@@ -101,7 +100,7 @@
       if (!resp.ok) return [];
       return await resp.json();
     } catch (e) {
-      console.error('[Messaging] Erreur chargement thread:', e);
+      console.warn('[Messaging] Erreur chargement thread');
       return [];
     }
   }
@@ -167,7 +166,7 @@
 
       return list;
     } catch (e) {
-      console.error('[Messaging] Erreur chargement conversations:', e);
+      console.warn('[Messaging] Erreur chargement conversations');
       return [];
     }
   }
@@ -194,14 +193,10 @@
         })
       });
       if (!resp.ok) {
-        var err = await resp.text();
-        console.warn('[Messaging] Erreur markRead RPC:', err);
-      } else {
-        var count = await resp.json();
-        console.log('[Messaging] markThreadRead:', count, 'messages marques lus');
+        console.warn('[Messaging] Erreur markRead (status ' + resp.status + ')');
       }
     } catch (e) {
-      console.warn('[Messaging] Erreur markRead:', e);
+      console.warn('[Messaging] Erreur markRead');
     }
   }
 
@@ -249,20 +244,17 @@
         '?or=(company_email.eq.' + encodeURIComponent(emailLower) +
         ',consultant_email.eq.' + encodeURIComponent(emailLower) + ')';
 
-      console.log('[Messaging] Chargement notifications pour', emailLower);
+      // Chargement des notifications
       var resp = await fetch(notificationsUrl, { headers: HEADERS });
       if (!resp.ok) {
-        console.warn('[Messaging] Erreur chargement notifications:', resp.status);
+        console.warn('[Messaging] Erreur chargement notifications (status ' + resp.status + ')');
         return 0;
       }
 
       var notifications = await resp.json();
-      if (!Array.isArray(notifications)) {
-        console.log('[Messaging] Pas de notifications');
+      if (!Array.isArray(notifications) || notifications.length === 0) {
         return 0;
       }
-
-      console.log('[Messaging] Traitant', notifications.length, 'notifications');
 
       // Pour chaque notification, créer les messages correspondants
       for (var i = 0; i < notifications.length; i++) {
@@ -288,7 +280,6 @@
 
             await insertMessage(msg1);
             syncedCount++;
-            console.log('[Messaging] Message initial créé pour notification', notif.id);
           }
         }
 
@@ -313,15 +304,13 @@
 
             await insertMessage(msg2);
             syncedCount++;
-            console.log('[Messaging] Message réponse créé pour notification', notif.id);
           }
         }
       }
 
-      console.log('[Messaging] Sync terminée:', syncedCount, 'messages créés');
       return syncedCount;
     } catch (e) {
-      console.error('[Messaging] Erreur synchronisation notifications:', e);
+      console.warn('[Messaging] Erreur sync notifications');
       return 0;
     }
   }
@@ -356,13 +345,11 @@
         body: JSON.stringify(row)
       });
       if (!resp.ok) {
-        var err = await resp.text();
-        console.error('[Messaging] Erreur insertion message:', err);
-        throw new Error(err);
+        throw new Error('Insert failed (status ' + resp.status + ')');
       }
       return await resp.json();
     } catch (e) {
-      console.error('[Messaging] Erreur insertMessage:', e);
+      console.warn('[Messaging] Erreur insertion message');
       throw e;
     }
   }
@@ -378,5 +365,4 @@
     syncFromNotifications: syncFromNotifications
   };
 
-  console.log('[Messaging] Module initialise.');
 })();

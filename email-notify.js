@@ -41,14 +41,11 @@
         body: JSON.stringify(payload)
       });
 
-      if (resp.ok) {
-        console.log('[EmailNotify] Email envoye a', opts.to);
-      } else {
-        var errData = await resp.json().catch(function () { return {}; });
-        console.warn('[EmailNotify] Erreur envoi email (status ' + resp.status + '):', errData);
+      if (!resp.ok) {
+        console.warn('[EmailNotify] Erreur envoi (status ' + resp.status + ')');
       }
     } catch (e) {
-      console.warn('[EmailNotify] API non accessible:', e.message);
+      // API non accessible — fallback silencieux
     }
   }
 
@@ -87,5 +84,4 @@
     notify: notify
   };
 
-  console.log('[EmailNotify] Module initialise.');
 })();
