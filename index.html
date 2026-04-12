@@ -6426,12 +6426,12 @@ function openConsultantContact(id, event) {
     return;
   }
   /* Non connecté → afficher un message explicatif avant le modal */
-  showContactGateOverlay();
+  showContactGateOverlay(id);
 }
 
-function showContactGateOverlay() {
+function showContactGateOverlay(consultantId) {
   var existing = document.getElementById('contact-gate-overlay');
-  if (existing) { existing.style.display = 'flex'; return; }
+  if (existing) { existing.remove(); } /* Recréer pour mettre à jour le consultantId */
   var overlay = document.createElement('div');
   overlay.id = 'contact-gate-overlay';
   overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);';
@@ -6445,7 +6445,7 @@ function showContactGateOverlay() {
       <p style="font-size:.85rem;color:#64748b;line-height:1.6;margin:0 0 1rem;">Pour contacter directement un consultant, vous devez être inscrit comme <strong style="color:var(--ink);">entreprise partenaire</strong> avec un plan actif. L'inscription vous donne accès à la messagerie sécurisée, aux profils complets et au réseau inter-entreprises.</p>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
         <button onclick="document.getElementById('contact-gate-overlay').style.display='none';openEntrepriseModal&&openEntrepriseModal('chercher')" style="flex:1;padding:.65rem 1rem;border:none;border-radius:10px;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,40,142,.18);">S'inscrire comme entreprise</button>
-        <button onclick="document.getElementById('contact-gate-overlay').style.display='none'" style="flex:1;padding:.65rem 1rem;border:1.5px solid rgba(0,40,142,.15);border-radius:10px;background:#f8fafc;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;">Continuer en visiteur</button>
+        <button onclick="document.getElementById('contact-gate-overlay').style.display='none';window.location.href=buildConsultantUrl('${consultantId}','#contact-section');" style="flex:1;padding:.65rem 1rem;border:1.5px solid rgba(0,40,142,.15);border-radius:10px;background:#f8fafc;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;">Continuer en visiteur</button>
       </div>
       <p style="font-size:.7rem;color:#94a3b8;text-align:center;margin:.75rem 0 0;">En tant que visiteur, vous pouvez consulter les profils freelances mais pas contacter les consultants.</p>
     </div>`;
@@ -6913,17 +6913,4 @@ function mapErrorToCode(error) {
 
   /* Parallax floating elements */
   var heroParticles = document.querySelectorAll('.hero-particle');
-  if (heroParticles.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    window.addEventListener('scroll', function() {
-      var scrolled = window.pageYOffset;
-      heroParticles.forEach(function(p, i) {
-        var speed = 0.03 + (i * 0.015);
-        p.style.transform = 'translateY(' + (scrolled * speed) + 'px)';
-      });
-    }, { passive: true });
-  }
-})();
-</script>
-
-</body>
-</html>
+  if (heroParti

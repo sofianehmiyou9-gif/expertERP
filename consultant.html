@@ -1661,6 +1661,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tabVis) { tabVis.style.borderBottomColor = '#00288e'; tabVis.style.color = '#00288e'; }
       if (panelEnt) panelEnt.style.display = 'none';
       if (panelVis) panelVis.style.display = 'block';
+      /* Auto-sélectionner le forfait Standard s'il n'y a pas de sélection */
+      if (!_selectedVpPlan) {
+        var stdCard = panelVis && panelVis.querySelector('.vp-plan-card[data-vp-plan="standard"]');
+        if (stdCard) selectVisiteurPlan(stdCard);
+      }
     } else {
       if (tabEnt) { tabEnt.style.borderBottomColor = '#00288e'; tabEnt.style.color = '#00288e'; }
       if (tabVis) { tabVis.style.borderBottomColor = 'transparent'; tabVis.style.color = '#6b7280'; }
