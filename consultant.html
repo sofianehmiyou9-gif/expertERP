@@ -4,14 +4,16 @@
 <meta charset="UTF-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
 <link rel="dns-prefetch" href="https://aqvkcbeezzbmoiykzfyo.supabase.co">
+<link rel="preconnect" href="https://aqvkcbeezzbmoiykzfyo.supabase.co" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil Consultant — ExpertERP</title>
 <meta name="description" content="Profil consultant ERP sur ExpertERP — Annuaire B2B de consultants SAP, Oracle, Dynamics, Workday qualifiés.">
 <link rel="canonical" href="https://expert-erp.vercel.app/consultant.html" />
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;1,6..72,600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,600;0,6..72,700;1,6..72,600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
 <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
 if (typeof tailwind !== 'undefined') tailwind.config = {
@@ -766,8 +768,8 @@ body { font-family: 'Manrope', sans-serif; }
 <script src="supabase-helpers.js"></script>
 <script src="i18n.js"></script>
 <script src="translate-content.js"></script>
-<script src="notifications.js"></script>
-<script src="messaging.js"></script>
+<script defer src="notifications.js"></script>
+<script defer src="messaging.js"></script>
 <script>
 // Define SB_URL and SB_KEY for inline scripts that use them directly
 const SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
@@ -1965,6 +1967,15 @@ document.addEventListener('DOMContentLoaded', () => {
           e.stopImmediatePropagation();
           document.getElementById('contact-gate-locked').scrollIntoView({ behavior: 'smooth' });
         }, true);
+      }
+
+      /* ═══ Auto-switch to Visiteur tab if hash is #contact-visiteur ═══ */
+      if (window.location.hash === '#contact-visiteur') {
+        setTimeout(function() {
+          switchGateTab('visiteur');
+          var contactEl = document.getElementById('contact-section');
+          if (contactEl) contactEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 400);
       }
     }
   })();
