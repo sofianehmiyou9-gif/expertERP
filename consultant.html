@@ -652,46 +652,45 @@ body { font-family: 'Manrope', sans-serif; }
         <!-- ═══ TAB VISITEUR PRO ═══ -->
         <div id="gate-panel-visiteur" style="display:none;">
 
-          <!-- Connexion visiteur existant -->
+          <!-- Inscription visiteur -->
           <div id="visiteur-login-section">
-            <h3 style="font-family:var(--font-headline,'Manrope',sans-serif);font-size:1.15rem;font-weight:700;color:#0f172a;margin:0 0 .35rem;text-align:center;">Contactez les consultants directement</h3>
-            <p style="font-size:.82rem;color:#6b7280;line-height:1.6;margin:0 0 1.25rem;text-align:center;">Choisissez votre forfait et envoyez des messages aux freelances ERP.</p>
+            <div style="text-align:center;margin-bottom:1rem;">
+              <h3 style="font-family:var(--font-headline,'Manrope',sans-serif);font-size:1.05rem;font-weight:700;color:#0f172a;margin:0 0 .25rem;">Contactez les consultants directement</h3>
+              <p style="font-size:.78rem;color:#6b7280;line-height:1.5;margin:0;">Choisissez votre forfait et envoyez des messages aux freelances ERP.</p>
+            </div>
 
-            <!-- Plans visiteur -->
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem;">
-              <div class="vp-plan-card" data-vp-plan="basic" data-vp-price="10" data-vp-msgs="2" onclick="selectVisiteurPlan(this)" style="border:1px solid #e2e8f0;border-radius:16px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all .3s;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.03);">
-                <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:.5rem;">Découverte</div>
-                <div style="font-size:1.75rem;font-weight:800;color:#1e293b;line-height:1;">10 $</div>
-                <div style="font-size:.7rem;color:#94a3b8;margin-bottom:.75rem;">/mois</div>
-                <div style="font-size:.75rem;font-weight:700;color:#2563eb;background:#eff6ff;border-radius:8px;padding:.4rem .5rem;">2 messages / mois</div>
+            <!-- Plans visiteur — layout horizontal compact -->
+            <div style="display:flex;gap:.5rem;margin-bottom:1rem;">
+              <div class="vp-plan-card" data-vp-plan="basic" data-vp-price="10" data-vp-msgs="2" onclick="selectVisiteurPlan(this)" style="flex:1;border:1.5px solid #e2e8f0;border-radius:12px;padding:.7rem .5rem;text-align:center;cursor:pointer;transition:all .2s;background:#fff;">
+                <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:.3rem;">Découverte</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1;">10 $<span style="font-size:.6rem;font-weight:500;color:#94a3b8;">/mo</span></div>
+                <div style="font-size:.68rem;font-weight:600;color:#2563eb;margin-top:.35rem;">2 msg/mois</div>
               </div>
-              <div class="vp-plan-card" data-vp-plan="standard" data-vp-price="18" data-vp-msgs="4" onclick="selectVisiteurPlan(this)" style="border:2px solid #2563eb;border-radius:16px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all .3s;background:linear-gradient(180deg,#eff6ff,#fff);position:relative;box-shadow:0 4px 16px rgba(37,99,235,.12);">
-                <div style="position:absolute;top:-.6rem;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-size:.6rem;font-weight:700;padding:.2rem .75rem;border-radius:99px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Populaire</div>
-                <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:.5rem;">Standard</div>
-                <div style="font-size:1.75rem;font-weight:800;color:#1e293b;line-height:1;">18 $</div>
-                <div style="font-size:.7rem;color:#94a3b8;margin-bottom:.75rem;">/mois</div>
-                <div style="font-size:.75rem;font-weight:700;color:#2563eb;background:#eff6ff;border-radius:8px;padding:.4rem .5rem;">4 messages / mois</div>
+              <div class="vp-plan-card" data-vp-plan="standard" data-vp-price="18" data-vp-msgs="4" onclick="selectVisiteurPlan(this)" style="flex:1;border:2px solid #2563eb;border-radius:12px;padding:.7rem .5rem;text-align:center;cursor:pointer;transition:all .2s;background:linear-gradient(180deg,#eff6ff,#fff);position:relative;box-shadow:0 2px 12px rgba(37,99,235,.1);">
+                <div style="position:absolute;top:-.5rem;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-size:.55rem;font-weight:700;padding:.15rem .6rem;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Populaire</div>
+                <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#2563eb;margin-bottom:.3rem;margin-top:.15rem;">Standard</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1;">18 $<span style="font-size:.6rem;font-weight:500;color:#94a3b8;">/mo</span></div>
+                <div style="font-size:.68rem;font-weight:600;color:#2563eb;margin-top:.35rem;">4 msg/mois</div>
               </div>
-              <div class="vp-plan-card" data-vp-plan="premium" data-vp-price="25" data-vp-msgs="5" onclick="selectVisiteurPlan(this)" style="border:1px solid #e2e8f0;border-radius:16px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all .3s;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.03);">
-                <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:.5rem;">Premium</div>
-                <div style="font-size:1.75rem;font-weight:800;color:#1e293b;line-height:1;">25 $</div>
-                <div style="font-size:.7rem;color:#94a3b8;margin-bottom:.75rem;">/mois</div>
-                <div style="font-size:.75rem;font-weight:700;color:#7c3aed;background:#f5f3ff;border-radius:8px;padding:.4rem .5rem;">5 messages / mois</div>
+              <div class="vp-plan-card" data-vp-plan="premium" data-vp-price="25" data-vp-msgs="5" onclick="selectVisiteurPlan(this)" style="flex:1;border:1.5px solid #e2e8f0;border-radius:12px;padding:.7rem .5rem;text-align:center;cursor:pointer;transition:all .2s;background:#fff;">
+                <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;margin-bottom:.3rem;">Premium</div>
+                <div style="font-size:1.3rem;font-weight:800;color:#1e293b;line-height:1;">25 $<span style="font-size:.6rem;font-weight:500;color:#94a3b8;">/mo</span></div>
+                <div style="font-size:.68rem;font-weight:600;color:#7c3aed;margin-top:.35rem;">5 msg/mois</div>
               </div>
             </div>
             <input type="hidden" id="vp-selected-plan" value="">
             <input type="hidden" id="vp-selected-msgs" value="">
 
-            <!-- Formulaire inscription visiteur -->
-            <div style="display:flex;flex-direction:column;gap:.65rem;">
-              <input id="vp-email" type="email" placeholder="Votre email professionnel" style="width:100%;padding:.85rem 1rem;border-radius:12px;border:1px solid #e2e8f0;font-size:.85rem;font-family:inherit;outline:none;background:#f8fafc;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.02);">
-              <input id="vp-password" type="password" placeholder="Choisissez un mot de passe" style="width:100%;padding:.85rem 1rem;border-radius:12px;border:1px solid #e2e8f0;font-size:.85rem;font-family:inherit;outline:none;background:#f8fafc;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.02);">
-              <div id="vp-error" style="font-size:.78rem;color:#dc2626;display:none;"></div>
-              <button id="vp-submit-btn" onclick="registerVisiteurPro()" style="width:100%;padding:.85rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;">
+            <!-- Formulaire inscription visiteur — compact -->
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <input id="vp-email" type="email" placeholder="Votre email professionnel" style="width:100%;padding:.7rem .85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.82rem;font-family:inherit;outline:none;background:#f8fafc;transition:all .2s;">
+              <input id="vp-password" type="password" placeholder="Choisissez un mot de passe" style="width:100%;padding:.7rem .85rem;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.82rem;font-family:inherit;outline:none;background:#f8fafc;transition:all .2s;">
+              <div id="vp-error" style="font-size:.75rem;color:#dc2626;display:none;"></div>
+              <button id="vp-submit-btn" onclick="registerVisiteurPro()" style="width:100%;padding:.75rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,40,142,.15);">
                 Créer mon compte Visiteur Pro
               </button>
             </div>
-            <p style="font-size:.72rem;color:#9ca3af;text-align:center;margin-top:.75rem;line-height:1.5;">Déjà inscrit ? <a href="#" onclick="toggleVisiteurLogin(true);return false;" style="color:#00288e;font-weight:600;text-decoration:underline;">Se connecter</a></p>
+            <p style="font-size:.7rem;color:#9ca3af;text-align:center;margin-top:.6rem;line-height:1.4;">Déjà inscrit ? <a href="#" onclick="toggleVisiteurLogin(true);return false;" style="color:#00288e;font-weight:600;text-decoration:underline;">Se connecter</a></p>
           </div>
 
           <!-- Connexion visiteur existant (masqué par défaut) -->
