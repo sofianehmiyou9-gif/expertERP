@@ -70,8 +70,9 @@
     btn.style.borderColor = '#2563eb';
     btn.style.color = '#fff';
     selectedErp = btn.dataset.erp;
-    /* Refresh task dropdowns in all experience blocks */
+    /* Refresh task dropdowns without dropping already selected tasks. */
     refreshAllTaskDropdowns();
+    refreshAllGeneratedText();
   };
 
   function getSelectedErp() {
@@ -95,6 +96,7 @@
     if (!wrap) return;
     var tasks = getTasksForErp();
     var idx = block.dataset.index;
+    var selectedTasks = getSelectedTasks(block);
     /* Dropdown + selected tags container */
     wrap.innerHTML =
       '<div class="task-selected-tags" id="task-tags-' + idx + '" style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem;"></div>' +
@@ -110,6 +112,10 @@
       dd.value = '';
       updateExpNarrative(block);
       updateGlobalResume();
+    });
+
+    selectedTasks.forEach(function(taskLabel) {
+      addTaskTag(block, taskLabel);
     });
   }
 
@@ -200,6 +206,13 @@
     var entreprise = (block.querySelector('input[name^="exp_entreprise_"]') || {}).value || '';
     var erp = getSelectedErp() || 'ERP';
     textarea.value = generateExpDescription(tasks, erp, poste, entreprise);
+  }
+
+  function refreshAllGeneratedText() {
+    container.querySelectorAll('.experience-block').forEach(function(block) {
+      updateExpNarrative(block);
+    });
+    updateGlobalResume();
   }
 
   /* ═══ GLOBAL RESUME GENERATOR (overview, different from exp descriptions) ═══ */
@@ -322,9 +335,17 @@
     /* Populate task dropdown */
     populateTaskDropdown(wrapper);
 
+    wrapper.querySelectorAll('input[name^="exp_titre_"], input[name^="exp_entreprise_"]').forEach(function(input) {
+      input.addEventListener('input', function() {
+        updateExpNarrative(wrapper);
+        updateGlobalResume();
+      });
+    });
+
     wrapper.querySelector('[data-remove="1"]').addEventListener('click', function () {
       wrapper.remove();
       clearMessage();
+      updateGlobalResume();
     });
   }
 
@@ -439,6 +460,11 @@
         return;
       }
 
+      if (!getSelectedErp()) {
+        showMessage('error', 'Sélectionne votre ERP principal avant d\'envoyer le formulaire.');
+        return;
+      }
+
       var payload = {
         nom: document.getElementById('nom').value.trim(),
         prenom: document.getElementById('prenom').value.trim(),
@@ -467,7 +493,7 @@
         var exists = await emailAlreadyUsed(payload.email);
         if (exists) {
           showMessage('error', 'Cet email est déjà utilisé. Si vous avez déjà postulé, votre candidature est en cours de traitement.');
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Soumettre ma candidature'; }
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Valider l\'Inscription'; }
           return;
         }
 
@@ -487,7 +513,7 @@
         showMessage('error', 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.');
         console.error('Inscription error:', err);
       } finally {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Soumettre ma candidature'; }
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Valider l\'Inscription'; }
       }
     });
   }

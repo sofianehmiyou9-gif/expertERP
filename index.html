@@ -5822,12 +5822,32 @@ function getSingleResourceRow() {
   };
 }
 
+function hasSingleResourceData(row) {
+  if (!row) return false;
+  return [
+    row.nom,
+    row.erp,
+    row.modules,
+    row.role,
+    row.annees_exp,
+    row.tjm,
+    row.disponibilite,
+    row.resume,
+    row.telephone,
+    row.mode_travail,
+    row.ville,
+    row.langues
+  ].some(function(value) {
+    return String(value || '').trim() !== '';
+  });
+}
+
 function validateOfferResources() {
   if (offerEntryMode === 'single') {
     const row = getSingleResourceRow();
     /* Les ressources sont OPTIONNELLES à l'inscription.
        Si l'utilisateur a commencé à remplir, on valide la cohérence. */
-    const hasAnyField = row.erp || row.role || row.tjm || row.nom;
+    const hasAnyField = hasSingleResourceData(row);
     if (hasAnyField) {
       if (!row.erp || !row.role || !row.tjm) {
         alert('Vous avez commencé à remplir une ressource. Veuillez renseigner au minimum l\'ERP, le rôle et le tarif journalier, ou videz tous les champs pour continuer sans ressource.');
@@ -5850,7 +5870,10 @@ function validateOfferResources() {
 }
 
 function buildOfferRows() {
-  if (offerEntryMode === 'single') return [getSingleResourceRow()];
+  if (offerEntryMode === 'single') {
+    const row = getSingleResourceRow();
+    return hasSingleResourceData(row) ? [row] : [];
+  }
   if (importedFileData && importedFileData.length > 0 && !importedFileData[0]._raw) return importedFileData;
   return [];
 }
