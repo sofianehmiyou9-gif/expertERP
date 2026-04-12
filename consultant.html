@@ -1567,12 +1567,14 @@ async function sendContactMessage() {
     type: 'message'
   };
 
-  // Sauvegarder via le module notifications (Supabase + localStorage)
-  await ExpertNotifications.push(notif);
+  /* ═══ Envoyer le message ═══
+     - Visiteur Pro → messagerie directe uniquement (pas de notification pour éviter le doublon)
+     - Entreprise → notification + messagerie directe (legacy : syncFromNotifications gère la dédup) */
+  var _isVpSender = _vpSession && _vpSession.role === 'visiteur_pro';
+  if (!_isVpSender) {
+    await ExpertNotifications.push(notif);
+  }
 
-  /* ═══ AUSSI envoyer via le système de messagerie directe ═══
-     Cela crée un message dans la table "messages" pour que la conversation
-     apparaisse dans l'onglet Messages des deux dashboards. */
   if (window.ExpertMessaging && companyEmail && recipientEmail) {
     try {
       var senderRole = 'entreprise';
