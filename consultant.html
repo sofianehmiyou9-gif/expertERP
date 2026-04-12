@@ -1748,14 +1748,29 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
         body: JSON.stringify(payload)
       });
-      if (!resp.ok) throw new Error('insert_failed');
+      if (!resp.ok) {
+        var errBody = {};
+        try { errBody = await resp.json(); } catch(_) {}
+        var errDetail = errBody.message || errBody.code || ('HTTP ' + resp.status);
+        console.error('[VisiteurPro] INSERT failed:', resp.status, errDetail);
+        if (resp.status === 409 || (errDetail && errDetail.includes('23505'))) {
+          throw new Error('duplicate');
+        }
+        throw new Error('insert_failed: ' + errDetail);
+      }
 
       /* Créer la session et recharger */
       await ExpertPortalAuth.setSession({ role: 'visiteur_pro', email: email.toLowerCase() });
       window.location.reload();
     } catch (e) {
       console.error('[VisiteurPro] Registration error:', e);
-      showVpError(errEl, 'Erreur lors de la création du compte. Réessayez.');
+      var userMsg = 'Erreur lors de la création du compte. Réessayez.';
+      if (String(e.message).includes('duplicate')) {
+        userMsg = 'Un compte avec cet email existe déjà. Utilisez l\'onglet Connexion.';
+      } else if (String(e.message).includes('42501') || String(e.message).includes('RLS')) {
+        userMsg = 'Erreur serveur (droits insuffisants). Veuillez contacter le support.';
+      }
+      showVpError(errEl, userMsg);
       if (btn) { btn.disabled = false; btn.textContent = 'Créer mon compte Visiteur Pro'; }
     }
   }

@@ -66,6 +66,12 @@
       headers: headers({ 'Content-Type': 'application/json', 'Prefer': prefer }),
       body: JSON.stringify(data)
     });
+    if (!response.ok) {
+      var errBody = {};
+      try { errBody = await response.json(); } catch(e) {}
+      var errMsg = errBody.message || errBody.msg || errBody.error || ('HTTP ' + response.status);
+      throw new Error('[sbInsert ' + table + '] ' + errMsg);
+    }
     if (prefer === 'return=minimal') return { success: true };
     return response.json();
   }

@@ -5825,17 +5825,18 @@ function getSingleResourceRow() {
 function validateOfferResources() {
   if (offerEntryMode === 'single') {
     const row = getSingleResourceRow();
-    if (!row.erp || !row.role || !row.tjm) {
-      alert('Pour une inscription manuelle, veuillez renseigner au minimum l\'ERP, le rôle et le tarif journalier de la ressource.');
-      return false;
-    }
-    if (!Number.isFinite(parseInt(row.tjm, 10)) || parseInt(row.tjm, 10) <= 0) {
-      alert('Le tarif journalier doit être un nombre positif.');
-      return false;
-    }
-    if (selectedPlan && selectedPlan < 1) {
-      alert('Le plan choisi ne permet pas cette inscription.');
-      return false;
+    /* Les ressources sont OPTIONNELLES à l'inscription.
+       Si l'utilisateur a commencé à remplir, on valide la cohérence. */
+    const hasAnyField = row.erp || row.role || row.tjm || row.nom;
+    if (hasAnyField) {
+      if (!row.erp || !row.role || !row.tjm) {
+        alert('Vous avez commencé à remplir une ressource. Veuillez renseigner au minimum l\'ERP, le rôle et le tarif journalier, ou videz tous les champs pour continuer sans ressource.');
+        return false;
+      }
+      if (!Number.isFinite(parseInt(row.tjm, 10)) || parseInt(row.tjm, 10) <= 0) {
+        alert('Le tarif journalier doit être un nombre positif.');
+        return false;
+      }
     }
     return true;
   }
@@ -5992,11 +5993,15 @@ async function submitEntreprise() {
     }
   } catch(err) {
     btn.disabled = false; btn.textContent = 'Envoyer ma demande ✓';
-    if (String(err?.message || '').includes('401') || String(err?.message || '').toLowerCase().includes('unauthorized')) {
-      alert('Acces refuse (401) lors de la creation entreprise. Verifiez les droits Supabase (RLS/policies) pour la table entreprises.');
+    console.error('[submitEntreprise] Erreur:', err);
+    var errMsg = String(err?.message || err || '');
+    if (errMsg.includes('401') || errMsg.toLowerCase().includes('unauthorized') || errMsg.includes('42501')) {
+      showError('server_error', 'Erreur lors de la création du compte entreprise. Le serveur a refusé la requête (droits insuffisants). Veuillez réessayer ou contacter le support.');
+    } else if (errMsg.includes('23505') || errMsg.includes('duplicate') || errMsg.includes('unique')) {
+      showError('duplicate_email', 'Un compte entreprise avec cet email existe déjà. Utilisez le portail de connexion pour accéder à votre dashboard.');
+    } else {
+      showError('server_error', 'Erreur lors de la création du compte. ' + (errMsg || 'Veuillez réessayer.'));
     }
-    const errorCode = mapErrorToCode(err);
-    showError(errorCode, err.message);
   }
 }
 // CONSULTANTS LISTING

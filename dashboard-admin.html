@@ -1197,6 +1197,9 @@ function renderOverview() {
   document.getElementById('k-pending').textContent = String(pending);
   document.getElementById('k-approved').textContent = String(approved);
   document.getElementById('k-entreprises').textContent = String(state.entreprises.length);
+  const entPending = state.entreprises.filter(e => normalizeEntrepriseStatus(e) === 'en_attente').length;
+  const entMeta = document.getElementById('k-entreprises').closest('.card')?.querySelector('.k-meta');
+  if (entMeta) entMeta.textContent = entPending > 0 ? (entPending + ' en attente') : 'Total';
   document.getElementById('k-consultants-meta').textContent = total ? Math.round((approved / total) * 100) + '% approuvés' : 'Total';
 
   const latest = active.slice(0, 8).map(c => {
@@ -1927,7 +1930,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 });
 </script>
 
-/* Spotlight Card Mouse Tracking */
+<!-- Spotlight Card Mouse Tracking -->
 <script>
 (function(){
   document.querySelectorAll('.spotlight-card').forEach(function(card) {
