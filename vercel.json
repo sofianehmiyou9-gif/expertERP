@@ -27,6 +27,10 @@
     {
       "source": "/recovery",
       "destination": "/recovery.html"
+    },
+    {
+      "source": "/dashboard-visiteur",
+      "destination": "/dashboard-visiteur.html"
     }
   ],
   "headers": [

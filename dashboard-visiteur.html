@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+<link rel="preconnect" href="https://aqvkcbeezzbmoiykzfyo.supabase.co" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Visiteur Pro — ExpertERP</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms"></script>
+<style>
+:root{--blue:#00288e;--blue-light:#0058be;--ink:#0f172a;--muted:#64748b;--border:#e5e7eb;--bg:#f8fafc;--surface:#fff;--font-main:'Manrope',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-main);background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Navbar ── */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.65rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.top-nav .logo{font-family:var(--font-main);font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,var(--blue),var(--blue-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.top-nav .user-info{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:var(--muted);}
+
+/* ── Layout ── */
+.dashboard-layout{display:grid;grid-template-columns:260px 1fr;gap:0;flex:1;max-width:1400px;margin:0 auto;width:100%;}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.25rem .75rem;display:flex;flex-direction:column;gap:.25rem;}
+.sidebar-item{display:flex;align-items:center;gap:.6rem;padding:.65rem .85rem;border-radius:10px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+.sidebar-item:hover{background:#f0f4ff;color:var(--blue);}
+.sidebar-item.active{background:linear-gradient(135deg,rgba(0,40,142,.08),rgba(0,88,190,.04));color:var(--blue);font-weight:700;}
+.main-content{padding:1.5rem 2rem;overflow-y:auto;height:calc(100vh - 52px);}
+
+/* ── Messages layout ── */
+.msg-container{display:grid;grid-template-columns:320px 1fr;gap:0;height:calc(100vh - 160px);min-height:450px;background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.conv-panel{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.conv-header{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.conv-search{width:100%;padding:.6rem .85rem;border:none;border-bottom:1px solid var(--border);font-size:.8rem;font-family:inherit;outline:none;background:#fafbfc;}
+.conv-list{flex:1;overflow-y:auto;}
+.conv-item{padding:.75rem 1rem;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s;}
+.conv-item:hover{background:#f8fafc;}
+.conv-item.active{background:#f0f4ff;border-left:3px solid var(--blue);}
+.conv-item-name{font-size:.82rem;font-weight:600;color:var(--ink);}
+.conv-item-preview{font-size:.75rem;color:var(--muted);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.conv-item-meta{display:flex;justify-content:space-between;align-items:center;margin-top:.3rem;}
+.conv-item-date{font-size:.68rem;color:#94a3b8;}
+.conv-unread{background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:99px;font-weight:700;}
+
+/* ── Chat panel ── */
+.chat-panel{display:flex;flex-direction:column;}
+.chat-header{padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;background:#fafbfc;}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;}
+.chat-name{font-size:.88rem;font-weight:700;color:var(--ink);}
+.chat-role{font-size:.72rem;color:var(--muted);}
+.chat-messages{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;background:linear-gradient(180deg,#f8f9fc,#f0f2f8);}
+.msg-bubble{max-width:75%;padding:.6rem .85rem;border-radius:12px;font-size:.8rem;line-height:1.5;}
+.msg-bubble.sent{align-self:flex-end;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;border-bottom-right-radius:4px;}
+.msg-bubble.received{align-self:flex-start;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-bottom-left-radius:4px;}
+.msg-time{font-size:.63rem;margin-top:.25rem;opacity:.65;}
+.chat-input-area{padding:.65rem;border-top:1px solid var(--border);display:flex;gap:.5rem;background:var(--surface);}
+.chat-input{flex:1;padding:.6rem .85rem;border:1.5px solid var(--border);border-radius:10px;font-size:.82rem;font-family:inherit;outline:none;resize:none;min-height:38px;max-height:100px;}
+.chat-input:focus{border-color:var(--blue);}
+.chat-send{padding:.6rem 1rem;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.chat-send:hover{opacity:.9;}
+
+/* ── Quota bar ── */
+.quota-bar{background:linear-gradient(135deg,#f0f4ff,#e8f0fe);border:1px solid rgba(0,40,142,.1);border-radius:12px;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.quota-info{font-size:.82rem;color:var(--blue);font-weight:600;}
+.quota-upgrade{font-size:.75rem;color:var(--blue-light);font-weight:600;text-decoration:underline;cursor:pointer;}
+
+/* ── Empty state ── */
+.chat-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;padding:2rem;}
+
+/* ── Profile section ── */
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.profile-row{display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.85rem;}
+.profile-label{font-weight:600;color:var(--muted);min-width:120px;}
+.profile-value{color:var(--ink);}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .dashboard-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .msg-container{grid-template-columns:1fr;height:auto;}
+  .conv-panel{max-height:250px;}
+  .chat-panel{min-height:400px;}
+  .mobile-nav{display:flex !important;}
+}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface);border-top:1px solid var(--border);padding:.5rem;justify-content:space-around;}
+.mobile-nav button{background:none;border:none;font-size:.7rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:.4rem .6rem;border-radius:8px;}
+.mobile-nav button.active{color:var(--blue);background:rgba(0,40,142,.06);}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="top-nav">
+  <a href="index.html" class="logo" style="text-decoration:none;">Expert<span style="font-weight:800;">ERP</span></a>
+  <div class="user-info">
+    <span id="nav-user-email" style="font-weight:600;color:var(--ink);">—</span>
+    <span style="background:#e8f0fe;color:var(--blue);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:6px;">VISITEUR PRO</span>
+    <button id="btn-logout" onclick="doLogout()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:.35rem .65rem;font-size:.75rem;color:#dc2626;cursor:pointer;font-weight:600;">Déconnexion</button>
+  </div>
+</nav>
+
+<!-- ═══ LAYOUT ═══ -->
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <button class="sidebar-item active" data-tab="messages" onclick="switchTab('messages')">
+      <span class="material-symbols-outlined" style="font-size:20px;">chat</span>
+      Messages <span id="sidebar-badge" style="display:none;background:#dc2626;color:#fff;font-size:.58rem;padding:1px 5px;border-radius:99px;font-weight:700;margin-left:auto;">0</span>
+    </button>
+    <button class="sidebar-item" data-tab="profile" onclick="switchTab('profile')">
+      <span class="material-symbols-outlined" style="font-size:20px;">person</span>
+      Mon compte
+    </button>
+    <button class="sidebar-item" data-tab="consultants" onclick="window.location.href='index.html'">
+      <span class="material-symbols-outlined" style="font-size:20px;">search</span>
+      Chercher un consultant
+    </button>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- ═══ MESSAGES TAB ═══ -->
+    <div id="tab-messages" class="tab-pane">
+      <div style="margin-bottom:.75rem;">
+        <h1 style="font-size:1.15rem;font-weight:800;color:var(--ink);margin:0 0 .2rem;">Messages</h1>
+        <p style="font-size:.8rem;color:var(--muted);">Vos conversations avec les consultants de la plateforme.</p>
+      </div>
+
+      <!-- Quota -->
+      <div id="quota-bar" class="quota-bar">
+        <span class="quota-info" id="quota-text">Chargement du forfait...</span>
+        <a href="index.html" class="quota-upgrade">Changer de forfait</a>
+      </div>
+
+      <!-- Messages 2 colonnes -->
+      <div class="msg-container">
+        <div class="conv-panel">
+          <div class="conv-header">
+            <span style="font-size:.88rem;font-weight:700;">Conversations</span>
+            <span id="conv-badge" style="display:none;background:#dc2626;color:#fff;font-size:.58rem;padding:1px 5px;border-radius:99px;font-weight:700;">0</span>
+          </div>
+          <input id="conv-search" type="text" class="conv-search" placeholder="Rechercher..." oninput="filterConvs()">
+          <div id="conv-list" class="conv-list">
+            <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.82rem;">Chargement...</div>
+          </div>
+        </div>
+        <div class="chat-panel">
+          <div id="chat-empty" class="chat-empty">
+            <div style="font-size:2.5rem;margin-bottom:.75rem;opacity:.5;">💬</div>
+            <div style="font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.3rem;">Sélectionnez une conversation</div>
+            <div style="font-size:.8rem;max-width:260px;">Choisissez un contact à gauche pour lire et envoyer des messages.</div>
+          </div>
+          <div id="chat-active" style="display:none;flex-direction:column;height:100%;">
+            <div class="chat-header">
+              <div class="chat-avatar" id="chat-avatar"></div>
+              <div>
+                <div class="chat-name" id="chat-name"></div>
+                <div class="chat-role" id="chat-role">Consultant</div>
+              </div>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+              <textarea id="chat-input" class="chat-input" placeholder="Écrivez votre message..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply();}"></textarea>
+              <button class="chat-send" onclick="sendReply()">Envoyer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROFILE TAB ═══ -->
+    <div id="tab-profile" class="tab-pane" style="display:none;">
+      <h1 style="font-size:1.15rem;font-weight:800;color:var(--ink);margin:0 0 1rem;">Mon compte</h1>
+      <div class="profile-card">
+        <div class="profile-row">
+          <span class="profile-label">Email</span>
+          <span class="profile-value" id="profile-email">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="profile-label">Forfait</span>
+          <span class="profile-value" id="profile-plan">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="profile-label">Messages restants</span>
+          <span class="profile-value" id="profile-remaining">—</span>
+        </div>
+        <div class="profile-row">
+          <span class="profile-label">Membre depuis</span>
+          <span class="profile-value" id="profile-since">—</span>
+        </div>
+        <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <a href="index.html" style="font-size:.82rem;color:var(--blue);font-weight:600;text-decoration:underline;">Changer de forfait</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Mobile bottom nav -->
+<div class="mobile-nav">
+  <button class="active" onclick="switchTab('messages')"><span class="material-symbols-outlined" style="font-size:22px;">chat</span>Messages</button>
+  <button onclick="switchTab('profile')"><span class="material-symbols-outlined" style="font-size:22px;">person</span>Compte</button>
+  <button onclick="window.location.href='index.html'"><span class="material-symbols-outlined" style="font-size:22px;">search</span>Chercher</button>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="config.js"></script>
+<script src="utils.js"></script>
+<script src="portal-auth.js"></script>
+<script src="supabase-helpers.js"></script>
+<script defer src="notifications.js"></script>
+<script defer src="messaging.js"></script>
+<script>
+var SB_URL = (window.ExpertConfig && ExpertConfig.SB_URL) || '';
+var SB_KEY = (window.ExpertConfig && ExpertConfig.SB_KEY) || '';
+var currentEmail = null;
+var _conversations = [];
+var _activeOtherEmail = null;
+var _activeOtherName = null;
+
+/* ═══ Auth check ═══ */
+(function checkAuth() {
+  var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+  if (!session || session.role !== 'visiteur_pro' || !session.email) {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:1rem;font-family:Manrope,sans-serif;">' +
+      '<div style="font-size:1.5rem;font-weight:800;color:#00288e;">Accès réservé</div>' +
+      '<p style="color:#64748b;font-size:.88rem;text-align:center;max-width:320px;">Cette page est réservée aux Visiteurs Pro connectés. Connectez-vous depuis la page d\'un consultant.</p>' +
+      '<a href="index.html" style="padding:.7rem 1.5rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border-radius:10px;font-weight:700;font-size:.85rem;text-decoration:none;">Retour à l\'accueil</a>' +
+      '</div>';
+    return;
+  }
+  currentEmail = session.email;
+  document.getElementById('nav-user-email').textContent = session.email;
+  loadQuota();
+  /* Wait for messaging module to be ready (defer loaded) */
+  waitForMessaging(function() { loadConversations(); });
+})();
+
+function waitForMessaging(cb) {
+  if (window.ExpertMessaging) { cb(); return; }
+  var tries = 0;
+  var iv = setInterval(function() {
+    tries++;
+    if (window.ExpertMessaging) { clearInterval(iv); cb(); }
+    if (tries > 50) { clearInterval(iv); document.getElementById('conv-list').innerHTML = '<div style="padding:2rem;text-align:center;color:#dc2626;font-size:.82rem;">Module messagerie non disponible.</div>'; }
+  }, 100);
+}
+
+function doLogout() {
+  if (window.ExpertPortalAuth) ExpertPortalAuth.clearSession();
+  window.location.href = 'index.html';
+}
+
+/* ═══ Tab switching ═══ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-pane').forEach(function(el) { el.style.display = 'none'; });
+  document.querySelectorAll('.sidebar-item').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.mobile-nav button').forEach(function(el) { el.classList.remove('active'); });
+  var pane = document.getElementById('tab-' + tab);
+  if (pane) pane.style.display = 'block';
+  document.querySelectorAll('.sidebar-item[data-tab="' + tab + '"]').forEach(function(el) { el.classList.add('active'); });
+}
+
+/* ═══ Quota ═══ */
+async function loadQuota() {
+  try {
+    var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=description,created_at&email=eq.' + encodeURIComponent(currentEmail) + '&type_demande=eq.visiteur_pro', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    var data = await resp.json();
+    if (!Array.isArray(data) || !data.length) return;
+    var notes = {};
+    try { notes = JSON.parse(data[0].description || '{}'); } catch(e) {}
+
+    var plan = notes.plan || 'basic';
+    var limit = notes.msgs_limit || 2;
+    var used = notes.msgs_used || 0;
+    var remaining = Math.max(0, limit - used);
+
+    /* Reset mensuel */
+    var currentMonth = new Date().toISOString().slice(0, 7);
+    if (notes.msgs_reset_date !== currentMonth) {
+      remaining = limit;
+      used = 0;
+    }
+
+    var planNames = { basic: 'Découverte (10$/mo)', standard: 'Standard (18$/mo)', premium: 'Premium (25$/mo)' };
+    document.getElementById('quota-text').textContent = '📨 ' + remaining + '/' + limit + ' messages restants ce mois-ci — Forfait ' + (planNames[plan] || plan);
+    if (remaining === 0) {
+      document.getElementById('quota-bar').style.background = 'linear-gradient(135deg,#fef2f2,#fce8e8)';
+      document.getElementById('quota-bar').style.borderColor = '#fecaca';
+      document.getElementById('quota-text').style.color = '#991b1b';
+    }
+
+    /* Profile tab */
+    document.getElementById('profile-email').textContent = currentEmail;
+    document.getElementById('profile-plan').textContent = planNames[plan] || plan;
+    document.getElementById('profile-remaining').textContent = remaining + ' / ' + limit;
+    try {
+      document.getElementById('profile-since').textContent = new Date(data[0].created_at).toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch(e) {}
+  } catch(e) {
+    console.error('[Quota]', e);
+  }
+}
+
+/* ═══ Conversations ═══ */
+async function loadConversations() {
+  if (!window.ExpertMessaging || !currentEmail) return;
+  var listEl = document.getElementById('conv-list');
+  try {
+    if (window.ExpertMessaging.syncFromNotifications) {
+      await window.ExpertMessaging.syncFromNotifications(currentEmail);
+    }
+    _conversations = await ExpertMessaging.getConversations(currentEmail) || [];
+    renderConvList(_conversations);
+    updateBadges();
+  } catch(e) {
+    console.error('[Conversations]', e);
+    listEl.innerHTML = '<div style="padding:2rem;text-align:center;color:#dc2626;font-size:.82rem;">Erreur de chargement.</div>';
+  }
+}
+
+function renderConvList(convos) {
+  var listEl = document.getElementById('conv-list');
+  if (!convos || !convos.length) {
+    listEl.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);font-size:.82rem;">Aucune conversation.<br><span style="font-size:.75rem;">Envoyez un message depuis la page d\'un consultant.</span></div>';
+    return;
+  }
+  listEl.innerHTML = convos.map(function(conv) {
+    var other = conv.otherName || conv.otherEmail || 'Inconnu';
+    var last = conv.lastMessage;
+    var isMe = last && last.sender_email === currentEmail.toLowerCase();
+    var preview = last ? (last.body || '').substring(0, 50) : '';
+    if (preview.length >= 50) preview += '...';
+    var timeStr = '';
+    if (last && last.created_at) {
+      var d = new Date(last.created_at);
+      var now = new Date();
+      var diff = now - d;
+      if (diff < 60000) timeStr = 'À l\'instant';
+      else if (diff < 3600000) timeStr = Math.floor(diff / 60000) + 'm';
+      else if (diff < 86400000) timeStr = Math.floor(diff / 3600000) + 'h';
+      else timeStr = d.toLocaleDateString('fr-CA', { month: 'short', day: 'numeric' });
+    }
+    var initials = other.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+    var isActive = _activeOtherEmail === conv.otherEmail;
+    return '<div class="conv-item' + (isActive ? ' active' : '') + '" data-email="' + (conv.otherEmail || '') + '" data-name="' + other.replace(/"/g, '&quot;') + '">' +
+      '<div style="display:flex;gap:.6rem;align-items:center;">' +
+        '<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0;">' + initials + '</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="conv-item-name">' + other + '</div>' +
+          '<div class="conv-item-preview">' + (isMe ? '<span style="color:#2563eb;">Vous : </span>' : '') + preview + '</div>' +
+          '<div class="conv-item-meta"><span class="conv-item-date">' + timeStr + '</span>' +
+            (conv.unreadCount > 0 ? '<span class="conv-unread">' + conv.unreadCount + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* Click delegation for conversation items */
+document.addEventListener('click', function(e) {
+  var item = e.target.closest('.conv-item');
+  if (item && item.dataset.email) {
+    openConversation(item.dataset.email, item.dataset.name || '');
+  }
+});
+
+function filterConvs() {
+  var q = (document.getElementById('conv-search').value || '').toLowerCase();
+  var filtered = _conversations.filter(function(c) {
+    return (c.otherName || '').toLowerCase().includes(q) || (c.otherEmail || '').toLowerCase().includes(q);
+  });
+  renderConvList(filtered);
+}
+
+async function openConversation(email, name) {
+  _activeOtherEmail = email;
+  _activeOtherName = name;
+
+  /* Update UI */
+  document.getElementById('chat-empty').style.display = 'none';
+  var activeEl = document.getElementById('chat-active');
+  activeEl.style.display = 'flex';
+
+  var initials = name.split(' ').map(function(w) { return w.charAt(0).toUpperCase(); }).join('').substring(0, 2);
+  document.getElementById('chat-avatar').textContent = initials;
+  document.getElementById('chat-name').textContent = name;
+  document.getElementById('chat-role').textContent = 'Consultant';
+
+  /* Mark active in list */
+  document.querySelectorAll('.conv-item').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.conv-item[data-email="' + email + '"]').forEach(function(el) { el.classList.add('active'); });
+
+  /* Load messages */
+  var msgEl = document.getElementById('chat-messages');
+  msgEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.82rem;">Chargement...</div>';
+
+  try {
+    var messages = await ExpertMessaging.getThread(currentEmail, email);
+    renderMessages(messages || []);
+
+    /* Mark as read */
+    var threadId = ExpertMessaging.makeThreadId(currentEmail, email);
+    await ExpertMessaging.markThreadRead(threadId, currentEmail);
+
+    /* Refresh list */
+    _conversations = await ExpertMessaging.getConversations(currentEmail) || [];
+    renderConvList(_conversations);
+    updateBadges();
+  } catch(e) {
+    msgEl.innerHTML = '<div style="text-align:center;padding:2rem;color:#dc2626;font-size:.82rem;">Erreur de chargement.</div>';
+  }
+}
+
+function renderMessages(messages) {
+  var container = document.getElementById('chat-messages');
+  if (!messages.length) {
+    container.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);font-size:.85rem;"><div style="font-size:2rem;margin-bottom:.5rem;opacity:.5;">💬</div>Début de la conversation</div>';
+    return;
+  }
+  container.innerHTML = messages.map(function(m) {
+    var isMe = m.sender_email === currentEmail.toLowerCase();
+    var timeStr = '';
+    try {
+      var d = new Date(m.created_at);
+      timeStr = d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
+    } catch(e) {}
+    var body = (m.body || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return '<div class="msg-bubble ' + (isMe ? 'sent' : 'received') + '">' +
+      '<div>' + body + '</div>' +
+      '<div class="msg-time" style="text-align:' + (isMe ? 'right' : 'left') + ';">' + timeStr + '</div>' +
+    '</div>';
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendReply() {
+  if (!_activeOtherEmail || !currentEmail) return;
+  var input = document.getElementById('chat-input');
+  var body = (input.value || '').trim();
+  if (!body) return;
+
+  /* Check quota */
+  try {
+    var resp = await fetch(SB_URL + '/rest/v1/entreprises?select=description&email=eq.' + encodeURIComponent(currentEmail) + '&type_demande=eq.visiteur_pro', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    var data = await resp.json();
+    if (Array.isArray(data) && data.length) {
+      var notes = {};
+      try { notes = JSON.parse(data[0].description || '{}'); } catch(e) {}
+      var limit = notes.msgs_limit || 2;
+      var used = notes.msgs_used || 0;
+      var currentMonth = new Date().toISOString().slice(0, 7);
+      if (notes.msgs_reset_date !== currentMonth) used = 0;
+      if (used >= limit) {
+        alert('Vous avez atteint votre limite de ' + limit + ' messages ce mois-ci. Changez de forfait pour en envoyer davantage.');
+        return;
+      }
+    }
+  } catch(e) {}
+
+  input.disabled = true;
+  try {
+    await ExpertMessaging.send({
+      senderEmail: currentEmail,
+      senderName: 'Visiteur Pro',
+      senderRole: 'visiteur_pro',
+      receiverEmail: _activeOtherEmail,
+      receiverName: _activeOtherName || _activeOtherEmail,
+      body: body
+    });
+
+    /* Increment message count */
+    try {
+      var resp2 = await fetch(SB_URL + '/rest/v1/entreprises?select=id,description&email=eq.' + encodeURIComponent(currentEmail) + '&type_demande=eq.visiteur_pro', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+      });
+      var d2 = await resp2.json();
+      if (Array.isArray(d2) && d2.length) {
+        var n = {};
+        try { n = JSON.parse(d2[0].description || '{}'); } catch(e) {}
+        var cm = new Date().toISOString().slice(0, 7);
+        if (n.msgs_reset_date !== cm) { n.msgs_used = 0; n.msgs_reset_date = cm; }
+        n.msgs_used = (n.msgs_used || 0) + 1;
+        await fetch(SB_URL + '/rest/v1/entreprises?id=eq.' + d2[0].id, {
+          method: 'PATCH',
+          headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ description: JSON.stringify(n) })
+        });
+      }
+    } catch(e) {}
+
+    input.value = '';
+    input.disabled = false;
+    input.focus();
+    /* Reload conversation */
+    openConversation(_activeOtherEmail, _activeOtherName || '');
+    loadQuota();
+  } catch(e) {
+    alert('Erreur lors de l\'envoi. Réessayez.');
+    input.disabled = false;
+  }
+}
+
+function updateBadges() {
+  var unread = (_conversations || []).reduce(function(s, c) { return s + (c.unreadCount || 0); }, 0);
+  var sidebarBadge = document.getElementById('sidebar-badge');
+  var convBadge = document.getElementById('conv-badge');
+  if (sidebarBadge) {
+    if (unread > 0) { sidebarBadge.textContent = unread; sidebarBadge.style.display = 'inline'; }
+    else { sidebarBadge.style.display = 'none'; }
+  }
+  if (convBadge) {
+    if (unread > 0) { convBadge.textContent = unread; convBadge.style.display = 'inline'; }
+    else { convBadge.style.display = 'none'; }
+  }
+}
+
+/* ═══ Auto-refresh every 15s ═══ */
+setInterval(function() {
+  if (!window.ExpertMessaging || !currentEmail) return;
+  ExpertMessaging.getConversations(currentEmail).then(function(convos) {
+    _conversations = convos || [];
+    renderConvList(_conversations);
+    updateBadges();
+    if (_activeOtherEmail) {
+      ExpertMessaging.getThread(currentEmail, _activeOtherEmail).then(function(msgs) {
+        if (msgs && msgs.length) renderMessages(msgs);
+      }).catch(function() {});
+    }
+  }).catch(function() {});
+}, 15000);
+</script>
+
+<script src="cookie-consent.js"></script>
+</body>
+</html>

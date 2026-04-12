@@ -3,6 +3,7 @@ Allow: /
 Disallow: /dashboard-admin.html
 Disallow: /dashboard-consultant.html
 Disallow: /dashboard-entreprise.html
+Disallow: /dashboard-visiteur.html
 Disallow: /reset-password.html
 Disallow: /recovery.html
 
