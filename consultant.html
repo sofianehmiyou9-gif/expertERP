@@ -734,7 +734,22 @@ body { font-family: 'Manrope', sans-serif; }
         </button>
       </form>
 
-      <!-- Section "Suivre mes échanges" retirée — gérée dans dashboard entreprise -->
+      <!-- ═══ VISITEUR PRO: Mes conversations ═══ -->
+      <div id="vp-conversations-section" style="display:none;margin-top:1.25rem;">
+        <div style="background:#fff;border-radius:16px;border:1px solid #e5e7eb;box-shadow:0 4px 16px rgba(0,0,0,.04);overflow:hidden;">
+          <div style="padding:.85rem 1rem;background:linear-gradient(135deg,#f0f4ff,#f8fafc);border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <span style="font-size:1.1rem;">💬</span>
+              <span style="font-size:.88rem;font-weight:700;color:#0f172a;">Mes conversations</span>
+            </div>
+            <button onclick="loadVpConversations()" style="background:none;border:none;cursor:pointer;font-size:.75rem;color:#2563eb;font-weight:600;">Actualiser</button>
+          </div>
+          <div id="vp-conversations-list" style="max-height:400px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:#94a3b8;font-size:.82rem;">Chargement...</div>
+          </div>
+        </div>
+      </div>
+
     </div>
       </div><!-- /contact col -->
 
@@ -1855,6 +1870,139 @@ document.addEventListener('DOMContentLoaded', () => {
   window.selectVisiteurPlan = selectVisiteurPlan;
   window.registerVisiteurPro = registerVisiteurPro;
   window.loginVisiteurPro = loginVisiteurPro;
+  window.getVisiteurMessageQuota = getVisiteurMessageQuota;
+  window.incrementVisiteurMessageCount = incrementVisiteurMessageCount;
+
+  /* ═══ VISITEUR PRO — Chargement conversations ═══ */
+  window.loadVpConversations = async function() {
+    var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+    if (!session || session.role !== 'visiteur_pro' || !session.email) return;
+    var listEl = document.getElementById('vp-conversations-list');
+    if (!listEl) return;
+    listEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:.82rem;">Chargement...</div>';
+
+    try {
+      if (!window.ExpertMessaging) {
+        listEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:.82rem;">Module messagerie non disponible.</div>';
+        return;
+      }
+      var conversations = await ExpertMessaging.getConversations(session.email);
+      if (!conversations || !conversations.length) {
+        listEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#94a3b8;font-size:.82rem;">Aucune conversation pour le moment.<br><span style="font-size:.75rem;">Envoyez un message via le formulaire ci-dessus.</span></div>';
+        return;
+      }
+      var html = '';
+      conversations.forEach(function(conv) {
+        var last = conv.lastMessage;
+        var isMe = last.sender_email === session.email.toLowerCase();
+        var preview = (last.body || '').substring(0, 80) + ((last.body || '').length > 80 ? '...' : '');
+        var dateStr = '';
+        try {
+          var d = new Date(last.created_at);
+          dateStr = d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
+        } catch(e) { dateStr = ''; }
+        var unread = conv.unreadCount > 0;
+        html += '<div onclick="openVpConversation(\'' + conv.threadId.replace(/'/g, "\\'") + '\',\'' + (conv.otherName || conv.otherEmail || '').replace(/'/g, "\\'") + '\')" style="padding:.85rem 1rem;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .15s;' + (unread ? 'background:#f0f4ff;' : '') + '" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'' + (unread ? '#f0f4ff' : '#fff') + '\'">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.25rem;">';
+        html += '<span style="font-size:.82rem;font-weight:' + (unread ? '700' : '600') + ';color:#0f172a;">' + (conv.otherName || conv.otherEmail || 'Inconnu') + '</span>';
+        html += '<span style="font-size:.68rem;color:#94a3b8;">' + dateStr + '</span>';
+        html += '</div>';
+        html += '<div style="font-size:.78rem;color:#64748b;line-height:1.4;' + (unread ? 'font-weight:600;' : '') + '">' + (isMe ? '<span style="color:#2563eb;">Vous : </span>' : '') + preview + '</div>';
+        if (unread) html += '<span style="display:inline-block;margin-top:.3rem;background:#dc2626;color:#fff;font-size:.6rem;padding:1px 6px;border-radius:99px;font-weight:700;">' + conv.unreadCount + ' nouveau' + (conv.unreadCount > 1 ? 'x' : '') + '</span>';
+        html += '</div>';
+      });
+      listEl.innerHTML = html;
+    } catch(e) {
+      console.error('[VP Conversations]', e);
+      listEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#dc2626;font-size:.82rem;">Erreur de chargement.</div>';
+    }
+  };
+
+  /* ═══ Ouvrir une conversation (mode lecture) ═══ */
+  window.openVpConversation = async function(threadId, otherName) {
+    var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+    if (!session || !window.ExpertMessaging) return;
+    var listEl = document.getElementById('vp-conversations-list');
+    if (!listEl) return;
+
+    /* Marquer comme lu */
+    try { await ExpertMessaging.markThreadRead(threadId, session.email); } catch(e) {}
+
+    /* Charger les messages du thread */
+    var emails = threadId.split('::');
+    var otherEmail = emails[0] === session.email.toLowerCase() ? emails[1] : emails[0];
+    var messages = await ExpertMessaging.getThread(session.email, otherEmail);
+
+    var html = '<div style="padding:.75rem 1rem;background:#f0f4ff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:.5rem;">';
+    html += '<button onclick="loadVpConversations()" style="background:none;border:none;cursor:pointer;font-size:1rem;color:#2563eb;">&#8592;</button>';
+    html += '<span style="font-size:.85rem;font-weight:700;color:#0f172a;">' + (otherName || otherEmail) + '</span>';
+    html += '</div>';
+    html += '<div style="padding:.75rem;display:flex;flex-direction:column;gap:.5rem;max-height:350px;overflow-y:auto;">';
+
+    if (!messages || !messages.length) {
+      html += '<div style="text-align:center;color:#94a3b8;font-size:.82rem;padding:1rem;">Aucun message.</div>';
+    } else {
+      messages.forEach(function(m) {
+        var isMe = m.sender_email === session.email.toLowerCase();
+        var timeStr = '';
+        try {
+          var d = new Date(m.created_at);
+          timeStr = d.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
+        } catch(e) {}
+        html += '<div style="max-width:85%;' + (isMe ? 'align-self:flex-end;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;' : 'align-self:flex-start;background:#f1f5f9;color:#0f172a;') + 'padding:.6rem .85rem;border-radius:12px;font-size:.8rem;line-height:1.5;">';
+        html += '<div>' + m.body.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+        html += '<div style="font-size:.65rem;margin-top:.3rem;opacity:.7;text-align:' + (isMe ? 'right' : 'left') + ';">' + timeStr + '</div>';
+        html += '</div>';
+      });
+    }
+
+    /* Mini formulaire de réponse */
+    html += '</div>';
+    html += '<div style="padding:.6rem;border-top:1px solid #e5e7eb;display:flex;gap:.4rem;">';
+    html += '<input id="vp-reply-input" type="text" placeholder="Votre r\u00e9ponse..." style="flex:1;padding:.55rem .75rem;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.8rem;font-family:inherit;outline:none;" onkeydown="if(event.key===\'Enter\')sendVpReply(\'' + otherEmail.replace(/'/g, "\\'") + '\',\'' + (otherName || '').replace(/'/g, "\\'") + '\')">';
+    html += '<button onclick="sendVpReply(\'' + otherEmail.replace(/'/g, "\\'") + '\',\'' + (otherName || '').replace(/'/g, "\\'") + '\')" style="padding:.55rem .85rem;background:linear-gradient(135deg,#00288e,#0058be);color:#fff;border:none;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;">Envoyer</button>';
+    html += '</div>';
+    listEl.innerHTML = html;
+    /* Scroll en bas */
+    var msgContainer = listEl.querySelector('div:nth-child(2)');
+    if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
+  };
+
+  /* ═══ Envoyer une réponse depuis la conversation ═══ */
+  window.sendVpReply = async function(otherEmail, otherName) {
+    var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
+    if (!session || !window.ExpertMessaging) return;
+    var input = document.getElementById('vp-reply-input');
+    if (!input) return;
+    var body = input.value.trim();
+    if (!body) return;
+
+    /* Vérifier quota */
+    var quota = await getVisiteurMessageQuota(session.email);
+    if (!quota.canSend) {
+      alert('Vous avez atteint votre limite de ' + quota.limit + ' messages ce mois-ci.');
+      return;
+    }
+
+    input.disabled = true;
+    try {
+      await ExpertMessaging.send({
+        senderEmail: session.email,
+        senderName: 'Visiteur Pro',
+        senderRole: 'visiteur_pro',
+        receiverEmail: otherEmail,
+        receiverName: otherName || otherEmail,
+        body: body
+      });
+      await incrementVisiteurMessageCount(session.email);
+      /* Recharger la conversation */
+      var threadId = [session.email.toLowerCase(), otherEmail.toLowerCase()].sort().join('::');
+      openVpConversation(threadId, otherName);
+    } catch(e) {
+      alert('Erreur lors de l\'envoi. Réessayez.');
+      input.disabled = false;
+    }
+  };
 
   (function initContactGate() {
     var session = window.ExpertPortalAuth ? ExpertPortalAuth.getSession() : null;
@@ -1954,6 +2102,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         contactForm.insertBefore(quotaHtml, contactForm.firstChild);
       })();
+
+      /* ═══ Afficher la section conversations Visiteur Pro ═══ */
+      var vpConvSection = document.getElementById('vp-conversations-section');
+      if (vpConvSection) vpConvSection.style.display = 'block';
+      loadVpConversations();
 
     } else {
       /* ── NON CONNECTÉ: Masquer le formulaire, afficher le gate ── */
