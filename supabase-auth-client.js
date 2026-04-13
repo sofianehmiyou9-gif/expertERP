@@ -162,11 +162,22 @@
     }
   }
 
+  /**
+   * Connexion / inscription via Google OAuth (Supabase redirect)
+   * Redirige vers Google, puis revient sur redirectTo avec les tokens en hash.
+   */
+  function signInWithGoogle(redirectTo) {
+    var redirect = redirectTo || window.location.origin;
+    var url = BASE + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(redirect);
+    window.location.href = url;
+  }
+
   // Expose l'API
   window.ExpertSupabaseAuth = {
     signIn: signIn,
     signOut: signOut,
     signUp: signUp,
+    signInWithGoogle: signInWithGoogle,
     getSession: getSession,
     getEmail: getEmail
   };
