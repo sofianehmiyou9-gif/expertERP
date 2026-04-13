@@ -6319,6 +6319,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.key === 'Enter') submitPortalAccess();
   });
 
+  /* ── Staging banner ── */
+  (function showStagingBanner() {
+    if (!window.ExpertConfig || window.ExpertConfig.ENV === 'production') return;
+    var env = window.ExpertConfig.ENV;
+    if (env === 'local') return; // pas de bandeau en local
+    var bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#f59e0b;color:#000;text-align:center;font-size:.72rem;font-weight:700;padding:6px 12px;letter-spacing:.05em;text-transform:uppercase;font-family:var(--font-main);';
+    bar.textContent = '⚠ ENVIRONNEMENT STAGING — Ceci n\'est pas la version production';
+    document.body.appendChild(bar);
+  })();
+
   /* ── Google OAuth callback : capture tokens from hash ── */
   (function handleOAuthCallback() {
     var hash = window.location.hash;

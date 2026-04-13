@@ -270,26 +270,32 @@ Table `billing_subscriptions` + `billing_webhook_events` prêtes pour l'intégra
 4. Vercel déploie automatiquement depuis GitHub
 5. Pour les données Supabase (surtout `entreprises`) : utiliser le **SQL Editor Supabase** directement
 
-### Flux QA / Staging (à mettre en place quand il y aura des clients)
+### Flux QA / Staging (IMPLÉMENTÉ — Avril 2026)
 Le but : ne jamais déployer en prod sans avoir testé sur un environnement de staging.
 
 **Principe : 2 branches GitHub = 2 environnements Vercel**
 - `main` → **PROD** → `expert-erp.vercel.app` (les clients)
 - `dev` → **STAGING** → URL preview auto-générée par Vercel (test uniquement)
 
-**Flux de travail cible :**
+**Détection automatique dans config.js :**
+- `config.js` détecte l'environnement via `window.location.hostname` :
+  - `expert-erp.vercel.app` → `ENV = 'production'` → clés PROD
+  - `*.vercel.app` (autre) → `ENV = 'staging'` → clés STAGING (fallback PROD si non configuré)
+  - localhost / fichier local → `ENV = 'local'` → clés PROD
+- Un bandeau jaune fixe "⚠ ENVIRONNEMENT STAGING" s'affiche en bas de page sur les previews Vercel
+- `ExpertConfig.ENV` est accessible dans tout le code pour conditionner des comportements
+
+**Flux de travail :**
 1. Claude travaille sur la branche `dev`
 2. L'utilisateur push sur `dev` → Vercel génère une preview URL
-3. Tests / validation sur la preview URL
+3. Tests / validation sur la preview URL (bandeau staging visible)
 4. Quand c'est OK → Pull Request `dev → main` sur GitHub
-5. Merge → Vercel déploie en prod automatiquement
+5. Merge → Vercel déploie en prod automatiquement (pas de bandeau)
 
 **Côté Supabase (optionnel mais recommandé) :**
 - Créer un 2e projet Supabase pour le staging (base de données séparée)
-- Utiliser les variables d'environnement Vercel pour switcher les clés :
-  - Production : `SB_URL` et `SB_KEY` du projet prod
-  - Preview : `SB_URL` et `SB_KEY` du projet staging
-- Ça évite de casser les données clients en testant
+- Renseigner les clés dans la section `STAGING` de `config.js`
+- Tant que STAGING n'est pas configuré, le staging utilise la même base que prod (safe pour tester le front)
 
 **Commandes pour initialiser le setup :**
 ```powershell
