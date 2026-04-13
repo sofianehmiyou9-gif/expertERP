@@ -212,8 +212,8 @@ nav.nav-scrolled{height:52px;background:rgba(255,255,255,.92);box-shadow:0 1px 1
 .nav-r{display:flex;gap:.4rem;align-items:center;flex-wrap:nowrap;flex-shrink:0;}
 .nav-login-link{font-family:var(--font-main);font-size:.82rem;font-weight:500;color:var(--ink);background:none;border:none;cursor:pointer;padding:.4rem .6rem;border-radius:var(--radius-btn);transition:all .2s;letter-spacing:-.01em;}
 .nav-login-link:hover{color:var(--primary);background:var(--surface-low);}
-.nav-cta-signup{font-size:.8rem !important;padding:.55rem 1.15rem !important;border-radius:999px !important;box-shadow:0 2px 8px rgba(94,106,210,.25) !important;font-weight:600 !important;letter-spacing:-.01em;}
-.nav-cta-signup:hover{box-shadow:0 4px 16px rgba(94,106,210,.35) !important;transform:translateY(-1px);}
+.nav-cta-signup{font-size:.78rem !important;padding:.45rem .95rem !important;border-radius:var(--radius-btn) !important;font-weight:500 !important;letter-spacing:-.01em;}
+.nav-cta-signup:hover{transform:translateY(-1px);}
 /* ── Account dropdown ── */
 #nav-dropdown.open{display:block !important;}
 #nav-account-btn:hover{border-color:var(--outline);background:var(--surface-low);}
@@ -332,6 +332,8 @@ nav.nav-scrolled{height:52px;background:rgba(255,255,255,.92);box-shadow:0 1px 1
 .ops-card p{font-size:.78rem;color:var(--text-secondary);line-height:1.6;}
 
 @media(max-width:980px){
+  .hero-section .w-full>div{grid-template-columns:1fr !important;gap:2rem !important;}
+  .hero-section .w-full{padding:3rem 1.5rem 2rem !important;}
   .home-hero{padding:5.2rem 1.3rem 2.4rem;width:100%;}
   .home-hero:after{right:1rem;top:1.1rem;width:180px;height:180px;}
   .hero-sub{max-width:100%;margin-bottom:2rem;}
@@ -1609,8 +1611,8 @@ function toggleTheme() {
   <div class="nav-r">
     <!-- ═══ ÉTAT NON CONNECTÉ ═══ -->
     <div id="nav-guest" style="display:flex;gap:.75rem;align-items:center;">
-      <button class="nav-login-link portal-trigger" id="portal-entry-btn" data-action="open-client-space" data-i18n="nav.login">Me connecter</button>
-      <button class="btn-solid nav-cta-signup" data-action="open-consultant-modal" data-i18n="nav.register">Créer mon compte</button>
+      <button class="nav-login-link portal-trigger" id="portal-entry-btn" data-action="open-client-space" data-i18n="nav.login">Se connecter</button>
+      <button class="btn-outline nav-cta-signup" data-action="open-consultant-modal" data-i18n="nav.register">Devenir consultant</button>
     </div>
     <!-- ═══ ÉTAT CONNECTÉ — Dropdown compte unique (style pro) ═══ -->
     <div id="nav-logged" style="display:none;position:relative;">
@@ -1654,7 +1656,7 @@ function toggleTheme() {
 <div class="page active" id="page-home">
 
   <!-- ═══ HERO — Premium animated ═══ -->
-  <section class="hero-section" style="min-height:calc(100vh - 56px);display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden;">
+  <section class="hero-section" style="min-height:auto;display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden;">
     <!-- Background gradient orbs -->
     <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
       <div style="position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(94,106,210,.12) 0%,transparent 70%);animation:heroGlow 8s ease-in-out infinite;filter:blur(60px);"></div>
@@ -1662,58 +1664,72 @@ function toggleTheme() {
       <div style="position:absolute;top:40%;left:50%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(94,106,210,.06) 0%,transparent 70%);animation:heroGlow 6s ease-in-out infinite 4s;filter:blur(50px);transform:translateX(-50%);"></div>
     </div>
 
-    <div class="w-full" style="max-width:760px;margin:0 auto;padding:4rem 2rem;text-align:center;position:relative;z-index:1;">
-      <!-- Eyebrow badge -->
-      <div style="animation:slideDown .6s cubic-bezier(.16,1,.3,1) both;">
-        <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .85rem;border-radius:999px;background:var(--primary-light);border:1px solid var(--primary-container);margin-bottom:2rem;">
-          <span style="width:6px;height:6px;border-radius:50%;background:var(--primary);display:block;position:relative;"><span style="position:absolute;inset:0;border-radius:50%;background:var(--primary);animation:pulseRing 2s ease-out infinite;"></span></span>
-          <span style="font-size:.75rem;color:var(--primary);font-weight:600;letter-spacing:-.01em;">Plateforme B2B de staffing ERP</span>
+    <div class="w-full" style="max-width:1100px;margin:0 auto;padding:5rem 2.5rem 3rem;position:relative;z-index:1;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+        <!-- Left column — text content -->
+        <div>
+          <!-- Eyebrow badge -->
+          <div style="animation:slideDown .6s cubic-bezier(.16,1,.3,1) both;margin-bottom:1.5rem;">
+            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .75rem;border-radius:999px;background:var(--primary-light);border:1px solid var(--primary-container);">
+              <span style="width:6px;height:6px;border-radius:50%;background:var(--primary);display:block;position:relative;"><span style="position:absolute;inset:0;border-radius:50%;background:var(--primary);animation:pulseRing 2s ease-out infinite;"></span></span>
+              <span style="font-size:.7rem;color:var(--primary);font-weight:600;letter-spacing:-.01em;">Plateforme B2B de staffing ERP</span>
+            </div>
+          </div>
+
+          <!-- Main headline -->
+          <h1 style="font-family:var(--font-main);font-size:clamp(2rem,3.5vw,3rem);font-weight:700;line-height:1.12;letter-spacing:-.04em;color:var(--ink);margin-bottom:1.25rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .1s both;" data-i18n="hero.title">
+            Rentabilisez vos consultants ERP. <span style="color:var(--primary);">Trouvez les experts qu'il vous faut.</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p style="font-size:.95rem;color:var(--text-secondary);max-width:460px;line-height:1.7;letter-spacing:-.01em;margin-bottom:2rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .2s both;" data-i18n="hero.subtitle">
+            La plateforme B2B qui connecte les entreprises ayant des ressources ERP disponibles avec celles qui en cherchent. Plus rapide et moins coûteux que les grandes firmes.
+          </p>
+
+          <!-- CTA buttons -->
+          <div style="display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:2rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .3s both;">
+            <button class="btn-solid" style="padding:.65rem 1.5rem;font-size:.85rem;font-weight:600;border-radius:var(--radius-btn);" data-action="show-page" data-page="consultants">
+              Trouver un consultant
+            </button>
+            <button class="btn-outline" style="padding:.65rem 1.5rem;font-size:.85rem;border-radius:var(--radius-btn);" onclick="window.location.href='/inscription-consultant.html'">
+              Je suis consultant
+            </button>
+          </div>
+
+          <!-- Trust indicators -->
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .4s both;">
+            <span style="display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.68rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:12px;color:var(--green);">verified</span>Profils vérifiés</span>
+            <span style="display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.68rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:12px;color:var(--primary);">schedule</span>Réponse en 2h</span>
+            <span style="display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .6rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.68rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:12px;color:var(--primary);">lock</span>100% confidentiel</span>
+          </div>
+        </div>
+
+        <!-- Right column — Search card -->
+        <div style="animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .4s both;">
+          <div style="padding:2rem;border-radius:16px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-lg);">
+            <h3 style="font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:1.25rem;letter-spacing:-.02em;">Rechercher un expert</h3>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+              <div style="display:flex;align-items:center;gap:.5rem;padding:0 .85rem;border:1px solid var(--border);border-radius:var(--radius-btn);background:var(--bg);transition:border-color .2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+                <span class="material-symbols-outlined" style="color:var(--text-muted);font-size:17px;">search</span>
+                <input style="width:100%;background:transparent;border:none;outline:none;padding:.7rem 0;font-family:var(--font-main);font-size:.85rem;color:var(--ink);" placeholder="SAP, Oracle, Dynamics…" type="text" id="hero-search-input">
+              </div>
+              <div style="display:flex;align-items:center;gap:.5rem;padding:0 .85rem;border:1px solid var(--border);border-radius:var(--radius-btn);background:var(--bg);transition:border-color .2s;">
+                <span class="material-symbols-outlined" style="color:var(--text-muted);font-size:17px;">location_on</span>
+                <input style="width:100%;background:transparent;border:none;outline:none;padding:.7rem 0;font-family:var(--font-main);font-size:.85rem;color:var(--ink);" placeholder="Paris, Montréal…" type="text" id="hero-location-input">
+              </div>
+              <button class="btn-solid" style="width:100%;padding:.7rem;font-size:.85rem;font-weight:600;border-radius:var(--radius-btn);margin-top:.25rem;" data-action="show-page" data-page="consultants" data-i18n="nav.find">
+                Rechercher
+              </button>
+            </div>
+            <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
+              <span style="font-size:.68rem;color:var(--text-muted);padding:.2rem .55rem;border-radius:999px;background:var(--surface-low);border:1px solid var(--border);cursor:pointer;" data-action="show-page" data-page="consultants">SAP S/4HANA</span>
+              <span style="font-size:.68rem;color:var(--text-muted);padding:.2rem .55rem;border-radius:999px;background:var(--surface-low);border:1px solid var(--border);cursor:pointer;" data-action="show-page" data-page="consultants">Oracle ERP</span>
+              <span style="font-size:.68rem;color:var(--text-muted);padding:.2rem .55rem;border-radius:999px;background:var(--surface-low);border:1px solid var(--border);cursor:pointer;" data-action="show-page" data-page="consultants">Dynamics 365</span>
+              <span style="font-size:.68rem;color:var(--text-muted);padding:.2rem .55rem;border-radius:999px;background:var(--surface-low);border:1px solid var(--border);cursor:pointer;" data-action="show-page" data-page="consultants">Workday</span>
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Main headline with staggered animation -->
-      <h1 style="font-family:var(--font-main);font-size:clamp(2.8rem,6vw,4.5rem);font-weight:800;line-height:1.05;letter-spacing:-.05em;color:var(--ink);margin-bottom:1.5rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .1s both;" data-i18n="hero.title">
-        Trouvez votre<br><span style="background:linear-gradient(135deg,var(--primary),var(--primary-hover));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">expert ERP</span><br>en 48 heures.
-      </h1>
-
-      <!-- Subtitle -->
-      <p style="font-size:1.1rem;color:var(--text-secondary);max-width:500px;margin:0 auto 2.5rem;line-height:1.65;letter-spacing:-.01em;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .2s both;" data-i18n="hero.subtitle">
-        Accédez à un réseau sélectif de consultants SAP, Oracle, Dynamics et Workday. Profils vérifiés, disponibles immédiatement.
-      </p>
-
-      <!-- CTA buttons -->
-      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .3s both;">
-        <button class="hero-cta-primary" style="padding:.7rem 1.75rem;border-radius:var(--radius-btn);background:var(--primary);color:#fff;border:none;font-family:var(--font-main);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em;box-shadow:0 2px 8px rgba(94,106,210,.3),0 0 0 0 rgba(94,106,210,0);" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(94,106,210,.4),var(--glow-primary)'" onmouseleave="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(94,106,210,.3)'" data-action="show-page" data-page="consultants">
-          Je cherche un consultant
-        </button>
-        <button style="padding:.7rem 1.75rem;border-radius:var(--radius-btn);background:var(--surface);color:var(--ink);border:1px solid var(--border);font-family:var(--font-main);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);letter-spacing:-.01em;backdrop-filter:blur(8px);" onmouseenter="this.style.borderColor='var(--primary-container)';this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.borderColor='var(--border)';this.style.transform='';this.style.boxShadow=''" onclick="window.location.href='/inscription-consultant.html'">
-          Je suis consultant
-        </button>
-      </div>
-
-      <!-- Trust indicators -->
-      <div style="display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .4s both;">
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:13px;color:var(--green);">verified</span>Profils vérifiés</span>
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:13px;color:var(--primary);">schedule</span>Réponse en 2h</span>
-        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .7rem;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);font-weight:500;"><span class="material-symbols-outlined" style="font-size:13px;color:var(--primary);">lock</span>100% confidentiel</span>
-      </div>
-
-      <!-- Search bar — premium glass effect -->
-      <div style="margin-top:3rem;animation:fadeUp .8s cubic-bezier(.16,1,.3,1) .5s both;">
-        <div class="hero-search-bar" style="display:flex;border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden;background:var(--surface);box-shadow:var(--shadow-md);transition:all .3s cubic-bezier(.16,1,.3,1);" onmouseenter="this.style.borderColor='var(--primary-container)';this.style.boxShadow='var(--shadow-lg)'" onmouseleave="this.style.borderColor='var(--border)';this.style.boxShadow='var(--shadow-md)'">
-          <div style="flex:1;display:flex;align-items:center;padding:0 1rem;gap:.5rem;">
-            <span class="material-symbols-outlined" style="color:var(--text-muted);font-size:18px;">search</span>
-            <input style="width:100%;background:transparent;border:none;outline:none;padding:.75rem 0;font-family:var(--font-main);font-size:.88rem;color:var(--ink);" placeholder="SAP, Oracle, Dynamics…" type="text" id="hero-search-input">
-          </div>
-          <div style="width:1px;background:var(--border);margin:.65rem 0;"></div>
-          <div style="flex:1;display:flex;align-items:center;padding:0 1rem;gap:.5rem;">
-            <span class="material-symbols-outlined" style="color:var(--text-muted);font-size:18px;">location_on</span>
-            <input style="width:100%;background:transparent;border:none;outline:none;padding:.75rem 0;font-family:var(--font-main);font-size:.88rem;color:var(--ink);" placeholder="Paris, Montréal…" type="text" id="hero-location-input">
-          </div>
-          <button style="padding:.75rem 1.5rem;background:var(--primary);color:#fff;border:none;font-family:var(--font-main);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);white-space:nowrap;margin:4px;" data-action="show-page" data-page="consultants" data-i18n="nav.find" onmouseenter="this.style.background='var(--primary-hover)'" onmouseleave="this.style.background='var(--primary)'">
-            Rechercher
-          </button>
-        </div>
       </div>
     </div>
   </section>
