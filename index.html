@@ -513,23 +513,90 @@ nav.nav-scrolled{height:52px;background:rgba(255,255,255,.92);box-shadow:0 1px 1
 .filter-input:focus,.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(94,106,210,.08);}
 .filter-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:2rem;background-image:var(--select-arrow);background-repeat:no-repeat;background-position:right .7rem center;background-size:11px 8px;cursor:pointer;}
 
-/* ── CONSULTANT CARDS — Malt-style photo-first ── */
-.consultants-grid{padding:1.5rem 2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;background:transparent;}
-.consultant-card{background:var(--surface);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--border);border-radius:16px;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;padding:0;gap:0;box-shadow:var(--shadow-sm);}
-.consultant-card:hover{border-color:var(--primary-container);transform:translateY(-5px);box-shadow:var(--shadow-xl);}
-.consultant-card.professional-resource .consultant-card-photo-wrap:after{content:'Entreprise';position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--primary);color:#fff;z-index:2;}
-/* Photo zone — large, prominent */
+/* ── CONSULTANT CARDS — Premium monochrome + 3D perspective + iridescent glow ── */
+.consultants-grid{padding:1.5rem 2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;background:transparent;perspective:1200px;}
+
+/* Card wrapper — 3D perspective container */
+.consultant-card{
+  background:var(--surface);overflow:visible;display:flex;flex-direction:column;
+  border:1px solid var(--border);border-radius:16px;
+  transition:transform .45s cubic-bezier(.03,.98,.52,.99),box-shadow .45s cubic-bezier(.03,.98,.52,.99),border-color .3s;
+  position:relative;padding:0;gap:0;
+  box-shadow:var(--shadow-sm);
+  transform-style:preserve-3d;will-change:transform;
+  --mx:0.5;--my:0.5;
+}
+.consultant-card:hover{
+  border-color:rgba(94,106,210,.22);
+  box-shadow:0 20px 60px rgba(0,0,0,.12),0 0 30px rgba(94,106,210,.08);
+  z-index:2;
+}
+[data-theme="dark"] .consultant-card:hover{
+  border-color:rgba(139,143,255,.18);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(139,143,255,.1);
+}
+
+/* Inner card clipping */
+.consultant-card-inner{position:relative;overflow:hidden;border-radius:15px;display:flex;flex-direction:column;flex:1;background:var(--surface);}
+
+/* Noise texture overlay */
+.consultant-card-noise{
+  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;
+  border-radius:15px;mix-blend-mode:overlay;transition:opacity .4s;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:128px 128px;
+}
+.consultant-card:hover .consultant-card-noise{opacity:.04;}
+[data-theme="dark"] .consultant-card:hover .consultant-card-noise{opacity:.07;}
+
+/* Specular glow — follows mouse */
+.consultant-card-specular{
+  position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;
+  border-radius:15px;transition:opacity .4s;
+  background:radial-gradient(circle 220px at calc(var(--mx)*100%) calc(var(--my)*100%),rgba(94,106,210,.12) 0%,transparent 70%);
+}
+.consultant-card:hover .consultant-card-specular{opacity:1;}
+[data-theme="dark"] .consultant-card-specular{
+  background:radial-gradient(circle 220px at calc(var(--mx)*100%) calc(var(--my)*100%),rgba(139,143,255,.18) 0%,transparent 70%);
+}
+
+/* Iridescent sheen — diagonal sweep reacting to mouse */
+.consultant-card-sheen{
+  position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;
+  border-radius:15px;transition:opacity .4s;
+  background:linear-gradient(calc(135deg + (var(--mx) - 0.5)*40deg),transparent 20%,rgba(94,106,210,.06) 35%,rgba(139,143,255,.1) 50%,rgba(168,130,255,.06) 65%,transparent 80%);
+  background-size:200% 200%;background-position:calc(var(--mx)*100%) calc(var(--my)*100%);
+}
+.consultant-card:hover .consultant-card-sheen{opacity:1;}
+[data-theme="dark"] .consultant-card-sheen{
+  background:linear-gradient(calc(135deg + (var(--mx) - 0.5)*40deg),transparent 15%,rgba(94,106,210,.08) 30%,rgba(139,143,255,.14) 50%,rgba(200,170,255,.08) 70%,transparent 85%);
+  background-size:200% 200%;background-position:calc(var(--mx)*100%) calc(var(--my)*100%);
+}
+
+/* Border glow on hover */
+.consultant-card-glow{
+  position:absolute;inset:-1px;z-index:0;pointer-events:none;opacity:0;
+  border-radius:17px;transition:opacity .4s;
+  background:radial-gradient(circle 300px at calc(var(--mx)*100%) calc(var(--my)*100%),rgba(94,106,210,.25) 0%,transparent 60%);
+}
+.consultant-card:hover .consultant-card-glow{opacity:1;}
+[data-theme="dark"] .consultant-card-glow{
+  background:radial-gradient(circle 300px at calc(var(--mx)*100%) calc(var(--my)*100%),rgba(139,143,255,.3) 0%,transparent 60%);
+}
+
+.consultant-card.professional-resource .consultant-card-photo-wrap:after{content:'Entreprise';position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--primary);color:#fff;z-index:6;}
+/* Photo zone */
 .consultant-card-top-row{display:block;margin:0;position:relative;}
-.consultant-card-photo-wrap{position:relative;width:100%;height:180px;overflow:hidden;border-radius:16px 16px 0 0;background:var(--surface-high);box-shadow:none;transition:none;}
+.consultant-card-photo-wrap{position:relative;width:100%;height:180px;overflow:hidden;border-radius:15px 15px 0 0;background:var(--surface-high);box-shadow:none;transition:none;}
 .consultant-card:hover .consultant-card-photo-wrap{transform:none;}
-.consultant-card-photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;transition:transform .4s cubic-bezier(.16,1,.3,1);}
-.consultant-card:hover .consultant-card-photo{transform:scale(1.04);filter:none;}
+.consultant-card-photo{width:100%;height:100%;object-fit:cover;display:block;border-radius:0;transition:transform .5s cubic-bezier(.03,.98,.52,.99),filter .5s;}
+.consultant-card:hover .consultant-card-photo{transform:scale(1.06);filter:brightness(1.05) contrast(1.02);}
 .consultant-card-photo-initials{width:100%;height:100%;min-height:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-main);font-size:2.2rem;font-weight:700;color:#fff;letter-spacing:.02em;border-radius:0;}
-/* Availability badge on photo */
-.consultant-card-avail-badge{display:inline-flex;align-items:center;gap:4px;position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;z-index:2;letter-spacing:.01em;}
+/* Availability badge */
+.consultant-card-avail-badge{display:inline-flex;align-items:center;gap:4px;position:absolute;top:10px;left:10px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;z-index:6;letter-spacing:.01em;}
 .consultant-card-avail-badge .avail-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;}
 /* Card body */
-.consultant-card-content{flex:1;min-width:0;padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;}
+.consultant-card-content{flex:1;min-width:0;padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1;}
 .consultant-card-header{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .consultant-card-role-label{font-size:11px;font-weight:500;color:var(--text-secondary);line-height:1.4;letter-spacing:0;text-transform:none;}
 .consultant-card-verified{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:5px;background:var(--green-bg);color:var(--green);font-size:9px;font-weight:700;flex-shrink:0;}
@@ -538,11 +605,13 @@ nav.nav-scrolled{height:52px;background:rgba(255,255,255,.92);box-shadow:0 1px 1
 .consultant-source-badge.freelance-source{background:var(--surface-low);color:var(--text-secondary);border:1px solid var(--border);}
 .consultant-card-name{font-family:var(--font-main);font-size:1.05rem;font-style:normal;font-weight:700;color:var(--ink);line-height:1.2;letter-spacing:-.015em;margin:0;}
 .consultant-card-bio{font-size:12px;line-height:1.55;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0;}
-/* Stats row — TJM, ville, exp inline */
+/* Chips */
 .consultant-card-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
-.consultant-card-chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:8px;background:var(--surface-low);color:var(--text-secondary);font-size:11px;font-weight:500;border:1px solid var(--border);transition:all .2s;}
-.consultant-card:hover .consultant-card-chip{border-color:var(--outline);}
+.consultant-card-chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:8px;background:var(--surface-low);color:var(--text-secondary);font-size:11px;font-weight:500;border:1px solid var(--border);transition:all .25s;}
+.consultant-card:hover .consultant-card-chip{border-color:var(--outline);background:rgba(94,106,210,.04);}
 .consultant-card-chip.primary{background:var(--primary-light);color:var(--primary);font-weight:600;border-color:var(--primary-container);}
+.consultant-card:hover .consultant-card-chip.primary{background:rgba(94,106,210,.1);border-color:rgba(94,106,210,.25);}
+/* Footer & buttons */
 .consultant-card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--border);}
 .consultant-card-stats-row{display:flex;gap:0;align-items:center;flex-wrap:wrap;min-width:0;background:transparent;border-radius:0;padding:0;border:none;}
 .consultant-card-stat-item{display:flex;align-items:center;gap:3px;min-width:0;padding:0 8px;border-right:1px solid var(--border);}
@@ -551,9 +620,9 @@ nav.nav-scrolled{height:52px;background:rgba(255,255,255,.92);box-shadow:0 1px 1
 .consultant-card-stat-num{font-family:var(--font-main);font-size:.78rem;font-weight:600;color:var(--ink);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .consultant-card-stat-lbl{font-size:8px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
 .consultant-card-btns{display:flex;gap:5px;flex-shrink:0;}
-.consultant-card-btn-p{padding:7px 16px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);box-shadow:0 2px 6px rgba(94,106,210,.25);}
+.consultant-card-btn-p{padding:7px 16px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);box-shadow:0 2px 6px rgba(94,106,210,.25);position:relative;z-index:6;}
 .consultant-card-btn-p:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 6px 16px rgba(94,106,210,.35);}
-.consultant-card-btn-s{padding:7px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:12px;font-weight:500;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);}
+.consultant-card-btn-s{padding:7px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--ink);font-size:12px;font-weight:500;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);position:relative;z-index:6;}
 .consultant-card-btn-s:hover{background:var(--surface-low);border-color:var(--outline);transform:translateY(-1px);}
 .empty-state{padding:3rem;text-align:center;color:var(--text-muted);grid-column:1/-1;}
 /* ── PAGINATION ── */
@@ -6053,43 +6122,82 @@ function renderConsultants(list) {
       : '';
 
     return `<article class="consultant-card${isB2BAnonymous ? ' professional-resource' : ''}" data-consultant-id="${escapeHtml(c.id)}" style="cursor:pointer;" aria-label="${escapeHtml(displayName)}">
-      <div class="consultant-card-top-row">
-        <div class="consultant-card-photo-wrap">
-          ${photoHtml}
-          ${availBadgeHtml}
-        </div>
-      </div>
-      <div class="consultant-card-content">
-        <div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-            <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
-            ${sourceTypeBadge}
-            <span class="consultant-card-verified">
-              <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Vérifié
-            </span>
+      <div class="consultant-card-glow"></div>
+      <div class="consultant-card-inner">
+        <div class="consultant-card-noise"></div>
+        <div class="consultant-card-specular"></div>
+        <div class="consultant-card-sheen"></div>
+        <div class="consultant-card-top-row">
+          <div class="consultant-card-photo-wrap">
+            ${photoHtml}
+            ${availBadgeHtml}
           </div>
-          <span class="consultant-card-role-label">${escapeHtml(title)}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-secondary);flex-wrap:wrap;">
-          ${rate ? '<span style="font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--primary);">payments</span>' + escapeHtml(rate) + '</span>' : ''}
-          ${cleanLocation ? '<span style="display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--text-muted);">location_on</span>' + escapeHtml(cleanLocation) + '</span>' : ''}
-          <span style="display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--text-muted);">work_history</span>${escapeHtml(String(expNum))} ans</span>
-        </div>
-        ${resume ? `<p class="consultant-card-bio">${escapeHtml(resume)}</p>` : ''}
-        <div class="consultant-card-chips">${chips}</div>
-        <div class="consultant-card-footer">
-          <div class="consultant-card-btns" style="width:100%;display:flex;gap:6px;">
+        <div class="consultant-card-content">
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              <h3 class="consultant-card-name">${escapeHtml(displayName)}</h3>
+              ${sourceTypeBadge}
+              <span class="consultant-card-verified">
+                <svg width="8" height="8" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M10.5 3L4.5 9 1.5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Vérifié
+              </span>
+            </div>
+            <span class="consultant-card-role-label">${escapeHtml(title)}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-secondary);flex-wrap:wrap;">
+            ${rate ? '<span style="font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--primary);">payments</span>' + escapeHtml(rate) + '</span>' : ''}
+            ${cleanLocation ? '<span style="display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--text-muted);">location_on</span>' + escapeHtml(cleanLocation) + '</span>' : ''}
+            <span style="display:inline-flex;align-items:center;gap:3px;"><span class="material-symbols-outlined" style="font-size:14px;color:var(--text-muted);">work_history</span>${escapeHtml(String(expNum))} ans</span>
+          </div>
+          ${resume ? `<p class="consultant-card-bio">${escapeHtml(resume)}</p>` : ''}
+          <div class="consultant-card-chips">${chips}</div>
+          <div class="consultant-card-footer">
+            <div class="consultant-card-btns" style="width:100%;display:flex;gap:6px;">
             <button class="consultant-card-btn-p" style="flex:1;" type="button" data-card-action="profile" data-consultant-id="${escapeHtml(c.id)}">Voir le profil</button>
             <button class="consultant-card-btn-s" type="button" data-card-action="contact" data-consultant-id="${escapeHtml(c.id)}">Contacter</button>
+            </div>
           </div>
         </div>
       </div>
     </article>`;
   }).join('');
   bindErpLogoFallbacks(grid);
+  initCardPerspective(grid);
 }
 
+/* ═══ 3D PERSPECTIVE + SPECULAR GLOW — mouse-reactive card effect ═══ */
+function initCardPerspective(container) {
+  if (!container) return;
+  var cards = container.querySelectorAll('.consultant-card');
+  var _raf = {};
+
+  cards.forEach(function(card) {
+    var id = card.dataset.consultantId || Math.random().toString(36).slice(2);
+
+    card.addEventListener('mousemove', function(e) {
+      if (_raf[id]) cancelAnimationFrame(_raf[id]);
+      _raf[id] = requestAnimationFrame(function() {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width;   // 0–1
+        var y = (e.clientY - rect.top) / rect.height;    // 0–1
+        var rotY = (x - 0.5) * 12;   // max ±6deg
+        var rotX = (0.5 - y) * 10;   // max ±5deg
+
+        card.style.setProperty('--mx', x.toFixed(3));
+        card.style.setProperty('--my', y.toFixed(3));
+        card.style.transform = 'perspective(800px) rotateY(' + rotY.toFixed(2) + 'deg) rotateX(' + rotX.toFixed(2) + 'deg) scale3d(1.02,1.02,1.02)';
+      });
+    });
+
+    card.addEventListener('mouseleave', function() {
+      if (_raf[id]) cancelAnimationFrame(_raf[id]);
+      card.style.setProperty('--mx', '0.5');
+      card.style.setProperty('--my', '0.5');
+      card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale3d(1,1,1)';
+    });
+  });
+}
 
 function buildConsultantUrl(id, fragment = '') {
   const safeId = encodeURIComponent(id || '');
