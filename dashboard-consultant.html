@@ -1398,6 +1398,9 @@ input:focus, textarea:focus, select:focus {
 let currentEmail = null;
 let currentConsultant = null;
 
+/* ═══ CONSULTANT_COLS — colonnes à sélectionner pour les requêtes consultants ═══ */
+var CONSULTANT_COLS = 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut';
+
 function normalizeToken(v) {
   return String(v || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }

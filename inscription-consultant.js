@@ -415,11 +415,43 @@
     }
   }
 
+  /* ═══ SHA-256 helper (for legacy hash compatibility) ═══ */
+  async function sha256HexLocal(text) {
+    if (window.sha256Hex) return window.sha256Hex(text);
+    if (window.ExpertSB && window.ExpertSB.sha256Hex) return window.ExpertSB.sha256Hex(text);
+    var encoder = new TextEncoder();
+    var data = encoder.encode(text);
+    var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
   /* ═══ SUBMIT TO SUPABASE ═══ */
   async function submitToSupabase(payload) {
     var today = new Date().toISOString().split('T')[0];
     var expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+
+    var email = payload.email.toLowerCase();
+
+    /* Step 1: Create Supabase Auth account (enables login + password reset emails) */
+    var authCreated = false;
+    if (window.ExpertSupabaseAuth && payload.password) {
+      var authResult = await ExpertSupabaseAuth.signUp(email, payload.password);
+      if (authResult.error) {
+        console.warn('[inscription] Supabase Auth signUp warning:', authResult.error.message);
+        /* Continue anyway — the consultant row will still be created with legacy hash */
+      } else {
+        authCreated = true;
+        console.log('[inscription] Supabase Auth account created for', email);
+      }
+    }
+
+    /* Step 2: Compute SHA-256 legacy hash for backward compatibility */
+    var passwordHash = '';
+    if (payload.password) {
+      passwordHash = await sha256HexLocal(payload.password);
+    }
 
     var notesAdmin = {
       source: 'inscription_directe',
@@ -428,17 +460,20 @@
       experiences: payload.experiences || [],
       date_creation: today,
       date_expiration: expiryDate.toISOString().split('T')[0],
-      submitted_at: new Date().toISOString()
+      submitted_at: new Date().toISOString(),
+      auth_supabase: authCreated,
+      auth_password_sha256: passwordHash
     };
 
     var row = {
       nom: payload.nom,
       prenom: payload.prenom,
-      email: payload.email.toLowerCase(),
+      email: email,
       telephone: payload.telephone,
       titre: payload.titre,
       competences: payload.competences,
       statut: 'en_attente',
+      password_hash: passwordHash,
       notes_admin: JSON.stringify(notesAdmin)
     };
 
@@ -465,6 +500,22 @@
         return;
       }
 
+      var password = document.getElementById('password').value;
+      var passwordConfirm = document.getElementById('password-confirm').value;
+      var passwordErrorEl = document.getElementById('passwordError');
+      if (passwordErrorEl) { passwordErrorEl.style.display = 'none'; passwordErrorEl.textContent = ''; }
+
+      if (!password || password.length < 8) {
+        if (passwordErrorEl) { passwordErrorEl.textContent = 'Le mot de passe doit contenir au moins 8 caractères.'; passwordErrorEl.style.display = 'block'; }
+        showMessage('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+        return;
+      }
+      if (password !== passwordConfirm) {
+        if (passwordErrorEl) { passwordErrorEl.textContent = 'Les mots de passe ne correspondent pas.'; passwordErrorEl.style.display = 'block'; }
+        showMessage('error', 'Les mots de passe ne correspondent pas.');
+        return;
+      }
+
       var payload = {
         nom: document.getElementById('nom').value.trim(),
         prenom: document.getElementById('prenom').value.trim(),
@@ -473,7 +524,8 @@
         titre: document.getElementById('titre').value.trim(),
         resume: document.getElementById('resume').value.trim(),
         competences: collectCompetences(document.getElementById('competences').value || ''),
-        experiences: collectExperiences()
+        experiences: collectExperiences(),
+        password: password
       };
 
       if (payload.experiences.length === 0) {
@@ -502,7 +554,7 @@
 
         // Success
         clearDraft();
-        showMessage('success', 'Candidature envoyée avec succès ! Notre équipe examinera votre profil sous 48h. Vous recevrez un email de confirmation.');
+        showMessage('success', 'Inscription réussie ! Votre compte a été créé. Notre équipe examinera votre profil sous 48h. Vous pourrez vous connecter à votre dashboard dès l\'approbation de votre candidature.');
         form.reset();
         container.innerHTML = '';
         experienceCount = 0;

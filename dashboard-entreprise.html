@@ -1647,6 +1647,9 @@ function safeJSString(str) {
 
 let currentEmail = null;
 let currentCompany = null;
+
+/* ═══ CONSULTANT_COLS — colonnes à sélectionner pour les requêtes consultants ═══ */
+var CONSULTANT_COLS = 'id,created_at,nom,prenom,email,telephone,titre,experience_annees,competences,disponibilite,tjm_min,tjm_max,notes_admin,statut';
 let uploadedFile = null;
 let currentUsedSlots = 0;
 let currentPlanQty = 5;
