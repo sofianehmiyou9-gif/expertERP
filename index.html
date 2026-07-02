@@ -1842,12 +1842,24 @@ function toggleTheme() {
       .hero-section .btn-solid,.hero-section .btn-outline{transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,background .2s,border-color .2s!important;}
       .hero-section .btn-solid:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(94,106,210,.32);}
       .hero-section .btn-outline:hover{transform:translateY(-2px);}
-      @media(prefers-reduced-motion:reduce){.hero-section .xerp-mesh{animation:none!important}}
+      /* Accent du titre en dégradé indigo→vert animé (le mot/ligne d'accent) */
+      @keyframes xerpSheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+      .hero-section h1[data-i18n="hero.title"] span{
+        background:linear-gradient(120deg,var(--primary) 0%,#3dd68c 52%,var(--primary) 100%)!important;
+        background-size:200% auto!important;-webkit-background-clip:text!important;background-clip:text!important;
+        -webkit-text-fill-color:transparent!important;color:transparent!important;
+        animation:xerpSheen 6s ease-in-out infinite;}
+      /* Boule lumineuse qui suit le curseur (injectée en JS, scopée à l'accueil) */
+      .xerp-cursor-glow{position:fixed;top:0;left:0;width:480px;height:480px;border-radius:50%;
+        pointer-events:none;z-index:0;opacity:0;transition:opacity .45s ease;filter:blur(14px);
+        background:radial-gradient(circle,rgba(94,106,210,.32),transparent 62%);}
+      /* Blobs mesh plus présents pour un effet plus vivant */
+      @media(prefers-reduced-motion:reduce){.hero-section .xerp-mesh{animation:none!important}.hero-section h1[data-i18n="hero.title"] span{animation:none!important}.xerp-cursor-glow{display:none!important}}
     </style>
     <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
-      <div class="xerp-mesh" style="width:560px;height:560px;top:-30%;right:2%;background:rgba(94,106,210,.16);animation:xerpDrift1 26s ease-in-out infinite;"></div>
-      <div class="xerp-mesh" style="width:480px;height:480px;bottom:-35%;left:6%;background:rgba(139,143,255,.12);animation:xerpDrift2 32s ease-in-out infinite;"></div>
-      <div class="xerp-mesh" style="width:420px;height:420px;top:20%;left:38%;background:rgba(61,214,140,.06);animation:xerpDrift3 30s ease-in-out infinite;"></div>
+      <div class="xerp-mesh" style="width:560px;height:560px;top:-30%;right:2%;background:rgba(94,106,210,.30);animation:xerpDrift1 26s ease-in-out infinite;"></div>
+      <div class="xerp-mesh" style="width:480px;height:480px;bottom:-35%;left:6%;background:rgba(139,143,255,.22);animation:xerpDrift2 32s ease-in-out infinite;"></div>
+      <div class="xerp-mesh" style="width:420px;height:420px;top:20%;left:38%;background:rgba(61,214,140,.13);animation:xerpDrift3 30s ease-in-out infinite;"></div>
       <div class="xerp-grid"></div>
       <div class="xerp-grain"></div>
     </div>
@@ -7058,6 +7070,39 @@ function mapErrorToCode(error) {
       frameId = requestAnimationFrame(draw);
     }
   });
+})();
+</script>
+
+<!-- WAW: boule lumineuse qui suit le curseur (accueil uniquement) — additif, aucune logique existante modifiée -->
+<script>
+(function(){
+  "use strict";
+  if (window.__xerpGlowInit) return; window.__xerpGlowInit = true;
+  try {
+    if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    if (!window.matchMedia('(pointer:fine)').matches) return;
+    var glow = document.createElement('div');
+    glow.className = 'xerp-cursor-glow';
+    glow.setAttribute('aria-hidden','true');
+    glow.style.mixBlendMode = 'screen';
+    glow.style.zIndex = '1';
+    document.body.appendChild(glow);
+    var gx=0, gy=0, cx=0, cy=0, raf=null;
+    function homeVisible(){
+      var h = document.querySelector('.hero-section');
+      return !!(h && h.offsetParent !== null);
+    }
+    window.addEventListener('pointermove', function(e){
+      if(!homeVisible()){ glow.style.opacity='0'; return; }
+      gx=e.clientX; gy=e.clientY; glow.style.opacity='1';
+      if(!raf){ raf=requestAnimationFrame(function move(){
+        cx+=(gx-cx)*0.14; cy+=(gy-cy)*0.14;
+        glow.style.transform='translate('+cx+'px,'+cy+'px) translate(-50%,-50%)';
+        raf = (Math.abs(gx-cx)>0.4||Math.abs(gy-cy)>0.4) ? requestAnimationFrame(move) : null;
+      }); }
+    }, {passive:true});
+    document.addEventListener('mouseleave', function(){ glow.style.opacity='0'; });
+  } catch(e){}
 })();
 </script>
 
